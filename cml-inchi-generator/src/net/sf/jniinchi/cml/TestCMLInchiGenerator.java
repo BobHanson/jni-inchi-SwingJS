@@ -22,6 +22,8 @@ import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.tools.MoleculeTool;
+import org.xmlcml.cml.tools.PiSystemManager;
 
 
 /**
@@ -92,15 +94,26 @@ public class TestCMLInchiGenerator {
         System.out.println(propanolMol.toXML());
         */
         
-        //testCrystalMol();
+        testCrystalMol();
     }
     
-    private static void testCrystalMol() throws ValidityException,
+    private static void testCrystalMol() throws JniInchiException, ValidityException,
 			ParsingException, IOException, CMLException {
     	CMLMolecule mol = (CMLMolecule) new CMLBuilder().build(new File("crystal.cml.xml")).getRootElement();
+    	MoleculeTool molTool = new MoleculeTool(mol);
+		molTool.adjustBondOrdersAndChargeToValency();
+		
         CMLInchiGenerator inchiGen = new CMLInchiGenerator(mol);
         System.out.println("Generated inchi: " + inchiGen.getInchi());
         
+        InchiCMLGenerator cmlGen = new InchiCMLGenerator(inchiGen.getInchi(), "");
+        System.out.println(cmlGen.getMolecule().toXML());
+        
+        inchiGen = new CMLInchiGenerator(cmlGen.getMolecule());
+        System.out.println("Generated inchi: " + inchiGen.getInchi());
+        
+        
+        /*
         inchiGen = new CMLInchiGenerator(mol, "-compress");
         System.out.println("Generated compressed inchi: " + inchiGen.getInchi());
         
@@ -113,7 +126,7 @@ public class TestCMLInchiGenerator {
         inchiGen.appendToElement(mol);
         System.out.println("XML with identifier:");
         System.out.println(mol.toXML());
-    	
+    	*/
 	}
 
 	/**

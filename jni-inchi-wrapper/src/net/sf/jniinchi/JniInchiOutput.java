@@ -46,7 +46,7 @@ public class JniInchiOutput {
     }
     
     /**
-     * Gets generated AuxInfo string.
+     * Gets generated InChI string.
      */
     public String getAuxInfo() {
         return(sAuxInfo);

@@ -533,3 +533,28 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeStructMe
   }
 
 
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoCentralAtom
+  (JNIEnv *, jobject, jint indx) {
+  	
+  	return stereo[indx].central_atom;
+  }
+
+
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoNeighbourAtom
+  (JNIEnv *, jobject, jint indx, jint i) {
+
+  	return stereo[indx].neighbor[i];
+  }
+  
+  
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoType
+  (JNIEnv *, jobject, jint indx) {
+  	
+  	return stereo[indx].type;
+  }
+
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoParity
+  (JNIEnv *, jobject, jint indx) {
+  
+  	return stereo[indx].parity;
+  }

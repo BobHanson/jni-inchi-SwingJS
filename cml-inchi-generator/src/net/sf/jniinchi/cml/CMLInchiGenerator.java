@@ -74,7 +74,10 @@ import org.xmlcml.cml.element.CMLMolecule;
  */
 public class CMLInchiGenerator {
 	
+	protected JniInchiInput input;
+	
 	protected JniInchiOutput output;
+	
     
 	/**
 	 * Convention to use when constructing CMLIdentifier to hold InChI.
@@ -96,15 +99,14 @@ public class CMLInchiGenerator {
      * @throws CMLException
      */
     public CMLInchiGenerator(CMLMolecule molecule) throws CMLException {
-//        try {
-//            loadLibrary();
-//            setOptions("");
-            
-            generateInchiFromCMLMolecule(molecule, "");
-//        } catch (JniInchiException jie) {
-//            throw new CMLException("InChI generation failed: " + jie.getMessage());
-//        }
+    	try {
+    		input = new JniInchiInput("");
+            generateInchiFromCMLMolecule(molecule);
+        } catch (JniInchiException jie) {
+            throw new CMLException("InChI generation failed: " + jie.getMessage());
+        }
     }
+    
     
     /**
      * <p>Constructor. Generates InChI from CMLMolecule.
@@ -119,14 +121,12 @@ public class CMLInchiGenerator {
      * @throws CMLException
      */
     public CMLInchiGenerator(CMLMolecule molecule, String options) throws CMLException {
-//        try {
-//            loadLibrary();
-//            setOptions(options);
-            
-            generateInchiFromCMLMolecule(molecule, options);
-//        } catch (JniInchiException jie) {
-//            throw new CMLException("InChI generation failed: " + jie.getMessage());
-//        }
+    	try {
+    		input = new JniInchiInput(options);
+            generateInchiFromCMLMolecule(molecule);
+        } catch (JniInchiException jie) {
+            throw new CMLException("InChI generation failed: " + jie.getMessage());
+        }
     }
     
     
@@ -141,14 +141,12 @@ public class CMLInchiGenerator {
      * @throws CMLException
      */
     public CMLInchiGenerator(CMLMolecule molecule, List options) throws CMLException {
-//        try {
-//            loadLibrary();
-//            setOptions(options);
-            
-            generateInchiFromCMLMolecule(molecule, "");
-//        } catch (JniInchiException jie) {
-//            throw new CMLException("InChI generation failed: " + jie.getMessage());
-//        }
+    	try {
+    		input = new JniInchiInput(options);
+            generateInchiFromCMLMolecule(molecule);
+        } catch (JniInchiException jie) {
+            throw new CMLException("InChI generation failed: " + jie.getMessage());
+        }
     }
     
     
@@ -161,13 +159,7 @@ public class CMLInchiGenerator {
      * @param molecule
      * @throws CMLException
      */
-    protected void generateInchiFromCMLMolecule(CMLMolecule molecule, String options) throws CMLException {
-    	JniInchiInput input;
-    	try {
-    		input = new JniInchiInput(options);
-    	} catch (JniInchiException jie) {
-    		throw new CMLException("InChI generation failed: " + jie.getMessage());
-    	}
+    protected void generateInchiFromCMLMolecule(CMLMolecule molecule) throws CMLException {
     	
         this.molecule = molecule;
         
@@ -341,19 +333,30 @@ public class CMLInchiGenerator {
         element.appendChild(identifier);
     }
     
-    
+    /**
+     * Gets generated InChI string.
+     */
     public String getInchi() {
     	return(output.getInchi());
     }
     
+    /**
+     * Gets generated InChI string.
+     */
     public String getAuxInfo() {
     	return(output.getAuxInfo());
     }
     
+    /**
+     * Gets generated (error/warning) messages.
+     */
     public String getMessage() {
     	return(output.getMessage());
     }
     
+    /**
+     * Gets generated log.
+     */
     public String getLog() {
     	return(output.getLog());
     }

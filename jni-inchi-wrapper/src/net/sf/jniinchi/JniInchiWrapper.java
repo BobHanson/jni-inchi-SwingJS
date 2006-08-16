@@ -365,12 +365,12 @@ public class JniInchiWrapper {
     	output.warningFlags[1][0] = wrapper.LibInchiGetStructWarningFlags10();
     	output.warningFlags[1][1] = wrapper.LibInchiGetStructWarningFlags11();
     	
-    	System.out.println(
-    			"" + output.warningFlags[0][0]
-    	        + " / " + output.warningFlags[0][1]
-    	        + " / " + output.warningFlags[1][0]
-    	        + " / " + output.warningFlags[1][1]
-         );
+//    	System.out.println(
+//    			"" + output.warningFlags[0][0]
+//    	        + " / " + output.warningFlags[0][1]
+//    	        + " / " + output.warningFlags[1][0]
+//    	        + " / " + output.warningFlags[1][1]
+//         );
     	
     	int numAtoms = wrapper.LibInchiGetNumAtoms();
     	int numStereo = wrapper.LibInchiGetNumStereo();
@@ -408,7 +408,7 @@ public class JniInchiWrapper {
     		}
     		
     		output.addAtom(atom);
-    		atom.debug();
+    		//atom.debug();
     		
     		int numBonds = wrapper.LibInchiGetAtomNumBonds(i);
     		for (int j = 0; j < numBonds; j ++) {
@@ -467,12 +467,58 @@ public class JniInchiWrapper {
     				JniInchiBond bond = new JniInchiBond(output.getAtom(i), output.getAtom(j), type, stereo);
     				
     				output.addBond(bond);
-    				bond.debug();
+    				//bond.debug();
     			}
     		}
     	}
     	
-    	// TODO: Read stereo parities
+    	for (int i = 0; i < numStereo; i ++) {
+    		int centralAt = wrapper.LibInchiGetStereoCentralAtom(i);
+    		int at0 = wrapper.LibInchiGetStereoNeighbourAtom(i, 0);
+    		int at1 = wrapper.LibInchiGetStereoNeighbourAtom(i, 1);
+    		int at2 = wrapper.LibInchiGetStereoNeighbourAtom(i, 2);
+    		int at3 = wrapper.LibInchiGetStereoNeighbourAtom(i, 3);
+    		
+    		int type = wrapper.LibInchiGetStereoType(i);
+    		int parity = wrapper.LibInchiGetStereoParity(i);
+    		
+    		INCHI_STEREOTYPE stereoType;
+    		if (type == 0) {
+    			stereoType = INCHI_STEREOTYPE.NONE;
+    		} else if (type == 1) {
+    			stereoType = INCHI_STEREOTYPE.DOUBLEBOND;
+    		} else if (type == 2) {
+    			stereoType = INCHI_STEREOTYPE.TETRAHEDRAL;
+    		} else if (type == 3) {
+    			stereoType = INCHI_STEREOTYPE.ALLENE;
+    		} else {
+    			throw new JniInchiException("Unknown stereo0D type: " + type);
+    		}
+    		
+    		INCHI_PARITY stereoParity;
+    		if (parity == 0) {
+    			stereoParity = INCHI_PARITY.NONE;
+    		} else if (parity == 1) {
+    			stereoParity = INCHI_PARITY.ODD;
+    		} else if (parity == 2) {
+    			stereoParity = INCHI_PARITY.EVEN;
+    		} else if (parity == 3) {
+    			stereoParity = INCHI_PARITY.UNKNOWN;
+    		} else if (parity == 4) {
+    			stereoParity = INCHI_PARITY.UNDEFINED;
+    		} else {
+    			throw new JniInchiException("Unknown stereo0D parity: " + parity);
+    		}
+    		
+    		JniInchiStereo0D stereo = new JniInchiStereo0D(
+    				stereoType == INCHI_STEREOTYPE.DOUBLEBOND ? null : output.getAtom(centralAt),
+    				output.getAtom(at0), output.getAtom(at1), output.getAtom(at2),
+    				output.getAtom(at3), stereoType, stereoParity);
+    		
+    		output.addParity(stereo);
+    		//stereo.debug();
+    	}
+    		
     	
     	wrapper.LibInchiFreeStructMem();
     	
@@ -706,6 +752,16 @@ public class JniInchiWrapper {
      * @param bondIndx	Bond index number
      */
     private native int LibInchiGetAtomBondStereo(int atIndx, int bondIndx);
+    
+    
+    private native int LibInchiGetStereoCentralAtom(int stIndex);
+    
+    private native int LibInchiGetStereoNeighbourAtom(int stIndex, int atIndx);
+    
+    private native int LibInchiGetStereoType(int stIndex);
+    
+    private native int LibInchiGetStereoParity(int stIndex);
+    
     
     
 }

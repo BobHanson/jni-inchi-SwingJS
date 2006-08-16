@@ -146,91 +146,91 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetNumStereo
 
 /**
  * Fetches X coordinate of atom.
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  */
 JNIEXPORT jdouble JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomX
   (JNIEnv *, jobject, jint indx);
 
 /**
  * Fetches Y coordinate of atom.
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  */
 JNIEXPORT jdouble JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomY
   (JNIEnv *, jobject, jint indx);
 
 /**
  * Fetches Z coordinate of atom.
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  */
 JNIEXPORT jdouble JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomZ
   (JNIEnv *, jobject, jint indx);
 
 /**
  * Fetches chemical element of atom.
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  */
 JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomElement
   (JNIEnv *env, jobject, jint indx);
 
 /**
  * Fetches isotopic mass/isotopic mass shift of atom.
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomIsotopicMass
   (JNIEnv *, jobject, jint indx);
 
 /**
  * Fetches radical status of atom.
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomRadical
   (JNIEnv *, jobject, jint indx);
 
 /**
  * Fetches charge on atom.
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomCharge
   (JNIEnv *, jobject, jint indx);
 
 /**
  * Fetches number of implicit hydrogens on atom.
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImplicitH
   (JNIEnv *, jobject, jint indx);
 
 /**
  * Fetches number of implicit protium (1H) on atom.
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImplicitP
   (JNIEnv *, jobject, jint indx);
 
 /**
  * Fetches number of implicit deuterium (2H) on atom.
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImplicitD
   (JNIEnv *, jobject, jint indx);
 
 /**
  * Fetches number of implicit tritum (3H) on atom.
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImplicitT
   (JNIEnv *, jobject, jint indx);
 
 /**
  * Fetches number of bonds on atom.
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomNumBonds
   (JNIEnv *, jobject, jint indx);
 
 /**
  * Fetches index of neighbouring atom.
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  * @param bondIndx	Bond index number
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomNeighbour
@@ -238,7 +238,7 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomNeigh
 
 /**
  * Fetches bond type (order).
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  * @param bondIndx	Bond index number
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomBondType
@@ -246,7 +246,7 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomBondT
 
 /**
  * Fetches bond stereochemistry.
- * @param atIndx	Atom index number
+ * @param indx	Atom index number
  * @param bondIndx	Bond index number
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomBondStereo
@@ -274,6 +274,19 @@ JNIEXPORT jlong JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStructWa
  */
 JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeStructMem
   (JNIEnv *, jobject);
+  
+
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoCentralAtom
+  (JNIEnv *, jobject, jint indx);
+
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoNeighbourAtom
+  (JNIEnv *, jobject, jint indx, jint i);
+
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoType
+  (JNIEnv *, jobject, jint indx);
+
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoParity
+  (JNIEnv *, jobject, jint indx);
 
 #ifdef __cplusplus
 }

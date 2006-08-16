@@ -174,6 +174,31 @@ public class JniInchiAtom {
         this.implicitT = n;
     }
     
+    
+    public String getElementType() {
+    	return(elname);
+    }
+    
+    public int getCharge() {
+    	return(charge);
+    }
+    
+    public double getX() {
+    	return(x);
+    }
+    
+    public double getY() {
+    	return(y);
+    }
+    
+    public double getZ() {
+    	return(z);
+    }
+    
+    public int getNumberImplicitH() {
+    	return(implicitH);
+    }
+    
     public void debug() {
     	System.out.println("InChI Atom: "
     			+ elname

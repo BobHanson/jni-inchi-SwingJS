@@ -70,6 +70,22 @@ public class JniInchiBond {
     	this.stereo = stereo;
     }
     
+    public JniInchiAtom getOriginAtom() {
+    	return(atomOrigin);
+    }
+    
+    public JniInchiAtom getTargetAtom() {
+    	return(atomTarget);
+    }
+    
+    public INCHI_BOND_TYPE getBondType() {
+    	return(type);
+    }
+    
+    public INCHI_BOND_STEREO getBondStereo() {
+    	return(stereo);
+    }
+    
     public void debug() {
     	System.out.println("InChI Bond: "
     			+ atomOrigin.elname

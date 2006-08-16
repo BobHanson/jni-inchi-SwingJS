@@ -68,4 +68,14 @@ public class JniInchiStereo0D {
     public void setDisconnectedParity(INCHI_PARITY parity) {
         this.disconParity = parity;
     }
+    
+    public void debug() {
+    	System.out.println("InChI Stereo0D: "
+    			+ (centralAtom == null ? "-" : centralAtom.elname)
+    			+ " [" + neighbors[0].elname + "," + neighbors[1].elname
+    			+ "," + neighbors[2].elname + "," + neighbors[3].elname + "] "
+    			+ "Type::" + type + " // "
+    			+ "Parity:" + parity
+    			);
+    }
 }
