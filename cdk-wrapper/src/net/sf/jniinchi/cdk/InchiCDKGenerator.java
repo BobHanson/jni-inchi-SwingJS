@@ -1,9 +1,9 @@
-/* File: InchiCMLGenerator.java
+/* File: InchiCDKGenerator.java
  * Author: Sam Adams
  * 
  * Copyright (C) 2006 Sam Adams
  */
-package net.sf.jniinchi.cml;
+package net.sf.jniinchi.cdk;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,36 +18,40 @@ import net.sf.jniinchi.JniInchiInputInchi;
 import net.sf.jniinchi.JniInchiOutputStructure;
 import net.sf.jniinchi.JniInchiWrapper;
 
+import org.openscience.cdk.Atom;
+import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.Bond;
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.tools.AtomTool;
 
 /**
- * This class generates a CMLMolecule from an InChI string.
+ * This class generates a CDK AtomContainer from an InChI string.
  * @author Sam Adams
  */
-public class InchiCMLGenerator {
+public class InchiCDKGenerator {
 
-	protected JniInchiInputInchi input;
+protected JniInchiInputInchi input;
 	
 	protected JniInchiOutputStructure output;
 	
-	protected CMLMolecule molecule;
+	protected IAtomContainer molecule;
 	
 	/**
-	 * Constructor. Generates CMLMolecule from InChI.
+	 * Constructor. Generates CDK AtomContainer from InChI.
 	 * @param inchi
 	 * @throws CMLException
 	 */
-	public InchiCMLGenerator(String inchi) throws CMLException {
+	public InchiCDKGenerator(String inchi) throws CDKException {
 		try {
 			input = new JniInchiInputInchi(inchi, "");
 		} catch (JniInchiException jie) {
-			throw new CMLException("Failed to convert InChI to molecule: " + jie.getMessage());
+			throw new CDKException("Failed to convert InChI to molecule: " + jie.getMessage());
 		}
-        generateCMLMoleculeFromInchi();
+        generateAtomContainerFromInchi();
 	}
 	
 	/**
@@ -56,13 +60,13 @@ public class InchiCMLGenerator {
 	 * @param options
 	 * @throws CMLException
 	 */
-	public InchiCMLGenerator(String inchi, String options) throws CMLException {
+	public InchiCDKGenerator(String inchi, String options) throws CDKException {
 		try {
 			input = new JniInchiInputInchi(inchi, options);
 		} catch (JniInchiException jie) {
-			throw new CMLException("Failed to convert InChI to molecule: " + jie.getMessage());
+			throw new CDKException("Failed to convert InChI to molecule: " + jie.getMessage());
 		}
-        generateCMLMoleculeFromInchi();
+		generateAtomContainerFromInchi();
 	}
 	
 	/**
@@ -71,34 +75,34 @@ public class InchiCMLGenerator {
 	 * @param options
 	 * @throws CMLException
 	 */
-	public InchiCMLGenerator(String inchi, List options) throws CMLException {
+	public InchiCDKGenerator(String inchi, List options) throws CDKException {
 		try {
 			input = new JniInchiInputInchi(inchi, options);
 		} catch (JniInchiException jie) {
-			throw new CMLException("Failed to convert InChI to molecule: " + jie.getMessage());
+			throw new CDKException("Failed to convert InChI to molecule: " + jie.getMessage());
 		}
-        generateCMLMoleculeFromInchi();
+		generateAtomContainerFromInchi();
 	}
 	
-	protected void generateCMLMoleculeFromInchi() throws CMLException {
+	protected void generateAtomContainerFromInchi() throws CDKException {
 		try {
 			output = JniInchiWrapper.getStructureFromInchi(input);
         } catch (JniInchiException jie) {
-        	throw new CMLException("Failed to convert InChI to molecule: " + jie.getMessage());
+        	throw new CDKException("Failed to convert InChI to molecule: " + jie.getMessage());
         }
 		
-        molecule = new CMLMolecule();
+        molecule = new AtomContainer();
         
-        Map<JniInchiAtom, CMLAtom> inchiCmlAtomMap = new HashMap<JniInchiAtom, CMLAtom>();
+        Map<JniInchiAtom, IAtom> inchiCdkAtomMap = new HashMap<JniInchiAtom, IAtom>();
         
         for (int i = 0; i < output.getNumAtoms(); i ++) {
         	JniInchiAtom iAt = output.getAtom(i);
-        	CMLAtom cAt = new CMLAtom();
+        	IAtom cAt = new Atom();
         	
-        	inchiCmlAtomMap.put(iAt, cAt);
+        	inchiCdkAtomMap.put(iAt, cAt);
         	
-        	cAt.setId("a" + i);
-        	cAt.setElementType(iAt.getElementType());
+        	cAt.setID("a" + i);
+        	cAt.setSymbol(iAt.getElementType());
         	
         	// Ignore coordinates - all zero
         	
@@ -112,44 +116,46 @@ public class InchiCMLGenerator {
         		cAt.setHydrogenCount(numH);
         	}
         	
-        	molecule.addAtom(cAt, false);
+        	molecule.addAtom(cAt);
         }
         
         for (int i = 0; i < output.getNumBonds(); i ++) {
         	JniInchiBond iBo = output.getBond(i);
-        	CMLBond cBo = new CMLBond();
+        	IBond cBo = new Bond();
         	
-        	CMLAtom atO = inchiCmlAtomMap.get(iBo.getOriginAtom());
-        	CMLAtom atT = inchiCmlAtomMap.get(iBo.getTargetAtom());
-        	cBo.setAtoms2(atO, atT);
+        	IAtom atO = inchiCdkAtomMap.get(iBo.getOriginAtom());
+        	IAtom atT = inchiCdkAtomMap.get(iBo.getTargetAtom());
+        	IAtom[] atoms = new IAtom[2];
+        	atoms[0] = atO;
+        	atoms[1] = atT;
+        	cBo.setAtoms(atoms);
         	
         	INCHI_BOND_TYPE type = iBo.getBondType();
         	if (type == INCHI_BOND_TYPE.SINGLE) {
-        		cBo.setOrder(CMLBond.SINGLE);
+        		cBo.setOrder(CDKConstants.BONDORDER_SINGLE);
         	} else if (type == INCHI_BOND_TYPE.DOUBLE) {
-        		cBo.setOrder(CMLBond.DOUBLE);
+        		cBo.setOrder(CDKConstants.BONDORDER_DOUBLE);
         	} else if (type == INCHI_BOND_TYPE.TRIPLE) {
-        		cBo.setOrder(CMLBond.TRIPLE);
+        		cBo.setOrder(CDKConstants.BONDORDER_TRIPLE);
         	} else if (type == INCHI_BOND_TYPE.ALTERN) {
-        		cBo.setOrder(CMLBond.AROMATIC);
+        		cBo.setOrder(CDKConstants.BONDORDER_AROMATIC);
         	} else {
-        		throw new CMLException("Unknown bond type: " + type);
+        		throw new CDKException("Unknown bond type: " + type);
         	}
         	
         	// TODO: bond sterochemistry
         	
-        	molecule.addBond(cBo, false);
+        	molecule.addBond(cBo);
         }
         
         // Add explict hydrogens to hydrogen counts
         for (int i = 0; i < molecule.getAtomCount(); i ++) {
-        	CMLAtom at = molecule.getAtom(i);
-        	if (at.getHydrogenCountAttribute() != null) {
-	        	AtomTool atTool = new AtomTool(at);
-	        	List<CMLAtom> ligandList = atTool.getLigandList();
+        	IAtom at = molecule.getAtomAt(i);
+        	if (at.getHydrogenCount() != 0) {
+        		IAtom[] ligands = molecule.getConnectedAtoms(at);;
 	        	int hLigands = 0;
-	        	for (int j = 0; j < ligandList.size(); j ++) {
-	        		if (ligandList.get(j).getElementType().equals("H")) {
+	        	for (int j = 0; j < ligands.length; j ++) {
+	        		if (ligands[j].getSymbol().equals("H")) {
 	        			hLigands ++;
 	        		}
 	        	}
@@ -166,7 +172,7 @@ public class InchiCMLGenerator {
 	 * Returns generated molecule.
 	 * @return
 	 */
-	public CMLMolecule getMolecule() {
+	public IAtomContainer getMolecule() {
 		return(molecule);
 	}
 	
@@ -206,4 +212,5 @@ public class InchiCMLGenerator {
     public long[][] getWarningFlags() {
     	return(output.getWarningFlags());
     }
+
 }

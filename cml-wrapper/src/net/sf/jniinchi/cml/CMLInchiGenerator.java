@@ -12,6 +12,7 @@ import java.util.Map;
 
 import net.sf.jniinchi.INCHI_BOND_TYPE;
 import net.sf.jniinchi.INCHI_RADICAL;
+import net.sf.jniinchi.INCHI_RET;
 import net.sf.jniinchi.JniInchiAtom;
 import net.sf.jniinchi.JniInchiBond;
 import net.sf.jniinchi.JniInchiInput;
@@ -301,7 +302,9 @@ public class CMLInchiGenerator {
         // TODO: Stereo chemistry
         try {
         	output = JniInchiWrapper.getInchi(input);
-        } catch (JniInchiException jie) { }
+        } catch (JniInchiException jie) {
+        	throw new CMLException("Failed to generate InChI: " + jie.getMessage());
+        }
     }
     
     
@@ -331,6 +334,15 @@ public class CMLInchiGenerator {
         identifier.appendChild(new Text(output.getInchi()));
         
         element.appendChild(identifier);
+    }
+    
+    /**
+     * Gets return status from InChI process.  OKAY and WARNING indicate
+     * InChI has been generated, in all other cases InChI generation
+     * has failed.
+     */
+    public INCHI_RET getReturnStatus() {
+        return(output.getReturnStatus());
     }
     
     /**

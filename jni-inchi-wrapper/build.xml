@@ -50,7 +50,8 @@
 		<mkdir dir="${doc.dir}"/>
 		<javadoc
 			destdir="${doc.dir}"
-			packagenames="sea36.inchitools.jni.*"
+			packagenames="net.sf.jniinchi.*"
+            source="1.4"
 			>
 			
 			<sourcepath>

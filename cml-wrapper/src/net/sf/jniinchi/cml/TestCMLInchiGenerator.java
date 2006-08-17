@@ -8,13 +8,8 @@ package net.sf.jniinchi.cml;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 
-import net.sf.jniinchi.INCHI_OPTION;
-import net.sf.jniinchi.JniInchiInputInchi;
 import net.sf.jniinchi.JniInchiException;
-import net.sf.jniinchi.JniInchiWrapper;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
@@ -23,7 +18,6 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.tools.MoleculeTool;
-import org.xmlcml.cml.tools.PiSystemManager;
 
 
 /**
@@ -76,8 +70,8 @@ public class TestCMLInchiGenerator {
         CMLInchiGenerator inchiGen = new CMLInchiGenerator(propanolMol);
         System.out.println("Generated inchi: " + inchiGen.getInchi());
         
-        JniInchiInputInchi input = new JniInchiInputInchi(inchiGen.getInchi(), " ");
-        JniInchiWrapper.getStructureFromInchi(input);
+        InchiCMLGenerator cmlGen = new InchiCMLGenerator(inchiGen.getInchi(), "");
+        System.out.println(cmlGen.getMolecule().toXML());
         
         /*
         inchiGen = new CMLInchiGenerator(propanolMol, "-compress");
