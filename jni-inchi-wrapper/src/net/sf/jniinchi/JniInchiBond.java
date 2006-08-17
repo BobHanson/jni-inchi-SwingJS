@@ -70,22 +70,41 @@ public class JniInchiBond {
     	this.stereo = stereo;
     }
     
+    /**
+     * Returns atom at bond origin.
+     * @return
+     */
     public JniInchiAtom getOriginAtom() {
     	return(atomOrigin);
     }
     
+    /**
+     * Returns atom at bond target.
+     * @return
+     */
     public JniInchiAtom getTargetAtom() {
     	return(atomTarget);
     }
     
+    /**
+     * Returns bond type.
+     * @return
+     */
     public INCHI_BOND_TYPE getBondType() {
     	return(type);
     }
     
+    /**
+     * Returns bond stereochemistry.
+     * @return
+     */
     public INCHI_BOND_STEREO getBondStereo() {
     	return(stereo);
     }
     
+    /**
+     * Outputs information on bond, for debugging purposes.
+     */
     public void debug() {
     	System.out.println("InChI Bond: "
     			+ atomOrigin.elname

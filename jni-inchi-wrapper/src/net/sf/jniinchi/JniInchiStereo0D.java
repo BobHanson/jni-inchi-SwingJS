@@ -69,6 +69,41 @@ public class JniInchiStereo0D {
         this.disconParity = parity;
     }
     
+    /**
+     * Returns central atom of stereo parity.
+     * @return
+     */
+    public JniInchiAtom getCentralAtom() {
+    	return(centralAtom);
+    }
+    
+    /**
+     * Returns neighboring atoms of stereo parity.
+     * @return
+     */
+    public JniInchiAtom[] getNeighbors() {
+    	return(neighbors);
+    }
+    
+    /**
+     * Returns parity.
+     * @return
+     */
+    public INCHI_PARITY getParity() {
+    	return(parity);
+    }
+    
+    /**
+     * Returns type of stereochemistry.
+     * @return
+     */
+    public INCHI_STEREOTYPE getStereoType() {
+    	return(type);
+    }
+    
+    /**
+     * Outputs information on stereo parity, for debugging purposes.
+     */
     public void debug() {
     	System.out.println("InChI Stereo0D: "
     			+ (centralAtom == null ? "-" : centralAtom.elname)

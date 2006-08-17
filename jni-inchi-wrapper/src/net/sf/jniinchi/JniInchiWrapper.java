@@ -247,10 +247,12 @@ public class JniInchiWrapper {
     }
     
     
-    
-    
-    
-    
+    /**
+     * Generates InChI string for a chemical structure.
+     * @param input
+     * @return
+     * @throws JniInchiException
+     */
     public static JniInchiOutput getInchi(JniInchiInput input) throws JniInchiException {
     	JniInchiWrapper wrapper = new JniInchiWrapper();
     	
@@ -315,7 +317,6 @@ public class JniInchiWrapper {
                     stereo.type.getIndx(), parity);
         }
         
-        
         // Call inchi library
         int retVal = wrapper.LibInchiGenerateInchi();
         
@@ -342,9 +343,12 @@ public class JniInchiWrapper {
     }
     
     
-    
-    
-    
+    /**
+     * Generated 0D structure from an InChI string.
+     * @param input
+     * @return
+     * @throws JniInchiException
+     */
     public static JniInchiOutputStructure getStructureFromInchi(JniInchiInputInchi input) throws JniInchiException {
     	JniInchiWrapper wrapper = new JniInchiWrapper();
     	int retVal = wrapper.LibInchiGetStruct(input.inchiString, input.options);
@@ -360,24 +364,20 @@ public class JniInchiWrapper {
             }
         }
     	
+    	// Get warning flags.
     	output.warningFlags[0][0] = wrapper.LibInchiGetStructWarningFlags00();
     	output.warningFlags[0][1] = wrapper.LibInchiGetStructWarningFlags01();
     	output.warningFlags[1][0] = wrapper.LibInchiGetStructWarningFlags10();
     	output.warningFlags[1][1] = wrapper.LibInchiGetStructWarningFlags11();
     	
-//    	System.out.println(
-//    			"" + output.warningFlags[0][0]
-//    	        + " / " + output.warningFlags[0][1]
-//    	        + " / " + output.warningFlags[1][0]
-//    	        + " / " + output.warningFlags[1][1]
-//         );
-    	
+    	// Get structural data
     	int numAtoms = wrapper.LibInchiGetNumAtoms();
     	int numStereo = wrapper.LibInchiGetNumStereo();
     	
     	int[][] bondTypes = new int[numAtoms][numAtoms];
     	int[][] bondStereos = new int[numAtoms][numAtoms];
     	
+    	// Generate atoms
     	for (int i = 0; i < numAtoms; i ++) {
     		String el = wrapper.LibInchiGetAtomElement(i);
     		double x = wrapper.LibInchiGetAtomX(i);
@@ -421,6 +421,7 @@ public class JniInchiWrapper {
     		}
     	}
     	
+    	// Generate bonds
     	for (int i = 0; i < numAtoms; i ++) {
     		for (int j = 0; j < i; j ++) {
     			int bo0 = bondTypes[i][j];
@@ -472,6 +473,7 @@ public class JniInchiWrapper {
     		}
     	}
     	
+    	// Generate stereo parities
     	for (int i = 0; i < numStereo; i ++) {
     		int centralAt = wrapper.LibInchiGetStereoCentralAtom(i);
     		int at0 = wrapper.LibInchiGetStereoNeighbourAtom(i, 0);
@@ -518,29 +520,13 @@ public class JniInchiWrapper {
     		output.addParity(stereo);
     		//stereo.debug();
     	}
-    		
     	
     	wrapper.LibInchiFreeStructMem();
     	
     	return(output);
     }
     
-    
-    /*
-    protected static JniInchiWrapper getInputFromAuxInfo(String auxinfo, String options) {
-    	
-    	
-    	return null;
-    }
-    
-    protected static JniInchiWrapper getInchiFromInchi(String inchi, String options) {
-    	
-    	
-    	return null;
-    }
-    */
-    
-    
+
     /**
      * Start new InChI library data record.  See <tt>inchi_api.h</tt> for details.
      * 

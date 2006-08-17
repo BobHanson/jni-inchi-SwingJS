@@ -1,37 +1,76 @@
+/* File: JniInchiOutputStructure.java
+ * Author: Sam Adams
+ * 
+ * Copyright (C) 2006 Sam Adams
+ */
 package net.sf.jniinchi;
 
-
+/**
+ * Encapsulates output from InChI to structure conversion.
+ * @author Sam Adams
+ */
 public class JniInchiOutputStructure extends JniInchiStructure {
 	
-	INCHI_RET retStatus;
+	/**
+	 * Return status from conversion.
+	 */
+	protected INCHI_RET retStatus;
 	
-    String message;
+	/**
+	 * Error/warning messages generated.
+	 */
+	protected String message;
 	
-	String log;
+	/**
+	 * Log generated.
+	 */
+	protected String log;
 	
-	long[][] warningFlags = new long[2][2];
+	/**
+	 * <p>Warning flags, see INCHIDIFF in inchicmp.h.
+	 * 
+	 * <p>[x][y]:
+	 * <br>x=0 => Reconnected if present in InChI otherwise Disconnected/Normal
+	 * <br>x=1 => Disconnected layer if Reconnected layer is present
+	 * <br>y=1 => Main layer or Mobile-H
+	 * <br>y=0 => Fixed-H layer
+	 */
+	protected long[][] warningFlags = new long[2][2];
 	
 	
+	/**
+     * Gets return status from InChI process.  OKAY and WARNING indicate
+     * InChI has been generated, in all other cases InChI generation
+     * has failed.
+     */
+    public INCHI_RET getReturnStatus() {
+        return(retStatus);
+    }
+    
+    /**
+     * Gets generated (error/warning) messages.
+     */
+    public String getMessage() {
+        return(message);
+    }
+    
+    /**
+     * Gets generated log.
+     */
+    public String getLog() {
+        return(log);
+    }
 	
-	
-	
-	/* InChI -> Structure * /
-	typedef struct tagINCHI_OutputStruct {
-	    /* 4 pointers are allocated by GetStructFromINCHI()     * /
-	    /* to deallocate all of them call FreeStructFromINCHI() * /
-	    inchi_Atom     *atom;         /* array of num_atoms elements * / 
-	    inchi_Stereo0D *stereo0D;     /* array of num_stereo0D 0D stereo elements or NULL  * /
-	    AT_NUM          num_atoms;    /* number of atoms in the structure < 1024 * /
-	    AT_NUM          num_stereo0D; /* number of 0D stereo elements * /
-	    char           *szMessage;    /* Error/warning ASCIIZ message * /
-	    char           *szLog;        /* log-file ASCIIZ string, contains a human-readable list * /
-	                                  /* of recognized options and possibly an Error/warning message * /
-	    unsigned long  WarningFlags[2][2]; /* warnings, see INCHIDIFF in inchicmp.h * /
-	                                       /* [x][y]: x=0 => Reconnected if present in InChI otherwise Disconnected/Normal
-	                                                  x=1 => Disconnected layer if Reconnected layer is present
-	                                                  y=1 => Main layer or Mobile-H
-	                                                  y=0 => Fixed-H layer
-	                                        * /
-	}inchi_OutputStruct;
-	*/
+    /**
+	 * <p>Returns warning flags, see INCHIDIFF in inchicmp.h.
+	 * 
+	 * <p>[x][y]:
+	 * <br>x=0 => Reconnected if present in InChI otherwise Disconnected/Normal
+	 * <br>x=1 => Disconnected layer if Reconnected layer is present
+	 * <br>y=1 => Main layer or Mobile-H
+	 * <br>y=0 => Fixed-H layer
+	 */
+    public long[][] getWarningFlags() {
+    	return(warningFlags);
+    }
 }

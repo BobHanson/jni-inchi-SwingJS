@@ -1,32 +1,41 @@
+/* File: JniInchiOutput.java
+ * Author: Sam Adams
+ * 
+ * Copyright (C) 2006 Sam Adams
+ */
 package net.sf.jniinchi;
 
+/**
+ * Encapsulates output from InChI generation.
+ * @author Sam Adams
+ */
 public class JniInchiOutput {
 	
 	/**
 	 * InChI return status
 	 */
-	INCHI_RET retStatus;
+	protected INCHI_RET retStatus;
 	
 	/**
 	 * InChI ASCIIZ string
 	 */
-	String sInchi;
+	protected String sInchi;
 	
 	/**
 	 * Aux info ASCIIZ string
 	 */
-	String sAuxInfo;
+	protected String sAuxInfo;
 	
 	/**
 	 * Error/warning ASCIIZ message
 	 */
-	String sMessage;
+	protected String sMessage;
 	
 	/**
 	 * log-file ASCIIZ string, contains a human-readable list of recognized 
 	 * options and possibly an Error/warning message
 	 */
-	String sLog;
+	protected String sLog;
 	
 	
 	/**

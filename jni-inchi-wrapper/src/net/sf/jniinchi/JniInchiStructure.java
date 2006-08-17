@@ -1,24 +1,33 @@
+/* File: JniInchiStructure.java
+ * Author: Sam Adams
+ * 
+ * Copyright (C) 2006 Sam Adams
+ */
 package net.sf.jniinchi;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  
+ * @author Sam Adams
+ */
 public class JniInchiStructure {
 
 	/**
      * List of atoms.
      */
-    List atomList = new ArrayList();
+    protected List atomList = new ArrayList();
     
     /**
      * List of bonds.
      */
-    List bondList = new ArrayList();
+    protected List bondList = new ArrayList();
     
     /**
      * List of stero parities.
      */
-    List stereoList = new ArrayList();
+    protected List stereoList = new ArrayList();
     
     
     /**
@@ -77,13 +86,30 @@ public class JniInchiStructure {
     }
     
     
-    
+    /**
+     * Returns atom from structure.
+     * @param i	Index of atom to return.
+     * @return
+     */
     public JniInchiAtom getAtom(int i) {
     	return((JniInchiAtom) atomList.get(i));
     }
     
+    /**
+     * Returns bond from structure.
+     * @param i	Index of bond to return.
+     * @return
+     */
     public JniInchiBond getBond(int i) {
     	return((JniInchiBond) bondList.get(i));
     }
-
+    
+    /**
+     * Returns stereo parity from structure.
+     * @param i	Index of stereo parity to return.
+     * @return
+     */
+    public JniInchiStereo0D getStereo0D(int i) {
+    	return((JniInchiStereo0D) stereoList.get(i));
+    }
 }

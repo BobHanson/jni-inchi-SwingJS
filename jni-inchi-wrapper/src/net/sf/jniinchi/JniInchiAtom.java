@@ -175,30 +175,89 @@ public class JniInchiAtom {
     }
     
     
+    /**
+     * Returns chemical element symbol of atom.
+     * @return
+     */
     public String getElementType() {
     	return(elname);
     }
     
+    /**
+     * Returns charge on atom.
+     * @return
+     */
     public int getCharge() {
     	return(charge);
     }
     
+    /**
+     * Returns radical state of atom.
+     * @return
+     */
+    public INCHI_RADICAL getRadical() {
+    	return(radical);
+    }
+    
+    /**
+     * Returns atom's X-coordinate.
+     * @return
+     */
     public double getX() {
     	return(x);
     }
     
+    /**
+     * Returns atom's Y-coordinate.
+     * @return
+     */
     public double getY() {
     	return(y);
     }
     
+    /**
+     * Returns atom's Z-coordinate.
+     * @return
+     */
     public double getZ() {
     	return(z);
     }
     
-    public int getNumberImplicitH() {
+    /**
+     * Returns number of implicit hydrogens on atom.
+     * @return
+     */
+    public int getImplicitH() {
     	return(implicitH);
     }
     
+    /**
+     * Returns number of implicit protiums (1H) on atom.
+     * @return
+     */
+    public int getImplicitProtium() {
+    	return(implicitP);
+    }
+    
+    /**
+     * Returns number of implicit deuteriums (2H) on atom.
+     * @return
+     */
+    public int getImplicitDeuterium() {
+    	return(implicitD);
+    }
+    
+    /**
+     * Returns number of implicit tritiums (3H) on atom.
+     * @return
+     */
+    public int getImplicitTritium() {
+    	return(implicitT);
+    }
+    
+    /**
+     * Outputs information on atom, for debugging purposes.
+     */
     public void debug() {
     	System.out.println("InChI Atom: "
     			+ elname
