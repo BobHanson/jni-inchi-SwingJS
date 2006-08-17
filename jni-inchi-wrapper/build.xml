@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="jniInchi" basedir="." default="compileAll">
+	
+	<property name="cml.jar" value="/jars/jumbo52.jar"/>
+	<property name="xom.jar" value="/jars/xom-1.1.jar"/>
+	<property name="cdk.jar" value="/jars/cdk-20060714.jar"/>
+	
+	<property name="bin.dir" value="bin"/>
+	<property name="dist.dir" value="dist"/>
+	<property name="doc.dir" value="javadoc"/>
+	<property name="cpp.dir" value="cpp-bin"/>
+	<property name="inchi.dir" value="inchi"/>
+	
+	<property name="jniInchi.src.dir" value="src"/>
+	
+	<target name="init">
+		<mkdir dir="${bin.dir}"/>
+	</target>
+	
+	<target name="clean" description="Delete all generated files">
+		<delete dir="${bin.dir}" failonerror="false"/>
+		<delete dir="${doc.dir}" failonerror="false"/>
+	</target>
+	
+	<target name="compile" description="Compiles jniInchi" depends="init">
+		<echo>COMPILING: jniInchi Java</echo>
+		<javac srcdir="${jniInchi.src.dir}/net/sf/jniinchi" destdir="${bin.dir}" source="1.4">
+		    <include name="*.java" />
+		</javac>
+		
+		<copy todir="${bin.dir}">
+			<fileset dir="${cpp.dir}">
+				<include name="JniInchi.dll"/>
+				<include name="libJniInchi.so"/>
+			</fileset>
+		</copy>
+		
+		<copy todir="${bin.dir}" file="${inchi.dir}/libinchi.dll"/>
+		<copy tofile="${bin.dir}/libinchi.so.1" file="${inchi.dir}/libinchi.so"/>
+		
+	</target>
+	
+	<target name="jar" depends="compile">
+		<mkdir dir="${dist.dir}"/>
+		<jar destfile="${dist.dir}/jniInChI.jar" basedir="${bin.dir}"/>
+	</target>
+	
+	<target name="javadoc">
+		<mkdir dir="${doc.dir}"/>
+		<javadoc
+			destdir="${doc.dir}"
+			packagenames="sea36.inchitools.jni.*"
+			>
+			
+			<sourcepath>
+				<pathelement path="${jniInchi.src.dir}"/>
+			</sourcepath>
+		</javadoc>
+	</target>
+	
+</project>
