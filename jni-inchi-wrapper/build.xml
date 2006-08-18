@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<project name="jniInchi" basedir="." default="compileAll">
-	
-	<property name="cml.jar" value="/jars/jumbo52.jar"/>
-	<property name="xom.jar" value="/jars/xom-1.1.jar"/>
-	<property name="cdk.jar" value="/jars/cdk-20060714.jar"/>
+<project name="jniInchi" basedir="." default="compile">
 	
 	<property name="bin.dir" value="bin"/>
 	<property name="dist.dir" value="dist"/>

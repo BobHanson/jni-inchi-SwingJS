@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="jniInchi" basedir="." default="jarAll">
+	
+	<property name="dist.dir" value="dist"/>
+	<property name="dist-bin.dir" value="dist-bin"/>
+	
+	<property name="jniInchi.dir" value="jni-inchi-wrapper"/>
+	<property name="cdkWrapper.dir" value="cdk-wrapper"/>
+	<property name="cmlWrapper.dir" value="cml-wrapper"/>
+	
+	<property name="cdk.jar" value="${cdkWrapper.dir}/lib/cdk-20060714.jar"/>
+	<property name="cml.jar" value="${cmlWrapper.dir}/lib/jumbo53-20060817.jar"/>
+	<property name="xom.jar" value="${cmlWrapper.dir}/lib/xom-1.1.jar"/>
+	
+	<target name="jarAll">
+		<delete dir="${dist-bin.dir}" quiet="true"/>
+		<mkdir dir="${dist-bin.dir}"/>
+		
+		<javac srcdir="${jniInchi.dir}/src/net/sf/jniinchi" destdir="${dist-bin.dir}" source="1.4">
+		    <include name="*.java" />
+		</javac>
+		
+		<copy todir="${dist-bin.dir}">
+			<fileset dir="${jniInchi.dir}/cpp-bin">
+				<include name="JniInchi.dll"/>
+				<include name="libJniInchi.so"/>
+			</fileset>
+		</copy>
+		
+		<copy todir="${dist-bin.dir}" file="${jniInchi.dir}/inchi/libinchi.dll"/>
+		<copy tofile="${dist-bin.dir}/libinchi.so.1" file="${jniInchi.dir}/inchi/libinchi.so"/>
+		
+		<javac
+				srcdir="${cdkWrapper.dir}/src/net/sf/jniinchi/cdk"
+				destdir="${dist-bin.dir}"
+				classpath="${jniInchi.dir}/bin;${cdk.jar}">
+		    <include name="*.java" />
+		</javac>
+		
+		<javac
+				srcdir="${cmlWrapper.dir}/src/net/sf/jniinchi/cml"
+				destdir="${dist-bin.dir}"
+				classpath="${jniInchi.dir}/bin;${cml.jar};${xom.jar}">
+		    <include name="*.java" />
+		</javac>
+		
+		<jar destfile="${dist.dir}/jniInChI-cdk-cml.jar" basedir="${dist-bin.dir}"/>
+		
+		<!--<delete dir="${dist-bin.dir}" quiet="true"/>-->
+	</target>
+	
+</project>
