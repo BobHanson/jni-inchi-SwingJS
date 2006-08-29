@@ -9,20 +9,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.vecmath.Point2d;
+import javax.vecmath.Point3d;
+
+import net.sf.jniinchi.IInchiGenerator;
 import net.sf.jniinchi.INCHI_BOND_STEREO;
 import net.sf.jniinchi.INCHI_BOND_TYPE;
+import net.sf.jniinchi.INCHI_PARITY;
+import net.sf.jniinchi.INCHI_RADICAL;
 import net.sf.jniinchi.INCHI_RET;
+import net.sf.jniinchi.INCHI_STEREOTYPE;
 import net.sf.jniinchi.JniInchiAtom;
 import net.sf.jniinchi.JniInchiBond;
 import net.sf.jniinchi.JniInchiException;
 import net.sf.jniinchi.JniInchiInput;
 import net.sf.jniinchi.JniInchiOutput;
+import net.sf.jniinchi.JniInchiStereo0D;
 import net.sf.jniinchi.JniInchiWrapper;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomParity;
 import org.openscience.cdk.interfaces.IBond;
 
 /**
@@ -53,13 +62,13 @@ import org.openscience.cdk.interfaces.IBond;
  * <code>CDKInchiGenerator inchiGen = new CDKInchiGenerator(propanolMol, opList);</code><br>
  * 
  * <p><tt><b>
- * TODO: spin multiplicity<br/>
- * TODO: atom parities.
+ * TODO: detect singlets vs no multiplicity<br/>
+ * TODO: atom parities other than tetrahedral.
  * </b></tt>
  * 
  * @author Sam Adams
  */
-public class CDKInchiGenerator {
+public class CDKInchiGenerator implements IInchiGenerator {
     
 	protected JniInchiInput input;
 	
@@ -163,12 +172,14 @@ public class CDKInchiGenerator {
         	// Use 3d if possible, otherwise 2d or none
         	double x, y, z;
             if (all3d) {
-                x = atom.getX3d();
-                y = atom.getY3d();
-                z = atom.getZ3d();
+            	Point3d p = atom.getPoint3d();
+                x = p.x;
+                y = p.y;
+                z = p.z;
             } else if (all2d) {
-                x = atom.getX2d();
-                y = atom.getY2d();
+            	Point2d p = atom.getPoint2d();
+                x = p.x;
+                y = p.y;
                 z = 0;
             } else {
                 x = 0;
@@ -202,6 +213,18 @@ public class CDKInchiGenerator {
             int implicitH = atom.getHydrogenCount();
             if (implicitH != 0) {
             	iatom.setImplictH(implicitH);
+            }
+            
+            // Check if radical
+            int count = atomContainer.getSingleElectronSum(atom);
+            if (count == 0) {
+            	// TODO - how to check whether singlet or undefined
+            } else if (count == 1) {
+            	iatom.setRadical(INCHI_RADICAL.DOUBLET);
+            } else if (count == 2) {
+            	iatom.setRadical(INCHI_RADICAL.TRIPLET);
+            } else {
+            	throw new CDKException("Unrecognised radical type");
             }
         }
         
@@ -265,6 +288,31 @@ public class CDKInchiGenerator {
             		ibond.setStereoDefinition(INCHI_BOND_STEREO.DOUBLE_EITHER);
             	}
             }
+        }
+        
+        for (IAtom atom : atoms) {
+        	IAtomParity parity = atomContainer.getAtomParity(atom);
+        	if (parity != null) {
+        		IAtom[] surroundingAtoms = parity.getSurroundingAtoms();
+        		int sign = parity.getParity();
+        		
+        		JniInchiAtom atC = atomMap.get(atom);
+        		JniInchiAtom at0 = atomMap.get(surroundingAtoms[0]);
+        		JniInchiAtom at1 = atomMap.get(surroundingAtoms[1]);
+        		JniInchiAtom at2 = atomMap.get(surroundingAtoms[2]);
+        		JniInchiAtom at3 = atomMap.get(surroundingAtoms[3]);
+        		INCHI_PARITY p = INCHI_PARITY.UNKNOWN;
+        		if (sign > 0) {
+        			p = INCHI_PARITY.EVEN;
+        		} else if (sign < 0) {
+        			p = INCHI_PARITY.ODD;
+        		} else {
+        			throw new CDKException("Atom parity of zero");
+        		}
+        		
+        		input.addParity(new JniInchiStereo0D(atC, at0, at1, at2, at3,
+        				INCHI_STEREOTYPE.TETRAHEDRAL, p));
+        	}
         }
         
         try {
