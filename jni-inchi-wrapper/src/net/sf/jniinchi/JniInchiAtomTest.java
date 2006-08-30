@@ -60,7 +60,7 @@ public class JniInchiAtomTest extends TestCase {
 	 */
 	public void testSetImplictH() {
 		JniInchiAtom atom = getTestAtom();
-		atom.setImplictH(3);
+		atom.setImplicitH(3);
 		assertEquals(atom.implicitH, 3);
 	}
 
@@ -69,7 +69,7 @@ public class JniInchiAtomTest extends TestCase {
 	 */
 	public void testSetImplictProtium() {
 		JniInchiAtom atom = getTestAtom();
-		atom.setImplictProtium(2);
+		atom.setImplicitProtium(2);
 		assertEquals(atom.implicitP, 2);
 	}
 
@@ -78,7 +78,7 @@ public class JniInchiAtomTest extends TestCase {
 	 */
 	public void testSetImplictDeuterium() {
 		JniInchiAtom atom = getTestAtom();
-		atom.setImplictDeuterium(2);
+		atom.setImplicitDeuterium(2);
 		assertEquals(atom.implicitD, 2);
 	}
 
@@ -87,7 +87,7 @@ public class JniInchiAtomTest extends TestCase {
 	 */
 	public void testSetImplictTritium() {
 		JniInchiAtom atom = getTestAtom();
-		atom.setImplictTritium(2);
+		atom.setImplicitTritium(2);
 		assertEquals(atom.implicitT, 2);
 	}
 

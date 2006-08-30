@@ -174,7 +174,6 @@ public class JniInchiAtom {
         this.implicitT = n;
     }
     
-    
     /**
      * Returns chemical element symbol of atom.
      * @return

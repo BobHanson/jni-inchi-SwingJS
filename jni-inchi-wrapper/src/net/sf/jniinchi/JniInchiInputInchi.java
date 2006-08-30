@@ -23,6 +23,16 @@ public class JniInchiInputInchi {
 	 */
 	protected String options;
 	
+    /**
+     * Constructor.
+     * @param inchi InChI string
+     * @param opts  Options
+     */
+    public JniInchiInputInchi(String inchi) {
+        this.inchiString = inchi;
+        this.options = "";
+    }
+    
 	/**
 	 * Constructor.
 	 * @param inchi	InChI string
@@ -42,4 +52,20 @@ public class JniInchiInputInchi {
 		this.inchiString = inchi;
 		this.options = JniInchiWrapper.checkOptions(opts);
 	}
+    
+    /**
+     * Returns options string.
+     * @return
+     */
+    public String getOptions() {
+        return(options);
+    }
+    
+    /**
+     * Returns options string.
+     * @return
+     */
+    public String getInchi() {
+        return(inchiString);
+    }
 }

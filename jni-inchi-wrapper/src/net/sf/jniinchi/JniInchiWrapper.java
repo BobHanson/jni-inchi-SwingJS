@@ -55,13 +55,13 @@ public class JniInchiWrapper {
      */
     private static final int MAXVAL = 20;
     
-    private static int WINDOWS = 1;
-    private static int LINUX = 2;
+    protected static final int WINDOWS = 1;
+    protected static final int LINUX = 2;
     
     /**
      * Flag indicating windows or linux.
      */
-    private static int PLATFORM =
+    protected static final int PLATFORM =
         System.getProperty("os.name", "").toLowerCase().startsWith("windows") ? WINDOWS : LINUX;
     
     /**
@@ -72,7 +72,7 @@ public class JniInchiWrapper {
     /**
      * Switch character for passing options. / in windows, - on other systems.
      */
-    private static String flagChar = PLATFORM == WINDOWS ? "/" : "-"; 
+    protected static final String flagChar = PLATFORM == WINDOWS ? "/" : "-"; 
     
     /**
      * Flag indicating whether native files should be placed automatically. By
@@ -235,8 +235,9 @@ public class JniInchiWrapper {
                 op = op.substring(1);
             }
             
-            if (optionMap.keySet().contains(op)) {
-                sbOptions.append(flagChar + op + " ");
+            String lcop = op.toLowerCase();
+            if (optionMap.keySet().contains(lcop)) {
+                sbOptions.append(flagChar + optionMap.get(lcop) + " ");
             } else {
                 throw new JniInchiException("Unrecognised InChI option");
             }
@@ -259,7 +260,11 @@ public class JniInchiWrapper {
         int nat = input.getNumAtoms();
         int nst = input.getNumStereo0D();
         
-        wrapper.LibInchiStartInput(nat, nst, input.options.length() == 0 ? " " : input.options);
+        String options = input.getOptions();
+        if (options.length() == 0) {
+            options = " ";
+        }
+        wrapper.LibInchiStartInput(nat, nst, options);
         
         // Load atom data
         Map atomIndxMap = new HashMap();
@@ -350,7 +355,12 @@ public class JniInchiWrapper {
      */
     public static JniInchiOutputStructure getStructureFromInchi(JniInchiInputInchi input) throws JniInchiException {
     	JniInchiWrapper wrapper = new JniInchiWrapper();
-    	int retVal = wrapper.LibInchiGetStruct(input.inchiString, input.options);
+        String options = input.getOptions();
+        if (options.length() == 0) {
+            options = " ";
+        }
+        String inchiString = input.getInchi();
+    	int retVal = wrapper.LibInchiGetStruct(inchiString, options);
     	
     	JniInchiOutputStructure output = new JniInchiOutputStructure();
     	
@@ -385,10 +395,10 @@ public class JniInchiWrapper {
     		
     		JniInchiAtom atom = new JniInchiAtom(x, y, z, el);
     		
-    		atom.setImplictH(wrapper.LibInchiGetAtomImplicitH(i));
-    		atom.setImplictProtium(wrapper.LibInchiGetAtomImplicitP(i));
-    		atom.setImplictDeuterium(wrapper.LibInchiGetAtomImplicitD(i));
-    		atom.setImplictTritium(wrapper.LibInchiGetAtomImplicitT(i));
+    		atom.setImplicitH(wrapper.LibInchiGetAtomImplicitH(i));
+    		atom.setImplicitProtium(wrapper.LibInchiGetAtomImplicitP(i));
+    		atom.setImplicitDeuterium(wrapper.LibInchiGetAtomImplicitD(i));
+    		atom.setImplicitTritium(wrapper.LibInchiGetAtomImplicitT(i));
     		
     		atom.setCharge(wrapper.LibInchiGetAtomCharge(i));
     		atom.setIsotopicMass(wrapper.LibInchiGetAtomIsotopicMass(i));

@@ -22,7 +22,7 @@ public class JniInchiInput extends JniInchiStructure {
      * Constructor.
      * @throws JniInchiException
      */
-    public JniInchiInput() throws JniInchiException {
+    public JniInchiInput() {
         this.options = "";
     }
     
