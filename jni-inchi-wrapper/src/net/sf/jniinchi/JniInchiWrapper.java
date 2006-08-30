@@ -203,11 +203,12 @@ public class JniInchiWrapper {
         System.err.println(" ** Failed to load JNI InChI native code **");
         System.err.println();
         System.err.println("The most likely cause of this problem is that the native libraries are not in the");
-        System.err.println("correct location.");
+        System.err.println("correct location.  If java is finding the files, but is failing to load them then");
+        System.err.println("they may need recompiling for your system.");
         System.err.println("");
         System.err.println("JNI InChI thinks you are using: " + (PLATFORM == WINDOWS ? "Windows" : "Linux"));
+        System.err.println("JNI InChI is trying to load: " + FILENAMES[0] + ", " + FILENAMES[1]);
         System.err.println("Java is searching the following locations: " + System.getProperty("java.library.path", ""));
-        System.err.println("Java is trying to load: " + FILENAMES[0] + ", " + FILENAMES[1]);
         System.err.println("");
         System.err.println("To get java to look in other locations add them to PATH if using Windows, or to");
         System.err.println("LD_LIBRARY_PATH if using Linux.");
