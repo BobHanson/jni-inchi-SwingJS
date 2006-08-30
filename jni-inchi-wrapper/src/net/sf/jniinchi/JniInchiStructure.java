@@ -80,7 +80,7 @@ public class JniInchiStructure {
      * @param parity  Parity to add
      * @return        Added parity
      */
-    public JniInchiStereo0D addParity(JniInchiStereo0D parity) {
+    public JniInchiStereo0D addStereo0D(JniInchiStereo0D parity) {
         stereoList.add(parity);
         return(parity);
     }

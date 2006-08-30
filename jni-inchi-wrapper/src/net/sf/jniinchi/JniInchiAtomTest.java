@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 public class JniInchiAtomTest extends TestCase {
 
-	protected JniInchiAtom getTestAtom() {
+	protected static JniInchiAtom getTestAtom() {
 		return(new JniInchiAtom(1, 2, 3, "C"));
 	}
 	

@@ -4,8 +4,12 @@ import junit.framework.TestCase;
 
 public class JniInchiBondTest extends TestCase {
 	
-	protected JniInchiAtom atO = new JniInchiAtom(0, 0, 0, "O");
-	protected JniInchiAtom atT = new JniInchiAtom(1.21, 0, 0, "O");
+	protected static JniInchiAtom atO = new JniInchiAtom(0, 0, 0, "O");
+	protected static JniInchiAtom atT = new JniInchiAtom(1.21, 0, 0, "O");
+    
+    protected static JniInchiBond getTestBond() {
+        return(new JniInchiBond(atO, atT, INCHI_BOND_TYPE.DOUBLE));
+    }
 	
 	/*
 	 * Test method for 'net.sf.jniinchi.JniInchiBond.JniInchiBond(JniInchiAtom, JniInchiAtom, INCHI_BOND_TYPE, INCHI_BOND_STEREO)'

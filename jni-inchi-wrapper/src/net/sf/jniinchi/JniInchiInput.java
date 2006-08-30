@@ -20,6 +20,14 @@ public class JniInchiInput extends JniInchiStructure {
     
     /**
      * Constructor.
+     * @throws JniInchiException
+     */
+    public JniInchiInput() throws JniInchiException {
+        this.options = "";
+    }
+    
+    /**
+     * Constructor.
      * @param opts	Options string.
      * @throws JniInchiException
      */

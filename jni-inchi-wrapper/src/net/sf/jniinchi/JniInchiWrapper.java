@@ -516,7 +516,7 @@ public class JniInchiWrapper {
     				output.getAtom(at0), output.getAtom(at1), output.getAtom(at2),
     				output.getAtom(at3), stereoType, stereoParity);
     		
-    		output.addParity(stereo);
+    		output.addStereo0D(stereo);
     		//stereo.debug();
     	}
     	
