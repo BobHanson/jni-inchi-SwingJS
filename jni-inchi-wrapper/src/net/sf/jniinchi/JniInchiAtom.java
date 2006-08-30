@@ -15,7 +15,7 @@ public class JniInchiAtom {
      * Indicates relative rather than absolute isotopic mass. Value
      * from inchi_api.h.
      */
-    private static final int ISOTOPIC_SHIFT_FLAG = 10000;
+    protected static final int ISOTOPIC_SHIFT_FLAG = 10000;
     
     /**
      * Atom x-coordinate.
