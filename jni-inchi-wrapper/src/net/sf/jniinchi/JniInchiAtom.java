@@ -145,7 +145,7 @@ public class JniInchiAtom {
      * 
      * @param n  Number of implicit hydrogen
      */
-    public void setImplictH(int n) {
+    public void setImplicitH(int n) {
         this.implicitH = n;
     }
     
@@ -153,7 +153,7 @@ public class JniInchiAtom {
      * Sets number of implicit protium (1H) on atom.
      * @param n  Number of implicit protium
      */
-    public void setImplictProtium(int n) {
+    public void setImplicitProtium(int n) {
         this.implicitP = n;
     }
     
@@ -162,7 +162,7 @@ public class JniInchiAtom {
      * 
      * @param n  Number of implicit deuterium
      */
-    public void setImplictDeuterium(int n) {
+    public void setImplicitDeuterium(int n) {
         this.implicitD = n;
     }
     
@@ -170,7 +170,7 @@ public class JniInchiAtom {
      * Sets number of implicit tritium (3H) on atom.
      * @param n  Number of implicit tritium
      */
-    public void setImplictTritium(int n) {
+    public void setImplicitTritium(int n) {
         this.implicitT = n;
     }
     
