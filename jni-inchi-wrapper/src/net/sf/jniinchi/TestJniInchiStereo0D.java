@@ -2,7 +2,7 @@ package net.sf.jniinchi;
 
 import junit.framework.TestCase;
 
-public class JniInchiStereo0DTest extends TestCase {
+public class TestJniInchiStereo0D extends TestCase {
     
     protected static JniInchiAtom atC = new JniInchiAtom(0, 0, 0, "C");
     protected static JniInchiAtom at0 = new JniInchiAtom(0, 0, 0, "N");

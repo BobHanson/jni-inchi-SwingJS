@@ -2,7 +2,7 @@ package net.sf.jniinchi;
 
 import junit.framework.TestCase;
 
-public class JniInchiOutputStructureTest extends TestCase {
+public class TestJniInchiOutputStructure extends TestCase {
 
     /*
      * Test method for 'net.sf.jniinchi.JniInchiOutputStructure.getReturnStatus()'

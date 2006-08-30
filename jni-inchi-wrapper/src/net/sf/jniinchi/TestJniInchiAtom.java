@@ -2,7 +2,7 @@ package net.sf.jniinchi;
 
 import junit.framework.TestCase;
 
-public class JniInchiAtomTest extends TestCase {
+public class TestJniInchiAtom extends TestCase {
 
 	protected static JniInchiAtom getTestAtom() {
 		return(new JniInchiAtom(1, 2, 3, "C"));

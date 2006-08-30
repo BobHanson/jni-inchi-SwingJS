@@ -2,7 +2,7 @@ package net.sf.jniinchi;
 
 import junit.framework.TestCase;
 
-public class JniInchiStructureTest extends TestCase {
+public class TestJniInchiStructure extends TestCase {
 
     /*
      * Test method for 'net.sf.jniinchi.JniInchiStructure.getNumAtoms()'
@@ -10,7 +10,7 @@ public class JniInchiStructureTest extends TestCase {
     public void testGetNumAtoms() {
         JniInchiStructure structure = new JniInchiStructure();
         assertEquals(structure.getNumAtoms(), 0);
-        structure.atomList.add(JniInchiAtomTest.getTestAtom());
+        structure.atomList.add(TestJniInchiAtom.getTestAtom());
         assertEquals(structure.getNumAtoms(), 1);
     }
 
@@ -20,7 +20,7 @@ public class JniInchiStructureTest extends TestCase {
     public void testGetNumBonds() {
         JniInchiStructure structure = new JniInchiStructure();
         assertEquals(structure.getNumBonds(), 0);
-        structure.bondList.add(JniInchiBondTest.getTestBond());
+        structure.bondList.add(TestJniInchiBond.getTestBond());
         assertEquals(structure.getNumBonds(), 1);
     }
 
@@ -30,7 +30,7 @@ public class JniInchiStructureTest extends TestCase {
     public void testGetNumStereo0D() {
         JniInchiStructure structure = new JniInchiStructure();
         assertEquals(structure.getNumStereo0D(), 0);
-        structure.stereoList.add(JniInchiStereo0DTest.getTestStereo0D());
+        structure.stereoList.add(TestJniInchiStereo0D.getTestStereo0D());
         assertEquals(structure.getNumStereo0D(), 1);
     }
 
@@ -40,7 +40,7 @@ public class JniInchiStructureTest extends TestCase {
     public void testAddAtom() {
         JniInchiStructure structure = new JniInchiStructure();
         assertEquals(structure.getNumAtoms(), 0);
-        structure.addAtom(JniInchiAtomTest.getTestAtom());
+        structure.addAtom(TestJniInchiAtom.getTestAtom());
         assertEquals(structure.getNumAtoms(), 1);
     }
 
@@ -50,7 +50,7 @@ public class JniInchiStructureTest extends TestCase {
     public void testAddBond() {
         JniInchiStructure structure = new JniInchiStructure();
         assertEquals(structure.getNumBonds(), 0);
-        structure.addBond(JniInchiBondTest.getTestBond());
+        structure.addBond(TestJniInchiBond.getTestBond());
         assertEquals(structure.getNumBonds(), 1);
     }
 
@@ -60,7 +60,7 @@ public class JniInchiStructureTest extends TestCase {
     public void testAddStereo0D() {
         JniInchiStructure structure = new JniInchiStructure();
         assertEquals(structure.getNumStereo0D(), 0);
-        structure.addStereo0D(JniInchiStereo0DTest.getTestStereo0D());
+        structure.addStereo0D(TestJniInchiStereo0D.getTestStereo0D());
         assertEquals(structure.getNumStereo0D(), 1);
     }
 
@@ -69,7 +69,7 @@ public class JniInchiStructureTest extends TestCase {
      */
     public void testGetAtom() {
         JniInchiStructure structure = new JniInchiStructure();
-        JniInchiAtom atom = JniInchiAtomTest.getTestAtom();
+        JniInchiAtom atom = TestJniInchiAtom.getTestAtom();
         structure.addAtom(atom);
         assertEquals(structure.getAtom(0), atom);
     }
@@ -79,7 +79,7 @@ public class JniInchiStructureTest extends TestCase {
      */
     public void testGetBond() {
         JniInchiStructure structure = new JniInchiStructure();
-        JniInchiBond bond = JniInchiBondTest.getTestBond();
+        JniInchiBond bond = TestJniInchiBond.getTestBond();
         structure.addBond(bond);
         assertEquals(structure.getBond(0), bond);
     }
@@ -89,7 +89,7 @@ public class JniInchiStructureTest extends TestCase {
      */
     public void testGetStereo0D() {
         JniInchiStructure structure = new JniInchiStructure();
-        JniInchiStereo0D stereo = JniInchiStereo0DTest.getTestStereo0D();
+        JniInchiStereo0D stereo = TestJniInchiStereo0D.getTestStereo0D();
         structure.addStereo0D(stereo);
         assertEquals(structure.getStereo0D(0), stereo);
     }

@@ -5,7 +5,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-public class JniInchiWrapperTest extends TestCase {
+public class TestJniInchiWrapper extends TestCase {
     
     protected static JniInchiInput getBenzeneInput() {
         JniInchiInput input = new JniInchiInput();
@@ -33,6 +33,48 @@ public class JniInchiWrapperTest extends TestCase {
         input.addBond(new JniInchiBond(a4, a5, INCHI_BOND_TYPE.DOUBLE));
         input.addBond(new JniInchiBond(a5, a6, INCHI_BOND_TYPE.SINGLE));
         input.addBond(new JniInchiBond(a6, a1, INCHI_BOND_TYPE.DOUBLE));
+        
+        return(input);
+    }
+    
+    protected static JniInchiInput getPropanolInput() {
+        JniInchiInput input = new JniInchiInput();
+        JniInchiAtom a1 = new JniInchiAtom(0.419000, -0.193000, 0.246000, "O");
+        JniInchiAtom a2 = new JniInchiAtom(0.753000, 0.647000, 0.603000, "H");
+        JniInchiAtom a3 = new JniInchiAtom(-0.965000, -0.011000, -0.023000, "C");
+        JniInchiAtom a4 = new JniInchiAtom(-1.468000, 0.262000, 0.910000, "H");
+        JniInchiAtom a5 = new JniInchiAtom(-1.075000, 0.808000, -0.740000, "H");
+        JniInchiAtom a6 = new JniInchiAtom(-1.531000, -1.306000, -0.586000, "C");
+        JniInchiAtom a7 = new JniInchiAtom(-1.366000, -2.121000, 0.129000, "H");
+        JniInchiAtom a8 = new JniInchiAtom(-0.980000, -1.585000, -1.492000, "H");
+        JniInchiAtom a9 = new JniInchiAtom(-3.012000, -1.187000, -0.898000, "C");
+        JniInchiAtom a10 = new JniInchiAtom(-3.194000, -0.403000, -1.641000, "H");
+        JniInchiAtom a11 = new JniInchiAtom(-3.585000, -0.946000, 0.003000, "H");
+        JniInchiAtom a12 = new JniInchiAtom(-3.392000, -2.131000, -1.301000, "H");
+        input.addAtom(a1);
+        input.addAtom(a2);
+        input.addAtom(a3);
+        input.addAtom(a4);
+        input.addAtom(a5);
+        input.addAtom(a6);
+        input.addAtom(a7);
+        input.addAtom(a8);
+        input.addAtom(a9);
+        input.addAtom(a10);
+        input.addAtom(a11);
+        input.addAtom(a12);
+        
+        input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a3, a5, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a3, a4, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a3, a6, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a6, a8, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a6, a7, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a6, a9, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a9, a12, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a9, a11, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a9, a10, INCHI_BOND_TYPE.SINGLE));
         
         return(input);
     }
@@ -82,6 +124,11 @@ public class JniInchiWrapperTest extends TestCase {
         assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
         assertEquals(output.getInchi(), "InChI=1/C6H6/c1-2-4-6-5-3-1/h1-6H");
         assertEquals(output.getAuxInfo(), "AuxInfo=1/0/N:1,2,6,3,5,4/E:(1,2,3,4,5,6)/rA:6CCCCCC/rB:s1;d2;s3;d4;d1s5;/rC:-.01,0,0;-.707,1.208,0;-2.102,1.208,0;-2.799,0,0;-2.102,-1.208,0;-.707,-1.208,0;");
+        
+        input = getPropanolInput();
+        output = JniInchiWrapper.getInchi(input);
+        assertEquals(output.getInchi(), "InChI=1/C3H8O/c1-2-3-4/h4H,2-3H2,1H3");
+        assertEquals(output.getAuxInfo(), "AuxInfo=1/0/N:9,6,3,1/rA:12OHCHHCHHCHHH/rB:s1;s1;s3;s3;s3;s6;s6;s6;s9;s9;s9;/rC:.419,-.193,.246;.753,.647,.603;-.965,-.011,-.023;-1.468,.262,.91;-1.075,.808,-.74;-1.531,-1.306,-.586;-1.366,-2.121,.129;-.98,-1.585,-1.492;-3.012,-1.187,-.898;-3.194,-.403,-1.641;-3.585,-.946,.003;-3.392,-2.131,-1.301;");
     }
 
     /*

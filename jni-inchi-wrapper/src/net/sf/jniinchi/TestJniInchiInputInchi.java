@@ -2,7 +2,7 @@ package net.sf.jniinchi;
 
 import junit.framework.TestCase;
 
-public class JniInchiInputInchiTest extends TestCase {
+public class TestJniInchiInputInchi extends TestCase {
 
     /*
      * Test method for 'net.sf.jniinchi.JniInchiInputInchi.getOptions()'
