@@ -23,6 +23,7 @@
 		<echo>COMPILING: jniInchi Java</echo>
 		<javac srcdir="${jniInchi.src.dir}/net/sf/jniinchi" destdir="${bin.dir}" source="1.4">
 		    <include name="*.java" />
+			<exclude name="Test*.java" />
 		</javac>
 		
 		<copy todir="${bin.dir}">
@@ -46,13 +47,12 @@
 		<mkdir dir="${doc.dir}"/>
 		<javadoc
 			destdir="${doc.dir}"
-			packagenames="net.sf.jniinchi.*"
             source="1.4"
 			>
 			
-			<sourcepath>
-				<pathelement path="${jniInchi.src.dir}"/>
-			</sourcepath>
+			<packageset dir="${jniInchi.src.dir}" defaultexcludes="yes">
+			      <include name="net/sf/jniinchi/**"/>
+		    </packageset>
 		</javadoc>
 	</target>
 	
