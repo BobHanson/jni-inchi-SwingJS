@@ -124,7 +124,7 @@ public class JniInchiWrapper {
 	                }
 	                
 	                if (!match) {
-                        printLibraryLoadFailedMessage();
+                        printLibraryLoadFailedMessage("Unable to auto-place files: working directory not in library search path.\nTo fix this, try adding '.' to PATH or LD_LIBRARY_PATH");
 	                	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: working directory not in library search path");
 	                }
 		            	
@@ -136,6 +136,7 @@ public class JniInchiWrapper {
                     	// Locate file
                         URL u = cl.getResource(FILENAMES[i]);
                         if (u == null) {
+                            printLibraryLoadFailedMessage();
                         	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: cannot locate " + FILENAMES[i]);
                         }
                         
@@ -177,10 +178,12 @@ public class JniInchiWrapper {
                     try {
                         System.loadLibrary(JNI_INCHI_LIB);
 	                } catch (UnsatisfiedLinkError ule2) {
-	                    throw new LoadNativeLibraryException("Unable to load JniInchi library: "
-	                            + ule2.getMessage());
+                        printLibraryLoadFailedMessage();
+	                    throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Auto-place attempt failed ["
+	                            + ule2.getMessage() + "]");
 	                }
             	} else {
+                    printLibraryLoadFailedMessage();
             		throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Not set to auto-place files.");
             	}
             }
@@ -191,6 +194,11 @@ public class JniInchiWrapper {
     
     
     protected static void printLibraryLoadFailedMessage() {
+        printLibraryLoadFailedMessage(null);
+    }
+    
+    
+    protected static void printLibraryLoadFailedMessage(String message) {
         System.err.println();
         System.err.println(" ** Failed to load JNI InChI native code **");
         System.err.println();
@@ -204,6 +212,10 @@ public class JniInchiWrapper {
         System.err.println("To get java to look in other locations add them to PATH if using Windows, or to");
         System.err.println("LD_LIBRARY_PATH if using Linux.");
         System.err.println("");
+        if (message != null) {
+            System.err.println(message);
+            System.err.println();
+        }
     }
     
     
@@ -776,7 +788,5 @@ public class JniInchiWrapper {
     private native int LibInchiGetStereoType(int stIndex);
     
     private native int LibInchiGetStereoParity(int stIndex);
-    
-    
     
 }
