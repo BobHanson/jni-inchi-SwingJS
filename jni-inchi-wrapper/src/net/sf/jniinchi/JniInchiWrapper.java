@@ -48,7 +48,7 @@ public class JniInchiWrapper {
     /**
      * Names of linux library files.
      */
-    private static final String[] LINUX_FILES = {"libinchi.so.1", "libJniInchi.so"};
+    private static final String[] LINUX_FILES = {"libJniInchi.so", "libinchi.so.1"};
     
     /**
      * Size of atom neighbors (bonds) array (value from InChI library).
@@ -95,7 +95,7 @@ public class JniInchiWrapper {
      * 
      * @throws JniInchiException Library failed to load
      */
-    protected static void loadLibrary() throws JniInchiException {
+    protected static void loadLibrary() throws LoadNativeLibraryException {
         if (!libraryLoaded) {
             try {
             	// Try to load native library
@@ -109,81 +109,101 @@ public class JniInchiWrapper {
             	
             	if (AUTO_PLACE_NATIVE_CODE) {
             	
-	            	try {
-		            	String librarySearchPath = System.getProperty("java.library.path");
-		            	String workingDir = System.getProperty("user.dir");
-		            	String pathSeparator = System.getProperty("path.separator");
-		                StringTokenizer token = new StringTokenizer(librarySearchPath, pathSeparator);
-		                
-		                boolean match = false;
-		                while (token.hasMoreTokens()) {
-		                	String path = token.nextToken();
-		                	if (path.equals(".") || path.equals(workingDir)) {
-		                		match = true;
-		                		break;
-		                	}
-		                }
-		                
-		                if (!match) {
-		                	throw new IOException("Working directory not in library search path");
-		                }
-		            	
-		                // Copy files to directory
-		            	String pathSep = System.getProperty("file.separator");
-		                ClassLoader cl = ClassLoader.getSystemClassLoader();
+	            	String librarySearchPath = System.getProperty("java.library.path");
+	            	String workingDir = System.getProperty("user.dir");
+	            	String pathSeparator = System.getProperty("path.separator");
+	                StringTokenizer token = new StringTokenizer(librarySearchPath, pathSeparator);
 	                
-	                    for (int i = 0; i < FILENAMES.length; i ++) {
-	                    	// Locate file
-	                        URL u = cl.getResource(FILENAMES[i]);
-	                        if (u == null) {
-	                        	throw new IOException("Unable to locate " + FILENAMES[i]);
-	                        }
-	                        
-	                        // Check output path writable
-	                        String outfilepath = workingDir + pathSep;
-	                        File outpath = new File(outfilepath);
-	                        if (!outpath.canWrite()) {
-	                        	throw new IOException("Unable to write to " + outpath);
-	                        }
-	                        
-	                        File outfile = new File(outfilepath + FILENAMES[i]);
-	                        
-	                        // Skip if file already exists
-	                        if (outfile.exists()) {
-	                        	continue;
-	                        }
-	                        
-	                        // Open streams           
-	                        InputStream is = u.openStream();
-	                        OutputStream os = new FileOutputStream(outfile);
-	                        
-	                        // Copy file
-	                        int n;
-	                        byte[] b = new byte[1024];
-	                        while ((n = is.read(b)) > -1) {
-	                            os.write(b, 0, n);
-	                        }
-	                        os.close();
-	                        is.close();
-	                    }
-	                    
-	                    // Load libraries
-	                    System.loadLibrary(JNI_INCHI_LIB);
-	                } catch (IOException ioe) {
-	                    throw new JniInchiException("Unable to load JniInchi library: "
-	                            + ioe.getMessage());
+	                boolean match = false;
+	                while (token.hasMoreTokens()) {
+	                	String path = token.nextToken();
+	                	if (path.equals(".") || path.equals(workingDir)) {
+	                		match = true;
+	                		break;
+	                	}
+	                }
+	                
+	                if (!match) {
+                        printLibraryLoadFailedMessage();
+	                	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: working directory not in library search path");
+	                }
+		            	
+	                // Copy files to directory
+	            	String pathSep = System.getProperty("file.separator");
+	                ClassLoader cl = ClassLoader.getSystemClassLoader();
+                
+                    for (int i = 0; i < FILENAMES.length; i ++) {
+                    	// Locate file
+                        URL u = cl.getResource(FILENAMES[i]);
+                        if (u == null) {
+                        	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: cannot locate " + FILENAMES[i]);
+                        }
+                        
+                        // Check output path writable
+                        String outfilepath = workingDir + pathSep;
+                        File outpath = new File(outfilepath);
+                        if (!outpath.canWrite()) {
+                            printLibraryLoadFailedMessage();
+                        	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: cannot write to " + outpath);
+                        }
+                        
+                        File outfile = new File(outfilepath + FILENAMES[i]);
+                        
+                        // Skip if file already exists
+                        if (outfile.exists()) {
+                        	continue;
+                        }
+                        
+                        try {
+                            // Open streams           
+                            InputStream is = u.openStream();
+                            OutputStream os = new FileOutputStream(outfile);
+                            
+                            // Copy file
+                            int n;
+                            byte[] b = new byte[1024];
+                            while ((n = is.read(b)) > -1) {
+                                os.write(b, 0, n);
+                            }
+                            os.close();
+                            is.close();
+                        } catch (IOException ioe) {
+                            printLibraryLoadFailedMessage();
+                            throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: " + ioe.getMessage());
+                        }
+                    }
+                    
+                    // Load libraries
+                    try {
+                        System.loadLibrary(JNI_INCHI_LIB);
 	                } catch (UnsatisfiedLinkError ule2) {
-	                    throw new JniInchiException("Unable to load JniInchi library: "
+	                    throw new LoadNativeLibraryException("Unable to load JniInchi library: "
 	                            + ule2.getMessage());
 	                }
             	} else {
-            		throw new JniInchiException("Unable to load JniInchi library: "
-                            + ule.getMessage());
+            		throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Not set to auto-place files.");
             	}
             }
             
             libraryLoaded = true;
         }
+    }
+    
+    
+    protected static void printLibraryLoadFailedMessage() {
+        System.err.println();
+        System.err.println(" ** Failed to load JNI InChI native code **");
+        System.err.println();
+        System.err.println("The most likely cause of this problem is that the native libraries are not in the");
+        System.err.println("correct location.");
+        System.err.println("");
+        System.err.println("JNI InChI thinks you are using: " + (PLATFORM == WINDOWS ? "Windows" : "Linux"));
+        System.err.println("Java is searching the following locations: " + System.getProperty("java.library.path", ""));
+        System.err.println("Java is trying to load: " + FILENAMES[0] + ", " + FILENAMES[1]);
+        System.err.println("");
+        System.err.println("To get java to look in other locations add them to PATH if using Windows, or to");
+        System.err.println("LD_LIBRARY_PATH if using Linux.");
+        System.err.println("");
     }
     
     
