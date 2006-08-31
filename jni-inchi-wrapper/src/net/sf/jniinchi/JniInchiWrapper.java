@@ -95,7 +95,7 @@ public class JniInchiWrapper {
      * 
      * @throws JniInchiException Library failed to load
      */
-    protected static void loadLibrary() throws LoadNativeLibraryException {
+    public static void loadLibrary() throws LoadNativeLibraryException {
         if (!libraryLoaded) {
             try {
             	// Try to load native library
@@ -223,7 +223,7 @@ public class JniInchiWrapper {
     /**
      * Constructor
      */
-    protected JniInchiWrapper() throws JniInchiException {
+    protected JniInchiWrapper() throws LoadNativeLibraryException {
 	    loadLibrary();
     }
     
