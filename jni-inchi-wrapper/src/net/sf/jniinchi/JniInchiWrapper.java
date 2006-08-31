@@ -124,7 +124,7 @@ public class JniInchiWrapper {
 	                }
 	                
 	                if (!match) {
-                        printLibraryLoadFailedMessage("Unable to auto-place files: working directory not in library search path.\nTo fix this, try adding '.' to PATH or LD_LIBRARY_PATH");
+                        printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. " + "Unable to auto-place files: working directory not in library search path.\nTo fix this, try adding '.' to PATH or LD_LIBRARY_PATH");
 	                	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: working directory not in library search path");
 	                }
 		            	
@@ -136,7 +136,7 @@ public class JniInchiWrapper {
                     	// Locate file
                         URL u = cl.getResource(FILENAMES[i]);
                         if (u == null) {
-                            printLibraryLoadFailedMessage();
+                            printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: cannot locate " + FILENAMES[i]);
                         	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: cannot locate " + FILENAMES[i]);
                         }
                         
@@ -144,7 +144,7 @@ public class JniInchiWrapper {
                         String outfilepath = workingDir + pathSep;
                         File outpath = new File(outfilepath);
                         if (!outpath.canWrite()) {
-                            printLibraryLoadFailedMessage();
+                            printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: cannot write to " + outpath);
                         	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: cannot write to " + outpath);
                         }
                         
@@ -169,7 +169,7 @@ public class JniInchiWrapper {
                             os.close();
                             is.close();
                         } catch (IOException ioe) {
-                            printLibraryLoadFailedMessage();
+                            printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: " + ioe.getMessage());
                             throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: " + ioe.getMessage());
                         }
                     }
@@ -178,12 +178,13 @@ public class JniInchiWrapper {
                     try {
                         System.loadLibrary(JNI_INCHI_LIB);
 	                } catch (UnsatisfiedLinkError ule2) {
-                        printLibraryLoadFailedMessage();
+                        printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. Auto-place attempt failed ["
+                                + ule2.getMessage() + "]");
 	                    throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Auto-place attempt failed ["
 	                            + ule2.getMessage() + "]");
 	                }
             	} else {
-                    printLibraryLoadFailedMessage();
+                    printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. Not set to auto-place files.");
             		throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Not set to auto-place files.");
             	}
             }
@@ -202,9 +203,20 @@ public class JniInchiWrapper {
         System.err.println();
         System.err.println(" ** Failed to load JNI InChI native code **");
         System.err.println();
-        System.err.println("The most likely cause of this problem is that the native libraries are not in the");
-        System.err.println("correct location.  If java is finding the files, but is failing to load them then");
-        System.err.println("they may need recompiling for your system.");
+        if (message != null) {
+            System.err.println("Error message:");
+            System.err.println(message);
+            System.err.println();
+        }
+        System.err.println("General information:");
+        System.err.println("The most likely common problem is that the PATH or LD_LIBRARY_PATH");
+        System.err.println("environmental variables are not correctly configured. If you have placed");
+        System.err.println("the native library files yourself, then the location they are in needs adding.");
+        System.err.println("If you are using the JNI-InChI JAR, and would like it to automatically place");
+        System.err.println("the native libraries then you need to make sure that either the current working");
+        System.err.println("directory or '.' are included in PATH or LD_LIBRARY_PATH. If java is finding the");
+        System.err.println("files, but is failing to load them then they may need recompiling for your");
+        System.err.println("system.");
         System.err.println("");
         System.err.println("JNI InChI thinks you are using: " + (PLATFORM == WINDOWS ? "Windows" : "Linux"));
         System.err.println("JNI InChI is trying to load: " + FILENAMES[0] + ", " + FILENAMES[1]);
@@ -213,10 +225,6 @@ public class JniInchiWrapper {
         System.err.println("To get java to look in other locations add them to PATH if using Windows, or to");
         System.err.println("LD_LIBRARY_PATH if using Linux.");
         System.err.println("");
-        if (message != null) {
-            System.err.println(message);
-            System.err.println();
-        }
     }
     
     
