@@ -268,7 +268,7 @@ public class CMLInchiGenerator {
                 	throw new CMLRuntime("Negative implicit hydrogen count: " + atom);
                 }
                 
-                iatom.setImplictH(hcount);
+                iatom.setImplicitH(hcount);
             }
         }
         
