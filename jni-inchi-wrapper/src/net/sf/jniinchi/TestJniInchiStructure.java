@@ -10,7 +10,7 @@ public class TestJniInchiStructure extends TestCase {
     public void testGetNumAtoms() {
         JniInchiStructure structure = new JniInchiStructure();
         assertEquals(structure.getNumAtoms(), 0);
-        structure.atomList.add(TestJniInchiAtom.getTestAtom());
+        structure.atomList.add(TestJniInchiAtom.getNewTestAtom());
         assertEquals(structure.getNumAtoms(), 1);
     }
 
@@ -40,7 +40,7 @@ public class TestJniInchiStructure extends TestCase {
     public void testAddAtom() {
         JniInchiStructure structure = new JniInchiStructure();
         assertEquals(structure.getNumAtoms(), 0);
-        structure.addAtom(TestJniInchiAtom.getTestAtom());
+        structure.addAtom(TestJniInchiAtom.getNewTestAtom());
         assertEquals(structure.getNumAtoms(), 1);
     }
 
@@ -69,7 +69,7 @@ public class TestJniInchiStructure extends TestCase {
      */
     public void testGetAtom() {
         JniInchiStructure structure = new JniInchiStructure();
-        JniInchiAtom atom = TestJniInchiAtom.getTestAtom();
+        JniInchiAtom atom = TestJniInchiAtom.getNewTestAtom();
         structure.addAtom(atom);
         assertEquals(structure.getAtom(0), atom);
     }

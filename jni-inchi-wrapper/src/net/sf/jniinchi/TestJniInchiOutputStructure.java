@@ -1,44 +1,49 @@
 package net.sf.jniinchi;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
-public class TestJniInchiOutputStructure extends TestCase {
+public class TestJniInchiOutputStructure {
 
     /*
      * Test method for 'net.sf.jniinchi.JniInchiOutputStructure.getReturnStatus()'
      */
+	@Test
     public void testGetReturnStatus() {
         JniInchiOutputStructure output = new JniInchiOutputStructure();
         output.retStatus = INCHI_RET.OKAY;
-        assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+        Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
     }
 
     /*
      * Test method for 'net.sf.jniinchi.JniInchiOutputStructure.getMessage()'
      */
+    @Test
     public void testGetMessage() {
         JniInchiOutputStructure output = new JniInchiOutputStructure();
         output.message = "Test message";
-        assertEquals(output.getMessage(), "Test message");
+        Assert.assertEquals(output.getMessage(), "Test message");
     }
 
     /*
      * Test method for 'net.sf.jniinchi.JniInchiOutputStructure.getLog()'
      */
+    @Test
     public void testGetLog() {
         JniInchiOutputStructure output = new JniInchiOutputStructure();
         output.log = "Test log";
-        assertEquals(output.getLog(), "Test log");
+        Assert.assertEquals(output.getLog(), "Test log");
     }
 
     /*
      * Test method for 'net.sf.jniinchi.JniInchiOutputStructure.getWarningFlags()'
      */
+    @Test
     public void testGetWarningFlags() {
         JniInchiOutputStructure output = new JniInchiOutputStructure();
         long[][] flags = {{1, 2}, {3, 4}};
         output.warningFlags = flags;
-        assertEquals(output.getWarningFlags(), flags);
+        Assert.assertEquals(output.getWarningFlags(), flags);
     }
 
 }

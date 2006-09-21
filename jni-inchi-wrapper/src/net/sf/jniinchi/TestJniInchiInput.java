@@ -1,15 +1,17 @@
 package net.sf.jniinchi;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
-public class TestJniInchiInput extends TestCase {
+public class TestJniInchiInput {
 
     /*
      * Test method for 'net.sf.jniinchi.JniInchiInput.getOptions()'
      */
+	@Test
     public void testGetOptions() {
         JniInchiInput input = new JniInchiInput();
         input.options = "-compress";
-        assertEquals(input.getOptions(), "-compress");
+        Assert.assertEquals(input.getOptions(), "-compress");
     }
 }
