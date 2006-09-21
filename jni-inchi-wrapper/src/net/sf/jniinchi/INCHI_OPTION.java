@@ -18,7 +18,7 @@ public class INCHI_OPTION {
     /**
      * List of options.
      */
-    private static Map lcMap = new HashMap(18);
+    private static Map lcMap = new HashMap(21);
     // ---
     
     
@@ -113,6 +113,21 @@ public class INCHI_OPTION {
      */
     public static final INCHI_OPTION WarnOnEmptyStructure = new INCHI_OPTION("WarnOnEmptyStructure");
 
+    /**
+     * Fix bug leading to missing or undefined sp3 parity.
+     */
+    public static final INCHI_OPTION FixSp3Bug  = new INCHI_OPTION("FixSp3Bug");
+    
+    /**
+     * Include Phosphines Stereochemistry.
+     */
+    public static final INCHI_OPTION SPXYZ = new INCHI_OPTION("SPXYZ");
+    
+    /**
+     * Include Arsines Stereochemistry
+     */
+    public static final INCHI_OPTION SAsXYZ = new INCHI_OPTION("SPXYZ");
+    
     
     
     
