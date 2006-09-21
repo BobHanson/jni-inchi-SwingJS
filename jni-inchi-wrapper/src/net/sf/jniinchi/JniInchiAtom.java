@@ -41,28 +41,28 @@ public class JniInchiAtom {
      * Number of implicit hydrogens on atom. If set to -1, InChI will add
      * implicit H automatically.
      */
-    protected int implicitH;
+    protected int implicitH = 0;
     
     /**
      * Number of implicit protiums (isotopic 1-H) on atom.
      */
-    protected int implicitP;
+    protected int implicitP = 0;
     
     /**
      * Number of implicit deuteriums (isotopic 2-H) on atom.
      */
-    protected int implicitD;
+    protected int implicitD = 0;
     
     /**
      * Number of implicit tritiums (isotopic 3-H) on atom.
      */
-    protected int implicitT;
+    protected int implicitT = 0;
     
     /**
-     * Mass of isotope. If set to 0, non isotopic; otherwise, isotopic mass, or
-     * ISOTOPIC_SHIFT_FLAG + (mass - average atomic mass).
+     * Mass of isotope. If set to 0, no isotopic mass set; otherwise, isotopic
+     * mass, or ISOTOPIC_SHIFT_FLAG + (mass - average atomic mass).
      */
-    protected int isotopic_mass;
+    protected int isotopic_mass = 0;
     
     /**
      * Radical status of atom.
@@ -72,7 +72,7 @@ public class JniInchiAtom {
     /**
      * Charge on atom.
      */
-    protected int charge;
+    protected int charge = 0;
     
     /**
      * <p>Create new atom.
