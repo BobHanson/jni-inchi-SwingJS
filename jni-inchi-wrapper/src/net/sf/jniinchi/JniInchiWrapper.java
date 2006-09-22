@@ -312,7 +312,6 @@ public class JniInchiWrapper {
         for (int i = 0; i < nat; i ++) {
             JniInchiAtom atom = input.getAtom(i);
             atomIndxMap.put(atom, new Integer(i));
-            
             wrapper.LibInchiSetAtom(i, atom.x, atom.y, atom.z, atom.elname,
                     atom.isotopic_mass, atom.implicitH, atom.implicitP,
                     atom.implicitD, atom.implicitT, atom.radical.getIndx(),
@@ -352,7 +351,9 @@ public class JniInchiWrapper {
             int parity = (int) (stereo.parity.getIndx()
                     | (stereo.disconParity.getIndx() << 3));
             
-            int atCi = ((Integer) atomIndxMap.get(stereo.centralAtom)).intValue();
+            int atCi = (stereo.type == INCHI_STEREOTYPE.DOUBLEBOND ?
+            		JniInchiStereo0D.NO_ATOM
+            		: ((Integer) atomIndxMap.get(stereo.centralAtom)).intValue());
             int at0i = ((Integer) atomIndxMap.get(stereo.neighbors[0])).intValue();
             int at1i = ((Integer) atomIndxMap.get(stereo.neighbors[1])).intValue();
             int at2i = ((Integer) atomIndxMap.get(stereo.neighbors[2])).intValue();
