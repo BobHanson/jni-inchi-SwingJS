@@ -33,6 +33,7 @@ public class TestJniInchiBond {
 		Assert.assertEquals(bond.atomOrigin, atO);
 		Assert.assertEquals(bond.atomTarget, atT);
 		Assert.assertEquals(bond.type, INCHI_BOND_TYPE.DOUBLE);
+		Assert.assertEquals(bond.stereo, INCHI_BOND_STEREO.NONE);
 	}
 
 	/*
@@ -40,7 +41,8 @@ public class TestJniInchiBond {
 	 */
     @Test
 	public void testSetStereoDefinition() {
-		JniInchiBond bond = new JniInchiBond(atO, atT, INCHI_BOND_TYPE.DOUBLE, null);
+		JniInchiBond bond = new JniInchiBond(atO, atT, INCHI_BOND_TYPE.DOUBLE);
+		Assert.assertEquals(bond.stereo, INCHI_BOND_STEREO.NONE);
 		bond.setStereoDefinition(INCHI_BOND_STEREO.DOUBLE_EITHER);
 		Assert.assertEquals(bond.stereo, INCHI_BOND_STEREO.DOUBLE_EITHER);
 	}
@@ -50,9 +52,10 @@ public class TestJniInchiBond {
 	 */
     @Test
 	public void testGetOriginAtom() {
-		JniInchiBond bond = new JniInchiBond(null, null, INCHI_BOND_TYPE.DOUBLE);
-		bond.atomOrigin = atO;
+		JniInchiBond bond = new JniInchiBond(atO, atT, INCHI_BOND_TYPE.DOUBLE);
 		Assert.assertEquals(bond.getOriginAtom(), atO);
+		bond = new JniInchiBond(atT, atO, INCHI_BOND_TYPE.DOUBLE);
+		Assert.assertEquals(bond.getOriginAtom(), atT);
 	}
 
 	/*
@@ -60,9 +63,10 @@ public class TestJniInchiBond {
 	 */
     @Test
 	public void testGetTargetAtom() {
-		JniInchiBond bond = new JniInchiBond(null, null, INCHI_BOND_TYPE.DOUBLE);
-		bond.atomTarget = atT;
+		JniInchiBond bond = new JniInchiBond(atO, atT, INCHI_BOND_TYPE.DOUBLE);
 		Assert.assertEquals(bond.getTargetAtom(), atT);
+		bond = new JniInchiBond(atT, atO, INCHI_BOND_TYPE.DOUBLE);
+		Assert.assertEquals(bond.getTargetAtom(), atO);
 	}
 
 	/*
@@ -70,9 +74,10 @@ public class TestJniInchiBond {
 	 */
     @Test
 	public void testGetBondType() {
-		JniInchiBond bond = new JniInchiBond(atO, atT, null);
-		bond.type = INCHI_BOND_TYPE.DOUBLE;
+		JniInchiBond bond = new JniInchiBond(atO, atT, INCHI_BOND_TYPE.DOUBLE);
 		Assert.assertEquals(bond.getBondType(), INCHI_BOND_TYPE.DOUBLE);
+		bond = new JniInchiBond(atO, atT, INCHI_BOND_TYPE.SINGLE);
+		Assert.assertEquals(bond.getBondType(), INCHI_BOND_TYPE.SINGLE);
 	}
 
 	/*
@@ -80,9 +85,10 @@ public class TestJniInchiBond {
 	 */
     @Test
 	public void testGetBondStereo() {
-		JniInchiBond bond = new JniInchiBond(atO, atT, INCHI_BOND_TYPE.DOUBLE, null);
-		bond.stereo = INCHI_BOND_STEREO.DOUBLE_EITHER;
+		JniInchiBond bond = new JniInchiBond(atO, atT, INCHI_BOND_TYPE.DOUBLE, INCHI_BOND_STEREO.DOUBLE_EITHER);
 		Assert.assertEquals(bond.getBondStereo(), INCHI_BOND_STEREO.DOUBLE_EITHER);
+		bond = new JniInchiBond(atO, atT, INCHI_BOND_TYPE.SINGLE, INCHI_BOND_STEREO.SINGLE_1UP);
+		Assert.assertEquals(bond.getBondStereo(), INCHI_BOND_STEREO.SINGLE_1UP);
 	}
 
 }

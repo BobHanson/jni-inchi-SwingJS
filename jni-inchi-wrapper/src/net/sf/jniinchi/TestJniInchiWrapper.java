@@ -4,156 +4,387 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestJniInchiWrapper {
 	
-	protected static final String ALANINE_INCHI = "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)";
-	protected static final String LALANINE_INCHI = "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1";
-	protected static final String DALANINE_INCHI = "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1";
+	// Test molecules
 	
+	/**
+	 * Generates input for a chlorine atom.
+	 * 
+	 * @param options
+	 * @return
+	 * @throws JniInchiException
+	 */
+	protected static JniInchiInput getChlorineAtom(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
+        
+        // Generate atoms
+        input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
+        
+        return(input);
+	}
 	
+	/**
+	 * Generates input for a chlorine atom.
+	 * 
+	 * @param options
+	 * @return
+	 * @throws JniInchiException
+	 */
+	protected static JniInchiInput getChlorineIon(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
+        
+        // Generate atoms
+        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
+        a1.setCharge(-1);
+        input.getAtom(0).setRadical(INCHI_RADICAL.SINGLET);
+        
+        return(input);
+	}
+	
+	/**
+	 * Generates input for hydrogen chloride, with implicit H atom.
+	 * 
+	 * @param options
+	 * @return
+	 * @throws JniInchiException
+	 */
+	protected static JniInchiInput getHydrogenChlorideImplicitH(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
+        
+        // Generate atoms
+        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
+        a1.setImplicitH(1);
+        
+        return(input);
+	}
+	
+	/**
+	 * Generates input for hydrogen chloride, with implicit protium atom.
+	 * 
+	 * @param options
+	 * @return
+	 * @throws JniInchiException
+	 */
+	protected static JniInchiInput getHydrogenChlorideImplicitP(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
+        
+        // Generate atoms
+        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
+        a1.setImplicitProtium(1);
+        
+        return(input);
+	}
+	
+	/**
+	 * Generates input for hydrogen chloride, with implicit deuterium atom.
+	 * 
+	 * @param options
+	 * @return
+	 * @throws JniInchiException
+	 */
+	protected static JniInchiInput getHydrogenChlorideImplicitD(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
+        
+        // Generate atoms
+        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
+        a1.setImplicitDeuterium(1);
+        
+        return(input);
+	}
+	
+	/**
+	 * Generates input for hydrogen chloride, with implicit tritium atom.
+	 * 
+	 * @param options
+	 * @return
+	 * @throws JniInchiException
+	 */
+	protected static JniInchiInput getHydrogenChlorideImplicitT(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
+        
+        // Generate atoms
+        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
+        a1.setImplicitTritium(1);
+        
+        return(input);
+	}
+	
+	/**
+	 * Generates input for a 37Cl atom by isotopic mass.
+	 * 
+	 * @param options
+	 * @return
+	 * @throws JniInchiException
+	 */
+	protected static JniInchiInput getChlorine37Atom(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
+        
+        // Generate atoms
+        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
+        a1.setIsotopicMass(37);
+        
+        return(input);
+	}
+	
+	/**
+	 * Generates input for a 37Cl atom by isotopic mass shift.
+	 * 
+	 * @param options
+	 * @return
+	 * @throws JniInchiException
+	 */
+	protected static JniInchiInput getChlorine37ByIsotopicMassShiftAtom(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
+        
+        // Generate atoms
+        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
+        a1.setIsotopicMassShift(+2);
+        
+        return(input);
+	}
+	
+	/**
+	 * Generates input for a methyl radical, with implicit hydrogens.
+	 * 
+	 * @param options
+	 * @return
+	 * @throws JniInchiException
+	 */
+    protected static JniInchiInput getMethylRadical(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
+        
+        // Generate atoms
+        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
+    	a1.setImplicitH(3);
+    	a1.setRadical(INCHI_RADICAL.DOUBLET);
+    	
+    	return(input);
+    }
     
-    protected static JniInchiInput get0DBenzeneBondsSingleDoubleInput(String options) throws JniInchiException {
-        JniInchiInput input = new JniInchiInput(options);
+    /**
+     * Generates input for an ethane molecule, with no coordinates and implicit
+     * hydrogens.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput getEthane(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
         
         // Generate atoms
         JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
         JniInchiAtom a2 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
-        JniInchiAtom a3 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
-        JniInchiAtom a4 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
-        JniInchiAtom a5 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
-        JniInchiAtom a6 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
-        a1.setImplicitH(1);
-        a2.setImplicitH(1);
-        a3.setImplicitH(1);
-        a4.setImplicitH(1);
-        a5.setImplicitH(1);
-        a6.setImplicitH(1);
-        
-        // Add bonds
-        input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a2, a3, INCHI_BOND_TYPE.DOUBLE));
-        input.addBond(new JniInchiBond(a3, a4, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a4, a5, INCHI_BOND_TYPE.DOUBLE));
-        input.addBond(new JniInchiBond(a5, a6, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a6, a1, INCHI_BOND_TYPE.DOUBLE));
-        
-        return(input);
+    	a1.setImplicitH(3);
+    	a2.setImplicitH(3);
+    	
+    	// Add bond
+    	input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
+    	
+    	return(input);
     }
     
-    protected static JniInchiInput get0DBenzeneBondsDoubleSingleInput(String options) throws JniInchiException {
-        JniInchiInput input = new JniInchiInput(options);
+    /**
+     * Generates input for an ethene molecule, with no coordinates and implicit
+     * hydrogens.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput getEthene(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
         
         // Generate atoms
         JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
         JniInchiAtom a2 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
-        JniInchiAtom a3 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
-        JniInchiAtom a4 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
-        JniInchiAtom a5 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
-        JniInchiAtom a6 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
-        a1.setImplicitH(1);
-        a2.setImplicitH(1);
-        a3.setImplicitH(1);
-        a4.setImplicitH(1);
-        a5.setImplicitH(1);
-        a6.setImplicitH(1);
-        
-        // Add bonds
-        input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.DOUBLE));
-        input.addBond(new JniInchiBond(a2, a3, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a3, a4, INCHI_BOND_TYPE.DOUBLE));
-        input.addBond(new JniInchiBond(a4, a5, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a5, a6, INCHI_BOND_TYPE.DOUBLE));
-        input.addBond(new JniInchiBond(a6, a1, INCHI_BOND_TYPE.SINGLE));
-        
-        return(input);
+    	a1.setImplicitH(2);
+    	a2.setImplicitH(2);
+    	
+    	// Add bond
+    	input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.DOUBLE));
+    	
+    	return(input);
     }
     
-    protected static JniInchiInput get2DBenzeneInput(String options) throws JniInchiException {
-        JniInchiInput input = new JniInchiInput(options);
+    /**
+     * Generates input for an ethyne molecule, with no coordinates and implicit
+     * hydrogens.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput getEthyne(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
         
         // Generate atoms
-        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(-0.010, 0.000, 0.000, "C"));
-        JniInchiAtom a2 = input.addAtom(new JniInchiAtom(-0.707, 1.208, 0.000, "C"));
-        JniInchiAtom a3 = input.addAtom(new JniInchiAtom(-2.102, 1.208, 0.000, "C"));
-        JniInchiAtom a4 = input.addAtom(new JniInchiAtom(-2.799, 0.000, 0.000, "C"));
-        JniInchiAtom a5 = input.addAtom(new JniInchiAtom(-2.102, -1.208, 0.000, "C"));
-        JniInchiAtom a6 = input.addAtom(new JniInchiAtom(-0.707, -1.208, 0.000, "C"));
-        a1.setImplicitH(1);
-        a2.setImplicitH(1);
-        a3.setImplicitH(1);
-        a4.setImplicitH(1);
-        a5.setImplicitH(1);
-        a6.setImplicitH(1);
-        
-        // Add bonds
-        input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a2, a3, INCHI_BOND_TYPE.DOUBLE));
-        input.addBond(new JniInchiBond(a3, a4, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a4, a5, INCHI_BOND_TYPE.DOUBLE));
-        input.addBond(new JniInchiBond(a5, a6, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a6, a1, INCHI_BOND_TYPE.DOUBLE));
-        
-        return(input);
+        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
+        JniInchiAtom a2 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
+    	a1.setImplicitH(1);
+    	a2.setImplicitH(1);
+    	
+    	// Add bond
+    	input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.TRIPLE));
+    	
+    	return(input);
     }
     
-    protected static JniInchiInput getPropanolExplicitHydrogenInput(String options) throws JniInchiException {
-        JniInchiInput input = new JniInchiInput(options);
+    
+    /**
+     * Generates input for an (E)-1,2-dichloroethene molecule, with 2D
+     * coordinates and implicit hydrogens.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput getE12dichloroethene2D(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
         
         // Generate atoms
-        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.419000, -0.193000, 0.246000, "O"));
-        JniInchiAtom a2 = input.addAtom(new JniInchiAtom(-0.965000, -0.011000, -0.023000, "C"));
-        JniInchiAtom a3 = input.addAtom(new JniInchiAtom(-1.531000, -1.306000, -0.586000, "C"));
-        JniInchiAtom a4 = input.addAtom(new JniInchiAtom(-3.012000, -1.187000, -0.898000, "C"));
-        JniInchiAtom a5 = input.addAtom(new JniInchiAtom(0.753000, 0.647000, 0.603000, "H"));
-        JniInchiAtom a6 = input.addAtom(new JniInchiAtom(-1.468000, 0.262000, 0.910000, "H"));
-        JniInchiAtom a7 = input.addAtom(new JniInchiAtom(-1.075000, 0.808000, -0.740000, "H"));
-        JniInchiAtom a8 = input.addAtom(new JniInchiAtom(-1.366000, -2.121000, 0.129000, "H"));
-        JniInchiAtom a9 = input.addAtom(new JniInchiAtom(-0.980000, -1.585000, -1.492000, "H"));
-        JniInchiAtom a10 = input.addAtom(new JniInchiAtom(-3.194000, -0.403000, -1.641000, "H"));
-        JniInchiAtom a11 = input.addAtom(new JniInchiAtom(-3.585000, -0.946000, 0.003000, "H"));
-        JniInchiAtom a12 = input.addAtom(new JniInchiAtom(-3.392000, -2.131000, -1.301000, "H"));
-        
-        // Add bonds
-        input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a2, a3, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a3, a4, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a1, a5, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a2, a7, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a3, a9, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a3, a8, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a4, a12, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a4, a11, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a4, a10, INCHI_BOND_TYPE.SINGLE));
-        
-        return(input);
+        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(2.866, -0.250, 0.000, "C"));
+        JniInchiAtom a2 = input.addAtom(new JniInchiAtom(3.732, 0.250, 0.000, "C"));
+        JniInchiAtom a3 = input.addAtom(new JniInchiAtom(2.000, 2.500, 0.000, "Cl"));
+        JniInchiAtom a4 = input.addAtom(new JniInchiAtom(4.598, -0.250, 0.000, "Cl"));
+    	a1.setImplicitH(1);
+    	a2.setImplicitH(1);
+    	
+    	// Add bond
+    	input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.DOUBLE));
+    	input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
+    	input.addBond(new JniInchiBond(a2, a4, INCHI_BOND_TYPE.SINGLE));
+    	
+    	return(input);
     }
     
-    protected static JniInchiInput getPropanolImplicitHydrogenInput(String options) throws JniInchiException {
-        JniInchiInput input = new JniInchiInput(options);
+    /**
+     * Generates input for an (E)-1,2-dichloroethene molecule, with 2D
+     * coordinates and implicit hydrogens.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput getZ12dichloroethene2D(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
         
         // Generate atoms
-        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.419000, -0.193000, 0.246000, "O"));
-        JniInchiAtom a2 = input.addAtom(new JniInchiAtom(-0.965000, -0.011000, -0.023000, "C"));
-        JniInchiAtom a3 = input.addAtom(new JniInchiAtom(-1.531000, -1.306000, -0.586000, "C"));
-        JniInchiAtom a4 = input.addAtom(new JniInchiAtom(-3.012000, -1.187000, -0.898000, "C"));
-        a1.setImplicitH(1);
-        a2.setImplicitH(2);
-        a3.setImplicitH(2);
-        a4.setImplicitH(3);
-        
-        // Add bonds
-        input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a2, a3, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a3, a4, INCHI_BOND_TYPE.SINGLE));
-        
-        return(input);
+        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(2.866, -0.440, 0.000, "C"));
+        JniInchiAtom a2 = input.addAtom(new JniInchiAtom(3.732, 0.060, 0.000, "C"));
+        JniInchiAtom a3 = input.addAtom(new JniInchiAtom(2.000, 0.060, 0.000, "Cl"));
+        JniInchiAtom a4 = input.addAtom(new JniInchiAtom(3.732, 1.060, 0.000, "Cl"));
+    	a1.setImplicitH(1);
+    	a2.setImplicitH(1);
+    	
+    	// Add bond
+    	input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.DOUBLE));
+    	input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
+    	input.addBond(new JniInchiBond(a2, a4, INCHI_BOND_TYPE.SINGLE));
+    	
+    	return(input);
     }
     
-
-    protected static JniInchiInput get3DLAlanineInput(String options) throws JniInchiException {
+    /**
+     * Generates input for an (E)-1,2-dichloroethene molecule, with 0D
+     * coordinates.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput get12dichloroethene0D(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
+        
+        // Generate atoms
+        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
+        JniInchiAtom a2 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
+        JniInchiAtom a3 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
+        JniInchiAtom a4 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
+    	a1.setImplicitH(1);
+    	a2.setImplicitH(1);
+    	
+    	// Add bond
+    	input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.DOUBLE));
+    	input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
+    	input.addBond(new JniInchiBond(a2, a4, INCHI_BOND_TYPE.SINGLE));
+    	
+    	return(input);
+    }
+    
+    /**
+     * Generates input for an (E)-1,2-dichloroethene molecule, with 0D
+     * coordinates and stereo parities.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput getE12dichloroethene0D(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
+        
+        // Generate atoms
+    	JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
+        JniInchiAtom a2 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
+        JniInchiAtom a3 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
+        JniInchiAtom a4 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
+    	a1.setImplicitH(1);
+    	a2.setImplicitH(1);
+    	
+    	// Add bond
+    	input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.DOUBLE));
+    	input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
+    	input.addBond(new JniInchiBond(a2, a4, INCHI_BOND_TYPE.SINGLE));
+    	
+    	// Add stereo parities
+    	input.addStereo0D(JniInchiStereo0D.createNewDoublebondStereo0D(a3, a1, a2, a4, INCHI_PARITY.EVEN));
+    	
+    	return(input);
+    }
+    
+    /**
+     * Generates input for an (E)-1,2-dichloroethene molecule, with 2D
+     * coordinates and stereo parities.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput getZ12dichloroethene0D(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
+        
+        // Generate atoms
+    	JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
+        JniInchiAtom a2 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "C"));
+        JniInchiAtom a3 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
+        JniInchiAtom a4 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
+    	a1.setImplicitH(1);
+    	a2.setImplicitH(1);
+    	
+    	// Add bond
+    	input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.DOUBLE));
+    	input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
+    	input.addBond(new JniInchiBond(a2, a4, INCHI_BOND_TYPE.SINGLE));
+    	
+    	// Add stereo parities
+    	input.addStereo0D(JniInchiStereo0D.createNewDoublebondStereo0D(a3, a1, a2, a4, INCHI_PARITY.ODD));
+    	
+    	return(input);
+    }
+    
+    /**
+     * Generates input for L-alanine molecule, with 3D coordinates and
+     * implicit hydrogens.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput getLAlanine3D(String options) throws JniInchiException {
     	JniInchiInput input = new JniInchiInput(options);
     	
     	// Generate atoms
@@ -179,24 +410,29 @@ public class TestJniInchiWrapper {
     	return(input);
     }
     
-
-    protected static JniInchiInput get3DLAlanineZwiterionInput(String options) throws JniInchiException {
+    /**
+     * Generates input for D-alanine molecule, with 3D coordinates and
+     * implicit hydrogens.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput getDAlanine3D(String options) throws JniInchiException {
     	JniInchiInput input = new JniInchiInput(options);
     	
     	// Generate atoms
-    	JniInchiAtom a1 = input.addAtom(new JniInchiAtom(-0.358, 0.819, 20.655, "C"));
-    	JniInchiAtom a2 = input.addAtom(new JniInchiAtom(-1.598, -0.032, 20.905, "C"));
-    	JniInchiAtom a3 = input.addAtom(new JniInchiAtom(-0.275, 2.014, 21.574, "N"));
-    	JniInchiAtom a4 = input.addAtom(new JniInchiAtom(0.952, 0.043, 20.838, "C"));
-    	JniInchiAtom a5 = input.addAtom(new JniInchiAtom(-2.678, 0.479, 21.093, "O"));
-    	JniInchiAtom a6 = input.addAtom(new JniInchiAtom(-1.596, -1.239, 20.958, "O"));
+    	JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.358, 0.819, 20.655, "C"));
+    	JniInchiAtom a2 = input.addAtom(new JniInchiAtom(1.598, -0.032, 20.905, "C"));
+    	JniInchiAtom a3 = input.addAtom(new JniInchiAtom(0.275, 2.014, 21.574, "N"));
+    	JniInchiAtom a4 = input.addAtom(new JniInchiAtom(-0.952, 0.043, 20.838, "C"));
+    	JniInchiAtom a5 = input.addAtom(new JniInchiAtom(2.678, 0.479, 21.093, "O"));
+    	JniInchiAtom a6 = input.addAtom(new JniInchiAtom(1.596, -1.239, 20.958, "O"));
     	
     	a1.setImplicitH(1);
-    	a3.setImplicitH(3);
+    	a3.setImplicitH(2);
     	a4.setImplicitH(3);
-    	
-    	a3.setCharge(+1);
-    	a5.setCharge(-1);
+    	a5.setImplicitH(1);
     	
     	// Add bonds
     	input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
@@ -208,7 +444,48 @@ public class TestJniInchiWrapper {
     	return(input);
     }
     
-    protected static JniInchiInput get2DLAlanineInput(String options) throws JniInchiException {
+    /**
+     * Generates input for alanine molecule, with 2D coordinates.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput getAlanine2D(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
+    	
+    	// Generate atoms
+    	JniInchiAtom a1 = input.addAtom(new JniInchiAtom(264.0, 968.0, 0.0, "C"));
+    	JniInchiAtom a2 = input.addAtom(new JniInchiAtom(295.0, 985.0, 0.0, "C"));
+    	JniInchiAtom a3 = input.addAtom(new JniInchiAtom(233.0, 986.0, 0.0, "N"));
+    	JniInchiAtom a4 = input.addAtom(new JniInchiAtom(264.0, 932.0, 0.0, "C"));
+    	JniInchiAtom a5 = input.addAtom(new JniInchiAtom(326.0, 967.0, 0.0, "O"));
+    	JniInchiAtom a6 = input.addAtom(new JniInchiAtom(295.0, 1021.0, 0.0, "O"));
+    	
+    	a1.setImplicitH(1);
+    	a3.setImplicitH(2);
+    	a4.setImplicitH(3);
+    	a5.setImplicitH(1);
+    	
+    	// Add bonds
+    	input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
+    	input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
+    	input.addBond(new JniInchiBond(a1, a4, INCHI_BOND_TYPE.SINGLE));
+    	input.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
+    	input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
+    	
+    	return(input);
+    }
+    
+    /**
+     * Generates input for L-alanine molecule, with 2D coordinates and
+     * bond stereo definitions.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput getLAlanine2D(String options) throws JniInchiException {
     	JniInchiInput input = new JniInchiInput(options);
     	
     	// Generate atoms
@@ -234,7 +511,15 @@ public class TestJniInchiWrapper {
     	return(input);
     }
     
-    protected static JniInchiInput get2DDALANINEInput(String options) throws JniInchiException {
+    /**
+     * Generates input for D-alanine molecule, with 2D coordinates and
+     * bond stereo definitions.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput getDAlanine2D(String options) throws JniInchiException {
     	JniInchiInput input = new JniInchiInput(options);
     	
     	// Generate atoms
@@ -260,33 +545,14 @@ public class TestJniInchiWrapper {
     	return(input);
     }
     
-    protected static JniInchiInput get2DUndefinedStereoAlanineInput(String options) throws JniInchiException {
-    	JniInchiInput input = new JniInchiInput(options);
-    	
-    	// Generate atoms
-    	JniInchiAtom a1 = input.addAtom(new JniInchiAtom(264.0, 968.0, 0.0, "C"));
-    	JniInchiAtom a2 = input.addAtom(new JniInchiAtom(295.0, 985.0, 0.0, "C"));
-    	JniInchiAtom a3 = input.addAtom(new JniInchiAtom(233.0, 986.0, 0.0, "N"));
-    	JniInchiAtom a4 = input.addAtom(new JniInchiAtom(264.0, 932.0, 0.0, "C"));
-    	JniInchiAtom a5 = input.addAtom(new JniInchiAtom(326.0, 967.0, 0.0, "O"));
-    	JniInchiAtom a6 = input.addAtom(new JniInchiAtom(295.0, 1021.0, 0.0, "O"));
-    	
-    	a1.setImplicitH(1);
-    	a3.setImplicitH(2);
-    	a4.setImplicitH(3);
-    	a5.setImplicitH(1);
-    	
-    	// Add bonds
-    	input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
-    	input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
-    	input.addBond(new JniInchiBond(a1, a4, INCHI_BOND_TYPE.SINGLE));
-    	input.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
-    	input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
-    	
-    	return(input);
-    }
     
-    protected static JniInchiInput get0DLAlanineInput(String options) throws JniInchiException {
+    /**
+     * Generates input for alanine molecule with no coordinates.
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput getAlanine0D(String options) throws JniInchiException {
     	JniInchiInput input = new JniInchiInput(options);
     	
     	// Generate atoms
@@ -297,12 +563,9 @@ public class TestJniInchiWrapper {
     	JniInchiAtom a5 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "O"));
     	JniInchiAtom a6 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "O"));
     	JniInchiAtom a7 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "H"));
-    	
     	a3.setImplicitH(2);
     	a4.setImplicitH(3);
     	a5.setImplicitH(1);
-    	
-    	input.addStereo0D(new JniInchiStereo0D(a1, a3, a4, a7, a2, INCHI_STEREOTYPE.TETRAHEDRAL, INCHI_PARITY.ODD));
     	
     	// Add bonds
     	input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
@@ -315,36 +578,15 @@ public class TestJniInchiWrapper {
     	return(input);
     }
     
-    protected static JniInchiInput get0DDAlanineInput(String options) throws JniInchiException {
-    	JniInchiInput input = new JniInchiInput(options);
-    	
-//    	 Generate atoms
-    	JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
-    	JniInchiAtom a2 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
-    	JniInchiAtom a3 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "N"));
-    	JniInchiAtom a4 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
-    	JniInchiAtom a5 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "O"));
-    	JniInchiAtom a6 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "O"));
-    	JniInchiAtom a7 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "H"));
-    	
-    	a3.setImplicitH(2);
-    	a4.setImplicitH(3);
-    	a5.setImplicitH(1);
-    	
-    	input.addStereo0D(new JniInchiStereo0D(a1, a3, a4, a7, a2, INCHI_STEREOTYPE.TETRAHEDRAL, INCHI_PARITY.EVEN));
-    	
-    	// Add bonds
-    	input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
-    	input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
-    	input.addBond(new JniInchiBond(a1, a4, INCHI_BOND_TYPE.SINGLE));
-    	input.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
-    	input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
-    	input.addBond(new JniInchiBond(a1, a7, INCHI_BOND_TYPE.SINGLE));
-    	
-    	return(input);
-    }
-    
-    protected static JniInchiInput get0DUndefinedStereoAlanineInput(String options) throws JniInchiException {
+    /**
+     * Generates input for L-alanine molecule with no coordinates but 0D stereo
+     * parities.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
+     */
+    protected static JniInchiInput getLAlanine0D(String options) throws JniInchiException {
     	JniInchiInput input = new JniInchiInput(options);
     	
     	// Generate atoms
@@ -354,8 +596,7 @@ public class TestJniInchiWrapper {
     	JniInchiAtom a4 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
     	JniInchiAtom a5 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "O"));
     	JniInchiAtom a6 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "O"));
-    	
-    	a1.setImplicitH(1);
+    	JniInchiAtom a7 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "H"));
     	a3.setImplicitH(2);
     	a4.setImplicitH(3);
     	a5.setImplicitH(1);
@@ -366,31 +607,372 @@ public class TestJniInchiWrapper {
     	input.addBond(new JniInchiBond(a1, a4, INCHI_BOND_TYPE.SINGLE));
     	input.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
     	input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
+    	input.addBond(new JniInchiBond(a1, a7, INCHI_BOND_TYPE.SINGLE));
+    	
+    	// Add stereo parities
+    	input.addStereo0D(JniInchiStereo0D.createNewTetrahedralStereo0D(a1, a3, a4, a7, a2, INCHI_PARITY.ODD));
     	
     	return(input);
     }
     
-    
-    
-    
-
-    /*
-     * Test method for 'net.sf.jniinchi.JniInchiWrapper.loadLibrary()'
+    /**
+     * Generates input for D-alanine molecule with no coordinates but 0D stereo
+     * parities.
+     * 
+     * @param options
+     * @return
+     * @throws JniInchiException
      */
-    public void testLoadLibrary() throws JniInchiException {
-        JniInchiWrapper.loadLibrary();
+    protected static JniInchiInput getDAlanine0D(String options) throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput(options);
+    	
+    	// Generate atoms
+    	JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
+    	JniInchiAtom a2 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
+    	JniInchiAtom a3 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "N"));
+    	JniInchiAtom a4 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
+    	JniInchiAtom a5 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "O"));
+    	JniInchiAtom a6 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "O"));
+    	JniInchiAtom a7 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "H"));
+    	a3.setImplicitH(2);
+    	a4.setImplicitH(3);
+    	a5.setImplicitH(1);
+    	
+    	// Add bonds
+    	input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
+    	input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
+    	input.addBond(new JniInchiBond(a1, a4, INCHI_BOND_TYPE.SINGLE));
+    	input.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
+    	input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
+    	input.addBond(new JniInchiBond(a1, a7, INCHI_BOND_TYPE.SINGLE));
+    	
+    	// Add stereo parities
+    	input.addStereo0D(JniInchiStereo0D.createNewTetrahedralStereo0D(a1, a3, a4, a7, a2, INCHI_PARITY.EVEN));
+    	return(input);
     }
-
-    /*
-     * Test method for 'net.sf.jniinchi.JniInchiWrapper.JniInchiWrapper()'
+    
+    
+    // Test atom handling
+    
+    /**
+     * Tests element name is correctly passed to InChI.
+     * @throws Exception
      */
-    public void testJniInchiWrapper() throws JniInchiException {
-        JniInchiWrapper wrapper = new JniInchiWrapper();
+    @Test
+    public void testGetInchiFromChlorineAtom() throws Exception {
+    	JniInchiInput input = getChlorineAtom("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(output.getInchi(), "InChI=1/Cl");
     }
-
-    /*
-     * Test method for 'net.sf.jniinchi.JniInchiWrapper.checkOptions(List)'
+    
+    /**
+     * Tests charge is correctly passed to InChI.
+     * 
+     * @throws Exception
      */
+    @Test
+    public void testGetInchiFromChlorineIon() throws Exception {
+    	JniInchiInput input = getChlorineIon("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(output.getInchi(), "InChI=1/Cl/q-1");
+    }
+    
+    /**
+     * Tests isotopic mass is correctly passed to InChI.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromChlorine37Atom() throws Exception {
+    	JniInchiInput input = getChlorine37Atom("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(output.getInchi(), "InChI=1/Cl/i1+2");
+    }
+    
+    /**
+     * Tests isotopic mass shift is correctly passed to InChI.
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromChlorine37ByIstopicMassShiftAtom() throws Exception {
+    	JniInchiInput input = getChlorine37ByIsotopicMassShiftAtom("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(output.getInchi(), "InChI=1/Cl/i1+2");
+    }
+    
+    /**
+     * Tests implicit hydrogen count is correctly passed to InChI.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromHydrogenChlorideImplicitH() throws Exception {
+    	JniInchiInput input = getHydrogenChlorideImplicitH("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(output.getInchi(), "InChI=1/ClH/h1H");
+    }
+    
+    /**
+     * Tests implicit protium count is correctly passed to InChI.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromHydrogenChlorideImplicitP() throws Exception {
+    	JniInchiInput input = getHydrogenChlorideImplicitP("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(output.getInchi(), "InChI=1/ClH/h1H/i/hH");
+    }
+    
+    /**
+     * Tests implicit deuterium count is correctly passed to InChi.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromHydrogenChlorideImplicitD() throws Exception {
+    	JniInchiInput input = getHydrogenChlorideImplicitD("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(output.getInchi(), "InChI=1/ClH/h1H/i/hD");
+    }
+    
+    /**
+     * Tests implicit tritium count is correctly passed to InChI.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromHydrogenChlorideImplicitT() throws Exception {
+    	JniInchiInput input = getHydrogenChlorideImplicitT("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(output.getInchi(), "InChI=1/ClH/h1H/i/hT");
+    }
+    
+    /**
+     * Tests radical state is correctly passed to InChI.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromMethylRadical() throws Exception {
+    	JniInchiInput input = getMethylRadical("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(output.getInchi(), "InChI=1/CH3/h1H3");
+    }
+    
+    
+    
+    // Test bond handling
+    
+    /**
+     * Tests single bond is correctly passed to InChI.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromEthane() throws Exception {
+    	JniInchiInput input = getEthane("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(output.getInchi(), "InChI=1/C2H6/c1-2/h1-2H3");
+    }
+    
+    /**
+     * Tests double bond is correctly passed to InChI.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromEthene() throws Exception {
+    	JniInchiInput input = getEthene("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(output.getInchi(), "InChI=1/C2H4/c1-2/h1-2H2");
+    }
+    
+    /**
+     * Tests triple bond is correctly passed to InChI.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromEthyne() throws Exception {
+    	JniInchiInput input = getEthyne("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(output.getInchi(), "InChI=1/C2H2/c1-2/h1-2H");
+    }
+    
+    
+    // Test 2D coordinate handling
+    
+    /**
+     * Tests 2D coordinates are correctly passed to InChI.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiEandZ12Dichloroethene2D() throws Exception {
+    	JniInchiInput inputE = getE12dichloroethene2D("");
+    	JniInchiOutput outputE = JniInchiWrapper.getInchi(inputE);
+    	Assert.assertEquals(outputE.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(outputE.getInchi(), "InChI=1/C2H2Cl2/c3-1-2-4/h1-2H/b2-1+");
+    	
+    	JniInchiInput inputZ = getZ12dichloroethene2D("");
+    	JniInchiOutput outputZ = JniInchiWrapper.getInchi(inputZ);
+    	Assert.assertEquals(outputZ.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(outputZ.getInchi(), "InChI=1/C2H2Cl2/c3-1-2-4/h1-2H/b2-1-");
+    }
+    
+    
+    // Test 3D coordinate handling
+    
+    /**
+     * Tests InChI generation from L and D-Alanine molecules, with 3D
+     * coordinates.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromLandDAlanine3D() throws Exception {
+    	JniInchiInput inputL = getLAlanine3D("");
+    	JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
+    	Assert.assertEquals(outputL.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(outputL.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1");
+    	
+    	JniInchiInput inputD = getDAlanine3D("");
+    	JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
+    	Assert.assertEquals(outputD.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(outputD.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1");
+    };
+    
+    
+    
+    // Test handling of 2D coordinates with bond stereo types
+    
+    /**
+     * Tests InChI generation from L and D-Alanine molecules, with 3D
+     * coordinates.
+     * 
+     * Fails due to bug in InChI software.
+     * See testGetInchiFromLandDAlanine2DWithFixSp3Bug() for workaround.
+     * 
+     * @throws Exception
+     */
+    @Test
+    @Ignore
+    public void testGetInchiFromLandDAlanine2D() throws Exception {
+    	JniInchiInput input = getAlanine2D("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.WARNING);
+    	Assert.assertEquals(output.getMessage(), "Omitted undefined stereo");
+    	Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)");
+    	
+    	JniInchiInput inputL = getLAlanine2D("");
+    	JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
+    	Assert.assertEquals(outputL.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(outputL.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1");
+    	
+    	JniInchiInput inputD = getDAlanine2D("");
+    	JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
+    	Assert.assertEquals(outputD.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(outputD.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1");
+    };
+    
+    /**
+     * Tests InChI generation from L and D-Alanine molecules, with 3D
+     * coordinates, using FixSp3Bug option from InChI software v1.01
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromLandDAlanine2DWithFixSp3Bug() throws Exception {
+    	JniInchiInput input = getAlanine2D("-FixSp3Bug");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.WARNING);
+    	Assert.assertEquals(output.getMessage(), "Omitted undefined stereo");
+    	Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)");
+    	
+    	JniInchiInput inputL = getLAlanine2D("-FixSp3Bug");
+    	JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
+    	Assert.assertEquals(outputL.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(outputL.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1");
+    	
+    	JniInchiInput inputD = getDAlanine2D("-FixSp3Bug");
+    	JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
+    	Assert.assertEquals(outputD.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(outputD.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1");
+    };
+    
+    
+    // Test handling of no coordinates, with stereo parities
+    
+    /**
+     * Tests InChI generation from L and D-Alanine molecules, with no
+     * coordinates but tetrahedral stereo parities.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromLandDAlanine0D() throws Exception {
+    	JniInchiInput input = getAlanine0D("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.WARNING);
+    	Assert.assertEquals(output.getMessage(), "Omitted undefined stereo");
+    	Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)");
+    	
+    	JniInchiInput inputL = getLAlanine0D("");
+    	JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
+    	Assert.assertEquals(outputL.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(outputL.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1");
+    	
+    	JniInchiInput inputD = getDAlanine0D("");
+    	JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
+    	Assert.assertEquals(outputD.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(outputD.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1");
+    };
+    
+    /**
+     * Tests InChI generation from E and Z 1,2-dichloroethene molecules, with no
+     * coordinates but doublebond stereo parities.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiEandZ12Dichloroethene0D() throws Exception {
+    	JniInchiInput input = get12dichloroethene0D("");
+    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
+    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.WARNING);
+    	Assert.assertEquals(output.getMessage(), "Omitted undefined stereo");
+    	Assert.assertEquals(output.getInchi(), "InChI=1/C2H2Cl2/c3-1-2-4/h1-2H");
+    	
+    	JniInchiInput inputE = getE12dichloroethene0D("");
+    	JniInchiOutput outputE = JniInchiWrapper.getInchi(inputE);
+    	Assert.assertEquals(outputE.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(outputE.getInchi(), "InChI=1/C2H2Cl2/c3-1-2-4/h1-2H/b2-1+");
+    	
+    	JniInchiInput inputZ = getZ12dichloroethene0D("");
+    	JniInchiOutput outputZ = JniInchiWrapper.getInchi(inputZ);
+    	Assert.assertEquals(outputZ.getReturnStatus(), INCHI_RET.OKAY);
+    	Assert.assertEquals(outputZ.getInchi(), "InChI=1/C2H2Cl2/c3-1-2-4/h1-2H/b2-1-");
+    };
+    
+
+    // Test option checking
+
+    /**
+     * Tests option lists are canonicalised correctly.
+     */
+    @Test
     public void testCheckOptionsList() throws JniInchiException {
         List opList = new ArrayList();
         opList.add(INCHI_OPTION.Compress);
@@ -400,9 +982,11 @@ public class TestJniInchiWrapper {
         Assert.assertEquals(options, flag + "Compress " + flag + "SNon ");
     }
 
-    /*
-     * Test method for 'net.sf.jniinchi.JniInchiWrapper.checkOptions(String)'
+    /**
+     * Tests option strings are handled checked canonicalised.
+     * @throws JniInchiException
      */
+    @Test
     public void testCheckOptionsString() throws JniInchiException {
         String options = JniInchiWrapper.checkOptions("  -ComPreSS  /SNon");
         String flag = JniInchiWrapper.flagChar;
@@ -410,340 +994,45 @@ public class TestJniInchiWrapper {
     }
     
     
-    /**
-     * Tests InChI generation from benzene molecule with no coordinates, and
-     * bonds alternating single/double/single/double/single/double.
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom0DBenzeneBondsSingleDouble() throws Exception {
-    	JniInchiInput input = get0DBenzeneBondsSingleDoubleInput("");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
-    	Assert.assertEquals(output.getInchi(), "InChI=1/C6H6/c1-2-4-6-5-3-1/h1-6H");
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/0/N:1,2,6,3,5,4/E:(1,2,3,4,5,6)/rA:6CCCCCC/rB:s1;d2;s3;d4;d1s5;/rC:;;;;;;");
-    }
+    // Test option handling
     
     /**
-     * Tests InChI generation from benzene molecule with no coordinates, and
-     * bonds alternating double/single/double/single/double/single.
+     * Tests passing options to inchi.
      * @throws Exception
      */
-    @Test
-    public void testGetInchiFrom0DBenzeneBondsDoubleSingle() throws Exception {
-    	JniInchiInput input = get0DBenzeneBondsDoubleSingleInput("");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
-    	Assert.assertEquals(output.getInchi(), "InChI=1/C6H6/c1-2-4-6-5-3-1/h1-6H");
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/0/N:1,2,6,3,5,4/E:(1,2,3,4,5,6)/rA:6CCCCCC/rB:d1;s2;d3;s4;s1d5;/rC:;;;;;;");
-    }
-    
-    /**
-     * Tests InChI generation from benzene molecule with 2/3D coordinates.
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom2DBenzene() throws Exception {
-    	JniInchiInput input = get2DBenzeneInput("");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
-    	Assert.assertEquals(output.getInchi(), "InChI=1/C6H6/c1-2-4-6-5-3-1/h1-6H");
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/0/N:1,2,6,3,5,4/E:(1,2,3,4,5,6)/rA:6CCCCCC/rB:s1;d2;s3;d4;d1s5;/rC:-.01,0,0;-.707,1.208,0;-2.102,1.208,0;-2.799,0,0;-2.102,-1.208,0;-.707,-1.208,0;");
-    }
-    
-    /**
-     * Tests InChI generation from 1-propanol molecule with explicit hydrogens.
-     * 
-     * Tests explicit hydrogen handling.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFromPropanolExplicitHydrogen() throws Exception {
-    	JniInchiInput input = getPropanolExplicitHydrogenInput("");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
-    	Assert.assertEquals(output.getInchi(), "InChI=1/C3H8O/c1-2-3-4/h4H,2-3H2,1H3");
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/0/N:4,3,2,1/rA:12OCCCHHHHHHHH/rB:s1;s2;s3;s1;s2;s2;s3;s3;s4;s4;s4;/rC:.419,-.193,.246;-.965,-.011,-.023;-1.531,-1.306,-.586;-3.012,-1.187,-.898;.753,.647,.603;-1.468,.262,.91;-1.075,.808,-.74;-1.366,-2.121,.129;-.98,-1.585,-1.492;-3.194,-.403,-1.641;-3.585,-.946,.003;-3.392,-2.131,-1.301;");
-    }
-    
-    /**
-     * Tests InChI generation from 1-propanol molecule with implicit hydrogens.
-     * 
-     * Tests implicit hydrogen handling.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFromPropanolImplicitHydrogen() throws Exception {
-    	JniInchiInput input = getPropanolImplicitHydrogenInput("");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
-    	Assert.assertEquals(output.getInchi(), "InChI=1/C3H8O/c1-2-3-4/h4H,2-3H2,1H3");
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/0/N:4,3,2,1/rA:4OCCC/rB:s1;s2;s3;/rC:.419,-.193,.246;-.965,-.011,-.023;-1.531,-1.306,-.586;-3.012,-1.187,-.898;");
-    }
-    
-    /**
-     * Tests InChI generation from L-Alanine molecule with 3D coordinates.
-     * 
-     * Tests stereo perception from 3d coordinates.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom3DLAlanine() throws Exception {
-    	JniInchiInput input = get3DLAlanineInput("");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
-    	Assert.assertEquals(output.getInchi(), LALANINE_INCHI);
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/it:im/rA:6CCNCOO/rB:s1;s1;s1;s2;d2;/rC:-.358,.819,20.655;-1.598,-.032,20.905;-.275,2.014,21.574;.952,.043,20.838;-2.678,.479,21.093;-1.596,-1.239,20.958;");
-    };
-    
-    /**
-     * Tests InChI generation from L-Alanine molecule with 3D coordinates, 
-     * including fixed hydrogen layer.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom3DLAlanineFixedH() throws Exception {
-    	JniInchiInput input = get3DLAlanineInput("-FixedH");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
-    	Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1/f/h5H");
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/it:im/F:m/it:m/rA:6CCNCOO/rB:s1;s1;s1;s2;d2;/rC:-.358,.819,20.655;-1.598,-.032,20.905;-.275,2.014,21.574;.952,.043,20.838;-2.678,.479,21.093;-1.596,-1.239,20.958;");
-    };
-    
-    /**
-     * Tests InChI generation from L-Alanine zwiterion molecule with 3D
-     * coordinates.
-     * 
-     * Tests stereo perception from 3d coordinates.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom3DLAlanineZwiterion() throws Exception {
-    	JniInchiInput input = get3DLAlanineZwiterionInput("");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.WARNING);
-    	Assert.assertEquals(output.getMessage(), "Proton(s) added/removed");
-    	Assert.assertEquals(output.getInchi(), LALANINE_INCHI);
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/it:im/rA:6CCN+CO-O/rB:s1;s1;s1;s2;d2;/rC:-.358,.819,20.655;-1.598,-.032,20.905;-.275,2.014,21.574;.952,.043,20.838;-2.678,.479,21.093;-1.596,-1.239,20.958;");
-    };
-    
-    /**
-     * Tests InChI generation from L-Alanine zwiterion molecule with 3D
-     * coordinates including fixed hydrogen layer.
-     * 
-     * Tests stereo perception from 3d coordinates.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom3DLAlanineZwiterionFixedH() throws Exception {
-    	JniInchiInput input = get3DLAlanineZwiterionInput("-FixedH");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.WARNING);
-    	Assert.assertEquals(output.getMessage(), "Proton(s) added/removed");
-    	Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1/f/h4H");
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/it:im/F:m/E:m/it:m/rA:6CCN+CO-O/rB:s1;s1;s1;s2;d2;/rC:-.358,.819,20.655;-1.598,-.032,20.905;-.275,2.014,21.574;.952,.043,20.838;-2.678,.479,21.093;-1.596,-1.239,20.958;");
-    };
-    
-    /**
-     * Tests InChI generation from alanine molecule with 2D coordinates and
-     * undefined stereochemistry, not using FixSp3Bug.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom2DUndefinedStereoAlanineWithoutFixSp3Bug() throws Exception {
-    	JniInchiInput input = get2DUndefinedStereoAlanineInput("");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.WARNING);
-    	Assert.assertEquals(output.getMessage(), "Omitted undefined stereo");
-    	Assert.assertEquals(output.getInchi(), ALANINE_INCHI);
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/rA:6CCNCOO/rB:s1;s1;s1;s2;d2;/rC:264,968,0;295,985,0;233,986,0;264,932,0;326,967,0;295,1021,0;");
-    }
-    
-    /**
-     * Tests InChI generation from alanine molecule with 2D coordinates and
-     * undefined stereochemistry, using FixSp3Bug.
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom2DUndefinedStereoAlanineWithFixSp3Bug() throws Exception {
-    	JniInchiInput input = get2DUndefinedStereoAlanineInput("-FixSp3Bug");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.WARNING);
-    	Assert.assertEquals(output.getMessage(), "Omitted undefined stereo");
-    	Assert.assertEquals(output.getInchi(), ALANINE_INCHI);
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/rA:6CCNCOO/rB:s1;s1;s1;s2;d2;/rC:264,968,0;295,985,0;233,986,0;264,932,0;326,967,0;295,1021,0;");
-    }
-    
-    /**
-     * Tests InChI generation from L-alanine molecule with 2D coordinates, not
-     * using FixSp3Bug.
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom2DLAlanineWithoutFixSp3Bug() throws Exception {
-    	JniInchiInput input = get2DLAlanineInput("");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.WARNING);
-    	Assert.assertEquals(output.getMessage(), "Omitted undefined stereo");
-    	Assert.assertEquals(output.getInchi(), ALANINE_INCHI);
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/rA:6CCNCOO/rB:s1;N1;s1;s2;d2;/rC:264,968,0;295,985,0;233,986,0;264,932,0;326,967,0;295,1021,0;");
-    }
-    
-    /**
-     * Tests InChI generation from L-alanine molecule with 2D coordinates, using
-     * FixSp3Bug.
-     * 
-     * Tests stereo perception from 2d coordinates and bond stereo.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom2DLAlanineWithFixSp3Bug() throws Exception {
-    	JniInchiInput input = get2DLAlanineInput("-FixSp3Bug");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
-    	Assert.assertEquals(output.getInchi(), LALANINE_INCHI);
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/it:im/rA:6CCNCOO/rB:s1;N1;s1;s2;d2;/rC:264,968,0;295,985,0;233,986,0;264,932,0;326,967,0;295,1021,0;");
-    }
-    
-    /**
-     * Tests InChI generation from R-alanine molecule with 2D coordinates, not 
-     * using FixSp3Bug.
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom2DDALANINEWithoutFixSp3Bug() throws Exception {
-    	JniInchiInput input = get2DDALANINEInput("");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.WARNING);
-    	Assert.assertEquals(output.getMessage(), "Omitted undefined stereo");
-    	Assert.assertEquals(output.getInchi(), ALANINE_INCHI);
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/rA:6CCNCOO/rB:s1;P1;s1;s2;d2;/rC:264,968,0;295,985,0;233,986,0;264,932,0;326,967,0;295,1021,0;");
-    }
-    
-    /**
-     * Tests InChI generation from R-alanine molecule with 2D coordinates, using
-     * FixSp3Bug.
-     * 
-     * Tests stereo perception from 2d coordinates and bond stereo.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom2DDALANINEWithFixSp3Bug() throws Exception {
-    	JniInchiInput input = get2DDALANINEInput("-FixSp3Bug");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
-    	Assert.assertEquals(output.getInchi(), DALANINE_INCHI);
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/it:im/rA:6CCNCOO/rB:s1;P1;s1;s2;d2;/rC:264,968,0;295,985,0;233,986,0;264,932,0;326,967,0;295,1021,0;");
-    }
-    
-    /**
-     * Tests InChI generation from alanine molecule without coordinates and
-     * without stereochemistry.
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom0DUndefinedStereoAlanine() throws Exception {
-    	JniInchiInput input = get0DUndefinedStereoAlanineInput("");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.WARNING);
-    	Assert.assertEquals(output.getMessage(), "Omitted undefined stereo");
-    	Assert.assertEquals(output.getInchi(), ALANINE_INCHI);
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/rA:6CCNCOO/rB:s1;s1;s1;s2;d2;/rC:;;;;;;");
-    }
-    
-    /**
-     * Tests InChI generation from L-alanine molecule without coordinates.
-     * 
-     * Tests stereo perception from tetrahedral atom parity.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom0DLAlanine() throws Exception {
-    	JniInchiInput input = get0DLAlanineInput("");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
-    	Assert.assertEquals(output.getInchi(), LALANINE_INCHI);
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/rA:6CCNCOO/rB:s1;s1;s1;s2;d2;/rC:;;;;;;");
-    }
-    
-    /**
-     * Tests InChI generation from R-alanine molecule without coordinates.
-     * 
-     * Tests stereo perception from tetrahedral atom parity.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFrom0DDAlanine() throws Exception {
-    	JniInchiInput input = get0DDAlanineInput("");
-    	JniInchiOutput output = JniInchiWrapper.getInchi(input);
-    	Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
-    	Assert.assertEquals(output.getInchi(), DALANINE_INCHI);
-    	// Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/rA:6CCNCOO/rB:s1;s1;s1;s2;d2;/rC:;;;;;;");
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    public void testGetInchi() throws JniInchiException {
-        JniInchiInput input = get0DBenzeneBondsSingleDoubleInput("");
+    // @Test
+    public void testGetInchiWithOptions() throws Exception {
+        JniInchiInput input = getLAlanine3D("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
-        Assert.assertEquals(output.getInchi(), "InChI=1/C6H6/c1-2-4-6-5-3-1/h1-6H");
-        // Assert.assertEquals(output.getAuxInfo(), "AuxInfo=1/0/N:1,2,6,3,5,4/E:(1,2,3,4,5,6)/rA:6CCCCCC/rB:s1;d2;s3;d4;d1s5;/rC:-.01,0,0;-.707,1.208,0;-2.102,1.208,0;-2.799,0,0;-2.102,-1.208,0;-.707,-1.208,0;");
-        /*
-        input = getLAlanineInput("");
-        output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,1,4H3/t2-/m0/s1");
-        										InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1/f/h5H
-        input = getDALANINEInput("");
-        output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,1,4H3/t2-/m1/s1");
+        Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1");
         
-        input = getLAlanineInput("-compress");
+        input = getLAlanine3D("-compress");
         output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/cABBCC/hB1A3D3/tB1/m0/s1");
+        debug(output);
+        Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+        Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF/tB1/m0/s1");
         
-        input = getLAlanineInput("/CoMpReSS");
+        input = getLAlanine3D("/compress");
         output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/cABBCC/hB1A3D3/tB1/m0/s1");
+        debug(output);
+        Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+        Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF/tB1/m0/s1");
         
-        input = getLAlanineInput("-SNon");
+        input = getLAlanine3D("-cOMprEsS");
         output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,1,4H3");
-        
-        input = getLAlanineInput("-SAbs");
-        output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,1,4H3/t2-/m0/s1");
-        
-        input = getLAlanineInput("-SRac");
-        output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,1,4H3/t2-/s3");
-        
-        input = get0ALANINEInput("-SRac");
-        output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,1,4H3/t2-/s3");
-        */
+        debug(output);
+        Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+        Assert.assertEquals(output.getInchi(), "InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF/tB1/m0/s1");
     }
+    
+    
+    // Test structure generation from InChI strings
 
     /*
      * Test method for 'net.sf.jniinchi.JniInchiWrapper.getStructureFromInchi(JniInchiInputInchi)'
      */
+    @Test
     public void testGetStructureFromInchi() throws JniInchiException {
         JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/C6H6/c1-2-4-6-5-3-1/h1-6H");
         JniInchiOutputStructure output = JniInchiWrapper.getStructureFromInchi(input);
