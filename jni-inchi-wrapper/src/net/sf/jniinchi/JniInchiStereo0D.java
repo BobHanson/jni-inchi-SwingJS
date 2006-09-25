@@ -110,17 +110,26 @@ public class JniInchiStereo0D {
     }
     
     /**
+     * Generates string representation of information on stereo parity,
+     * for debugging purposes.
+     */
+    public String getDebugString() {
+        return("InChI Stereo0D: "
+            + (centralAtom == null ? "-" : centralAtom.elname)
+            + " [" + neighbors[0].elname + "," + neighbors[1].elname
+            + "," + neighbors[2].elname + "," + neighbors[3].elname + "] "
+            + "Type::" + type + " // "
+            + "Parity:" + parity
+            );
+    }
+    
+    /**
      * Outputs information on stereo parity, for debugging purposes.
      */
     public void debug() {
-    	System.out.println("InChI Stereo0D: "
-    			+ (centralAtom == null ? "-" : centralAtom.elname)
-    			+ " [" + neighbors[0].elname + "," + neighbors[1].elname
-    			+ "," + neighbors[2].elname + "," + neighbors[3].elname + "] "
-    			+ "Type::" + type + " // "
-    			+ "Parity:" + parity
-    			);
+    	System.out.println(getDebugString());
     }
+    
     
     /**
      * <p>Convenience method for generating 0D stereo parities at tetrahedral
@@ -129,17 +138,17 @@ public class JniInchiStereo0D {
      * <p><b>Usage notes from <i>inchi_api.h</i>:</b>
      * <pre>
      *  4 neighbors
-	 *     *           X                    neighbor[4] : {#W, #X, #Y, #Z}     *           |                    central_atom: #A     *        W--A--Y                 type        : INCHI_StereoType_Tetrahedral     *           |     *           Z     *  parity: if (X,Y,Z) are clockwize when seen from W then parity is 'e' otherwise 'o'     *  Example (see AXYZW above): if W is above the plane XYZ then parity = 'e'     *     *  3 neighbors     *     *             Y          Y       neighbor[4] : {#A, #X, #Y, #Z}     *            /          /        central_atom: #A     *        X--A  (e.g. O=S   )     type        : INCHI_StereoType_Tetrahedral     *            \          \     *             Z          Z     *     *  parity: if (X,Y,Z) are clockwize when seen from A then parity is 'e',     *                                                         otherwise 'o'     *  unknown parity = 'u'     *  Example (see AXYZ above): if A is above the plane XYZ then parity = 'e'     *  This approach may be used also in case of an implicit H attached to A.     *
+     *     *           X                    neighbor[4] : {#W, #X, #Y, #Z}     *           |                    central_atom: #A     *        W--A--Y                 type        : INCHI_StereoType_Tetrahedral     *           |     *           Z     *  parity: if (X,Y,Z) are clockwize when seen from W then parity is 'e' otherwise 'o'     *  Example (see AXYZW above): if W is above the plane XYZ then parity = 'e'     *     *  3 neighbors     *     *             Y          Y       neighbor[4] : {#A, #X, #Y, #Z}     *            /          /        central_atom: #A     *        X--A  (e.g. O=S   )     type        : INCHI_StereoType_Tetrahedral     *            \          \     *             Z          Z     *     *  parity: if (X,Y,Z) are clockwize when seen from A then parity is 'e',     *                                                         otherwise 'o'     *  unknown parity = 'u'     *  Example (see AXYZ above): if A is above the plane XYZ then parity = 'e'     *  This approach may be used also in case of an implicit H attached to A.     *
      *  ==============================================
      *  Note. Correspondence to CML 0D stereo parities
      *  ==============================================
      *  a list of 4 atoms corresponds to CML atomRefs4
      *  
-   	 *  tetrahedral atom
-   	 *  ================
-   	 *  CML atomParity > 0 <=> INCHI_PARITY_EVEN
-   	 *  CML atomParity < 0 <=> INCHI_PARITY_ODD
-   	 *  
+     *  tetrahedral atom
+     *  ================
+     *  CML atomParity > 0 <=> INCHI_PARITY_EVEN
+     *  CML atomParity < 0 <=> INCHI_PARITY_ODD
+     *  
      *                               | 1   1   1   1  |  where xW is x-coordinate of
      *                               | xW  xX  xY  xZ |  atom W, etc. (xyz is a
      *  CML atomParity = determinant | yW  yX  yY  yZ |  'right-handed' Cartesian
@@ -171,14 +180,14 @@ public class JniInchiStereo0D {
      *  =============================================
      *  stereogenic bond >A=B< or cumulene >A=C=C=B<
      *  =============================================
-	 *
+     *
      *                              neighbor[4]  : {#X,#A,#B,#Y} in this order
      *  X                           central_atom : NO_ATOM
      *   \            X      Y      type         : INCHI_StereoType_DoubleBond
      *    A==B         \    /
      *        \         A==B
      *         Y
-	 *
+     *
      *  parity= 'e'    parity= 'o'   unknown parity = 'u'
      * 
      *  ==============================================

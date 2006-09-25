@@ -255,19 +255,27 @@ public class JniInchiAtom {
     }
     
     /**
+     * Generates string representation of information on atom,
+     * for debugging purposes.
+     */
+    public String getDebugString() {
+    	return("InChI Atom: "
+        	+ elname
+        	+ " [" + x + "," + y + "," + z + "] "
+        	+ "Charge:" + charge + " // "
+        	+ "Iso Mass:" + isotopic_mass + " // "
+        	+ "Implicit H:" + implicitH
+        	+ " P:" + implicitP
+        	+ " D:" + implicitD
+        	+ " T:" + implicitT
+        	+ " // Radical: " + radical
+        	);
+    }
+    
+    /**
      * Outputs information on atom, for debugging purposes.
      */
     public void debug() {
-    	System.out.println("InChI Atom: "
-    			+ elname
-    			+ " [" + x + "," + y + "," + z + "] "
-    			+ "Charge:" + charge + " // "
-    			+ "Iso Mass:" + isotopic_mass + " // "
-    			+ "Implicit H:" + implicitH
-    			+ " P:" + implicitP
-    			+ " D:" + implicitD
-    			+ " T:" + implicitT
-    			+ " // Radical: " + radical
-    			);
+        System.out.println(getDebugString());
     }
 }

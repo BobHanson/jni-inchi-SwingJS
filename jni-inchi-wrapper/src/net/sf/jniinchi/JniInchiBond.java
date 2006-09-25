@@ -11,9 +11,9 @@ package net.sf.jniinchi;
  */
 public class JniInchiBond {
     
-	/**
-	 * Origin atom in bond.
-	 */
+    /**
+     * Origin atom in bond.
+     */
     JniInchiAtom atomOrigin;
     
     /**
@@ -103,14 +103,22 @@ public class JniInchiBond {
     }
     
     /**
+     * Generates string representation of information on bond,
+     * for debugging purposes.
+     */
+    public String getDebugString() {
+    	return("InChI Bond: "
+		+ atomOrigin.elname
+		+ "-" + atomTarget.elname
+		+ " // Type: " + type
+		+ " // Stereo: " + stereo
+		);
+    }
+    
+    /**
      * Outputs information on bond, for debugging purposes.
      */
     public void debug() {
-    	System.out.println("InChI Bond: "
-    			+ atomOrigin.elname
-    			+ "-" + atomTarget.elname
-    			+ " // Type: " + type
-    			+ " // Stereo: " + stereo
-    			);
+        System.out.println(getDebugString());
     }
 }
