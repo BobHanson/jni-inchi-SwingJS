@@ -420,6 +420,9 @@ public class JniInchiWrapper {
     	output.warningFlags[0][1] = wrapper.LibInchiGetStructWarningFlags01();
     	output.warningFlags[1][0] = wrapper.LibInchiGetStructWarningFlags10();
     	output.warningFlags[1][1] = wrapper.LibInchiGetStructWarningFlags11();
+        
+        output.message = wrapper.LibInchiGetMessage();
+        output.log = wrapper.LibInchiGetLog();
     	
     	// Get structural data
     	int numAtoms = wrapper.LibInchiGetNumAtoms();
