@@ -38,6 +38,9 @@ inchi_Stereo0D * stereo;
 // InChI DLL options string
 char * optionString;
 
+char * szMessage;
+char * szLog;
+
 
 /**
  * Start new InChI library data record.  See <tt>inchi_api.h</tt> for details.
@@ -48,42 +51,41 @@ char * optionString;
  */
 JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiStartInput
   (JNIEnv *env, jobject, jint numAtoms, jint numStereo, jstring options) {
-  	
-	// Set number of atoms and stereo parities
-  	pInp->num_atoms = numAtoms;
-  	pInp->num_stereo0D = numStereo;
-	
-	numberAtoms = numAtoms;
-	numberStereo = numStereo;
-  	
-	// Record options
-  	int len = env->GetStringLength(options);
-  	const char *nativeString = env->GetStringUTFChars(options, 0);
-  	optionString = new char[len + 1];
-  	strcpy(optionString, nativeString);
-  	optionString[len] = 0;
-    env->ReleaseStringUTFChars(options, nativeString);
+      
+      // Set number of atoms and stereo parities
+      pInp->num_atoms = numAtoms;
+      pInp->num_stereo0D = numStereo;
+      
+      numberAtoms = numAtoms;
+      numberStereo = numStereo;
+      
+      // Record options
+      int len = env->GetStringLength(options);
+      const char *nativeString = env->GetStringUTFChars(options, 0);
+      optionString = new char[len + 1];
+      strcpy(optionString, nativeString);
+      optionString[len] = 0;
+      env->ReleaseStringUTFChars(options, nativeString);
 
-    pInp->szOptions = optionString;
+      pInp->szOptions = optionString;
 
-	// Get memory for atoms and stereo parities
-	atoms = new inchi_Atom[numAtoms];
-	stereo = new inchi_Stereo0D[numStereo];
-	
-	// Initialise atoms
-	for (int i = 0; i < numAtoms; i ++) {
-		atoms[i] = * new inchi_Atom();
-	}
-	
-	// Initialise stereo parities
-	for (int i = 0; i < numStereo; i ++) {
-		stereo[i] = * new inchi_Stereo0D();
-	}
-	
-	// Add atom adn stereo pariry array to InChI input data
-	pInp->atom = atoms;
-	pInp->stereo0D = stereo;
-	
+      // Get memory for atoms and stereo parities
+      atoms = new inchi_Atom[numAtoms];
+      stereo = new inchi_Stereo0D[numStereo];
+      
+      // Initialise atoms
+      for (int i = 0; i < numAtoms; i ++) {
+      	atoms[i] = * new inchi_Atom();
+      }
+      
+      // Initialise stereo parities
+      for (int i = 0; i < numStereo; i ++) {
+      	stereo[i] = * new inchi_Stereo0D();
+      }
+      
+      // Add atom adn stereo pariry array to InChI input data
+      pInp->atom = atoms;
+      pInp->stereo0D = stereo;
   }
 
 
@@ -108,29 +110,29 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtom
    jint isoMass, jint numH, jint numP, jint numD, jint numT, jint radical,
    jint charge) {
    	
-	// Set atom coordinates
-   	atoms[indx].x = x;
-   	atoms[indx].y = y;
-   	atoms[indx].z = z;
-	
-	// Set element
+      // Set atom coordinates
+      atoms[indx].x = x;
+      atoms[indx].y = y;
+      atoms[indx].z = z;
+      
+      // Set element
  	const char *nativeString = env->GetStringUTFChars(elname, 0);
-	strcpy(atoms[indx].elname, nativeString);
-	env->ReleaseStringUTFChars(elname, nativeString);
-	
-	// Set implict hydrogens (and isotopes)
-	atoms[indx].num_iso_H[0] = numH;
-	atoms[indx].num_iso_H[1] = numP;
-	atoms[indx].num_iso_H[2] = numD;
-	atoms[indx].num_iso_H[3] = numT;
-  	
-	// Set spin multiplicity
-  	atoms[indx].radical = radical;
-	
-	// Set charge
-  	atoms[indx].charge = charge;
-	
-	// Set isotopic mass
+      strcpy(atoms[indx].elname, nativeString);
+      env->ReleaseStringUTFChars(elname, nativeString);
+      
+      // Set implict hydrogens (and isotopes)
+      atoms[indx].num_iso_H[0] = numH;
+      atoms[indx].num_iso_H[1] = numP;
+      atoms[indx].num_iso_H[2] = numD;
+      atoms[indx].num_iso_H[3] = numT;
+      
+      // Set spin multiplicity
+      atoms[indx].radical = radical;
+      
+      // Set charge
+      atoms[indx].charge = charge;
+      
+      // Set isotopic mass
     atoms[indx].isotopic_mass = isoMass;
   }
 
@@ -146,25 +148,25 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtom
  */
 JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtomBonds
   (JNIEnv * env, jobject, jint atNo, jint nbonds, jintArray neighbourArray,
-  	jintArray typeArray, jintArray stereoArray) {
+      jintArray typeArray, jintArray stereoArray) {
 
     // Create c++ arrays
-  	jint * neighbours = env->GetIntArrayElements(neighbourArray, 0);
-	jint * types = env->GetIntArrayElements(typeArray, 0);
-	jint * stereo = env->GetIntArrayElements(stereoArray, 0);
-	
-	// Record atom neighbours
-	atoms[atNo].num_bonds = nbonds;
-	for (int bondNo = 0; bondNo < nbonds; bondNo ++) {
-		atoms[atNo].neighbor[bondNo] = neighbours[bondNo];
-		atoms[atNo].bond_type[bondNo] = types[bondNo];
-		atoms[atNo].bond_stereo[bondNo] = stereo[bondNo];
-	}
-	
-	// Free memory
-	env->ReleaseIntArrayElements(neighbourArray, neighbours, 0);
-	env->ReleaseIntArrayElements(typeArray, types, 0);
-	env->ReleaseIntArrayElements(stereoArray, stereo, 0);
+      jint * neighbours = env->GetIntArrayElements(neighbourArray, 0);
+      jint * types = env->GetIntArrayElements(typeArray, 0);
+      jint * stereo = env->GetIntArrayElements(stereoArray, 0);
+      
+      // Record atom neighbours
+      atoms[atNo].num_bonds = nbonds;
+      for (int bondNo = 0; bondNo < nbonds; bondNo ++) {
+      	atoms[atNo].neighbor[bondNo] = neighbours[bondNo];
+      	atoms[atNo].bond_type[bondNo] = types[bondNo];
+      	atoms[atNo].bond_stereo[bondNo] = stereo[bondNo];
+      }
+      
+      // Free memory
+      env->ReleaseIntArrayElements(neighbourArray, neighbours, 0);
+      env->ReleaseIntArrayElements(typeArray, types, 0);
+      env->ReleaseIntArrayElements(stereoArray, stereo, 0);
   }
 
 
@@ -182,16 +184,16 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtomBonds
  */
 JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetStereo
   (JNIEnv *, jobject, jint i, jint atC, jint at0, jint at1, jint at2, jint at3,
-  	jint type, jint parity) {
-  		
-  		stereo[i].central_atom = atC;
-  		stereo[i].neighbor[0] = at0;
-  		stereo[i].neighbor[1] = at1;
-  		stereo[i].neighbor[2] = at2;
-  		stereo[i].neighbor[3] = at3;
-  		
-  		stereo[i].type = type;
-  		stereo[i].parity = parity;
+      jint type, jint parity) {
+      	
+      	stereo[i].central_atom = atC;
+      	stereo[i].neighbor[0] = at0;
+      	stereo[i].neighbor[1] = at1;
+      	stereo[i].neighbor[2] = at2;
+      	stereo[i].neighbor[3] = at3;
+      	
+      	stereo[i].type = type;
+      	stereo[i].parity = parity;
   }
 
 
@@ -201,9 +203,13 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetStereo
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGenerateInchi
   (JNIEnv *, jobject) {
-  	
-  	int ret = GetINCHI(pInp, pOut);
-  	return ret;
+      
+      int ret = GetINCHI(pInp, pOut);
+      
+      szMessage = pOut->szMessage;
+      szLog = pOut->szLog;
+      
+      return ret;
   }
 
 
@@ -212,8 +218,8 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGenerateInch
  */
 JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetInchi
   (JNIEnv *env, jobject) {
-  	
-  	return env->NewStringUTF(pOut->szInChI);
+      
+      return env->NewStringUTF(pOut->szInChI);
   }
 
 
@@ -222,8 +228,8 @@ JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetInchi
  */
 JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAuxInfo
   (JNIEnv *env, jobject) {
-  	
-  	return env->NewStringUTF(pOut->szAuxInfo);
+      
+      return env->NewStringUTF(pOut->szAuxInfo);
   }
 
 
@@ -232,8 +238,8 @@ JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAuxInf
  */
 JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetMessage
   (JNIEnv *env, jobject) {
-  	
-  	return env->NewStringUTF(pOut->szMessage);
+      
+      return env->NewStringUTF(szMessage);
   }
 
 
@@ -242,8 +248,8 @@ JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetMessag
  */
 JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetLog
   (JNIEnv *env, jobject) {
-  	
-	return env->NewStringUTF(pOut->szLog);
+      
+      return env->NewStringUTF(szLog);
   }
 
 
@@ -253,11 +259,11 @@ JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetLog
  */
 JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeMem
   (JNIEnv *, jobject) {
-  	
-  	Free_inchi_Input(pInp);
-  	FreeINCHI(pOut);
-  	
-  	delete optionString;
+      
+      Free_inchi_Input(pInp);
+      FreeINCHI(pOut);
+      
+      delete optionString;
   }
 
 
@@ -272,33 +278,36 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeMem
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStruct
   (JNIEnv *env, jobject, jstring inchi, jstring options) {
-  	
-	int len = env->GetStringLength(inchi);
-  	const char *nativeString = env->GetStringUTFChars(inchi, 0);
-	char * inchiString = new char[len + 1];
-  	strcpy(inchiString, nativeString);
-  	inchiString[len] = 0;
-    env->ReleaseStringUTFChars(inchi, nativeString);
-	
-	pInpInchi->szInChI = inchiString;
-	
-	len = env->GetStringLength(options);
-  	nativeString = env->GetStringUTFChars(options, 0);
-  	optionString = new char[len + 1];
-  	strcpy(optionString, nativeString);
-  	optionString[len] = 0;
-    env->ReleaseStringUTFChars(options, nativeString);
+      
+      int len = env->GetStringLength(inchi);
+      const char *nativeString = env->GetStringUTFChars(inchi, 0);
+      char * inchiString = new char[len + 1];
+      strcpy(inchiString, nativeString);
+      inchiString[len] = 0;
+      env->ReleaseStringUTFChars(inchi, nativeString);
+      
+      pInpInchi->szInChI = inchiString;
+      
+      len = env->GetStringLength(options);
+      nativeString = env->GetStringUTFChars(options, 0);
+      optionString = new char[len + 1];
+      strcpy(optionString, nativeString);
+      optionString[len] = 0;
+      env->ReleaseStringUTFChars(options, nativeString);
 
-    pInpInchi->szOptions = optionString;
-	
-	int ret = GetStructFromINCHI(pInpInchi, pOutStruct);
-	
-	numberAtoms = pOutStruct->num_atoms;
-	numberStereo = pOutStruct->num_stereo0D;
-	atoms = pOutStruct->atom;
-	stereo = pOutStruct->stereo0D;
-	
-	return ret;
+      pInpInchi->szOptions = optionString;
+      
+      int ret = GetStructFromINCHI(pInpInchi, pOutStruct);
+      
+      numberAtoms = pOutStruct->num_atoms;
+      numberStereo = pOutStruct->num_stereo0D;
+      atoms = pOutStruct->atom;
+      stereo = pOutStruct->stereo0D;
+      
+      szMessage = pOutStruct->szMessage;
+      szLog = pOutStruct->szLog;
+      
+      return ret;
   }
 
 
@@ -307,8 +316,8 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStruct
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetNumAtoms
   (JNIEnv *, jobject) {
-	
-	return numberAtoms;
+      
+      return numberAtoms;
   }
 
 
@@ -318,7 +327,7 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetNumAtoms
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetNumStereo
   (JNIEnv *, jobject) {
 
-	return numberStereo;
+      return numberStereo;
   }
 
 
@@ -328,8 +337,8 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetNumStereo
  */
 JNIEXPORT jdouble JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomX
   (JNIEnv *, jobject, jint indx) {
-	
-	return atoms[indx].x;
+      
+      return atoms[indx].x;
   }
 
 
@@ -339,8 +348,8 @@ JNIEXPORT jdouble JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomX
  */
 JNIEXPORT jdouble JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomY
   (JNIEnv *, jobject, jint indx) {
-	
-	return atoms[indx].y;
+      
+      return atoms[indx].y;
   }
 
 
@@ -350,8 +359,8 @@ JNIEXPORT jdouble JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomY
  */
 JNIEXPORT jdouble JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomZ
   (JNIEnv *, jobject, jint indx) {
-	
-	return atoms[indx].y;
+      
+      return atoms[indx].y;
   }
 
 
@@ -361,8 +370,8 @@ JNIEXPORT jdouble JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomZ
  */
 JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomElement
   (JNIEnv *env, jobject, jint indx) {
-	
-	return env->NewStringUTF(atoms[indx].elname);
+      
+      return env->NewStringUTF(atoms[indx].elname);
   }
 
 
@@ -372,8 +381,8 @@ JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomEl
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomIsotopicMass
   (JNIEnv *, jobject, jint indx) {
-	
-	return atoms[indx].isotopic_mass;
+      
+      return atoms[indx].isotopic_mass;
   }
 
 
@@ -383,8 +392,8 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomIsoto
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomRadical
   (JNIEnv *, jobject, jint indx) {
-	
-	return atoms[indx].radical;
+      
+      return atoms[indx].radical;
   }
 
 
@@ -394,8 +403,8 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomRadic
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomCharge
   (JNIEnv *, jobject, jint indx) {
-	
-	return atoms[indx].charge;
+      
+      return atoms[indx].charge;
   }
 
 
@@ -405,8 +414,8 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomCharg
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImplicitH
   (JNIEnv *, jobject, jint indx) {
-	
-	return atoms[indx].num_iso_H[0];
+      
+      return atoms[indx].num_iso_H[0];
   }
 
 
@@ -416,8 +425,8 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImpli
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImplicitP
   (JNIEnv *, jobject, jint indx) {
-	
-	return atoms[indx].num_iso_H[1];
+      
+      return atoms[indx].num_iso_H[1];
   }
 
 
@@ -427,8 +436,8 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImpli
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImplicitD
   (JNIEnv *, jobject, jint indx) {
-	
-	return atoms[indx].num_iso_H[2];
+      
+      return atoms[indx].num_iso_H[2];
   }
 
 
@@ -438,8 +447,8 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImpli
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImplicitT
   (JNIEnv *, jobject, jint indx) {
-	
-	return atoms[indx].num_iso_H[3];
+      
+      return atoms[indx].num_iso_H[3];
   }
 
 
@@ -449,8 +458,8 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImpli
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomNumBonds
   (JNIEnv *, jobject, jint indx) {
-	
-	return atoms[indx].num_bonds;
+      
+      return atoms[indx].num_bonds;
   }
 
 
@@ -461,8 +470,8 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomNumBo
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomNeighbour
   (JNIEnv *, jobject, jint indx, jint i) {
-	
-	return atoms[indx].neighbor[i];
+      
+      return atoms[indx].neighbor[i];
   }
 
 
@@ -473,8 +482,8 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomNeigh
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomBondType
   (JNIEnv *, jobject, jint indx, jint i) {
-	
-	return atoms[indx].bond_type[i];
+      
+      return atoms[indx].bond_type[i];
   }
 
 
@@ -485,40 +494,40 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomBondT
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomBondStereo
   (JNIEnv *, jobject, jint indx, jint i) {
-	
-	return atoms[indx].bond_stereo[i];
+      
+      return atoms[indx].bond_stereo[i];
   }
 
 
 
 JNIEXPORT jlong JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStructWarningFlags00
   (JNIEnv *env, jobject) {
-	
-	return pOutStruct->WarningFlags[0][0];
+      
+      return pOutStruct->WarningFlags[0][0];
   }
 
 
 
 JNIEXPORT jlong JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStructWarningFlags01
   (JNIEnv *env, jobject) {
-	
-	return pOutStruct->WarningFlags[0][0];
+      
+      return pOutStruct->WarningFlags[0][0];
   }
 
 
 
 JNIEXPORT jlong JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStructWarningFlags10
   (JNIEnv *env, jobject) {
-	
-	return pOutStruct->WarningFlags[0][0];
+      
+      return pOutStruct->WarningFlags[0][0];
   }
 
 
 
 JNIEXPORT jlong JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStructWarningFlags11
   (JNIEnv *env, jobject) {
-	
-	return pOutStruct->WarningFlags[0][0];
+      
+      return pOutStruct->WarningFlags[0][0];
   }
 
 
@@ -528,33 +537,33 @@ JNIEXPORT jlong JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStructWa
  */
 JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeStructMem
   (JNIEnv *, jobject) {
-	
-	FreeStructFromINCHI(pOutStruct);
+      
+      FreeStructFromINCHI(pOutStruct);
   }
 
 
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoCentralAtom
   (JNIEnv *, jobject, jint indx) {
-  	
-  	return stereo[indx].central_atom;
+      
+      return stereo[indx].central_atom;
   }
 
 
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoNeighbourAtom
   (JNIEnv *, jobject, jint indx, jint i) {
 
-  	return stereo[indx].neighbor[i];
+      return stereo[indx].neighbor[i];
   }
   
   
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoType
   (JNIEnv *, jobject, jint indx) {
-  	
-  	return stereo[indx].type;
+      
+      return stereo[indx].type;
   }
 
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoParity
   (JNIEnv *, jobject, jint indx) {
   
-  	return stereo[indx].parity;
+      return stereo[indx].parity;
   }
