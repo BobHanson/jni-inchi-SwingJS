@@ -1,9 +1,11 @@
 package net.sf.jniinchi;
 
+import junit.framework.TestCase;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestJniInchiInput {
+public class TestJniInchiInput extends TestCase {
 
     /*
      * Test method for 'net.sf.jniinchi.JniInchiInput.getOptions()'

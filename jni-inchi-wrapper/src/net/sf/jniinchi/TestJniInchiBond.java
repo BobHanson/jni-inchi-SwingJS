@@ -1,9 +1,11 @@
 package net.sf.jniinchi;
 
+import junit.framework.TestCase;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestJniInchiBond {
+public class TestJniInchiBond extends TestCase {
 	
 	protected static JniInchiAtom atO = new JniInchiAtom(0, 0, 0, "O");
 	protected static JniInchiAtom atT = new JniInchiAtom(1.21, 0, 0, "O");
