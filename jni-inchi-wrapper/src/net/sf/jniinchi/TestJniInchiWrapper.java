@@ -656,6 +656,7 @@ public class TestJniInchiWrapper {
     
     /**
      * Tests element name is correctly passed to InChI.
+     * 
      * @throws Exception
      */
     @Test
