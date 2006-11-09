@@ -125,7 +125,7 @@ public class JniInchiWrapper {
 	                
 	                if (!match) {
                         printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. " + "Unable to auto-place files: working directory not in library search path.\nTo fix this, try adding '.' to PATH or LD_LIBRARY_PATH");
-	                	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: working directory not in library search path");
+	                	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: working directory not in library search path. See system.err for more details"");
 	                }
 		            	
 	                // Copy files to directory
@@ -137,7 +137,7 @@ public class JniInchiWrapper {
                         URL u = cl.getResource(FILENAMES[i]);
                         if (u == null) {
                             printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: cannot locate " + FILENAMES[i]);
-                        	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: cannot locate " + FILENAMES[i]);
+                        	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: cannot locate " + FILENAMES[i] + ". See system.err for more details");
                         }
                         
                         // Check output path writable
@@ -145,7 +145,7 @@ public class JniInchiWrapper {
                         File outpath = new File(outfilepath);
                         if (!outpath.canWrite()) {
                             printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: cannot write to " + outpath);
-                        	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: cannot write to " + outpath);
+                            throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: cannot write to " + outpath + ". See system.err for more details");
                         }
                         
                         File outfile = new File(outfilepath + FILENAMES[i]);
@@ -170,7 +170,7 @@ public class JniInchiWrapper {
                             is.close();
                         } catch (IOException ioe) {
                             printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: " + ioe.getMessage());
-                            throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: " + ioe.getMessage());
+                            throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: " + ioe.getMessage() + ". See system.err for more details");
                         }
                     }
                     
@@ -181,7 +181,7 @@ public class JniInchiWrapper {
                         printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. Auto-place attempt failed ["
                                 + ule2.getMessage() + "]");
 	                    throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Auto-place attempt failed ["
-	                            + ule2.getMessage() + "]");
+	                            + ule2.getMessage() + "].  See system.err for more details"");
 	                }
             	} else {
                     printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. Not set to auto-place files.");
