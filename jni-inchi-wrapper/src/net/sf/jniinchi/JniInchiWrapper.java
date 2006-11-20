@@ -125,7 +125,7 @@ public class JniInchiWrapper {
 	                
 	                if (!match) {
                         printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. " + "Unable to auto-place files: working directory not in library search path.\nTo fix this, try adding '.' to PATH or LD_LIBRARY_PATH");
-	                	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: working directory not in library search path. See system.err for more details"");
+	                	throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Unable to auto-place files: working directory not in library search path. See system.err for more details");
 	                }
 		            	
 	                // Copy files to directory
@@ -181,7 +181,7 @@ public class JniInchiWrapper {
                         printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. Auto-place attempt failed ["
                                 + ule2.getMessage() + "]");
 	                    throw new LoadNativeLibraryException("Initial load failed [" + ule.getMessage() + "]. Auto-place attempt failed ["
-	                            + ule2.getMessage() + "].  See system.err for more details"");
+	                            + ule2.getMessage() + "].  See system.err for more details");
 	                }
             	} else {
                     printLibraryLoadFailedMessage("Initial load failed [" + ule.getMessage() + "]. Not set to auto-place files.");
