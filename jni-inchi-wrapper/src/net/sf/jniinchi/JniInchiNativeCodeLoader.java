@@ -51,7 +51,7 @@ public class JniInchiNativeCodeLoader {
     	
     	// Find required library versions
     	String version = getVersionString();
-    	log("JNI InChI version: " + version);
+    	log("Looking for native code version: " + version);
     	
     	// Determine native library filenames
     	inchiFilename = INCHI_LIB_NAMES[env.platform];
