@@ -133,7 +133,7 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtom
       atoms[indx].charge = charge;
       
       // Set isotopic mass
-    atoms[indx].isotopic_mass = isoMass;
+      atoms[indx].isotopic_mass = isoMass;
   }
 
 
@@ -150,7 +150,7 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtomBonds
   (JNIEnv * env, jobject, jint atNo, jint nbonds, jintArray neighbourArray,
       jintArray typeArray, jintArray stereoArray) {
 
-    // Create c++ arrays
+      // Create c++ arrays
       jint * neighbours = env->GetIntArrayElements(neighbourArray, 0);
       jint * types = env->GetIntArrayElements(typeArray, 0);
       jint * stereo = env->GetIntArrayElements(stereoArray, 0);
@@ -567,3 +567,15 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoPar
   
       return stereo[indx].parity;
   }
+
+
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersionMajor
+  (JNIEnv *env, jclass) {
+      return NATIVE_LIB_VERSION_MAJOR;
+  }
+
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersionMinor
+  (JNIEnv *env, jclass) {
+      return NATIVE_LIB_VERSION_MINOR;
+  }
+

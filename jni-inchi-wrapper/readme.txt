@@ -65,24 +65,23 @@ you must either rename it libinchi.so.1, or create a link to that name i.e.
 ln -s libinchi.so.1 libinchi.so).
 
 When the JNI InChI wrapper is used, it attempts to load the required native
-(C++) libraries.  To do this Java searches the directories found in the
+(C++) libraries.  To do this Java searches the directory containing the class
+files or JAR file, the current working directory and the directories found in the
 java.library.path system property.  These are usually directories from the jdk
 or jre installation, and either the contents of the PATH environmental variable,
 in Windows, or the contents of LD_LIBRARY_PATH in Linux.  Therefore, in order to
 use the JNI InChI wrapper the native library files must be placed in one of
 these directories.  If, however, you are using the jniInChI.jar file and it
 fails to load the native code it will attempt to extract the copies of the
-libraries contained in the jar and place them into '.' and try loading the
+libraries contained in the jar and place them into either the directory containing
+the class files, or the current working directory and try loading the
 native code again automatically.  For this to work the current user must have
-write access to the appropriate directory, and either PATH or LD_LIBRARY_PATH
-must contain '.'.  To prevent this behaviour you can set the 
-JniInchiWrapper.AUTO_PLACE_NATIVE_CODE variable to false before constructing any
-InChI generators; by default it is set to true.
+write access to the appropriate directory.
 
 To test whether this distribution is working on your system ensure that either
 the jar file, or the class files, are in your Java classpath and run:
 
-	java sea36.inchitools.jni.TestJniInchiWrapper
+	java sea36.inchitools.jni.Main
 
 
 5. Usage

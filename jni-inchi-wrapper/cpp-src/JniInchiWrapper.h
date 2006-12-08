@@ -12,6 +12,8 @@
 extern "C" {
 #endif
 
+#define NATIVE_LIB_VERSION_MAJOR 1
+#define NATIVE_LIB_VERSION_MINOR 3
 
 
 /**
@@ -287,6 +289,14 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoTyp
 
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoParity
   (JNIEnv *, jobject, jint indx);
+
+
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersionMajor
+  (JNIEnv *, jclass);
+ 
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersionMinor
+  (JNIEnv *, jclass);
+
 
 #ifdef __cplusplus
 }
