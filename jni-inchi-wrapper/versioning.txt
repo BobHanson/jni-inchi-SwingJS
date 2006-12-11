@@ -1,0 +1,5 @@
+If the native code is changed, version must be updated in the following locations:
+  build.xml
+  build-cpp.bat
+  build-cpp.sh
+  src/net/sf/jniinchi/JniInchiNativeCodeLoader.java
