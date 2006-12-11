@@ -15,7 +15,7 @@ public class JniInchiNativeCodeLoader {
 	protected static boolean debug = false;
 	
 	protected static final int CURRENT_NATIVE_VERSION_MAJOR = 1;
-	protected static final int CURRENT_NATIVE_VERSION_MINOR = 3;
+	protected static final int CURRENT_NATIVE_VERSION_MINOR = 4;
 	
 	protected static String[] INCHI_LIB_NAMES = {null, "libinchi.dll", "libinchi.so.1"};
     protected static String[] JNI_LIB_PREFIX = {null, "JniInchi." , "libJniInchi."};

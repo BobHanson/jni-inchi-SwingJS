@@ -13,7 +13,7 @@ extern "C" {
 #endif
 
 #define NATIVE_LIB_VERSION_MAJOR 1
-#define NATIVE_LIB_VERSION_MINOR 3
+#define NATIVE_LIB_VERSION_MINOR 4
 
 
 /**
@@ -43,7 +43,7 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiStartInput
  * @param radical	Radical definition
  * @param charge	Charge on atom
  */
-JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtom
+JNIEXPORT jboolean JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtom
   (JNIEnv *env, jobject, jint indx, jdouble x, jdouble y , jdouble z, jstring elname,
    jint isoMass, jint numH, jint numP, jint numD, jint numT, jint radical,
    jint charge);
@@ -58,7 +58,7 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtom
  * @param typeArray			Array of type of each bond
  * @param stereoArray		Array of stereo definition for each bond
  */
-JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtomBonds
+JNIEXPORT jboolean JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtomBonds
   (JNIEnv * env, jobject, jint atNo, jint nbonds, jintArray neighbourArray,
   	jintArray typeArray, jintArray stereoArray);
 
@@ -75,7 +75,7 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtomBonds
  * @param type		Stereo parity type
  * @param parity	Parity
  */
-JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetStereo
+JNIEXPORT jboolean JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetStereo
   (JNIEnv *, jobject, jint i, jint atC, jint at0, jint at1, jint at2, jint at3,
   	jint type, jint parity);
 
@@ -120,8 +120,15 @@ JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetLog
  * Frees memory used by InChI library.  Must be called once InChI has
  * been generated and all data fetched.
  */
-JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeMem
+JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeInputMem
   (JNIEnv *, jobject);
+  
+/**
+ * Frees memory used by InChI library.  Must be called once InChI has
+ * been generated and all data fetched.
+ */
+JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeOutputMem
+  (JNIEnv *, jobject);  
 
 
 

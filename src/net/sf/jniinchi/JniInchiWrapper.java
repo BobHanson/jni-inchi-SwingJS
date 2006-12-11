@@ -153,10 +153,14 @@ public class JniInchiWrapper {
         for (int i = 0; i < nat; i ++) {
             JniInchiAtom atom = input.getAtom(i);
             atomIndxMap.put(atom, new Integer(i));
-            wrapper.LibInchiSetAtom(i, atom.x, atom.y, atom.z, atom.elname,
+            if (!wrapper.LibInchiSetAtom(i, atom.x, atom.y, atom.z, atom.elname,
                     atom.isotopic_mass, atom.implicitH, atom.implicitP,
                     atom.implicitD, atom.implicitT, atom.radical.getIndx(),
-                    atom.charge);
+                    atom.charge)) {
+                
+                wrapper.LibInchiFreeInputMem();
+                throw new JniInchiException("JNI: Failed to set atoms");
+            }
         }
         
         int[]   atomNumNeighbors = new int[nat];
@@ -181,8 +185,11 @@ public class JniInchiWrapper {
         }
         
         for (int i = 0; i < nat; i ++) {
-            wrapper.LibInchiSetAtomBonds(i, atomNumNeighbors[i], atomNeighbors[i],
-                    atomBondTypes[i], atomBondStereo[i]);
+            if (!wrapper.LibInchiSetAtomBonds(i, atomNumNeighbors[i],
+                    atomNeighbors[i], atomBondTypes[i], atomBondStereo[i])) {
+                wrapper.LibInchiFreeInputMem();
+                throw new JniInchiException("JNI: Failed to set atom neighbours");
+            }
         }
         
         
@@ -200,8 +207,11 @@ public class JniInchiWrapper {
             int at2i = ((Integer) atomIndxMap.get(stereo.neighbors[2])).intValue();
             int at3i = ((Integer) atomIndxMap.get(stereo.neighbors[3])).intValue();
             
-            wrapper.LibInchiSetStereo(i, atCi, at0i, at1i, at2i, at3i,
-                    stereo.type.getIndx(), parity);
+            if (!wrapper.LibInchiSetStereo(i, atCi, at0i, at1i, at2i, at3i,
+                    stereo.type.getIndx(), parity)) {
+                wrapper.LibInchiFreeInputMem();
+                throw new JniInchiException("JNI: Failed to set stereos");
+            }
         }
         
         // Call inchi library
@@ -224,7 +234,8 @@ public class JniInchiWrapper {
         output.sMessage = wrapper.LibInchiGetMessage();
         output.sLog = wrapper.LibInchiGetLog();
         
-        wrapper.LibInchiFreeMem();
+        wrapper.LibInchiFreeInputMem();
+        wrapper.LibInchiFreeOutputMem();
     	
     	return(output);
     }
@@ -448,7 +459,7 @@ public class JniInchiWrapper {
      * @param radical	Radical definition
      * @param charge	Charge on atom
      */
-    private native void LibInchiSetAtom(int indx, double x, double y, double z,
+    private native boolean LibInchiSetAtom(int indx, double x, double y, double z,
             String elname, int isoMass, int numH, int numP, int numD,
             int numT, int radical, int charge);
     
@@ -461,7 +472,7 @@ public class JniInchiWrapper {
      * @param type		Array of type of each bond
      * @param stereo	Array of stereo definition for each bond
      */
-    private native void LibInchiSetAtomBonds(int indx, int nBonds, 
+    private native boolean LibInchiSetAtomBonds(int indx, int nBonds, 
             int[] neighbors, int[] type, int[] stereo);
     
     /**
@@ -476,7 +487,7 @@ public class JniInchiWrapper {
      * @param type		Stereo parity type
      * @param parity	Parity
      */
-    private native void LibInchiSetStereo(int indx, int atC, int at0, int at1,
+    private native boolean LibInchiSetStereo(int indx, int atC, int at0, int at1,
             int at2, int at3, int type, int parity);
     
     /**
@@ -509,7 +520,13 @@ public class JniInchiWrapper {
      * Frees memory used by InChI library.  Must be called once InChI has
      * been generated and all data fetched. 
      */
-    private native void LibInchiFreeMem();
+    private native void LibInchiFreeInputMem();
+    
+    /**
+     * Frees memory used by InChI library.  Must be called once InChI has
+     * been generated and all data fetched. 
+     */
+    private native void LibInchiFreeOutputMem();
     
     
     /**
