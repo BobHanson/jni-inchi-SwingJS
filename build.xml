@@ -1,53 +1,61 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<project name="jniInchi" basedir="." default="jarAll">
+<project name="jniInchi" basedir="." default="compile">
 	
+	<property name="native.version" value="1.3"/>
+	
+	<property name="bin.dir" value="bin"/>
 	<property name="dist.dir" value="dist"/>
-	<property name="dist-bin.dir" value="dist-bin"/>
+	<property name="doc.dir" value="javadoc"/>
+	<property name="cpp.dir" value="cpp-bin"/>
+	<property name="inchi.dir" value="inchi"/>
 	
-	<property name="jniInchi.dir" value="jni-inchi-wrapper"/>
-	<property name="cdkWrapper.dir" value="cdk-wrapper"/>
-	<property name="cmlWrapper.dir" value="cml-wrapper"/>
+	<property name="jniInchi.src.dir" value="src"/>
 	
-	<property name="cdk.jar" value="${cdkWrapper.dir}/lib/cdk-20060714.jar"/>
-	<property name="cml.jar" value="${cmlWrapper.dir}/lib/jumbo53-20060817.jar"/>
-	<property name="xom.jar" value="${cmlWrapper.dir}/lib/xom-1.1.jar"/>
+	<target name="init">
+		<mkdir dir="${bin.dir}"/>
+	</target>
 	
-	<target name="jarAll">
-		<delete dir="${dist-bin.dir}" quiet="true"/>
-		<mkdir dir="${dist-bin.dir}"/>
-		
-		<javac srcdir="${jniInchi.dir}/src/net/sf/jniinchi" destdir="${dist-bin.dir}" source="1.4">
+	<target name="clean" description="Delete all generated files">
+		<delete dir="${bin.dir}" failonerror="false"/>
+		<delete dir="${doc.dir}" failonerror="false"/>
+	</target>
+	
+	<target name="compile" description="Compiles jniInchi" depends="init">
+		<echo>COMPILING: jniInchi Java</echo>
+		<javac srcdir="${jniInchi.src.dir}/net/sf/jniinchi" destdir="${bin.dir}" source="1.4">
 		    <include name="*.java" />
+			<exclude name="Test*.java" />
 		</javac>
 		
-		<copy todir="${dist-bin.dir}">
-			<fileset dir="${jniInchi.dir}/cpp-bin">
-				<include name="JniInchi.dll"/>
-				<include name="libJniInchi.so"/>
+		<copy todir="${bin.dir}">
+			<fileset dir="${cpp.dir}">
+				<include name="JniInchi.${native.version}.dll"/>
+				<include name="libJniInchi.${native.version}.so"/>
 			</fileset>
 		</copy>
 		
-		<copy todir="${dist-bin.dir}" file="${jniInchi.dir}/inchi/libinchi.dll"/>
-		<copy tofile="${dist-bin.dir}/libinchi.so.1" file="${jniInchi.dir}/inchi/libinchi.so"/>
+		<copy todir="${bin.dir}" file="${inchi.dir}/libinchi.dll"/>
+		<copy tofile="${bin.dir}/libinchi.so.1" file="${inchi.dir}/libinchi.so"/>
 		
-		<javac
-				srcdir="${cdkWrapper.dir}/src/net/sf/jniinchi/cdk"
-				destdir="${dist-bin.dir}"
-				classpath="${jniInchi.dir}/bin;${cdk.jar}">
-		    <include name="*.java" />
-		</javac>
-		
-		<javac
-				srcdir="${cmlWrapper.dir}/src/net/sf/jniinchi/cml"
-				destdir="${dist-bin.dir}"
-				classpath="${jniInchi.dir}/bin;${cml.jar};${xom.jar}">
-		    <include name="*.java" />
-		</javac>
-		
-		<jar destfile="${dist.dir}/jniInChI-cdk-cml.jar" basedir="${dist-bin.dir}"/>
-		
-		<!--<delete dir="${dist-bin.dir}" quiet="true"/>-->
+	</target>
+	
+	<target name="jar" depends="compile">
+		<mkdir dir="${dist.dir}"/>
+		<jar destfile="${dist.dir}/jniInChI.jar" basedir="${bin.dir}"/>
+	</target>
+	
+	<target name="javadoc">
+		<mkdir dir="${doc.dir}"/>
+		<javadoc
+			destdir="${doc.dir}"
+            source="1.4"
+			>
+			
+			<packageset dir="${jniInchi.src.dir}" defaultexcludes="yes">
+			      <include name="net/sf/jniinchi/**"/>
+		    </packageset>
+		</javadoc>
 	</target>
 	
 </project>
