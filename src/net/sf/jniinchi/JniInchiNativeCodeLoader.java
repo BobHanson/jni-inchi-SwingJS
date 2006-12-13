@@ -394,9 +394,24 @@ class Environment {
         try {
             classFilePath = URLDecoder.decode(classFilePath, "UTF-8");
         } catch (UnsupportedEncodingException uee) {
-            System.err.println(uee.getMessage());
+            // Decode manually
+        	int indx;
+        	while ((indx = classFilePath.indexOf('%')) > -1) {
+        		if (classFilePath.length() > indx + 1) {
+        			String lccfp = classFilePath.toLowerCase();
+        			char ch = lccfp.charAt(indx + 1);
+        			char cl = lccfp.charAt(indx + 2);
+        			int ih = "0123456789abcdef".indexOf(ch);
+        			int il = "0123456789abcdef".indexOf(cl);
+        			if (ih > -1 && il > -1) {
+        				classFilePath = classFilePath.substring(0, indx)
+        					+ ((char) (16 * ih + il))
+        					+ classFilePath.substring(indx + 3);
+        			}
+        		}
+        	}
         }
-        System.err.println(classFilePath);
+        
     	// Check if loaded from jar
     	if (classFilePath.startsWith("jar:file")) {
     		usingJarFile = true;
