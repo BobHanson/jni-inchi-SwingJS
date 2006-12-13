@@ -1,0 +1,10 @@
+This directory contains precompiled InChI library files and the API header file,
+from software version 1.01 of the International Union of Pure and Applied
+Chemistry (IUPAC)'s International Chemical Identifier (InChI).
+
+These files are Copyright (C) The International Union of Pure and Applied
+Chemistry 2005: IUPAC International Chemical Identifier (InChI)
+(contact: secretariat@iupac.org).
+
+The complete InChI distribution, including source code, is available from the
+IUPAC website (http://www.iupac.org/inchi).
