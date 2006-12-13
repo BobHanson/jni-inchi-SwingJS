@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -388,13 +390,18 @@ class Environment {
     	ClassLoader cldr = ClassLoader.getSystemClassLoader();
     	// Find this class
     	URL clUrl = cldr.getResource("net/sf/jniinchi/JniInchiNativeCodeLoader.class");
-    	String classFilePath = clUrl.toString();
-    	
+        String classFilePath = clUrl.toString();
+        try {
+            classFilePath = URLDecoder.decode(classFilePath, "UTF-8");
+        } catch (UnsupportedEncodingException uee) {
+            System.err.println(uee.getMessage());
+        }
+        System.err.println(classFilePath);
     	// Check if loaded from jar
     	if (classFilePath.startsWith("jar:file")) {
     		usingJarFile = true;
     		String path = classFilePath.substring(9, classFilePath.indexOf("!"));
-    		jarFile = new File(path);
+            jarFile = new File(path);
     		classRootDirectory = jarFile.getParentFile().getAbsoluteFile();
     	} else {
     		usingJarFile = false;
