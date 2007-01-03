@@ -872,6 +872,7 @@ public class TestJniInchiWrapper {
     @Test
     @Ignore
     public void testGetInchiFromLandDAlanine2D() throws Exception {
+        /*
         JniInchiInput input = getAlanine2D("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
@@ -887,6 +888,7 @@ public class TestJniInchiWrapper {
         JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
         Assert.assertEquals(INCHI_RET.OKAY, outputD.getReturnStatus());
         Assert.assertEquals("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1", outputD.getInchi());
+        */
     };
 
     /**
@@ -1010,19 +1012,19 @@ public class TestJniInchiWrapper {
 
         input = getLAlanine3D("-compress");
         output = JniInchiWrapper.getInchi(input);
-        debug(output);
+        //debug(output);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
         Assert.assertEquals("InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF/tB1/m0/s1", output.getInchi());
 
         input = getLAlanine3D("/compress");
         output = JniInchiWrapper.getInchi(input);
-        debug(output);
+        //debug(output);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
         Assert.assertEquals("InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF/tB1/m0/s1", output.getInchi());
 
         input = getLAlanine3D("-cOMprEsS");
         output = JniInchiWrapper.getInchi(input);
-        debug(output);
+        //debug(output);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
         Assert.assertEquals("InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF/tB1/m0/s1", output.getInchi());
     }
@@ -1056,14 +1058,16 @@ public class TestJniInchiWrapper {
     @Ignore
     // FIXME
     public void testGetChlorineIonFromInchi() throws Exception {
+        /*
         JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/Cl/q-1", "-FixedH");
         JniInchiOutputStructure output = JniInchiWrapper.getStructureFromInchi(input);
-        debug(output);
+        //debug(output);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
         Assert.assertEquals(1, output.getNumAtoms());
         Assert.assertEquals(0, output.getNumBonds());
         Assert.assertEquals(0, output.getNumStereo0D());
         Assert.assertEquals("InChI Atom: Cl [0.0,0.0,0.0] Charge:-1 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE", output.getAtom(0).getDebugString());
+        */
     }
 
     /**
@@ -1155,6 +1159,7 @@ public class TestJniInchiWrapper {
     @Ignore
     // Test fails due to problem with InChI library
     public void testGetMethylRadicalFromInchi() throws Exception {
+        /*
         JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/CH3/h1H3");
         JniInchiOutputStructure output = JniInchiWrapper.getStructureFromInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
@@ -1162,6 +1167,7 @@ public class TestJniInchiWrapper {
         Assert.assertEquals(0, output.getNumBonds());
         Assert.assertEquals(0, output.getNumStereo0D());
         Assert.assertEquals("InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: DOUBLET", output.getAtom(0).getDebugString());
+        */
     }
 
 
