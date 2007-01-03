@@ -1,5 +1,5 @@
 #!/bin/bash
 export VERSION=1.4
-g++ -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -I"inchi" -I"cpp-src" -Wl,-linchi,-L"inchi" -shared -o "cpp-bin/libJniInchi.so" "cpp-src/JniInchiWrapper.cpp"
-strip "cpp-bin/libJniInchi.so"
-mv cpp-bin/libJniInchi.so cpp-bin/libJniInchi.$VERSION.so
+g++ -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -I"src/main/native" -Wl,-linchi,-L"inchi" -shared -o "src/main/resources/libJniInchi.so" "src/main/native/JniInchiWrapper.cpp"
+strip "src/main/resources/libJniInchi.so"
+mv src/main/resources/libJniInchi.so src/main/resources/libJniInchi.$VERSION.so
