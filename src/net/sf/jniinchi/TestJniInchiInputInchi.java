@@ -8,19 +8,19 @@ public class TestJniInchiInputInchi {
     /*
      * Test method for 'net.sf.jniinchi.JniInchiInputInchi.getOptions()'
      */
-	@Test
+    @Test
     public void testGetOptions() {
         JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/C6H6/c1-2-4-6-5-3-1/h1-6H");
         input.options = "-compress";
-        Assert.assertEquals(input.getOptions(), "-compress");
+        Assert.assertEquals("-compress", input.getOptions());
     }
 
     /*
      * Test method for 'net.sf.jniinchi.JniInchiInputInchi.getInchi()'
      */
-	@Test
+    @Test
     public void testGetInchi() {
         JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/C6H6/c1-2-4-6-5-3-1/h1-6H");
-        Assert.assertEquals(input.getInchi(), "InChI=1/C6H6/c1-2-4-6-5-3-1/h1-6H");
+        Assert.assertEquals("InChI=1/C6H6/c1-2-4-6-5-3-1/h1-6H", input.getInchi());
     }
 }

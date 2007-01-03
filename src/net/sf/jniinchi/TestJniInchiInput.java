@@ -10,10 +10,10 @@ public class TestJniInchiInput extends TestCase {
     /*
      * Test method for 'net.sf.jniinchi.JniInchiInput.getOptions()'
      */
-	@Test
+    @Test
     public void testGetOptions() {
         JniInchiInput input = new JniInchiInput();
         input.options = "-compress";
-        Assert.assertEquals(input.getOptions(), "-compress");
+        Assert.assertEquals("-compress", input.getOptions());
     }
 }

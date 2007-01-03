@@ -8,11 +8,11 @@ public class TestJniInchiOutputStructure {
     /*
      * Test method for 'net.sf.jniinchi.JniInchiOutputStructure.getReturnStatus()'
      */
-	@Test
+    @Test
     public void testGetReturnStatus() {
         JniInchiOutputStructure output = new JniInchiOutputStructure();
         output.retStatus = INCHI_RET.OKAY;
-        Assert.assertEquals(output.getReturnStatus(), INCHI_RET.OKAY);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
     }
 
     /*
@@ -22,7 +22,7 @@ public class TestJniInchiOutputStructure {
     public void testGetMessage() {
         JniInchiOutputStructure output = new JniInchiOutputStructure();
         output.message = "Test message";
-        Assert.assertEquals(output.getMessage(), "Test message");
+        Assert.assertEquals("Test message", output.getMessage());
     }
 
     /*
@@ -32,7 +32,7 @@ public class TestJniInchiOutputStructure {
     public void testGetLog() {
         JniInchiOutputStructure output = new JniInchiOutputStructure();
         output.log = "Test log";
-        Assert.assertEquals(output.getLog(), "Test log");
+        Assert.assertEquals("Test log", output.getLog());
     }
 
     /*
@@ -43,7 +43,7 @@ public class TestJniInchiOutputStructure {
         JniInchiOutputStructure output = new JniInchiOutputStructure();
         long[][] flags = {{1, 2}, {3, 4}};
         output.warningFlags = flags;
-        Assert.assertEquals(output.getWarningFlags(), flags);
+        Assert.assertEquals(flags, output.getWarningFlags());
     }
 
 }
