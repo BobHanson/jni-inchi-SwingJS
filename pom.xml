@@ -7,7 +7,14 @@
   <packaging>jar</packaging>
   <version>0.3</version>
   <name>jniinchi</name>
-  <url>http://maven.apache.org</url>
+  
+  <distributionManagement>
+    <repository>
+        <id>wwmm</id>
+        <name>WWMM</name>
+        <url>dav:http://wwmm.ch.cam.ac.uk/maven2</url>
+    </repository>
+  </distributionManagement>
 
   <developers>
     <developer>
