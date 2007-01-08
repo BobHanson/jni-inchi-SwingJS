@@ -19,7 +19,7 @@ public class JniInchiNativeCodeLoader {
     protected static final int CURRENT_NATIVE_VERSION_MAJOR = 1;
     protected static final int CURRENT_NATIVE_VERSION_MINOR = 4;
 
-    protected static String[] INCHI_LIB_NAMES = {null, "libinchi.dll", "libinchi.so.1"};
+    protected static String[] INCHI_LIB_NAMES = {null, "libinchi.dll", "libinchi.so"};
     protected static String[] JNI_LIB_PREFIX = {null, "JniInchi." , "libJniInchi."};
     protected static String[] JNI_LIB_SUFFIX = {null, ".dll", ".so"};
 
@@ -36,6 +36,7 @@ public class JniInchiNativeCodeLoader {
 
     protected void log(String message) {
         log.append(message + "\n");
+        if (debug) System.err.println(message);
     }
 
     /**
