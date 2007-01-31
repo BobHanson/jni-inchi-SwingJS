@@ -1,0 +1,5 @@
+Thread safety
+Properties file to specify native code location
+Add native code building to pom
+	http://mojo.codehaus.org/maven-native/native-maven-plugin/
+	http://docs.codehaus.org/display/MAVENUSER/Projects+With+JNI
