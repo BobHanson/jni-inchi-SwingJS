@@ -60,7 +60,7 @@ JNIEXPORT jboolean JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtom
  */
 JNIEXPORT jboolean JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtomBonds
   (JNIEnv * env, jobject, jint atNo, jint nbonds, jintArray neighbourArray,
-  	jintArray typeArray, jintArray stereoArray);
+      jintArray typeArray, jintArray stereoArray);
 
 
 /**
@@ -77,7 +77,7 @@ JNIEXPORT jboolean JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtomB
  */
 JNIEXPORT jboolean JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetStereo
   (JNIEnv *, jobject, jint i, jint atC, jint at0, jint at1, jint at2, jint at3,
-  	jint type, jint parity);
+      jint type, jint parity);
 
 
 /**
@@ -86,6 +86,16 @@ JNIEXPORT jboolean JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetStere
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGenerateInchi
   (JNIEnv *, jobject);
+
+
+/**
+ * Generates InChI from InChI string.
+ * @param inchi		InChI string
+ * @param options	Options
+ * @return		Return status.
+ */
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGenerateInchiFromInchi
+  (JNIEnv *env, jobject, jstring inchi, jstring options);
 
 
 /**
@@ -122,13 +132,13 @@ JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetLog
  */
 JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeInputMem
   (JNIEnv *, jobject);
-  
+
 /**
  * Frees memory used by InChI library.  Must be called once InChI has
  * been generated and all data fetched.
  */
 JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeOutputMem
-  (JNIEnv *, jobject);  
+  (JNIEnv *, jobject);
 
 
 
@@ -279,11 +289,11 @@ JNIEXPORT jlong JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStructWa
 
 /**
  * Frees memory used by InChI library.  Must be called once structure has
- * been generated and all data fetched. 
+ * been generated and all data fetched.
  */
 JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeStructMem
   (JNIEnv *, jobject);
-  
+
 
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoCentralAtom
   (JNIEnv *, jobject, jint indx);
@@ -300,7 +310,7 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoPar
 
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersionMajor
   (JNIEnv *, jclass);
- 
+
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersionMinor
   (JNIEnv *, jclass);
 

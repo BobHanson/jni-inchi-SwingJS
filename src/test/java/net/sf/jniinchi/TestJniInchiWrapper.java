@@ -1354,6 +1354,28 @@ public class TestJniInchiWrapper {
 
 
 
+    @Test
+    public void testInchiToSdf() throws Exception {
+        // InChI to InChI
+        //JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)", "/compress");
+        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF", "");
+        JniInchiOutput outputSdf = JniInchiWrapper.getInchiFromInchi(input);
+
+        System.out.println("RET: " + outputSdf.retStatus);
+        System.out.println("INCHI: " + outputSdf.sInchi);
+        System.out.println("AUXINFO: " + outputSdf.sAuxInfo);
+        System.out.println("MESSAGE: " + outputSdf.sMessage);
+        System.out.println("LOG: " + outputSdf.sLog);
+
+
+        System.out.println(JniInchiWrapper.getInchi(this.getAlanine0D("/compress")).sInchi);
+        System.out.println(JniInchiWrapper.getInchi(this.getLAlanine0D("/compress")).sInchi);
+        System.out.println(JniInchiWrapper.getInchi(this.getDAlanine0D("/compress")).sInchi);
+
+
+    }
+
+
 
 
     protected void debug(JniInchiOutput output) {
