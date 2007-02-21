@@ -50,7 +50,8 @@
               <goal>exec</goal>
             </goals>
             <configuration>
-              <executable>/usr/bin/make</executable>
+              <executable>c:\Tools\cygwin\bin\make.exe</executable>
+< !- -              <executable>/usr/bin/make</executable>	- - >
               <workingDirectory>src/main/native</workingDirectory>
             </configuration>
           </execution>

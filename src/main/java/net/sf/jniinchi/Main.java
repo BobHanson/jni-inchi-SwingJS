@@ -46,37 +46,49 @@ public class Main {
     public static void check() throws JniInchiException {
         System.out.println("Loading native code");
         JniInchiNativeCodeLoader loader = JniInchiNativeCodeLoader.getLoader();
+        try {
+            loader.loadNativeCode_();
+            System.out.println(" - OKAY");
+            
+            System.out.println("Generating InChI from structure");
+            JniInchiStructure mol = getTestMolecule();
+            JniInchiOutput out1 = JniInchiWrapper.getInchi(new JniInchiInput(mol));
+            if ("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)".equals(out1.getInchi())) {
+                System.out.println(" - OKAY");
+            } else {
+                System.out.println(" - ERROR");
+            }
+            
+            System.out.println("Generating structure from InChI");
+            JniInchiOutputStructure out2 = JniInchiWrapper.getStructureFromInchi(new JniInchiInputInchi("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)"));
+            if (out2.atomList.size() == 6 && out2.bondList.size() == 5) {
+                System.out.println(" - OKAY");
+            } else {
+                System.out.println(" - ERROR");
+            }
+            
+            System.out.println("Converting structure back to InChI");
+            JniInchiOutput out3 = JniInchiWrapper.getInchi(new JniInchiInput(out2));
+            if ("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)".equals(out3.getInchi())) {
+                System.out.println(" - OKAY");
+            } else {
+                System.out.println(" - ERROR");
+            }
+        } catch (LoadNativeLibraryException lnle) {
+            System.out.println(" - ERROR");
+        }
+        
+        
+        
+        System.out.println();
+        System.out.println("Checks done.");
+        System.out.println();
+    }
+    
+    public static void debug() throws LoadNativeLibraryException {
+        JniInchiNativeCodeLoader.setDebug(true);
+        JniInchiNativeCodeLoader loader = JniInchiNativeCodeLoader.getLoader();
         loader.loadNativeCode_();
-        System.out.println(" - OKAY");
-        
-        System.out.println("Generating InChI from structure");
-        JniInchiStructure mol = getTestMolecule();
-        JniInchiOutput out1 = JniInchiWrapper.getInchi(new JniInchiInput(mol));
-        if ("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)".equals(out1.getInchi())) {
-            System.out.println(" - OKAY");
-        } else {
-            System.out.println(" - ERROR");
-        }
-        
-        System.out.println("Generating structure from InChI");
-        JniInchiOutputStructure out2 = JniInchiWrapper.getStructureFromInchi(new JniInchiInputInchi("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)"));
-        if (out2.atomList.size() == 6 && out2.bondList.size() == 5) {
-            System.out.println(" - OKAY");
-        } else {
-            System.out.println(" - ERROR");
-        }
-        
-        System.out.println("Converting structure back to InChI");
-        JniInchiOutput out3 = JniInchiWrapper.getInchi(new JniInchiInput(out2));
-        if ("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)".equals(out3.getInchi())) {
-            System.out.println(" - OKAY");
-        } else {
-            System.out.println(" - ERROR");
-        }
-        
-        System.out.println();
-        System.out.println("Checks completed.");
-        System.out.println();
     }
 
     public static void main(String[] args) throws Exception {
@@ -85,7 +97,9 @@ public class Main {
         System.out.println("** JniInchi debugger **");
         System.out.println();
         
-        args = new String[] {"-check"};
+        if (args.length == 0) {
+            args = new String[] {"-check"};
+        }
         
         // Parse option
         if (args.length == 1) {
@@ -96,7 +110,7 @@ public class Main {
                 check();
                 return;
             } else if ("-debug".equals(args[0])) {
-                displayHelp();
+                debug();
                 return;
             } else if ("-install".equals(args[0])) {
                 System.setProperty(JniInchiNativeCodeLoader.P_AUTOEXTRACT, "true");

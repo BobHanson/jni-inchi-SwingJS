@@ -2,23 +2,29 @@
 # Makefile for JniInchi
 #
 
+LIBNAME = JniInchi
 CODE_VERSION = 1.4
-SOURCE_FILE = JniInchiWrapper.cpp
 
+CLASSES = JniInchiWrapper.cpp
 OBJECTS = JniInchiWrapper.o
-HEADERS = net_sf_jniinchi_JniInchiWrapper.h
-JAVA_CLASS = net.sf.jniinchi.JniInchiWrapper
+JNIHEADERS = net_sf_jniinchi_JniInchiWrapper.h
 
 TARGET_DIR = ../../../target/classes
 
+JAVA_CLASS = net.sf.jniinchi.JniInchiWrapper
 JAVA_BUILD_DIR = ../../../target/classes
-CPP_SRC_DIR = .
 
-LIBNAME = JniInchi
+# the name of the file we build
+TARGET = $(TARGET_DIR)/$(LIB_PREFIX)$(LIBNAME).$(CODE_VERSION)$(LIB_EXTN)
 
-JAVAH = $(JAVA_HOME)/bin/javah
+# classpath for javah
+JAVAH_CLASSPATH = $(JAVA_BUILD_DIR)
+
+# Javah bits
+JAVAH = "$(JAVA_HOME)/bin/javah"
 JAVAH_FLAGS += -classpath $(JAVAH_CLASSPATH)
 JAVAH_CMD = $(JAVAH) $(JAVAH_FLAGS) $(OUTPUT_OPTION)
+JAVA_CLASS_FILE = $(addsuffix .class, $(subst .,/,$(JAVA_CLASS)))
 
 # Preprocessor and compiler flags
 CXXFLAGS = -Wall
@@ -27,7 +33,6 @@ CPPFLAGS = -I. -I"${JAVA_HOME}/include"
 # Linker flags
 LDFLAGS = -shared
 LDLIBS=-linchi -L../resources
-
 
 # os-dependent bits
 UNAME := $(shell uname)
@@ -55,36 +60,22 @@ endif
 endif
 
 
-# the name of the file we build
-TARGET = $(TARGET_DIR)/$(LIB_PREFIX)$(LIBNAME).$(CODE_VERSION)$(LIB_EXTN)
-
-# classpath for javah
-ifdef CLASSPATH
-JAVAH_CLASSPATH = $(JAVA_BUILD_DIR):$(CLASSPATH)
-else
-JAVAH_CLASSPATH = $(JAVA_BUILD_DIR)
-endif
-
-
-
-# default target
 all: $(TARGET)
 
 clean:
-	$(RM) $(HEADERS)
+	$(RM) $(JNIHEADERS)
 	$(RM) $(OBJECTS)
 	$(RM) $(TARGET)
 
-# C++ depends on header file from java native calls
-JniInchiWrapper.cpp: $(HEADERS)
 
-# Generate header file, with javah
-net_sf_jniinchi_JniInchiWrapper.h: $(JAVA_BUILD_DIR)/net/sf/jniinchi/JniInchiWrapper.class
-	$(RM) $@
-	$(JAVAH) $(JAVAH_FLAGS) $(JAVA_CLASS)
+$(CLASSES): $(JNIHEADERS)
 
+$(OBJECTS): $(CLASSES)
 
 $(TARGET): $(OBJECTS)
 	$(LINK.cpp) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o $(TARGET)
 
-
+# Generate header file, using javah
+$(JNIHEADERS): $(JAVA_BUILD_DIR)/$(JAVA_CLASS_FILE)
+	$(RM) $@
+	$(JAVAH) $(JAVAH_FLAGS) $(JAVA_CLASS)

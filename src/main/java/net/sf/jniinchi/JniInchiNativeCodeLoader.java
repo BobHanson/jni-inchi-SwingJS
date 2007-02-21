@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
 
 public class JniInchiNativeCodeLoader {
     
-    private static final boolean DEBUG = false;
+    private static boolean DEBUG = false;
     
     private static final int CURRENT_NATIVE_VERSION_MAJOR = 1;
     private static final int CURRENT_NATIVE_VERSION_MINOR = 4;
@@ -66,6 +66,10 @@ public class JniInchiNativeCodeLoader {
     }
 
     
+    public static void setDebug(boolean debug) {
+        DEBUG = debug;
+    }
+    
     
     
 
@@ -83,13 +87,12 @@ public class JniInchiNativeCodeLoader {
 
         // Find required library versions
         String version = getVersionString();
-        log("Looking for native code version: " + version);
+        log("Expecting native code version: " + version);
 
         // Determine native library filenames
         inchiFilename = INCHI_LIB_NAMES[env.platform];
         jniFilename = JNI_LIB_PREFIX[env.platform] + version + JNI_LIB_SUFFIX[env.platform];
-        log("JNI library filename: " + jniFilename);
-        log("InChI filename: " + inchiFilename);
+        log("Files: [" + jniFilename + ", " +inchiFilename + "]");
         
         // Load properties
         properties = loadProperties();
@@ -153,6 +156,7 @@ public class JniInchiNativeCodeLoader {
     public void loadNativeCode_() throws LoadNativeLibraryException {
         String path = findNativeFilesPath();
         if (path == null) {
+            log("Unable to find native libraries");
             if (env.usingJarFile && Boolean.valueOf(properties.getProperty(P_AUTOEXTRACT))) {
                 path = extractNativeFiles();
             }
@@ -161,7 +165,9 @@ public class JniInchiNativeCodeLoader {
         if (path != null) {
             loadNativeCode(path);
         } else {
+            log("Native libraries not found in: " + properties.getProperty(P_NATIVECODE_PATH)); 
             // Print error message
+            throw new LoadNativeLibraryException();
         }
     }
 
@@ -181,9 +187,11 @@ public class JniInchiNativeCodeLoader {
         return null;
     }
     
+    
     private String extractNativeFiles() {
         return null;
     }
+    
     
     private void loadNativeCode(String path) throws LoadNativeLibraryException {
         File inchiFile = new File(path, inchiFilename);
@@ -220,6 +228,8 @@ public class JniInchiNativeCodeLoader {
         } catch (UnsatisfiedLinkError ule) {
             die("Error getting native code version - cannot find native method: " + ule.getMessage());
         }
+        
+        log("Native code loaded");
     }
 
     
@@ -229,71 +239,15 @@ public class JniInchiNativeCodeLoader {
 
 
 
-    protected void log(String message) {
+    private void log(String message) {
         log.append(message + "\n");
-        if (DEBUG) System.err.println(message);
-    }
-
-    /**
-     * Constructor. Checks platform is compatable, and locates native files.
-     *
-     */
-    private JniInchiNativeCodeLoader(int i) throws LoadNativeLibraryException {
-        properties = null;
-        
-        log("Detecting environment");
-        env = new Environment();
-
-        // Check platform has been recognised
-        if (env.platform == Environment.PLAT_UNKNOWN) {
-            die("Unknown platform");
-        }
-
-        // Find required library versions
-        String version = getVersionString();
-        log("Looking for native code version: " + version);
-
-
-        // Determine native library filenames
-        inchiFilename = INCHI_LIB_NAMES[env.platform];
-        jniFilename = JNI_LIB_PREFIX[env.platform] + version + JNI_LIB_SUFFIX[env.platform];
-        log("JNI library file: " + jniFilename);
-        log("InChI file: " + inchiFilename);
-
-        log("Searching for JNI file");
-        // Search for JNI library file
-        if (!findJniFile()) {
-            log("JNI file not found");
-
-            // JniInchi native library not found
-            if (env.usingJarFile) {
-                log("Running from JAR file - checking for libraries");
-
-                // Try to autoplace from jar
-                autoplaceJniFile();
-
-                // See if InChI library file is already in location
-                log("Checking for InChI file in " + jniFile.getParentFile().getAbsolutePath());
-                if (!checkForInchiFile()) {
-                    log("InChI file not found");
-                    autoplaceInchiFile();
-                }
-
-            } else {
-                die("Unable to locate native libraries");
-            }
-        } else {
-            log("JNI file found: " + jniFile.toString());
-            log("Checking for InChI file in " + jniFile.getParentFile().getAbsolutePath());
-            if (!checkForInchiFile()) {
-                log("InChI file not found");
-            }
-            log("InChI file found: " + inchiFile.toString());
-        }
+        if (DEBUG) System.out.println(message);
     }
 
 
-    protected void autoplaceJniFile() throws LoadNativeLibraryException {
+
+
+    private void autoplaceJniFile() throws LoadNativeLibraryException {
         // Check for library inside jar
         log("Looking for JNI file in jar");
         ClassLoader cldr = this.getClass().getClassLoader();
@@ -333,7 +287,7 @@ public class JniInchiNativeCodeLoader {
         }
     }
 
-    protected void autoplaceInchiFile() throws LoadNativeLibraryException {
+    private void autoplaceInchiFile() throws LoadNativeLibraryException {
         // Check for library inside jar
         log("Looking for InChI file in jar");
         ClassLoader cldr = this.getClass().getClassLoader();
@@ -358,18 +312,29 @@ public class JniInchiNativeCodeLoader {
 
 
 
-
-    protected void copyStreamToFile(InputStream in, File file) throws IOException {
+    /**
+     * Writes the contents of an input stream to a file.
+     * @param in
+     * @param file
+     * @throws IOException
+     */
+    private void copyStreamToFile(InputStream in, File file) throws IOException {
         byte[] bytes = new byte[1024];
         int n;
 
         OutputStream out = new FileOutputStream(file);
-        while ((n = in.read(bytes)) > -1) {
-            out.write(bytes, 0, n);
+        try {
+            while ((n = in.read(bytes)) > -1) {
+                out.write(bytes, 0, n);
+            }
+            out.flush();
+        } finally {
+            try {
+                out.close();
+            } finally {
+                in.close();
+            }
         }
-        out.flush();
-        out.close();
-        in.close();
     }
 
 
@@ -377,7 +342,7 @@ public class JniInchiNativeCodeLoader {
      * Returns string representation of current native code version.
      * @return
      */
-    protected static String getVersionString() {
+    private static String getVersionString() {
         return(CURRENT_NATIVE_VERSION_MAJOR + "." + CURRENT_NATIVE_VERSION_MINOR);
     }
 
@@ -385,7 +350,7 @@ public class JniInchiNativeCodeLoader {
      * Searches for JNI native library file.
      * @return
      */
-    protected boolean findJniFile() {
+    private boolean findJniFile() {
         int i = 0;
         while (i < env.librarySearchLocations.size()) {
             File dir = (File) env.librarySearchLocations.get(i);
@@ -401,7 +366,7 @@ public class JniInchiNativeCodeLoader {
         return(jniFile != null);
     }
 
-    protected boolean checkForInchiFile() {
+    private boolean checkForInchiFile() {
         if (jniFile != null) {
             File f = new File(jniFile.getParent(), inchiFilename);
             if (f.exists()) {
@@ -412,7 +377,7 @@ public class JniInchiNativeCodeLoader {
         return(inchiFile != null);
     }
 
-    protected boolean findInchiFile() {
+    private boolean findInchiFile() {
         if (inchiFile == null) {
             int i = 0;
             while (i < env.librarySearchLocations.size()) {
@@ -431,41 +396,8 @@ public class JniInchiNativeCodeLoader {
     }
 
 
-    private void loadNativeCode() throws LoadNativeLibraryException {
-        // Load InChI native code
-        try {
-            log("Loading InChI library");
-            System.load(inchiFile.getAbsolutePath());
-        } catch (UnsatisfiedLinkError ule) {
-            die("Error loading InChI library: " + ule.getMessage());
-        }
 
-        // Load JNI InChI native code
-        try {
-            log("Loading JNI library");
-            System.load(jniFile.getAbsolutePath());
-        } catch (UnsatisfiedLinkError ule) {
-            die("Error loading JNI InChI library: " + ule.getMessage());
-        }
-
-        // Check version match
-        try {
-            log("Checking correct version is loaded");
-            int majorVersion = JniInchiWrapper.LibInchiGetVersionMajor();
-            int minorVersion = JniInchiWrapper.LibInchiGetVersionMinor();
-
-            if ( CURRENT_NATIVE_VERSION_MAJOR != majorVersion
-              || CURRENT_NATIVE_VERSION_MINOR != minorVersion) {
-                die("Native code is version " + majorVersion + "." + minorVersion
-                  + "; expected " + CURRENT_NATIVE_VERSION_MAJOR + "." + CURRENT_NATIVE_VERSION_MINOR);
-
-            }
-        } catch (UnsatisfiedLinkError ule) {
-            die("Error getting native code version: " + ule.getMessage());
-        }
-    }
-
-    protected void die(String message) throws LoadNativeLibraryException {
+    private void die(String message) throws LoadNativeLibraryException {
         System.err.println();
         System.err.println("JNI InChI has failed to load the native libraries required.");
         System.err.println();
