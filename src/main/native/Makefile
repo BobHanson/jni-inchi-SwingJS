@@ -4,7 +4,11 @@
 
 CODE_VERSION = 1.4
 SOURCE_FILE = JniInchiWrapper.cpp
+
 OBJECTS = JniInchiWrapper.o
+HEADERS = net_sf_jniinchi_JniInchiWrapper.h
+JAVA_CLASS = net.sf.jniinchi.JniInchiWrapper
+
 TARGET_DIR = ../../../target/classes
 
 JAVA_BUILD_DIR = ../../../target/classes
@@ -67,20 +71,20 @@ endif
 all: $(TARGET)
 
 clean:
-	$(RM) $(CPP_SRC_DIR)/net_sf_jniinchi_JniInchiWrapper.h
+	$(RM) $(HEADERS)
 	$(RM) $(OBJECTS)
 	$(RM) $(TARGET)
 
 # C++ depends on header file from java native calls
-$(CPP_SRC_DIR)/JniInchiWrapper.cpp: $(CPP_SRC_DIR)/net_sf_jniinchi_JniInchiWrapper.h
+JniInchiWrapper.cpp: $(HEADERS)
 
 # Generate header file, with javah
-$(CPP_SRC_DIR)/net_sf_jniinchi_JniInchiWrapper.h: $(JAVA_BUILD_DIR)/net/sf/jniinchi/JniInchiWrapper.class
+net_sf_jniinchi_JniInchiWrapper.h: $(JAVA_BUILD_DIR)/net/sf/jniinchi/JniInchiWrapper.class
 	$(RM) $@
-	$(JAVAH) $(JAVAH_FLAGS) net.sf.jniinchi.JniInchiWrapper
+	$(JAVAH) $(JAVAH_FLAGS) $(JAVA_CLASS)
 
 
 $(TARGET): $(OBJECTS)
-	$(LINK.cpp) JniInchiWrapper.o $(LDFLAGS) $(LDLIBS) -o $(TARGET)
+	$(LINK.cpp) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o $(TARGET)
 
 
