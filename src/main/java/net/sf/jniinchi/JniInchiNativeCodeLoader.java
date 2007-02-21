@@ -1,6 +1,7 @@
 package net.sf.jniinchi;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,11 +11,124 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
 public class JniInchiNativeCodeLoader {
 
-    protected static boolean debug = false;
+    private static final String PROP_PROPERTIES_PATH = "jniinchi.properties.path";
+    private static final String PROP_NATIVECODE_PATH = "jniinchi.nativecode.path";
+    private static final String PROP_AUTOPLACE = "jniinchi.autoplace";
+
+    /**
+     * Singleton.
+     */
+    private static JniInchiNativeCodeLoader loader;
+
+    /**
+     * Singleton getter.
+     * @return
+     */
+    public static JniInchiNativeCodeLoader getLoader() {
+        if (loader == null) {
+            loader = new JniInchiNativeCodeLoader();
+        }
+
+        return loader;
+    }
+
+    private boolean debug = true;
+
+    private Properties properties;
+
+
+    /**
+     * Constructor. Sets/detects properties.
+     */
+    private JniInchiNativeCodeLoader() {
+        // Detect environment
+        env = new Environment();
+
+        String nativePath = System.getProperty("jniinchi.native.path");
+        if (nativePath != null) {
+            // TODO
+            // findNativeLibrary(nativePath);
+        } else {
+            // Try reading properties file
+
+
+
+
+        }
+
+
+
+
+
+
+        Properties systemProperties = new Properties();
+        systemProperties.setProperty(PROP_PROPERTIES_PATH, System.getProperty(PROP_PROPERTIES_PATH));
+        systemProperties.setProperty(PROP_NATIVECODE_PATH, System.getProperty(PROP_NATIVECODE_PATH));
+        systemProperties.setProperty(PROP_AUTOPLACE, System.getProperty(PROP_AUTOPLACE));
+
+        Properties defaultProperties = new Properties();
+
+
+
+        String propPath = System.getProperty("jniinchi.properties.path");
+        if (propPath != null) {
+            log("System has jniinchi.properties.path set");
+        } else {
+            propPath = env.classRootDirectory + File.pathSeparator
+                + env.currentWorkingDirectory + File.pathSeparator
+                + System.getProperty("user.home");
+        }
+        log("jniinchi.properties search path: " + propPath);
+
+        // Set default properties values
+        properties = new Properties();
+
+
+
+        // Native code search path
+        properties.setProperty("jniinchi.native.path",
+            System.getProperty("jniinchi.native.path",
+                  env.classRootDirectory + File.pathSeparator
+                + env.currentWorkingDirectory + File.pathSeparator
+                + System.getProperty("java.library.path")));
+
+        // Auto extract native code if not found
+        properties.setProperty("jniinchi.autoextract",
+            System.getProperty("jniinchi.autoextract", "true"));
+
+        // Look for jniinchi.properties file
+        for (String path : propPath.split(File.pathSeparator)) {
+            File f = new File(path + File.separator + "jniinchi.properties");
+            if (f.exists()) {
+                log("jniinchi.properties file found: " + f.getAbsolutePath());
+                try {
+                    properties.load(new FileInputStream(f));
+                    break;
+                } catch (IOException ioe) {
+                    // TODO
+                }
+            }
+        }
+
+        properties.list(System.err);
+
+
+    }
+
+
+    private String getProperty(String key) {
+        String value = System.getProperty(key, properties.getProperty(key, ""));
+        return value;
+    }
+
+
+
+
 
     protected static final int CURRENT_NATIVE_VERSION_MAJOR = 1;
     protected static final int CURRENT_NATIVE_VERSION_MINOR = 4;
@@ -22,6 +136,8 @@ public class JniInchiNativeCodeLoader {
     protected static String[] INCHI_LIB_NAMES = {null, "libinchi.dll", "libinchi.so"};
     protected static String[] JNI_LIB_PREFIX = {null, "JniInchi." , "libJniInchi."};
     protected static String[] JNI_LIB_SUFFIX = {null, ".dll", ".so"};
+
+
 
     protected Environment env;
 
@@ -43,7 +159,7 @@ public class JniInchiNativeCodeLoader {
      * Constructor. Checks platform is compatable, and locates native files.
      *
      */
-    public JniInchiNativeCodeLoader() throws LoadNativeLibraryException {
+    public JniInchiNativeCodeLoader(int i) throws LoadNativeLibraryException {
         log("Detecting environment");
         env = new Environment();
 
@@ -55,6 +171,53 @@ public class JniInchiNativeCodeLoader {
         // Find required library versions
         String version = getVersionString();
         log("Looking for native code version: " + version);
+
+
+        // Check for system property
+        if (System.getProperty("jniinchi.native.path") != null) {
+            // TODO
+
+        }
+
+        // Check for properties file
+        if (System.getProperty("jniinchi.properties.path") != null) {
+            // TODO
+
+        }
+
+        // Search for properties file
+        // 1. Root dir
+        // 2. CWD
+        // 3. User's home directory
+        Properties props = new Properties();
+        try {
+            props.load(null);
+        } catch (IOException ioe) {
+
+        }
+        System.getProperties();
+
+
+
+
+        // Search for native library files
+        // 1. Root dir
+        // 2. CWD
+        // 3. library.path
+
+
+
+        // Extract from JAR file
+        boolean autoplace = true;
+        if (System.getProperty("jniinchi.autoplace") != null) {
+            autoplace = Boolean.getBoolean("jniinchi.autoplace");
+        }
+        if (autoplace) {
+
+
+        }
+
+
 
         // Determine native library filenames
         inchiFilename = INCHI_LIB_NAMES[env.platform];
@@ -154,6 +317,11 @@ public class JniInchiNativeCodeLoader {
             die("Unable to autoplace InChI file");
         }
     }
+
+
+
+
+
 
 
     protected void copyStreamToFile(InputStream in, File file) throws IOException {

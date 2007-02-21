@@ -7,7 +7,7 @@
   <packaging>jar</packaging>
   <version>0.3</version>
   <name>jniinchi</name>
-  
+
   <distributionManagement>
     <repository>
         <id>wwmm</id>
@@ -36,6 +36,26 @@
           <source>1.5</source>
           <target>1.5</target>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <!-- this execution happens just after compiling the java
+            classes, and builds the native code. -->
+            <id>build-native</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>make</executable>
+              <workingDirectory>src/main/native</workingDirectory>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
