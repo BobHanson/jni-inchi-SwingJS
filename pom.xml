@@ -5,7 +5,7 @@
   <groupId>net.sf</groupId>
   <artifactId>jniinchi</artifactId>
   <packaging>jar</packaging>
-  <version>0.3</version>
+  <version>0.3-SNAPSHOT</version>
   <name>jniinchi</name>
 
   <distributionManagement>
@@ -51,7 +51,7 @@
               <goal>exec</goal>
             </goals>
             <configuration>
-              <executable>make</executable>
+              <executable>/usr/bin/make</executable>
               <workingDirectory>src/main/native</workingDirectory>
             </configuration>
           </execution>

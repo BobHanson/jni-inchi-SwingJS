@@ -6,8 +6,11 @@
 #include <string>
 #include <iostream>
 
-#include "JniInchiWrapper.h"
+#include "net_sf_jniinchi_JniInchiWrapper.h"
 #include <inchi_api.h>
+
+#define NATIVE_LIB_VERSION_MAJOR 1
+#define NATIVE_LIB_VERSION_MINOR 4
 
 using namespace std;
 
