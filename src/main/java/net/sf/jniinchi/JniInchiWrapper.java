@@ -64,8 +64,8 @@ public class JniInchiWrapper {
      */
     public static void loadLibrary() throws LoadNativeLibraryException {
         if (!libraryLoaded) {
-            JniInchiNativeCodeLoader loader = new JniInchiNativeCodeLoader(0);
-            loader.loadNativeCode();
+            JniInchiNativeCodeLoader loader = JniInchiNativeCodeLoader.getLoader();
+            loader.loadNativeCode_();
         }
     }
 
