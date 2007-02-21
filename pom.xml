@@ -38,10 +38,10 @@
         </configuration>
       </plugin>
 
-<!--
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
+        <version>1.0.1</version>
         <executions>
           <execution>
             <id>build-native</id>
@@ -50,14 +50,21 @@
               <goal>exec</goal>
             </goals>
             <configuration>
-              <executable>c:\Tools\cygwin\bin\make.exe</executable>
-< !- -              <executable>/usr/bin/make</executable>	- - >
-              <workingDirectory>src/main/native</workingDirectory>
+              <executable>make all</executable>
+            </configuration>
+          </execution>
+          <execution>
+            <id>clean-native</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>make clean</executable>
             </configuration>
           </execution>
         </executions>
       </plugin>
--->
 
     </plugins>
   </build>

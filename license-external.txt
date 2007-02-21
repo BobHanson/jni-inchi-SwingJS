@@ -3,12 +3,13 @@
 This distribution contains some content that is copyrighted by its respective
 owners and distributed under the indicated licenses:
 
-InChI library binaries and API header file - content copyright (C) The
-International Union of Pure and Applied Chemistry 2005: IUPAC International
-Chemical Identifier (InChI) (contact: secretariat@iupac.org), and distributed
-under the terms of the GNU Lesser General Public License.
+InChI library source files
+ - content copyright (C) The International Union of Pure and Applied Chemistry
+   2005: IUPAC International Chemical Identifier (InChI) (contact: 
+   secretariat@iupac.org), and distributed under the terms of the GNU Lesser
+   General Public License.
 
-These are contained in the /inchi directory.
+These are contained in /src/main/native/inchi
 
 All other content is copyright (C) Sam Adams - licenced under the GNU Lesser
 General Public License (see license.txt).

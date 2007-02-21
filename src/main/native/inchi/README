@@ -1,0 +1,11 @@
+This directory contains source files for the InChI library.
+
+Content is copyright (C) The International Union of Pure and Applied Chemistry
+2005: IUPAC International Chemical Identifier (InChI) (contact: 
+secretariat@iupac.org), and distributed under the terms of the GNU Lesser
+General Public License.
+
+A copy of the license in contained at the root of this distribution.
+
+The file 'Makefile' is based on one provided by IUPAC in the InChI distribution,
+but has been heavily modified for use with JNI-InChI.

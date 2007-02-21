@@ -28,11 +28,11 @@ JAVA_CLASS_FILE = $(addsuffix .class, $(subst .,/,$(JAVA_CLASS)))
 
 # Preprocessor and compiler flags
 CXXFLAGS = -Wall
-CPPFLAGS = -I. -I"${JAVA_HOME}/include"
+CPPFLAGS = -I. -Iinchi -I"${JAVA_HOME}/include"
 
 # Linker flags
 LDFLAGS = -shared
-LDLIBS=-linchi -L../resources
+LDLIBS=-linchi -L$(TARGET_DIR)
 
 # os-dependent bits
 UNAME := $(shell uname)
@@ -72,10 +72,13 @@ $(CLASSES): $(JNIHEADERS)
 
 $(OBJECTS): $(CLASSES)
 
-$(TARGET): $(OBJECTS)
+$(TARGET): $(OBJECTS) INCHI
 	$(LINK.cpp) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o $(TARGET)
 
 # Generate header file, using javah
 $(JNIHEADERS): $(JAVA_BUILD_DIR)/$(JAVA_CLASS_FILE)
 	$(RM) $@
 	$(JAVAH) $(JAVAH_FLAGS) $(JAVA_CLASS)
+
+INCHI:
+	cd inchi && $(MAKE)
