@@ -34,6 +34,7 @@ CPPFLAGS = -I. -Iinchi -I"${JAVA_HOME}/include"
 LDFLAGS = -shared
 LDLIBS=-linchi -L$(TARGET_DIR)
 
+
 # os-dependent bits
 UNAME := $(shell uname)
 

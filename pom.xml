@@ -50,7 +50,10 @@
               <goal>exec</goal>
             </goals>
             <configuration>
-              <executable>make all</executable>
+              <executable>make</executable>
+              <arguments>
+                <argument>all</argument>
+              </arguments>
             </configuration>
           </execution>
           <execution>

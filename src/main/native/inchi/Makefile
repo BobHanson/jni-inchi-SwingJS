@@ -6,7 +6,8 @@ TARGET_DIR = ../../../../target/classes
 
 TARGET = $(TARGET_DIR)/$(LIBNAME)$(LIB_EXTN)
 
-LDFLAGS = -shared
+LDFLAGS = -shared -Wl,-soname,libinchi.so
+CFLAGS = -ansi -O3 
 
 
 # os-dependent bits
@@ -14,6 +15,7 @@ UNAME := $(shell uname)
 
 ifeq ($(UNAME),Linux)
 LIB_EXTN = .so
+#LDFLAGS += -Wl,-R,""
 else
 ifeq ($(findstring MINGW,$(UNAME)),MINGW)
 LIB_EXTN = .dll
@@ -57,5 +59,6 @@ clean:
 	$(RM) $(TARGET)
 
 $(TARGET): $(INCHI_LIB_OBJS)
-	$(LINK.cpp) $(INCHI_LIB_OBJS) $(LDFLAGS) $(LDLIBS) -o $(TARGET)
+	$(CC) $(LDFLAGS) $(OUTPUT_OPTION) $^
+#	$(LINK.c) $(INCHI_LIB_OBJS) $(LDFLAGS) $(LDLIBS) -o $(TARGET)
 
