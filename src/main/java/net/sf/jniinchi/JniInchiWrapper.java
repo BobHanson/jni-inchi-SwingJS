@@ -81,7 +81,7 @@ public class JniInchiWrapper {
     /**
      * Constructor
      */
-    protected JniInchiWrapper() throws LoadNativeLibraryException {
+    private JniInchiWrapper() throws LoadNativeLibraryException {
         loadLibrary();
     }
 
@@ -136,7 +136,7 @@ public class JniInchiWrapper {
 
         return(sbOptions.toString());
     }
-
+    
 
     /**
      * Generates InChI string for a chemical structure.
@@ -146,143 +146,157 @@ public class JniInchiWrapper {
      */
     public static JniInchiOutput getInchi(JniInchiInput input) throws JniInchiException {
         JniInchiWrapper wrapper = getWrapper();
-
-        // Create arrays
-        int nat = input.getNumAtoms();
-        int nst = input.getNumStereo0D();
-
-        String options = input.getOptions();
-        if (options.length() == 0) {
-            options = " ";
-        }
-        wrapper.LibInchiStartInput(nat, nst, options);
-
-        // Load atom data
-        Map atomIndxMap = new HashMap();
-        for (int i = 0; i < nat; i ++) {
-            JniInchiAtom atom = input.getAtom(i);
-            atomIndxMap.put(atom, new Integer(i));
-            if (!wrapper.LibInchiSetAtom(i, atom.x, atom.y, atom.z, atom.elname,
-                    atom.isotopic_mass, atom.implicitH, atom.implicitP,
-                    atom.implicitD, atom.implicitT, atom.radical.getIndx(),
-                    atom.charge)) {
-
-                wrapper.LibInchiFreeInputMem();
-                throw new JniInchiException("JNI: Failed to set atoms");
+        wrapper.getLock();
+        
+        try {
+        
+            // Create arrays
+            int nat = input.getNumAtoms();
+            int nst = input.getNumStereo0D();
+    
+            String options = input.getOptions();
+            if (options.length() == 0) {
+                options = " ";
             }
-        }
-
-        int[]   atomNumNeighbors = new int[nat];
-        int[][] atomNeighbors = new int[nat][MAXVAL];
-        int[][] atomBondTypes = new int[nat][MAXVAL];
-        int[][] atomBondStereo = new int[nat][MAXVAL];
-
-
-        // Load bond data (note, bonds only need to be recorded in one atom's
-        // neighbor list, not both
-        for (int i = 0; i < input.bondList.size(); i ++) {
-            JniInchiBond bond = input.getBond(i);
-            int atOi = ((Integer) atomIndxMap.get(bond.atomOrigin)).intValue();
-            int atTi = ((Integer) atomIndxMap.get(bond.atomTarget)).intValue();
-
-            int bondNo = atomNumNeighbors[atOi];
-            atomNeighbors[atOi][bondNo] = atTi;
-            atomBondTypes[atOi][bondNo] = bond.type.getIndx();
-            atomBondStereo[atOi][bondNo] = bond.stereo.getIndx();
-
-            atomNumNeighbors[atOi] ++;
-        }
-
-        for (int i = 0; i < nat; i ++) {
-            if (!wrapper.LibInchiSetAtomBonds(i, atomNumNeighbors[i],
-                    atomNeighbors[i], atomBondTypes[i], atomBondStereo[i])) {
-                wrapper.LibInchiFreeInputMem();
-                throw new JniInchiException("JNI: Failed to set atom neighbours");
+            wrapper.LibInchiStartInput(nat, nst, options);
+    
+            // Load atom data
+            Map atomIndxMap = new HashMap();
+            for (int i = 0; i < nat; i ++) {
+                JniInchiAtom atom = input.getAtom(i);
+                atomIndxMap.put(atom, new Integer(i));
+                if (!wrapper.LibInchiSetAtom(i, atom.x, atom.y, atom.z, atom.elname,
+                        atom.isotopic_mass, atom.implicitH, atom.implicitP,
+                        atom.implicitD, atom.implicitT, atom.radical.getIndx(),
+                        atom.charge)) {
+    
+                    wrapper.LibInchiFreeInputMem();
+                    throw new JniInchiException("JNI: Failed to set atoms");
+                }
             }
-        }
-
-
-        // Load 0D Stereo parities
-        for (int i = 0; i < nst; i ++) {
-            JniInchiStereo0D stereo = (JniInchiStereo0D) input.stereoList.get(i);
-            int parity = (int) (stereo.parity.getIndx()
-                    | (stereo.disconParity.getIndx() << 3));
-
-            int atCi = (stereo.type == INCHI_STEREOTYPE.DOUBLEBOND ?
-                    JniInchiStereo0D.NO_ATOM
-                    : ((Integer) atomIndxMap.get(stereo.centralAtom)).intValue());
-            int at0i = ((Integer) atomIndxMap.get(stereo.neighbors[0])).intValue();
-            int at1i = ((Integer) atomIndxMap.get(stereo.neighbors[1])).intValue();
-            int at2i = ((Integer) atomIndxMap.get(stereo.neighbors[2])).intValue();
-            int at3i = ((Integer) atomIndxMap.get(stereo.neighbors[3])).intValue();
-
-            if (!wrapper.LibInchiSetStereo(i, atCi, at0i, at1i, at2i, at3i,
-                    stereo.type.getIndx(), parity)) {
-                wrapper.LibInchiFreeInputMem();
-                throw new JniInchiException("JNI: Failed to set stereos");
+    
+            int[]   atomNumNeighbors = new int[nat];
+            int[][] atomNeighbors = new int[nat][MAXVAL];
+            int[][] atomBondTypes = new int[nat][MAXVAL];
+            int[][] atomBondStereo = new int[nat][MAXVAL];
+    
+    
+            // Load bond data (note, bonds only need to be recorded in one atom's
+            // neighbor list, not both
+            for (int i = 0; i < input.bondList.size(); i ++) {
+                JniInchiBond bond = input.getBond(i);
+                int atOi = ((Integer) atomIndxMap.get(bond.atomOrigin)).intValue();
+                int atTi = ((Integer) atomIndxMap.get(bond.atomTarget)).intValue();
+    
+                int bondNo = atomNumNeighbors[atOi];
+                atomNeighbors[atOi][bondNo] = atTi;
+                atomBondTypes[atOi][bondNo] = bond.type.getIndx();
+                atomBondStereo[atOi][bondNo] = bond.stereo.getIndx();
+    
+                atomNumNeighbors[atOi] ++;
             }
-        }
-
-        // Call inchi library
-        int retVal = wrapper.LibInchiGenerateInchi();
-
-        // Fetch results
-        JniInchiOutput output = new JniInchiOutput();
-
-        List retCodes = INCHI_RET.getList();
-        for (int i = 0; i < retCodes.size(); i ++) {
-            INCHI_RET ret = (INCHI_RET) retCodes.get(i);
-            if (retVal == ret.getIndx()) {
-                output.retStatus = ret;
-                break;
+    
+            for (int i = 0; i < nat; i ++) {
+                if (!wrapper.LibInchiSetAtomBonds(i, atomNumNeighbors[i],
+                        atomNeighbors[i], atomBondTypes[i], atomBondStereo[i])) {
+                    wrapper.LibInchiFreeInputMem();
+                    throw new JniInchiException("JNI: Failed to set atom neighbours");
+                }
             }
+    
+    
+            // Load 0D Stereo parities
+            for (int i = 0; i < nst; i ++) {
+                JniInchiStereo0D stereo = (JniInchiStereo0D) input.stereoList.get(i);
+                int parity = (int) (stereo.parity.getIndx()
+                        | (stereo.disconParity.getIndx() << 3));
+    
+                int atCi = (stereo.type == INCHI_STEREOTYPE.DOUBLEBOND ?
+                        JniInchiStereo0D.NO_ATOM
+                        : ((Integer) atomIndxMap.get(stereo.centralAtom)).intValue());
+                int at0i = ((Integer) atomIndxMap.get(stereo.neighbors[0])).intValue();
+                int at1i = ((Integer) atomIndxMap.get(stereo.neighbors[1])).intValue();
+                int at2i = ((Integer) atomIndxMap.get(stereo.neighbors[2])).intValue();
+                int at3i = ((Integer) atomIndxMap.get(stereo.neighbors[3])).intValue();
+    
+                if (!wrapper.LibInchiSetStereo(i, atCi, at0i, at1i, at2i, at3i,
+                        stereo.type.getIndx(), parity)) {
+                    wrapper.LibInchiFreeInputMem();
+                    throw new JniInchiException("JNI: Failed to set stereos");
+                }
+            }
+    
+            // Call inchi library
+            int retVal = wrapper.LibInchiGenerateInchi();
+    
+            // Fetch results
+            JniInchiOutput output = new JniInchiOutput();
+    
+            List retCodes = INCHI_RET.getList();
+            for (int i = 0; i < retCodes.size(); i ++) {
+                INCHI_RET ret = (INCHI_RET) retCodes.get(i);
+                if (retVal == ret.getIndx()) {
+                    output.retStatus = ret;
+                    break;
+                }
+            }
+    
+            output.sInchi = wrapper.LibInchiGetInchi();
+            output.sAuxInfo = wrapper.LibInchiGetAuxInfo();
+            output.sMessage = wrapper.LibInchiGetMessage();
+            output.sLog = wrapper.LibInchiGetLog();
+    
+            wrapper.LibInchiFreeInputMem();
+            wrapper.LibInchiFreeOutputMem();
+    
+            return(output);
+        } finally {
+            wrapper.releaseLock();
         }
-
-        output.sInchi = wrapper.LibInchiGetInchi();
-        output.sAuxInfo = wrapper.LibInchiGetAuxInfo();
-        output.sMessage = wrapper.LibInchiGetMessage();
-        output.sLog = wrapper.LibInchiGetLog();
-
-        wrapper.LibInchiFreeInputMem();
-        wrapper.LibInchiFreeOutputMem();
-
-        return(output);
     }
 
 
     public static JniInchiOutput getInchiFromInchi(JniInchiInputInchi input) throws JniInchiException {
         JniInchiWrapper wrapper = getWrapper();
+        wrapper.getLock();
         
-        String options = input.getOptions();
-        if (options.length() == 0) {
-            options = " ";
-        }
-        String inchiString = input.getInchi();
-
-        // Call inchi library
-        int retVal = wrapper.LibInchiGenerateInchiFromInchi(inchiString, options);
-
-        // Fetch results
-        JniInchiOutput output = new JniInchiOutput();
-
-        List retCodes = INCHI_RET.getList();
-        for (int i = 0; i < retCodes.size(); i ++) {
-            INCHI_RET ret = (INCHI_RET) retCodes.get(i);
-            if (retVal == ret.getIndx()) {
-                output.retStatus = ret;
-                break;
+        try {
+        
+            String options = input.getOptions();
+            if (options.length() == 0) {
+                options = " ";
             }
+            String inchiString = input.getInchi();
+    
+            // Call inchi library
+            int retVal = wrapper.LibInchiGenerateInchiFromInchi(inchiString, options);
+    
+            // Fetch results
+            JniInchiOutput output = new JniInchiOutput();
+    
+            List retCodes = INCHI_RET.getList();
+            for (int i = 0; i < retCodes.size(); i ++) {
+                INCHI_RET ret = (INCHI_RET) retCodes.get(i);
+                if (retVal == ret.getIndx()) {
+                    output.retStatus = ret;
+                    break;
+                }
+            }
+    
+            output.sInchi = wrapper.LibInchiGetInchi();
+            output.sAuxInfo = wrapper.LibInchiGetAuxInfo();
+            output.sMessage = wrapper.LibInchiGetMessage();
+            output.sLog = wrapper.LibInchiGetLog();
+    
+            wrapper.LibInchiFreeInputMem();
+            wrapper.LibInchiFreeOutputMem();
+    
+            return(output);
+            
+        } finally {
+            wrapper.releaseLock();
         }
-
-        output.sInchi = wrapper.LibInchiGetInchi();
-        output.sAuxInfo = wrapper.LibInchiGetAuxInfo();
-        output.sMessage = wrapper.LibInchiGetMessage();
-        output.sLog = wrapper.LibInchiGetLog();
-
-        wrapper.LibInchiFreeInputMem();
-        wrapper.LibInchiFreeOutputMem();
-
-        return(output);
+        
     }
 
     /**
@@ -293,189 +307,211 @@ public class JniInchiWrapper {
      */
     public static JniInchiOutputStructure getStructureFromInchi(JniInchiInputInchi input) throws JniInchiException {
         JniInchiWrapper wrapper = getWrapper();
+        wrapper.getLock();
         
-        String options = input.getOptions();
-        if (options.length() == 0) {
-            options = " ";
-        }
-        String inchiString = input.getInchi();
-        int retVal = wrapper.LibInchiGetStruct(inchiString, options);
-
-        JniInchiOutputStructure output = new JniInchiOutputStructure();
-
-        List retCodes = INCHI_RET.getList();
-        for (int i = 0; i < retCodes.size(); i ++) {
-            INCHI_RET ret = (INCHI_RET) retCodes.get(i);
-            if (retVal == ret.getIndx()) {
-                output.retStatus = ret;
-                break;
+        try {
+        
+            String options = input.getOptions();
+            if (options.length() == 0) {
+                options = " ";
             }
-        }
-
-        // Get warning flags.
-        output.warningFlags[0][0] = wrapper.LibInchiGetStructWarningFlags00();
-        output.warningFlags[0][1] = wrapper.LibInchiGetStructWarningFlags01();
-        output.warningFlags[1][0] = wrapper.LibInchiGetStructWarningFlags10();
-        output.warningFlags[1][1] = wrapper.LibInchiGetStructWarningFlags11();
-
-        output.message = wrapper.LibInchiGetMessage();
-        output.log = wrapper.LibInchiGetLog();
-
-        // Get structural data
-        int numAtoms = wrapper.LibInchiGetNumAtoms();
-        int numStereo = wrapper.LibInchiGetNumStereo();
-
-        int[][] bondTypes = new int[numAtoms][numAtoms];
-        int[][] bondStereos = new int[numAtoms][numAtoms];
-
-        // Generate atoms
-        for (int i = 0; i < numAtoms; i ++) {
-            String el = wrapper.LibInchiGetAtomElement(i);
-            double x = wrapper.LibInchiGetAtomX(i);
-            double y = wrapper.LibInchiGetAtomY(i);
-            double z = wrapper.LibInchiGetAtomZ(i);
-
-            JniInchiAtom atom = new JniInchiAtom(x, y, z, el);
-
-            atom.setImplicitH(wrapper.LibInchiGetAtomImplicitH(i));
-            atom.setImplicitProtium(wrapper.LibInchiGetAtomImplicitP(i));
-            atom.setImplicitDeuterium(wrapper.LibInchiGetAtomImplicitD(i));
-            atom.setImplicitTritium(wrapper.LibInchiGetAtomImplicitT(i));
-
-            atom.setCharge(wrapper.LibInchiGetAtomCharge(i));
-            atom.setIsotopicMass(wrapper.LibInchiGetAtomIsotopicMass(i));
-
-            int radical = wrapper.LibInchiGetAtomRadical(i);
-            if (radical == 0) {
-                atom.setRadical(INCHI_RADICAL.NONE);
-            } else if (radical == 1) {
-                atom.setRadical(INCHI_RADICAL.SINGLET);
-            } else if (radical == 2) {
-                atom.setRadical(INCHI_RADICAL.DOUBLET);
-            } else if (radical == 3) {
-                atom.setRadical(INCHI_RADICAL.TRIPLET);
-            } else {
-                throw new JniInchiException("Unknown radical state: " + radical);
-            }
-
-            output.addAtom(atom);
-            //atom.debug();
-
-            int numBonds = wrapper.LibInchiGetAtomNumBonds(i);
-            for (int j = 0; j < numBonds; j ++) {
-                int neighbour = wrapper.LibInchiGetAtomNeighbour(i, j);
-                int order = wrapper.LibInchiGetAtomBondType(i, j);
-                int stereo = wrapper.LibInchiGetAtomBondStereo(i, j);
-
-                bondTypes[i][neighbour] = order;
-                bondStereos[i][neighbour] = stereo;
-            }
-        }
-
-        // Generate bonds
-        for (int i = 0; i < numAtoms; i ++) {
-            for (int j = 0; j < i; j ++) {
-                int bo0 = bondTypes[i][j];
-                int bo1 = bondTypes[j][i];
-                if (bo0 != bo1) {
-                    throw new JniInchiException("Bond order mismatch: " + i + "-" + j);
-                }
-                if (bo0 > 0) {
-                    INCHI_BOND_TYPE type = null;
-                    if (bo0 == 1) {
-                        type = INCHI_BOND_TYPE.SINGLE;
-                    } else if (bo0 == 2) {
-                        type = INCHI_BOND_TYPE.DOUBLE;
-                    } else if (bo0 == 3) {
-                        type = INCHI_BOND_TYPE.TRIPLE;
-                    } else if (bo0 == 4) {
-                        type = INCHI_BOND_TYPE.ALTERN;
-                    } else {
-                        throw new JniInchiException("Unknown bond type: " + bo0);
-                    }
-
-                    int bs0 = bondStereos[i][j];
-                    int bs1 = bondStereos[j][i];
-
-                    if (bs0 != bs1) {
-                        throw new JniInchiException("Bond stereo mismatch: " + i + "-" + j);
-                    }
-
-                    INCHI_BOND_STEREO stereo = null;
-                    if (bs0 == 0) {
-                        stereo = INCHI_BOND_STEREO.NONE;
-                    } else if (bs0 == 1) {
-                        stereo = INCHI_BOND_STEREO.SINGLE_1UP;
-                    } else if (bs0 == 4) {
-                        stereo = INCHI_BOND_STEREO.SINGLE_1EITHER;
-                    } else if (bs0 == 6) {
-                        stereo = INCHI_BOND_STEREO.SINGLE_1DOWN;
-                    } else if (bs0 == 3) {
-                        stereo = INCHI_BOND_STEREO.DOUBLE_EITHER;
-                    } else  {
-                        throw new JniInchiException("Unknown bond stereo: " + bs0);
-                    }
-
-                    JniInchiBond bond = new JniInchiBond(output.getAtom(i), output.getAtom(j), type, stereo);
-
-                    output.addBond(bond);
-                    //bond.debug();
+            String inchiString = input.getInchi();
+            int retVal = wrapper.LibInchiGetStruct(inchiString, options);
+    
+            JniInchiOutputStructure output = new JniInchiOutputStructure();
+    
+            List retCodes = INCHI_RET.getList();
+            for (int i = 0; i < retCodes.size(); i ++) {
+                INCHI_RET ret = (INCHI_RET) retCodes.get(i);
+                if (retVal == ret.getIndx()) {
+                    output.retStatus = ret;
+                    break;
                 }
             }
-        }
-
-        // Generate stereo parities
-        for (int i = 0; i < numStereo; i ++) {
-            int centralAt = wrapper.LibInchiGetStereoCentralAtom(i);
-            int at0 = wrapper.LibInchiGetStereoNeighbourAtom(i, 0);
-            int at1 = wrapper.LibInchiGetStereoNeighbourAtom(i, 1);
-            int at2 = wrapper.LibInchiGetStereoNeighbourAtom(i, 2);
-            int at3 = wrapper.LibInchiGetStereoNeighbourAtom(i, 3);
-
-            int type = wrapper.LibInchiGetStereoType(i);
-            int parity = wrapper.LibInchiGetStereoParity(i);
-
-            INCHI_STEREOTYPE stereoType;
-            if (type == 0) {
-                stereoType = INCHI_STEREOTYPE.NONE;
-            } else if (type == 1) {
-                stereoType = INCHI_STEREOTYPE.DOUBLEBOND;
-            } else if (type == 2) {
-                stereoType = INCHI_STEREOTYPE.TETRAHEDRAL;
-            } else if (type == 3) {
-                stereoType = INCHI_STEREOTYPE.ALLENE;
-            } else {
-                throw new JniInchiException("Unknown stereo0D type: " + type);
+    
+            // Get warning flags.
+            output.warningFlags[0][0] = wrapper.LibInchiGetStructWarningFlags00();
+            output.warningFlags[0][1] = wrapper.LibInchiGetStructWarningFlags01();
+            output.warningFlags[1][0] = wrapper.LibInchiGetStructWarningFlags10();
+            output.warningFlags[1][1] = wrapper.LibInchiGetStructWarningFlags11();
+    
+            output.message = wrapper.LibInchiGetMessage();
+            output.log = wrapper.LibInchiGetLog();
+    
+            // Get structural data
+            int numAtoms = wrapper.LibInchiGetNumAtoms();
+            int numStereo = wrapper.LibInchiGetNumStereo();
+    
+            int[][] bondTypes = new int[numAtoms][numAtoms];
+            int[][] bondStereos = new int[numAtoms][numAtoms];
+    
+            // Generate atoms
+            for (int i = 0; i < numAtoms; i ++) {
+                String el = wrapper.LibInchiGetAtomElement(i);
+                double x = wrapper.LibInchiGetAtomX(i);
+                double y = wrapper.LibInchiGetAtomY(i);
+                double z = wrapper.LibInchiGetAtomZ(i);
+    
+                JniInchiAtom atom = new JniInchiAtom(x, y, z, el);
+    
+                atom.setImplicitH(wrapper.LibInchiGetAtomImplicitH(i));
+                atom.setImplicitProtium(wrapper.LibInchiGetAtomImplicitP(i));
+                atom.setImplicitDeuterium(wrapper.LibInchiGetAtomImplicitD(i));
+                atom.setImplicitTritium(wrapper.LibInchiGetAtomImplicitT(i));
+    
+                atom.setCharge(wrapper.LibInchiGetAtomCharge(i));
+                atom.setIsotopicMass(wrapper.LibInchiGetAtomIsotopicMass(i));
+    
+                int radical = wrapper.LibInchiGetAtomRadical(i);
+                if (radical == 0) {
+                    atom.setRadical(INCHI_RADICAL.NONE);
+                } else if (radical == 1) {
+                    atom.setRadical(INCHI_RADICAL.SINGLET);
+                } else if (radical == 2) {
+                    atom.setRadical(INCHI_RADICAL.DOUBLET);
+                } else if (radical == 3) {
+                    atom.setRadical(INCHI_RADICAL.TRIPLET);
+                } else {
+                    throw new JniInchiException("Unknown radical state: " + radical);
+                }
+    
+                output.addAtom(atom);
+                //atom.debug();
+    
+                int numBonds = wrapper.LibInchiGetAtomNumBonds(i);
+                for (int j = 0; j < numBonds; j ++) {
+                    int neighbour = wrapper.LibInchiGetAtomNeighbour(i, j);
+                    int order = wrapper.LibInchiGetAtomBondType(i, j);
+                    int stereo = wrapper.LibInchiGetAtomBondStereo(i, j);
+    
+                    bondTypes[i][neighbour] = order;
+                    bondStereos[i][neighbour] = stereo;
+                }
             }
-
-            INCHI_PARITY stereoParity;
-            if (parity == 0) {
-                stereoParity = INCHI_PARITY.NONE;
-            } else if (parity == 1) {
-                stereoParity = INCHI_PARITY.ODD;
-            } else if (parity == 2) {
-                stereoParity = INCHI_PARITY.EVEN;
-            } else if (parity == 3) {
-                stereoParity = INCHI_PARITY.UNKNOWN;
-            } else if (parity == 4) {
-                stereoParity = INCHI_PARITY.UNDEFINED;
-            } else {
-                throw new JniInchiException("Unknown stereo0D parity: " + parity);
+    
+            // Generate bonds
+            for (int i = 0; i < numAtoms; i ++) {
+                for (int j = 0; j < i; j ++) {
+                    int bo0 = bondTypes[i][j];
+                    int bo1 = bondTypes[j][i];
+                    if (bo0 != bo1) {
+                        throw new JniInchiException("Bond order mismatch: " + i + "-" + j);
+                    }
+                    if (bo0 > 0) {
+                        INCHI_BOND_TYPE type = null;
+                        if (bo0 == 1) {
+                            type = INCHI_BOND_TYPE.SINGLE;
+                        } else if (bo0 == 2) {
+                            type = INCHI_BOND_TYPE.DOUBLE;
+                        } else if (bo0 == 3) {
+                            type = INCHI_BOND_TYPE.TRIPLE;
+                        } else if (bo0 == 4) {
+                            type = INCHI_BOND_TYPE.ALTERN;
+                        } else {
+                            throw new JniInchiException("Unknown bond type: " + bo0);
+                        }
+    
+                        int bs0 = bondStereos[i][j];
+                        int bs1 = bondStereos[j][i];
+    
+                        if (bs0 != bs1) {
+                            throw new JniInchiException("Bond stereo mismatch: " + i + "-" + j);
+                        }
+    
+                        INCHI_BOND_STEREO stereo = null;
+                        if (bs0 == 0) {
+                            stereo = INCHI_BOND_STEREO.NONE;
+                        } else if (bs0 == 1) {
+                            stereo = INCHI_BOND_STEREO.SINGLE_1UP;
+                        } else if (bs0 == 4) {
+                            stereo = INCHI_BOND_STEREO.SINGLE_1EITHER;
+                        } else if (bs0 == 6) {
+                            stereo = INCHI_BOND_STEREO.SINGLE_1DOWN;
+                        } else if (bs0 == 3) {
+                            stereo = INCHI_BOND_STEREO.DOUBLE_EITHER;
+                        } else  {
+                            throw new JniInchiException("Unknown bond stereo: " + bs0);
+                        }
+    
+                        JniInchiBond bond = new JniInchiBond(output.getAtom(i), output.getAtom(j), type, stereo);
+    
+                        output.addBond(bond);
+                        //bond.debug();
+                    }
+                }
             }
-
-            JniInchiStereo0D stereo = new JniInchiStereo0D(
-                    stereoType == INCHI_STEREOTYPE.DOUBLEBOND ? null : output.getAtom(centralAt),
-                    output.getAtom(at0), output.getAtom(at1), output.getAtom(at2),
-                    output.getAtom(at3), stereoType, stereoParity);
-
-            output.addStereo0D(stereo);
-            //stereo.debug();
+    
+            // Generate stereo parities
+            for (int i = 0; i < numStereo; i ++) {
+                int centralAt = wrapper.LibInchiGetStereoCentralAtom(i);
+                int at0 = wrapper.LibInchiGetStereoNeighbourAtom(i, 0);
+                int at1 = wrapper.LibInchiGetStereoNeighbourAtom(i, 1);
+                int at2 = wrapper.LibInchiGetStereoNeighbourAtom(i, 2);
+                int at3 = wrapper.LibInchiGetStereoNeighbourAtom(i, 3);
+    
+                int type = wrapper.LibInchiGetStereoType(i);
+                int parity = wrapper.LibInchiGetStereoParity(i);
+    
+                INCHI_STEREOTYPE stereoType;
+                if (type == 0) {
+                    stereoType = INCHI_STEREOTYPE.NONE;
+                } else if (type == 1) {
+                    stereoType = INCHI_STEREOTYPE.DOUBLEBOND;
+                } else if (type == 2) {
+                    stereoType = INCHI_STEREOTYPE.TETRAHEDRAL;
+                } else if (type == 3) {
+                    stereoType = INCHI_STEREOTYPE.ALLENE;
+                } else {
+                    throw new JniInchiException("Unknown stereo0D type: " + type);
+                }
+    
+                INCHI_PARITY stereoParity;
+                if (parity == 0) {
+                    stereoParity = INCHI_PARITY.NONE;
+                } else if (parity == 1) {
+                    stereoParity = INCHI_PARITY.ODD;
+                } else if (parity == 2) {
+                    stereoParity = INCHI_PARITY.EVEN;
+                } else if (parity == 3) {
+                    stereoParity = INCHI_PARITY.UNKNOWN;
+                } else if (parity == 4) {
+                    stereoParity = INCHI_PARITY.UNDEFINED;
+                } else {
+                    throw new JniInchiException("Unknown stereo0D parity: " + parity);
+                }
+    
+                JniInchiStereo0D stereo = new JniInchiStereo0D(
+                        stereoType == INCHI_STEREOTYPE.DOUBLEBOND ? null : output.getAtom(centralAt),
+                        output.getAtom(at0), output.getAtom(at1), output.getAtom(at2),
+                        output.getAtom(at3), stereoType, stereoParity);
+    
+                output.addStereo0D(stereo);
+                //stereo.debug();
+            }
+    
+            wrapper.LibInchiFreeStructMem();
+    
+            return(output);
+        
+        } finally {
+            wrapper.releaseLock();
         }
-
-        wrapper.LibInchiFreeStructMem();
-
-        return(output);
     }
+    
+    
+    private boolean locked = false;
+    
+    private synchronized void getLock() {
+        while (locked) {
+            // Do nothing
+        }
+        locked = true;
+    }
+    
+    private void releaseLock() {
+        locked = false;
+    }
+    
 
 
     /**

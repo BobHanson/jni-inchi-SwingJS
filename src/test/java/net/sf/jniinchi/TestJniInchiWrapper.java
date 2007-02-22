@@ -2,6 +2,7 @@ package net.sf.jniinchi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -1351,6 +1352,63 @@ public class TestJniInchiWrapper {
         Assert.assertEquals("InChI Bond: Cl-C // Type: SINGLE // Stereo: NONE", outputZ.getBond(2).getDebugString());
         Assert.assertEquals("InChI Stereo0D: - [H,C,C,H] Type::DOUBLEBOND // Parity:ODD", outputZ.getStereo0D(0).getDebugString());
     };
+    
+    /**
+     * Tests thread safety - starts ten threads, and sets them generating
+     * InChIs for randomly picked elements. Checks generated InChIs are as
+     * expected.
+     *
+     */
+    @Test
+    public void multithreading() {
+        int nthreads = 10;
+        TestThread[] threads = new TestThread[nthreads];
+        for (int i = 0; i < nthreads; i ++) {
+            threads[i] = new TestThread(i);
+            threads[i].start();
+        }
+        
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ie) {
+            Assert.assertTrue("Interrupted", false);
+        }
+        
+        boolean allRunning = true;
+        
+        for (int i = 0; i < nthreads; i ++) {
+            if (threads[i].runCount < 1) {
+                allRunning = false;
+            }
+            threads[i].timeToStop = true;
+        }
+        
+        Assert.assertTrue("All threads running", allRunning);
+        
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ie) {
+            Assert.assertTrue("Interrupted", false);
+        }
+        
+        boolean allDead = true;
+        
+        for (int i = 0; i < nthreads; i ++) {
+            if (threads[i].isAlive()) {
+                allDead = false;
+            }
+        }
+        
+        Assert.assertTrue("All threads stopped", allDead);
+        
+        int failureCount = 0;
+        
+        for (int i = 0; i < nthreads; i ++) {
+            failureCount += threads[i].failCount;
+        }
+        
+        Assert.assertEquals("Fail count", 0, failureCount);
+    }
 
 
 
@@ -1374,5 +1432,50 @@ public class TestJniInchiWrapper {
         System.out.println(output.getLog());
         //System.out.println(output.getLog());
         System.out.println();
+    }
+    
+    
+    private class TestThread extends Thread {
+
+        private String[] ELS = {"H", "He", "Li", "Be", "B", "C", "N",
+            "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar"};
+        
+        public boolean timeToStop;
+        
+        public int failCount;
+        public int runCount;
+        public JniInchiException ex;
+        public int i;
+        
+        public TestThread(int i) {
+            this.i = i;
+        }
+        
+        public void run() {
+            timeToStop = false;
+            failCount = 0;
+            runCount = 0;
+            Random rand = new Random();
+            while (!timeToStop) {
+                // System.out.println(i + " " + runCount + " " + failCount);
+                runCount ++;
+                JniInchiInput input = new JniInchiInput();
+                String element = ELS[rand.nextInt(ELS.length)];
+                input.addAtom(new JniInchiAtom(0, 0, 0, element));
+                try {
+                    JniInchiOutput output = JniInchiWrapper.getInchi(input);
+                    if (INCHI_RET.OKAY != output.getReturnStatus()) {
+                        failCount ++;
+                    } else if (!("InChI=1/" + element).equals(output.getInchi())) {
+                        failCount ++;
+                    }
+                } catch (JniInchiException e) {
+                    failCount ++;
+                    ex = e;
+                    break;
+                }
+            }
+        }
+        
     }
 }

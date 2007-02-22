@@ -65,7 +65,7 @@ public class JniInchiNativeCodeLoader {
      * 
      * @return
      */
-    public static JniInchiNativeCodeLoader getLoader()
+    public synchronized static JniInchiNativeCodeLoader getLoader()
             throws LoadNativeLibraryException {
         if (loader == null) {
             loader = new JniInchiNativeCodeLoader();
@@ -189,7 +189,7 @@ public class JniInchiNativeCodeLoader {
      * @throws LoadNativeLibraryException
      *             if loading fails.
      */
-    public void load() throws LoadNativeLibraryException {
+    public synchronized void load() throws LoadNativeLibraryException {
         if (!loaded) {
             if (!findNativeFiles()) {
                 boolean autoExtract = Boolean.valueOf(properties
