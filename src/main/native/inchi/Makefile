@@ -60,4 +60,5 @@ clean:
 
 $(TARGET): $(INCHI_LIB_OBJS)
 	$(CC) $(LDFLAGS) $(OUTPUT_OPTION) $^
+	ln -s $(LIBNAME)$(LIB_EXTN)$(VERSION) $(TARGET_DIR)/$(LIBNAME).so
 

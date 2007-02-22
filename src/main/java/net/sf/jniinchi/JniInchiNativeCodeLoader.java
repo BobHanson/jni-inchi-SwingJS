@@ -39,7 +39,7 @@ public class JniInchiNativeCodeLoader {
     private static String[] JNI_LIB_PREFIX = { null, "libJniInchi.",
             "libJniInchi." };
 
-    private static String[] JNI_LIB_SUFFIX = { null, ".dll", ".so" };
+    private static String[] JNI_LIB_SUFFIX = { null, ".dll", "so." };
 
     private final Properties properties;
 
@@ -100,8 +100,13 @@ public class JniInchiNativeCodeLoader {
 
         // Determine native library filenames
         inchiFilename = INCHI_LIB_NAMES[env.platform];
-        jniFilename = JNI_LIB_PREFIX[env.platform] + version
-                + JNI_LIB_SUFFIX[env.platform];
+        if (env.platform == Environment.PLAT_WINDOWS) {
+            jniFilename = JNI_LIB_PREFIX[env.platform] + version
+                    + JNI_LIB_SUFFIX[env.platform];
+        } else if (env.platform == Environment.PLAT_LINUX) {
+            jniFilename = JNI_LIB_PREFIX[env.platform]
+                    + JNI_LIB_SUFFIX[env.platform] + version;
+        }
         log("Files: [" + jniFilename + ", " + inchiFilename + "]");
 
         // Load properties

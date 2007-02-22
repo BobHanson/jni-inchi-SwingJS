@@ -30,7 +30,7 @@ CPPFLAGS = -I. -Iinchi -I"${JAVA_HOME}/include"
 
 # Linker flags
 LDFLAGS = -shared
-LDLIBS=-linchi.1.01.00 -L$(TARGET_DIR)
+LDLIBS=-linchi -L$(TARGET_DIR)
 
 
 # os-dependent bits
@@ -72,7 +72,7 @@ clean:
 
 $(CLASSES): $(JNIHEADERS)
 
-$(OBJECTS): $(CLASSES)
+$(OBJECT:S): $(CLASSES)
 
 $(TARGET): $(OBJECTS) INCHI
 	$(LINK.cpp) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o $(TARGET)
