@@ -6,24 +6,23 @@ TARGET_DIR = ../../../../target/classes
 
 TARGET = $(TARGET_DIR)/$(LIBNAME)$(LIB_EXTN)
 
-LDFLAGS = -shared -Wl,-soname,libinchi.so
+LDFLAGS = -shared
 CFLAGS = -ansi -O3 
-
 
 # os-dependent bits
 UNAME := $(shell uname)
 
 ifeq ($(UNAME),Linux)
 LIB_EXTN = .so
-#LDFLAGS += -Wl,-R,""
+LDFLAGS += -Wl,-soname,libinchi.so
 else
 ifeq ($(findstring MINGW,$(UNAME)),MINGW)
 LIB_EXTN = .dll
-LDFLAGS += -Wl,--add-stdcall-alias
+LDFLAGS += -Wl,-soname,libinchi.dll
 else
 ifeq ($(findstring CYGWIN,$(UNAME)),CYGWIN)
 LIB_EXTN = .dll
-LDFLAGS += -Wl,--add-stdcall-alias
+LDFLAGS += -Wl,-soname,libinchi.dll
 else
 f := $(error Platform $(UNAME) not supported)
 endif
@@ -60,5 +59,4 @@ clean:
 
 $(TARGET): $(INCHI_LIB_OBJS)
 	$(CC) $(LDFLAGS) $(OUTPUT_OPTION) $^
-#	$(LINK.c) $(INCHI_LIB_OBJS) $(LDFLAGS) $(LDLIBS) -o $(TARGET)
 

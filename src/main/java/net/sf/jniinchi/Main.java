@@ -27,10 +27,10 @@ public class Main {
         struct.addBond(new JniInchiBond(a1, a4, INCHI_BOND_TYPE.SINGLE));
         struct.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
         struct.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
-        
+
         return struct;
     }
-    
+
     public static void displayHelp() {
         System.out.println("Usage: java -jar JniInchi.jar OPTION");
         System.out.println("   or: java net.sf.jniinchi.Main OPTION");
@@ -42,14 +42,14 @@ public class Main {
         System.out.println("    -explain    Show detailed help.");
         System.out.println();
     }
-    
+
     public static void check() throws JniInchiException {
         System.out.println("Loading native code");
         JniInchiNativeCodeLoader loader = JniInchiNativeCodeLoader.getLoader();
         try {
-            loader.loadNativeCode_();
+            loader.load();
             System.out.println(" - OKAY");
-            
+
             System.out.println("Generating InChI from structure");
             JniInchiStructure mol = getTestMolecule();
             JniInchiOutput out1 = JniInchiWrapper.getInchi(new JniInchiInput(mol));
@@ -58,7 +58,7 @@ public class Main {
             } else {
                 System.out.println(" - ERROR");
             }
-            
+
             System.out.println("Generating structure from InChI");
             JniInchiOutputStructure out2 = JniInchiWrapper.getStructureFromInchi(new JniInchiInputInchi("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)"));
             if (out2.atomList.size() == 6 && out2.bondList.size() == 5) {
@@ -66,7 +66,7 @@ public class Main {
             } else {
                 System.out.println(" - ERROR");
             }
-            
+
             System.out.println("Converting structure back to InChI");
             JniInchiOutput out3 = JniInchiWrapper.getInchi(new JniInchiInput(out2));
             if ("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)".equals(out3.getInchi())) {
@@ -77,18 +77,18 @@ public class Main {
         } catch (LoadNativeLibraryException lnle) {
             System.out.println(" - ERROR");
         }
-        
-        
-        
+
+
+
         System.out.println();
         System.out.println("Checks done.");
         System.out.println();
     }
-    
+
     public static void debug() throws LoadNativeLibraryException {
         JniInchiNativeCodeLoader.setDebug(true);
         JniInchiNativeCodeLoader loader = JniInchiNativeCodeLoader.getLoader();
-        loader.loadNativeCode_();
+        loader.load();
     }
 
     public static void main(String[] args) throws Exception {
@@ -96,11 +96,7 @@ public class Main {
         System.out.println();
         System.out.println("** JniInchi debugger **");
         System.out.println();
-        
-        if (args.length == 0) {
-            args = new String[] {"-check"};
-        }
-        
+
         // Parse option
         if (args.length == 1) {
             if ("-help".equals(args[0])) {
@@ -114,7 +110,7 @@ public class Main {
                 return;
             } else if ("-install".equals(args[0])) {
                 System.setProperty(JniInchiNativeCodeLoader.P_AUTOEXTRACT, "true");
-                JniInchiNativeCodeLoader.getLoader().loadNativeCode_();
+                JniInchiNativeCodeLoader.getLoader().load();
                 return;
             } else if ("-explain".equals(args[0])) {
 

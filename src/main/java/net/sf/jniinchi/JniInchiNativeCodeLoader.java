@@ -15,26 +15,27 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 public class JniInchiNativeCodeLoader {
-    
+
     private static boolean DEBUG = false;
-    
+
     private static final int CURRENT_NATIVE_VERSION_MAJOR = 1;
     private static final int CURRENT_NATIVE_VERSION_MINOR = 4;
-    
+
     // Property names
     protected final static String P_PROPERTIES_PATH = "jniinchi.properties.path";
     protected final static String P_NATIVECODE_PATH = "jniinchi.nativecode.path";
     protected final static String P_AUTOEXTRACT = "jniinchi.autoextract";
-    
+    protected final static String P_AUTOEXTRACT_PATH = "jniinchi.autoextract.path";
+
     private final static String PROPERTIES_FILENAME = "jniinchi.properties";
-    
+
     private static String[] INCHI_LIB_NAMES = {null, "libinchi.dll", "libinchi.so"};
     private static String[] JNI_LIB_PREFIX = {null, "JniInchi." , "libJniInchi."};
     private static String[] JNI_LIB_SUFFIX = {null, ".dll", ".so"};
 
-    
+
     private final Properties properties;
-    
+
     private final Environment env;
 
     protected String jniFilename;
@@ -45,9 +46,7 @@ public class JniInchiNativeCodeLoader {
 
     protected StringBuffer log = new StringBuffer();
 
-    
-    
-    
+
     /**
      * Singleton.
      */
@@ -65,13 +64,14 @@ public class JniInchiNativeCodeLoader {
         return loader;
     }
 
-    
+    /**
+     * Sets debug mode.
+     * @param debug
+     */
     public static void setDebug(boolean debug) {
         DEBUG = debug;
     }
-    
-    
-    
+
 
     /**
      * Constructor. Sets/detects properties.
@@ -79,7 +79,7 @@ public class JniInchiNativeCodeLoader {
     private JniInchiNativeCodeLoader() throws LoadNativeLibraryException {
         // Detect environment
         env = Environment.getEnvironment();
-        
+
         // Check platform has been recognised
         if (env.platform == Environment.PLAT_UNKNOWN) {
             die("Unknown platform");
@@ -93,11 +93,11 @@ public class JniInchiNativeCodeLoader {
         inchiFilename = INCHI_LIB_NAMES[env.platform];
         jniFilename = JNI_LIB_PREFIX[env.platform] + version + JNI_LIB_SUFFIX[env.platform];
         log("Files: [" + jniFilename + ", " +inchiFilename + "]");
-        
+
         // Load properties
         properties = loadProperties();
     }
-    
+
     /**
      * Loads property values. First, defaults are set. These are overridden by
      * a values found in a properties file (if it exists), which are in turn
@@ -110,29 +110,37 @@ public class JniInchiNativeCodeLoader {
         Properties loaded = new Properties(defaults);
         // System properties override loaded and default
         Properties runtime = new Properties(loaded);
-        
+
         // Set default values
         log("Setting default property values");
         defaults.setProperty(P_PROPERTIES_PATH,
                 System.getProperty("user.home") + File.pathSeparator
-                + env.classRootDirectory); 
-        defaults.setProperty(P_NATIVECODE_PATH, 
+                + env.classRootDirectory);
+        defaults.setProperty(P_NATIVECODE_PATH,
                 env.classRootDirectory + File.pathSeparator
                 + env.currentWorkingDirectory + File.pathSeparator
                 + System.getProperty("java.library.path", ""));
         defaults.setProperty(P_AUTOEXTRACT, "true");
-        
+        defaults.setProperty(P_AUTOEXTRACT_PATH,
+                env.classRootDirectory + File.pathSeparator
+                + env.currentWorkingDirectory + File.pathSeparator);
+
         // Import system set values
-        log("Searching for system properties");
+        log("Searching for runtime properties");
         for (Object o : defaults.keySet()) {
             String key = (String) o;
             String value = System.getProperty(key);
             if (value != null) {
-                log("Found system propery " + key + " = " + value);
+                log("Found runtime propery " + key + " = " + value);
                 runtime.setProperty(key, value);
             }
         }
-        
+        if (runtime.containsKey(P_NATIVECODE_PATH)) {
+            runtime.setProperty(P_AUTOEXTRACT_PATH, runtime.getProperty(P_NATIVECODE_PATH));
+        } else {
+            runtime.remove(P_AUTOEXTRACT_PATH);
+        }
+
         // Load properties file
         log("Searching for properties file");
         String searchPath = runtime.getProperty(P_PROPERTIES_PATH);
@@ -148,55 +156,138 @@ public class JniInchiNativeCodeLoader {
                 break;
             }
         }
-        
+        if (loaded.containsKey(P_NATIVECODE_PATH)) {
+            loaded.setProperty(P_AUTOEXTRACT_PATH, runtime.getProperty(P_NATIVECODE_PATH));
+        } else {
+            loaded.remove(P_AUTOEXTRACT_PATH);
+        }
+
         return runtime;
     }
-    
 
-    public void loadNativeCode_() throws LoadNativeLibraryException {
-        String path = findNativeFilesPath();
-        if (path == null) {
-            log("Unable to find native libraries");
-            if (env.usingJarFile && Boolean.valueOf(properties.getProperty(P_AUTOEXTRACT))) {
-                path = extractNativeFiles();
+
+    public void load() throws LoadNativeLibraryException {
+        if (!findNativeFiles()) {
+            boolean autoExtract = Boolean.valueOf(properties.getProperty(P_AUTOEXTRACT));
+            if (env.usingJarFile) {
+                log("Running from JAR file");
+                if (autoExtract) {
+                    log("Auto-extract enabled");
+                    extractNativeFiles();
+                } else {
+                    log("Auto-extract disabled");
+                }
+            } else {
+                log("Not running from JAR file");
             }
         }
-        
-        if (path != null) {
-            loadNativeCode(path);
+
+        if (jniFile != null && inchiFile != null) {
+            loadNativeCode();
         } else {
-            log("Native libraries not found in: " + properties.getProperty(P_NATIVECODE_PATH)); 
+            log("Native libraries not found");
             // Print error message
             throw new LoadNativeLibraryException();
         }
     }
 
-    
-    private String findNativeFilesPath() {
+
+    /**
+     * Searches for native files.
+     * @return  True if both files found, otherwise false.
+     */
+    private boolean findNativeFiles() {
         log("Searching for native libraries");
-        String searchPath = properties.getProperty(P_NATIVECODE_PATH);
-        for (String path : searchPath.split(File.pathSeparator)) {
-            File jniLib = new File(path, jniFilename);
-            File inchiLib = new File(path, inchiFilename);
-            if (jniLib.exists() && inchiLib.exists()) {
-                log("Native libraries found: " + path);
-                return path;
+        findJniFile();
+        findInchiFile();
+        return (jniFile != null) && (inchiFile != null);
+    }
+
+    /**
+     * Searches for JNI native library file.
+     * Looks in the locations stored in the jniinchi.nativecode.path
+     * property.
+     * @return  The JNI file if found, otherwise null.
+     */
+    private File findJniFile() {
+        jniFile = null;
+
+        String[] searchPaths = properties.getProperty(P_NATIVECODE_PATH).split(File.pathSeparator);
+        for (String path : searchPaths) {
+            log("  " + path);
+            File f = new File(path, jniFilename);
+            if (f.exists()) {
+                // JNI library found
+                jniFile = f;
+                break;
             }
         }
-        log("Native libraries not found");
-        return null;
+
+        if (jniFile != null) {
+            log("JNI file found: " + jniFile.getAbsolutePath());
+        } else {
+            log("JNI file not found");
+        }
+
+        return jniFile;
     }
-    
-    
-    private String extractNativeFiles() {
-        return null;
+
+    /**
+     * Searches for InChI native library file.
+     * Looks first in the directory containing the JNI native library,
+     * and then in the locations stored in the jniinchi.nativecode.path
+     * property.
+     * @return  The InChI file if found, otherwise null.
+     */
+    private File findInchiFile() {
+        inchiFile = null;
+
+        if (jniFile != null) {
+            File f = new File(jniFile.getParent(), inchiFilename);
+            if (f.exists()) {
+                inchiFile = f;
+            }
+        }
+        if (inchiFile == null) {
+            String[] searchPaths = properties.getProperty(P_NATIVECODE_PATH).split(File.pathSeparator);
+            for (String path : searchPaths) {
+                File f = new File(path, inchiFilename);
+                if (f.exists()) {
+                    // InChI library found
+                    inchiFile = f;
+                    break;
+                }
+            }
+        }
+
+        if (inchiFile != null) {
+            log("InChI file found: " + inchiFile.getAbsolutePath());
+        } else {
+            log("InChI file not found");
+        }
+
+        return inchiFile;
     }
-    
-    
-    private void loadNativeCode(String path) throws LoadNativeLibraryException {
-        File inchiFile = new File(path, inchiFilename);
-        File jniFile = new File(path, jniFilename);
-        
+
+
+    private void extractNativeFiles() throws LoadNativeLibraryException {
+        if (jniFile == null) {
+            autoplaceJniFile();
+            if (inchiFile != null) {
+                if (!inchiFile.getParentFile().equals(jniFile.getParentFile())) {
+                    log("Resetting InChI file location");
+                    inchiFile = null;
+                }
+            }
+        }
+        if (inchiFile == null) {
+            autoplaceInchiFile();
+        }
+    }
+
+
+    private void loadNativeCode() throws LoadNativeLibraryException {
+
         // Load InChI native code
         try {
             log("Loading InChI library");
@@ -228,11 +319,11 @@ public class JniInchiNativeCodeLoader {
         } catch (UnsatisfiedLinkError ule) {
             die("Error getting native code version - cannot find native method: " + ule.getMessage());
         }
-        
+
         log("Native code loaded");
     }
 
-    
+
 
 
 
@@ -249,47 +340,35 @@ public class JniInchiNativeCodeLoader {
 
     private void autoplaceJniFile() throws LoadNativeLibraryException {
         // Check for library inside jar
-        log("Looking for JNI file in jar");
+        log("Getting JNI file from jar");
         ClassLoader cldr = this.getClass().getClassLoader();
         URL url = cldr.getResource(jniFilename);
         if (url == null) {
             die("JNI file not found");
         }
 
-        // Try autoplacing JNI library in class root directory
-        jniFile = new File(env.classRootDirectory, jniFilename);
-        log("Copying JNI file to " + env.classRootDirectory.getAbsolutePath());
-
-        try {
-            copyStreamToFile(url.openStream(), jniFile);
-        } catch (IOException ioe) {
-            log("Failed: " + ioe.getMessage());
-            if (jniFile.exists()) {
-                jniFile.delete();
+        // Try autoplacing JNI library
+        String[] paths = properties.getProperty(P_AUTOEXTRACT_PATH).split(File.pathSeparator);
+        for (String path : paths) {
+            File f = new File(path, jniFilename);
+            log("Copying JNI file to " + f.getAbsolutePath());
+            try {
+                copyStreamToFile(url.openStream(), f);
+                jniFile = f;
+                break;
+            } catch (IOException ioe) {
+                log("Failed: " + ioe.getMessage());
             }
+        }
 
-            if (!env.classRootDirectory.equals(env.currentWorkingDirectory)) {
-                // Try autoplacing JNI library in current working directory
-                jniFile = new File(env.classRootDirectory, jniFilename);
-                log("Copying JNI file to " + env.currentWorkingDirectory.getAbsolutePath());
-
-                try {
-                    copyStreamToFile(url.openStream(), jniFile);
-                } catch (IOException ioe2) {
-                    log("Failed: " + ioe2.getMessage());
-                    if (jniFile.exists()) {
-                        jniFile.delete();
-                    }
-
-                    die("Unable to autoplace JNI file");
-                }
-            }
+        if (jniFile == null) {
+            die("Failed to extract JNI file");
         }
     }
 
     private void autoplaceInchiFile() throws LoadNativeLibraryException {
         // Check for library inside jar
-        log("Looking for InChI file in jar");
+        log("Getting InChI file from jar");
         ClassLoader cldr = this.getClass().getClassLoader();
         URL url = cldr.getResource(inchiFilename);
         if (url == null) {
@@ -297,20 +376,33 @@ public class JniInchiNativeCodeLoader {
         }
 
         // Try autoplacing InChI file in same directory as JNI file
-        inchiFile = new File(jniFile.getParentFile(), inchiFilename);
-        log("Copying InChI file to " + env.classRootDirectory.getAbsolutePath());
+        File f = new File(jniFile.getParentFile(), inchiFilename);
+        log("Copying InChI file to " + f.getAbsolutePath());
         try {
-            copyStreamToFile(url.openStream(), inchiFile);
+            copyStreamToFile(url.openStream(), f);
+            inchiFile = f;
         } catch (IOException ioe) {
             log("Failed: " + ioe.getMessage());
-            die("Unable to autoplace InChI file");
+
+            // Try paths from properties
+            String[] paths = properties.getProperty(P_AUTOEXTRACT_PATH).split(File.pathSeparator);
+            for (String path : paths) {
+                f = new File(path, inchiFilename);
+                log("Copying InChI file to " + f.getAbsolutePath());
+                try {
+                    copyStreamToFile(url.openStream(), f);
+                    inchiFile = f;
+                    break;
+                } catch (IOException ioe2) {
+                    log("Failed: " + ioe2.getMessage());
+                }
+            }
+        }
+
+        if (inchiFile == null) {
+            die("Failed to extract InChI file");
         }
     }
-
-
-
-
-
 
     /**
      * Writes the contents of an input stream to a file.
@@ -346,58 +438,11 @@ public class JniInchiNativeCodeLoader {
         return(CURRENT_NATIVE_VERSION_MAJOR + "." + CURRENT_NATIVE_VERSION_MINOR);
     }
 
-    /**
-     * Searches for JNI native library file.
-     * @return
-     */
-    private boolean findJniFile() {
-        int i = 0;
-        while (i < env.librarySearchLocations.size()) {
-            File dir = (File) env.librarySearchLocations.get(i);
-            File f = new File(dir, jniFilename);
-            if (f.exists()) {
-                // JNI library found
-                jniFile = f;
-                break;
-            }
-            i ++;
-        }
-
-        return(jniFile != null);
-    }
-
-    private boolean checkForInchiFile() {
-        if (jniFile != null) {
-            File f = new File(jniFile.getParent(), inchiFilename);
-            if (f.exists()) {
-                inchiFile = f;
-            }
-        }
-
-        return(inchiFile != null);
-    }
-
-    private boolean findInchiFile() {
-        if (inchiFile == null) {
-            int i = 0;
-            while (i < env.librarySearchLocations.size()) {
-                File dir = (File) env.librarySearchLocations.get(i);
-                File f = new File(dir, inchiFilename);
-                if (f.exists()) {
-                    // JNI library found
-                    inchiFile = f;
-                    break;
-                }
-                i ++;
-            }
-        }
-
-        return(inchiFile != null);
-    }
 
 
 
     private void die(String message) throws LoadNativeLibraryException {
+        /*
         System.err.println();
         System.err.println("JNI InChI has failed to load the native libraries required.");
         System.err.println();
@@ -420,28 +465,30 @@ public class JniInchiNativeCodeLoader {
         System.err.println("If java is finding the native files, but is failing to load them then they may");
         System.err.println("need to be recompiled for your system");
         System.err.println();
+        */
         System.err.println("ERROR MESSAGE:");
         System.err.println(message);
+        /*
         System.err.println();
         System.err.println("LOG:");
         System.err.println(log);
         System.err.println();
         System.err.println("CURRENT ENVIRONMENT:");
         env.debug();
-
+        */
         throw new LoadNativeLibraryException("Failed to load native code. See STDERR for details.");
     }
-}
 
 
 /**
  * Provides information of the current operating environment.
  */
-class Environment {
+static class Environment {
 
     private static Environment environment;
-    
-    private final String CLASSFILE = this.getClass().getCanonicalName().replace(".", File.separator) + ".class";
+
+    private final Class CLAZZ = JniInchiNativeCodeLoader.class;
+    private final String CLASSFILE = CLAZZ.getCanonicalName().replace(".", "/") + ".class";
 
     protected static final int PLAT_UNKNOWN = 0;
     protected static final int PLAT_WINDOWS = 1;
@@ -465,21 +512,21 @@ class Environment {
     protected boolean usingJarFile;
     protected File jarFile;
 
-    
-    
-    
-    
+
+
+
+
     public static Environment getEnvironment() {
         if (environment == null) {
             environment = new Environment();
         }
         return environment;
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     public Environment() {
         findPlatform();
         findArchitecture();
@@ -543,7 +590,7 @@ class Environment {
      * @return
      */
     protected File findClassRootDirectory() {
-        ClassLoader cldr = this.getClass().getClassLoader();
+        ClassLoader cldr = CLAZZ.getClassLoader();
         // Find this class
         URL clUrl = cldr.getResource(CLASSFILE);
         String classFilePath = clUrl.toString();
@@ -639,4 +686,6 @@ class Environment {
         }
 
     }
+}
+
 }

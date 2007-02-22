@@ -5,7 +5,7 @@
   <groupId>net.sf</groupId>
   <artifactId>jniinchi</artifactId>
   <packaging>jar</packaging>
-  <version>0.3-SNAPSHOT</version>
+  <version>0.4-SNAPSHOT</version>
   <name>jniinchi</name>
 
   <distributionManagement>
@@ -30,11 +30,24 @@
 
   <build>
     <plugins>
+
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>net.sf.jniinchi.Main</mainClass>
+            </manifest>
+          </archive>
         </configuration>
       </plugin>
 
