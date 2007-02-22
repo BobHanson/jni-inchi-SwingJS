@@ -1,0 +1,146 @@
+Java Native Interface for InChI
+===============================
+
+(C) 2006 Sam Adams, sea36@cam.ac.uk
+Unilever Centre for Molecular Science Informatics, University of Cambridge, UK
+
+Precompiled InChI library files and the API header file have been included in
+this distribution, for convenience.  These files are Copyright (C) The
+International Union of Pure and Applied Chemistry 2005: IUPAC International
+Chemical Identifier (InChI) (contact: secretariat@iupac.org).  The complete
+InChI distribution, including source code, is available from the IUPAC website
+(http://www.iupac.org/inchi).
+
+
+1. Contents
+
+    1. Contents
+    2. Introduction
+    3. Package contents
+    4. Installation
+    5. Usage
+    6. Compatibility
+    7. License
+
+
+2. Introduction
+
+This package provides Java Native Interface (JNI) wrappers for software version
+1.01 of the InChI chemical identifier C++ library distributed by IUPAC. The
+following features are supported:
+
+    * InChI generation from structure
+    * 0D structure generation from InChI
+    * Full range of options supported by InChI
+
+Structure generation from AuxInfo has not yet been implemented, but will
+hopefully be soon.
+
+* http://www.iupac.org/inchi/
+* http://java.sun.com/j2se/1.4.2/docs/guide/jni/
+
+Warning: the InChI library is not thread safe.
+
+
+3. Package contents
+
+    /                       readme and license files
+    /pom.xml                Maven Project Object Model file
+    /src/main/java          Java source code
+    /src/main/native        C++ source code
+    /src/main/native/inchi  InChI source code
+    /src/test/java          Java unit tests
+
+
+4. Installation
+
+The simplest method of using this package is to make use of the
+jniinchi-<version>.jar file, which can be downloaded from sourceforge or built
+using maven.  Alternatively you can use the individual files themselves; you
+will require all of the classes within /src/main/java, and the appropriate C++
+libraries - JniInchi.dll/libJniInchi.so and libinchi.dll/libinchi.so depending
+on whether you are working under windows or linux.
+
+When the JNI InChI wrapper is used, it attempts to load the required native
+(C++) libraries.  To do this the following locations are searched:
+  (1) The directory containing the jar file/root of the class hierarchy
+  (2) The current working directory
+  (3) The directories specified in the java.library.path system property (in
+     windows this contains the contents of the %PATH% environment variable, and
+     in linux the contents of the $LD_LIBRARY_PATH environment variable).
+
+If JNI InChI wrapper cannot find the native libraries then it will check to see
+whether it is being run from a jar file, and if so whether the jar file contains
+the required native libraries. If it finds them inside the jar, then it will
+attempt to extract them and place them in either of the directories (1) or (2)
+above, so they can then be loaded.
+
+These defaults can be overridden using either a properties file named
+jniinchi.properties placed either in the directory (1) above, or the user's
+home directory (or in a location specified by the jniinchi.properties.path
+runtime property), or by passing properties to the virtual machine at runtime.
+The following properties are recognised:
+
+  jniinchi.nativecode.path = <path>   - the specified path(s) will be searched
+       for the native files. If the files are not present, then JNI InChI
+       wrapper will attempt to extract them into this path. This property
+       overrides the default paths. If it is set NO OTHER PATHS WILL BE CHECKED.
+
+  jniinchi.autoextract = true/false   - if set to false then no attempt will be
+       made to autoextract missing native libraries from the jar file.
+
+To check and debug your installation, run the net.sf.jniinchi.Main class.
+
+    eg. java net.sf.jniinchi.Main -help
+        java net.sf.jniinchi.Main -check
+        java -jar jniinchi-<version>.jar -debug
+
+If you have problems running the native code, you may need to recompile it
+for your system. The native code compilation is integrated with the maven
+build process, so the simplest method is to run 'maven package', which will
+produce a new jar file containing native libraries compiled specifically for
+your system.  Alternatively, the native code may be compiled using make, with
+the targets 'clean' and 'all'.  The compiled libraries are placed in the
+/target/classes directory.
+
+
+5. Usage
+
+It is not expected that most users interact with the InChI API wrappers
+directly, but rather through further wrappers which provide an interface to
+whichever molecular handling library or toolkit they are using.  InChI
+generators for both CML and CDK have been written as examples, and are available
+through the respective projects.
+
+The class net.sf.jniinchi.JniInchiWrapper provides access to the InChI library's
+functionality through methods such as:
+
+    static JniInchiOutput getInchi(JniInchiInput input)
+and
+    static JniInchiOutputStructure getStructureFromInchi(JniInchiInputInchi input)
+
+The first of which is used to generate an InChI from a structure, and the second
+to generate a structure from an InChI.
+
+
+6. Compatability
+
+The JNI wrapper is written in Java 1.4, to allow compatability with as many
+applications as possible.
+
+
+7. License
+
+This library is free software; you can redistribute it and/or modify it under
+the terms of the GNU Lesser General Public License as published by the Free
+Software Foundation (http://www.opensource.org/licenses/lgpl-license.php);
+either version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along
+with this library; if not, write to the Free Software Foundation, Inc.,
+59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+
