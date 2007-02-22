@@ -14,6 +14,8 @@ TARGET_DIR = ../../../target/classes
 JAVA_CLASS = net.sf.jniinchi.JniInchiWrapper
 JAVA_BUILD_DIR = ../../../target/classes
 
+INCHI_FILE = libinchi.so.1.01.00
+INCHILINK = $(TARGET_DIR)/libinchi.so
 
 # classpath for javah
 JAVAH_CLASSPATH = $(JAVA_BUILD_DIR)
@@ -74,19 +76,26 @@ clean:
 	$(RM) $(JNIHEADERS)
 	$(RM) $(OBJECTS)
 	$(RM) $(TARGET)
+	$(RM) $(TARGET_DIR)/libinchi.so
 
 
 $(CLASSES): $(JNIHEADERS)
 
 $(OBJECT:S): $(CLASSES)
 
-$(TARGET): $(OBJECTS) INCHI
+$(TARGET): $(OBJECTS) $(INCHILINK)
 	$(LINK.cpp) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o $(TARGET)
 
 # Generate header file, using javah
 $(JNIHEADERS): $(JAVA_BUILD_DIR)/$(JAVA_CLASS_FILE)
 	$(RM) $@
 	$(JAVAH) $(JAVAH_FLAGS) $(JAVA_CLASS)
+
+$(INCHILINK): INCHI
+ifdef LINUX
+	$(RM) $@
+	ln -s $(INCHI_FILE) $@
+endif
 
 INCHI:
 	cd inchi && $(MAKE)

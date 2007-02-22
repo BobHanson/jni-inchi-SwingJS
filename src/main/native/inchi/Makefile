@@ -59,18 +59,13 @@ INCHI_LIB_OBJS = ichican2.o       ichicano.o \
                  inchi_dll_main.o runichi.o  \
                  strutil.o        util.o
 
-all: $(TARGET) LINK
+all: $(TARGET)
 
 clean:
 	$(RM) $(INCHI_LIB_OBJS)
 	$(RM) $(TARGET)
-	$(RM) $(TARGET_DIR)/$(LIBNAME)$(LIB_EXTN)
 
 $(TARGET): $(INCHI_LIB_OBJS)
 	$(CC) $(LDFLAGS) $(OUTPUT_OPTION) $^
 
-LINK: $(TARGET)
-ifdef LINUX
-	ln -s $(TARGET_FILE) $(TARGET_DIR)/$(LIBNAME)$(LIB_EXTN)
-endif
 
