@@ -91,9 +91,8 @@ The following properties are recognised:
 
 To check and debug your installation, run the net.sf.jniinchi.Main class.
 
-    eg. java net.sf.jniinchi.Main -help
-        java net.sf.jniinchi.Main -check
-        java -jar jniinchi-<version>.jar -debug
+    eg. java net.sf.jniinchi.Main
+        java -jar jniinchi-<version>.jar
 
 If you have problems running the native code, you may need to recompile it
 for your system. The native code compilation is integrated with the maven
