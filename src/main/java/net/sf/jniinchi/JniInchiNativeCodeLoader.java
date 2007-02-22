@@ -159,8 +159,8 @@ public class JniInchiNativeCodeLoader {
         }
 
         // Load properties file
-        log("Searching for properties file");
         String searchPath = runtime.getProperty(P_PROPERTIES_PATH);
+        log("Searching for properties file - " + searchPath);
         for (String path : searchPath.split(File.pathSeparator)) {
             File f = new File(path, PROPERTIES_FILENAME);
             if (f.exists()) {
@@ -211,8 +211,8 @@ public class JniInchiNativeCodeLoader {
                 loadNativeLibraries();
             } else {
                 log("Native libraries not found");
-                // Print error message
-                throw new LoadNativeLibraryException();
+                
+                die("Unable to find native libraries");
             }
             
             loaded = true;
@@ -356,7 +356,7 @@ public class JniInchiNativeCodeLoader {
 
             }
         } catch (UnsatisfiedLinkError ule) {
-            die("Error getting native code version - cannot find native method: "
+            die("Error getting native code version - cannot find native method. "
                     + ule.getMessage());
         }
 
