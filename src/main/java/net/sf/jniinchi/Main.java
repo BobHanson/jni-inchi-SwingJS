@@ -31,25 +31,19 @@ public class Main {
         return struct;
     }
 
-    public static void displayHelp() {
-        System.out.println("Usage: java -jar JniInchi.jar OPTION");
-        System.out.println("   or: java net.sf.jniinchi.Main OPTION");
-        System.out.println("Where OPTION is one of:");
-        System.out.println("    -help       Show this message.");
-        System.out.println("    -check      Perform simple test.");
-        System.out.println("    -debug      Show debug information.");
-        System.out.println();
-        System.out.println("If you are running JNI InChI from a jar file, then either -check or -debug");
-        System.out.println("will extract the required native library files, as necessary.");
-        System.out.println();
-    }
-
-    public static void check() throws JniInchiException {
+    public static void runChecks() throws JniInchiException {
         System.out.println("Loading native code");
+        System.out.println();
+        JniInchiNativeCodeLoader.setDebug(true);
         JniInchiNativeCodeLoader loader = JniInchiNativeCodeLoader.getLoader();
+        loader.load();
+        
         try {
             loader.load();
-            System.out.println(" - OKAY");
+            System.out.println();
+            
+            System.out.println("Running checks");
+            System.out.println();
 
             System.out.println("Generating InChI from structure");
             JniInchiStructure mol = getTestMolecule();
@@ -79,17 +73,9 @@ public class Main {
             System.out.println(" - ERROR");
         }
 
-
-
         System.out.println();
         System.out.println("Checks done.");
         System.out.println();
-    }
-
-    public static void debug() throws LoadNativeLibraryException {
-        JniInchiNativeCodeLoader.setDebug(true);
-        JniInchiNativeCodeLoader loader = JniInchiNativeCodeLoader.getLoader();
-        loader.load();
     }
 
     public static void main(String[] args) throws Exception {
@@ -97,23 +83,7 @@ public class Main {
         System.out.println();
         System.out.println("** JniInchi debugger **");
         System.out.println();
-
-        // Parse option
-        if (args.length == 1) {
-            if ("-help".equals(args[0])) {
-                displayHelp();
-                return;
-            } else if ("-check".equals(args[0])) {
-                check();
-                return;
-            } else if ("-debug".equals(args[0])) {
-                debug();
-                return;
-            }
-        }
-
-        // No option/option unknown - print error message
-        System.out.println("Unrecognised input. For list of options, use -help.");
-        System.out.println();
+        
+        runChecks();
     }
 }

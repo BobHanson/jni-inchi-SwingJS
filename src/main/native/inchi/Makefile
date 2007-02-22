@@ -11,25 +11,32 @@ CFLAGS = -ansi -O3
 UNAME := $(shell uname)
 
 ifeq ($(UNAME),Linux)
-LIB_EXTN = .so
-LDFLAGS += -Wl,-soname,libinchi.so
-TARGET = $(TARGET_DIR)/$(LIBNAME)$(LIB_EXTN)$(VERSION)
+LINUX = 1
 else
 ifeq ($(findstring MINGW,$(UNAME)),MINGW)
-LIB_EXTN = .dll
-LDFLAGS += -Wl,-soname,libinchi.dll
-TARGET = $(TARGET_DIR)/$(LIBNAME)$(VERSION)$(LIB_EXTN)
+WINDOWS = 1
 else
 ifeq ($(findstring CYGWIN,$(UNAME)),CYGWIN)
-LIB_EXTN = .dll
-LDFLAGS += -Wl,-soname,libinchi.dll
-TARGET = $(TARGET_DIR)/$(LIBNAME)$(VERSION)$(LIB_EXTN)
+WINDOWS = 1
 else
 f := $(error Platform $(UNAME) not supported)
 endif
 endif
 endif
 
+ifdef LINUX
+LIB_EXTN = .so
+LDFLAGS += -Wl,-soname,libinchi.so
+TARGET_FILE = $(LIBNAME)$(LIB_EXTN)$(VERSION)
+else
+ifdef WINDOWS
+LIB_EXTN = .dll
+LDFLAGS += -Wl,-soname,libinchi.dll
+TARGET_FILE = $(LIBNAME)$(VERSION)$(LIB_EXTN)
+endif
+endif
+
+TARGET = $(TARGET_DIR)/$(TARGET_FILE)
 
 
 # === InChI Library Object files ============
@@ -60,5 +67,7 @@ clean:
 
 $(TARGET): $(INCHI_LIB_OBJS)
 	$(CC) $(LDFLAGS) $(OUTPUT_OPTION) $^
-	ln -s $(LIBNAME)$(LIB_EXTN)$(VERSION) $(TARGET_DIR)/$(LIBNAME).so
+ifdef LINUX
+	ln -s $(TARGET_FILE) $(TARGET_DIR)/$(LIBNAME)$(LIB_EXTN)
+endif
 

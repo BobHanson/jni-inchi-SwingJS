@@ -52,6 +52,8 @@ public class JniInchiNativeCodeLoader {
     protected File jniFile;
 
     protected File inchiFile;
+    
+    private boolean loaded = false;
 
     /**
      * Singleton.
@@ -188,28 +190,32 @@ public class JniInchiNativeCodeLoader {
      *             if loading fails.
      */
     public void load() throws LoadNativeLibraryException {
-        if (!findNativeFiles()) {
-            boolean autoExtract = Boolean.valueOf(properties
-                    .getProperty(P_AUTOEXTRACT));
-            if (env.usingJarFile) {
-                log("Running from JAR file");
-                if (autoExtract) {
-                    log("Auto-extract enabled");
-                    extractNativeFiles();
+        if (!loaded) {
+            if (!findNativeFiles()) {
+                boolean autoExtract = Boolean.valueOf(properties
+                        .getProperty(P_AUTOEXTRACT));
+                if (env.usingJarFile) {
+                    log("Running from JAR file");
+                    if (autoExtract) {
+                        log("Auto-extract enabled");
+                        extractNativeFiles();
+                    } else {
+                        log("Auto-extract disabled");
+                    }
                 } else {
-                    log("Auto-extract disabled");
+                    log("Not running from JAR file");
                 }
-            } else {
-                log("Not running from JAR file");
             }
-        }
-
-        if (jniFile != null && inchiFile != null) {
-            loadNativeLibraries();
-        } else {
-            log("Native libraries not found");
-            // Print error message
-            throw new LoadNativeLibraryException();
+    
+            if (jniFile != null && inchiFile != null) {
+                loadNativeLibraries();
+            } else {
+                log("Native libraries not found");
+                // Print error message
+                throw new LoadNativeLibraryException();
+            }
+            
+            loaded = true;
         }
     }
 

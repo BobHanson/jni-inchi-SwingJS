@@ -30,34 +30,40 @@ CPPFLAGS = -I. -Iinchi -I"${JAVA_HOME}/include"
 
 # Linker flags
 LDFLAGS = -shared
-LDLIBS=-linchi -L$(TARGET_DIR)
 
 
 # os-dependent bits
 UNAME := $(shell uname)
 
 ifeq ($(UNAME),Linux)
-LIB_PREFIX = lib
-LIB_EXTN = .so
-CPPFLAGS += -I$(JAVA_HOME)/include/linux
-TARGET = $(TARGET_DIR)/$(LIB_PREFIX)$(LIBNAME)$(LIB_EXTN)$(CODE_VERSION)
+LINUX = 1
 else
 ifeq ($(findstring MINGW,$(UNAME)),MINGW)
-LIB_PREFIX = lib
-LIB_EXTN = .dll
-CPPFLAGS += -I"$(JAVA_HOME)/include/win32"
-LDFLAGS += -Wl,--add-stdcall-alias
-TARGET = $(TARGET_DIR)/$(LIB_PREFIX)$(LIBNAME)$(CODE_VERSION)$(LIB_EXTN)
+WINDOWS = 1
 else
 ifeq ($(findstring CYGWIN,$(UNAME)),CYGWIN)
-LIB_PREFIX = lib
-LIB_EXTN = .dll
-CPPFLAGS += -I"$(JAVA_HOME)/include/win32"
-LDFLAGS += -Wl,--add-stdcall-alias
-TARGET = $(TARGET_DIR)/$(LIB_PREFIX)$(LIBNAME)$(CODE_VERSION)$(LIB_EXTN)
+WINDOWS = 1
 else
 f := $(error Platform $(UNAME) not supported)
 endif
+endif
+endif
+
+
+ifdef LINUX
+LIB_PREFIX = lib
+LIB_EXTN = .so
+CPPFLAGS += -I$(JAVA_HOME)/include/linux
+LDLIBS=-linchi -L$(TARGET_DIR)
+TARGET = $(TARGET_DIR)/$(LIB_PREFIX)$(LIBNAME)$(LIB_EXTN)$(CODE_VERSION)
+else
+ifdef WINDOWS
+LIB_PREFIX = lib
+LIB_EXTN = .dll
+CPPFLAGS += -I"$(JAVA_HOME)/include/win32"
+LDFLAGS += -Wl,--add-stdcall-alias
+LDLIBS=-linchi.1.01.00 -L$(TARGET_DIR)
+TARGET = $(TARGET_DIR)/$(LIB_PREFIX)$(LIBNAME)$(CODE_VERSION)$(LIB_EXTN)
 endif
 endif
 

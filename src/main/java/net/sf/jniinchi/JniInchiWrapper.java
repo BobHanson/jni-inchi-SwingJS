@@ -36,8 +36,10 @@ public class JniInchiWrapper {
 
     protected static final int WINDOWS = 1;
     protected static final int LINUX = 2;
-
-    /**
+    
+    private static JniInchiWrapper inchiWrapper;
+    
+        /**
      * Flag indicating windows or linux.
      */
     protected static final int PLATFORM =
@@ -67,6 +69,13 @@ public class JniInchiWrapper {
             JniInchiNativeCodeLoader loader = JniInchiNativeCodeLoader.getLoader();
             loader.load();
         }
+    }
+    
+    protected static synchronized JniInchiWrapper getWrapper() throws LoadNativeLibraryException {
+        if (inchiWrapper == null) {
+            inchiWrapper = new JniInchiWrapper();
+        }
+        return inchiWrapper;
     }
 
     /**
@@ -136,7 +145,7 @@ public class JniInchiWrapper {
      * @throws JniInchiException
      */
     public static JniInchiOutput getInchi(JniInchiInput input) throws JniInchiException {
-        JniInchiWrapper wrapper = new JniInchiWrapper();
+        JniInchiWrapper wrapper = getWrapper();
 
         // Create arrays
         int nat = input.getNumAtoms();
@@ -242,7 +251,8 @@ public class JniInchiWrapper {
 
 
     public static JniInchiOutput getInchiFromInchi(JniInchiInputInchi input) throws JniInchiException {
-        JniInchiWrapper wrapper = new JniInchiWrapper();
+        JniInchiWrapper wrapper = getWrapper();
+        
         String options = input.getOptions();
         if (options.length() == 0) {
             options = " ";
@@ -282,7 +292,8 @@ public class JniInchiWrapper {
      * @throws JniInchiException
      */
     public static JniInchiOutputStructure getStructureFromInchi(JniInchiInputInchi input) throws JniInchiException {
-        JniInchiWrapper wrapper = new JniInchiWrapper();
+        JniInchiWrapper wrapper = getWrapper();
+        
         String options = input.getOptions();
         if (options.length() == 0) {
             options = " ";
