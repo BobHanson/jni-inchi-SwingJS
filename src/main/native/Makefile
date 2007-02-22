@@ -3,7 +3,7 @@
 #
 
 LIBNAME = JniInchi
-CODE_VERSION = 1.4
+CODE_VERSION = .1.4
 
 CLASSES = JniInchiWrapper.cpp
 OBJECTS = JniInchiWrapper.o
@@ -14,8 +14,6 @@ TARGET_DIR = ../../../target/classes
 JAVA_CLASS = net.sf.jniinchi.JniInchiWrapper
 JAVA_BUILD_DIR = ../../../target/classes
 
-# the name of the file we build
-TARGET = $(TARGET_DIR)/$(LIB_PREFIX)$(LIBNAME).$(CODE_VERSION)$(LIB_EXTN)
 
 # classpath for javah
 JAVAH_CLASSPATH = $(JAVA_BUILD_DIR)
@@ -32,7 +30,7 @@ CPPFLAGS = -I. -Iinchi -I"${JAVA_HOME}/include"
 
 # Linker flags
 LDFLAGS = -shared
-LDLIBS=-linchi -L$(TARGET_DIR)
+LDLIBS=-linchi.1.01.00 -L$(TARGET_DIR)
 
 
 # os-dependent bits
@@ -42,18 +40,21 @@ ifeq ($(UNAME),Linux)
 LIB_PREFIX = lib
 LIB_EXTN = .so
 CPPFLAGS += -I$(JAVA_HOME)/include/linux
+TARGET = $(TARGET_DIR)/$(LIB_PREFIX)$(LIBNAME)$(LIB_EXTN)$(CODE_VERSION)
 else
 ifeq ($(findstring MINGW,$(UNAME)),MINGW)
-LIB_PREFIX =
+LIB_PREFIX = lib
 LIB_EXTN = .dll
 CPPFLAGS += -I"$(JAVA_HOME)/include/win32"
 LDFLAGS += -Wl,--add-stdcall-alias
+TARGET = $(TARGET_DIR)/$(LIB_PREFIX)$(LIBNAME)$(CODE_VERSION)$(LIB_EXTN)
 else
 ifeq ($(findstring CYGWIN,$(UNAME)),CYGWIN)
-LIB_PREFIX =
+LIB_PREFIX = lib
 LIB_EXTN = .dll
 CPPFLAGS += -I"$(JAVA_HOME)/include/win32"
 LDFLAGS += -Wl,--add-stdcall-alias
+TARGET = $(TARGET_DIR)/$(LIB_PREFIX)$(LIBNAME)$(CODE_VERSION)$(LIB_EXTN)
 else
 f := $(error Platform $(UNAME) not supported)
 endif

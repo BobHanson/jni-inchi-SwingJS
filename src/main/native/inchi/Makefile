@@ -4,8 +4,6 @@ VERSION = $(MAIN_VERSION).01.00
 LIBNAME = libinchi
 TARGET_DIR = ../../../../target/classes
 
-TARGET = $(TARGET_DIR)/$(LIBNAME)$(LIB_EXTN)
-
 LDFLAGS = -shared
 CFLAGS = -ansi -O3 
 
@@ -15,14 +13,17 @@ UNAME := $(shell uname)
 ifeq ($(UNAME),Linux)
 LIB_EXTN = .so
 LDFLAGS += -Wl,-soname,libinchi.so
+TARGET = $(TARGET_DIR)/$(LIBNAME)$(LIB_EXTN)$(VERSION)
 else
 ifeq ($(findstring MINGW,$(UNAME)),MINGW)
 LIB_EXTN = .dll
 LDFLAGS += -Wl,-soname,libinchi.dll
+TARGET = $(TARGET_DIR)/$(LIBNAME)$(VERSION)$(LIB_EXTN)
 else
 ifeq ($(findstring CYGWIN,$(UNAME)),CYGWIN)
 LIB_EXTN = .dll
 LDFLAGS += -Wl,-soname,libinchi.dll
+TARGET = $(TARGET_DIR)/$(LIBNAME)$(VERSION)$(LIB_EXTN)
 else
 f := $(error Platform $(UNAME) not supported)
 endif

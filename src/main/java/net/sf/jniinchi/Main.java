@@ -38,8 +38,9 @@ public class Main {
         System.out.println("    -help       Show this message.");
         System.out.println("    -check      Perform simple test.");
         System.out.println("    -debug      Show debug information.");
-        System.out.println("    -install    Install native libraries.");
-        System.out.println("    -explain    Show detailed help.");
+        System.out.println();
+        System.out.println("If you are running JNI InChI from a jar file, then either -check or -debug");
+        System.out.println("will extract the required native library files, as necessary.");
         System.out.println();
     }
 
@@ -107,13 +108,6 @@ public class Main {
                 return;
             } else if ("-debug".equals(args[0])) {
                 debug();
-                return;
-            } else if ("-install".equals(args[0])) {
-                System.setProperty(JniInchiNativeCodeLoader.P_AUTOEXTRACT, "true");
-                JniInchiNativeCodeLoader.getLoader().load();
-                return;
-            } else if ("-explain".equals(args[0])) {
-
                 return;
             }
         }
