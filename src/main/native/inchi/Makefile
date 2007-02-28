@@ -28,6 +28,7 @@ ifdef LINUX
 LIB_EXTN = .so
 LDFLAGS += -Wl,-soname,libinchi.so
 TARGET_FILE = $(LIBNAME)$(LIB_EXTN)$(VERSION)
+CFLAGS += -fPIC
 else
 ifdef WINDOWS
 LIB_EXTN = .dll

@@ -55,7 +55,7 @@ endif
 ifdef LINUX
 LIB_PREFIX = lib
 LIB_EXTN = .so
-CPPFLAGS += -I$(JAVA_HOME)/include/linux
+CPPFLAGS += -I$(JAVA_HOME)/include/linux -fPIC
 LDLIBS=-linchi -L$(TARGET_DIR)
 TARGET = $(TARGET_DIR)/$(LIB_PREFIX)$(LIBNAME)$(LIB_EXTN)$(CODE_VERSION)
 else
