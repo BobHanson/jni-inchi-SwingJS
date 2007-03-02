@@ -28,4 +28,8 @@ public class JniInchiException extends Exception {
     public JniInchiException(String message) {
         super(message);
     }
+    
+    public JniInchiException(Exception ex) {
+        super(ex);
+    }
 }

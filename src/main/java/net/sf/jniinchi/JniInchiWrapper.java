@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.concurrent.TimeoutException;
 
 /**
  * <p>JNI Wrapper for International Chemical Identifier (InChI) C++ library.
@@ -33,6 +34,11 @@ public class JniInchiWrapper {
      * Size of atom neighbors (bonds) array (value from InChI library).
      */
     private static final int MAXVAL = 20;
+    
+    /**
+     * Maximum time to wait for a lock (in seconds).
+     */
+    private static final int MAX_LOCK_TIMEOUT = 15;
 
     protected static final int WINDOWS = 1;
     protected static final int LINUX = 2;
@@ -146,7 +152,11 @@ public class JniInchiWrapper {
      */
     public static JniInchiOutput getInchi(JniInchiInput input) throws JniInchiException {
         JniInchiWrapper wrapper = getWrapper();
-        wrapper.getLock();
+        try {
+            wrapper.getLock();
+        } catch (TimeoutException ex) {
+            throw new JniInchiException(ex);
+        }
         
         try {
         
@@ -258,7 +268,11 @@ public class JniInchiWrapper {
 
     public static JniInchiOutput getInchiFromInchi(JniInchiInputInchi input) throws JniInchiException {
         JniInchiWrapper wrapper = getWrapper();
-        wrapper.getLock();
+        try {
+            wrapper.getLock();
+        } catch (TimeoutException ex) {
+            throw new JniInchiException(ex);
+        };
         
         try {
         
@@ -307,7 +321,11 @@ public class JniInchiWrapper {
      */
     public static JniInchiOutputStructure getStructureFromInchi(JniInchiInputInchi input) throws JniInchiException {
         JniInchiWrapper wrapper = getWrapper();
-        wrapper.getLock();
+        try {
+            wrapper.getLock();
+        } catch (TimeoutException ex) {
+            throw new JniInchiException(ex);
+        }
         
         try {
         
@@ -501,9 +519,12 @@ public class JniInchiWrapper {
     
     private boolean locked = false;
     
-    private synchronized void getLock() {
+    private synchronized void getLock() throws TimeoutException {
+        long timeout = System.currentTimeMillis() + 1000 * MAX_LOCK_TIMEOUT;
         while (locked) {
-            // Do nothing
+            if (timeout < System.currentTimeMillis()) {
+                throw new TimeoutException("Unable to get lock");
+            }
         }
         locked = true;
     }
