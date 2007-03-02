@@ -1,0 +1,27 @@
+  ----------
+  JNI InChI Wrapper - Download
+  ----------
+  Sam Adams
+  ----------
+  02 March 2007
+  ----------
+
+Download
+
+* Releases
+
+ You can obtain the JNI InChI Wrapper from the
+ {{{https://sourceforge.net/project/showfiles.php?group_id=173262}SourceForge download area}}.
+
+* Source code from SVN
+
+  You can also obtain the source from the
+  {{{https://sourceforge.net/svn/?group_id=173262}SourceForge SVN Server}}.
+  
+* Maven 2 repository
+
+  Releases and snapshots are published to a maven repository at
+  {{http://wwmm.ch.cam.ac.uk/maven2/}}.  You can link to these in your
+   maven 2 pom.
+ 
+

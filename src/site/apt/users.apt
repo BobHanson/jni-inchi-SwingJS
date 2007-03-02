@@ -1,0 +1,18 @@
+  ----------
+  JNI InChI Wrapper - Users
+  ----------
+  Sam Adams
+  ----------
+  02 March 2007
+  ----------
+
+Who uses JNI InChI Wrapper ?
+
+  JNI InChI Wrapper is a library indended for use by developers of other
+  projects. The following projects are known to make use of it:
+
+  * {{{http://almost.cubic.uni-koeln.de/cdk/cdk_top}The Chemistry Development Kit (CDK)}}
+  
+  * {{{ http://cml.sourceforge.net}JUMBO - The Chemical Markup Language (CML) library}}
+
+  

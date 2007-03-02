@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Maven">
+	<bannerLeft>
+		<name>JniInchiWrapper</name>
+		<href>http://jni-inchi.sf.net/</href>
+	</bannerLeft>
+
+	<poweredBy>
+		<logo name="Build with Maven 2" href="http://maven.apache.org" img="images/logos/maven-feather.png" />
+		<logo name="Hosted on SourceForge.net" href="http://sourceforge.net" img="http://sflogo.sourceforge.net/sflogo.php?group_id=173262&amp;amp;type=1" />
+	</poweredBy>
+	
+	<body>
+		<links>
+			<item name="SF Project Pages" href="http://sourceforge.net/projects/jni-inchi/" />
+		</links>
+
+		<menu name="JNI InChI Wrapper">
+			<item name="Overview" href="index.html" />
+			<item name="Download" href="download.html" />
+			<item name="Who is using it?" href="users.html" />
+		</menu>
+
+    ${reports}
+
+  </body>
+	
+
+</project>
