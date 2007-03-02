@@ -23,13 +23,13 @@ public class JniInchiNativeCodeLoader {
     private static final int CURRENT_NATIVE_VERSION_MINOR = 4;
 
     // Property names
-    protected final static String P_PROPERTIES_PATH = "jniinchi.properties.path";
+    private final static String P_PROPERTIES_PATH = "jniinchi.properties.path";
 
-    protected final static String P_NATIVECODE_PATH = "jniinchi.nativecode.path";
+    private final static String P_NATIVECODE_PATH = "jniinchi.nativecode.path";
 
-    protected final static String P_AUTOEXTRACT = "jniinchi.autoextract";
+    private final static String P_AUTOEXTRACT = "jniinchi.autoextract";
 
-    protected final static String P_AUTOEXTRACT_PATH = "jniinchi.autoextract.path";
+    private final static String P_AUTOEXTRACT_PATH = "jniinchi.autoextract.path";
 
     private final static String PROPERTIES_FILENAME = "jniinchi.properties";
 
@@ -45,14 +45,14 @@ public class JniInchiNativeCodeLoader {
 
     private final Environment env;
 
-    protected String jniFilename;
+    private String jniFilename;
 
-    protected String inchiFilename;
+    private String inchiFilename;
 
-    protected File jniFile;
+    private File jniFile;
 
-    protected File inchiFile;
-    
+    private File inchiFile;
+
     private boolean loaded = false;
 
     /**
@@ -62,7 +62,7 @@ public class JniInchiNativeCodeLoader {
 
     /**
      * Singleton getter.
-     * 
+     *
      * @return
      */
     public synchronized static JniInchiNativeCodeLoader getLoader()
@@ -76,7 +76,7 @@ public class JniInchiNativeCodeLoader {
 
     /**
      * Sets debug mode.
-     * 
+     *
      * @param debug
      */
     public static void setDebug(boolean debug) {
@@ -185,7 +185,7 @@ public class JniInchiNativeCodeLoader {
 
     /**
      * Load native libraries.
-     * 
+     *
      * @throws LoadNativeLibraryException
      *             if loading fails.
      */
@@ -206,22 +206,22 @@ public class JniInchiNativeCodeLoader {
                     log("Not running from JAR file");
                 }
             }
-    
+
             if (jniFile != null && inchiFile != null) {
                 loadNativeLibraries();
             } else {
                 log("Native libraries not found");
-                
+
                 die("Unable to find native libraries");
             }
-            
+
             loaded = true;
         }
     }
 
     /**
      * Searches for native files.
-     * 
+     *
      * @return True if both files found, otherwise false.
      */
     private boolean findNativeFiles() {
@@ -234,7 +234,7 @@ public class JniInchiNativeCodeLoader {
     /**
      * Searches for JNI native library file. Looks in the locations stored in
      * the jniinchi.nativecode.path property.
-     * 
+     *
      * @return The JNI file if found, otherwise null.
      */
     private File findJniFile() {
@@ -264,7 +264,7 @@ public class JniInchiNativeCodeLoader {
      * Searches for InChI native library file. Looks first in the directory
      * containing the JNI native library, and then in the locations stored in
      * the jniinchi.nativecode.path property.
-     * 
+     *
      * @return The InChI file if found, otherwise null.
      */
     private File findInchiFile() {
@@ -300,7 +300,7 @@ public class JniInchiNativeCodeLoader {
 
     /**
      * Extract native libraries from jar file.
-     * 
+     *
      * @throws LoadNativeLibraryException
      */
     private void extractNativeFiles() throws LoadNativeLibraryException {
@@ -320,7 +320,7 @@ public class JniInchiNativeCodeLoader {
 
     /**
      * Load libraries in inchiFile and jniFile.
-     * 
+     *
      * @throws LoadNativeLibraryException
      */
     private void loadNativeLibraries() throws LoadNativeLibraryException {
@@ -365,17 +365,17 @@ public class JniInchiNativeCodeLoader {
 
     /**
      * Print message, if in debug mode.
-     * 
+     *
      * @param message
      */
-    private void log(String message) {
+    private void log(final String message) {
         if (DEBUG)
             System.out.println(message);
     }
 
     /**
      * Extract JNI library file from jar.
-     * 
+     *
      * @throws LoadNativeLibraryException
      */
     private void extractJniFile() throws LoadNativeLibraryException {
@@ -409,7 +409,7 @@ public class JniInchiNativeCodeLoader {
 
     /**
      * Extract InChI library file from jar.
-     * 
+     *
      * @throws LoadNativeLibraryException
      */
     private void extractInchiFile() throws LoadNativeLibraryException {
@@ -453,7 +453,7 @@ public class JniInchiNativeCodeLoader {
 
     /**
      * Writes the contents of an input stream to a file.
-     * 
+     *
      * @param in
      * @param file
      * @throws IOException
@@ -479,14 +479,14 @@ public class JniInchiNativeCodeLoader {
 
     /**
      * Returns string representation of current native code version.
-     * 
+     *
      * @return
      */
     private static String getVersionString() {
         return (CURRENT_NATIVE_VERSION_MAJOR + "." + CURRENT_NATIVE_VERSION_MINOR);
     }
 
-    private void die(String message) throws LoadNativeLibraryException {
+    private void die(final String message) throws LoadNativeLibraryException {
 
         System.err.println();
         System.err
@@ -509,7 +509,7 @@ public class JniInchiNativeCodeLoader {
      * Provides information of the current operating environment.
      */
     static class Environment {
-        
+
         private static boolean DEBUG = false;
 
         private static Environment environment;
@@ -520,36 +520,36 @@ public class JniInchiNativeCodeLoader {
                 "/")
                 + ".class";
 
-        protected static final int PLAT_UNKNOWN = 0;
+        private static final int PLAT_UNKNOWN = 0;
 
-        protected static final int PLAT_WINDOWS = 1;
+        private static final int PLAT_WINDOWS = 1;
 
-        protected static final int PLAT_LINUX = 2;
+        private static final int PLAT_LINUX = 2;
 
-        protected static String[] PLATFORM_NAME = { "UNKNOWN", "WINDOWS",
+        private static String[] PLATFORM_NAME = { "UNKNOWN", "WINDOWS",
                 "LINUX" };
 
-        protected static final int ARCH_UNKNOWN = 0;
+        private static final int ARCH_UNKNOWN = 0;
 
-        protected static final int ARCH_X86 = 1;
+        private static final int ARCH_X86 = 1;
 
-        protected static final int ARCH_A64 = 2;
+        private static final int ARCH_A64 = 2;
 
-        protected static String[] ARCHITECTURE_NAME = { "UNKNOWN", "x86", "A64" };
+        private static String[] ARCHITECTURE_NAME = { "UNKNOWN", "x86", "A64" };
 
-        protected int platform;
+        private int platform;
 
-        protected int architecture;
+        private int architecture;
 
-        protected File currentWorkingDirectory;
+        private File currentWorkingDirectory;
 
-        protected File classRootDirectory;
+        private File classRootDirectory;
 
-        protected List librarySearchLocations;
+        private List librarySearchLocations;
 
-        protected boolean usingJarFile;
+        private boolean usingJarFile;
 
-        protected File jarFile;
+        private File jarFile;
 
         public static Environment getEnvironment() {
             if (environment == null) {
@@ -557,7 +557,7 @@ public class JniInchiNativeCodeLoader {
             }
             return environment;
         }
-        
+
         public static void setDebug(boolean debug) {
             DEBUG = debug;
         }
@@ -572,10 +572,10 @@ public class JniInchiNativeCodeLoader {
 
         /**
          * Detects which operating system is running.
-         * 
+         *
          * @return
          */
-        protected int findPlatform() {
+        private int findPlatform() {
             String osname = System.getProperty("os.name", "").toLowerCase();
             if (osname.startsWith("windows")) {
                 platform = PLAT_WINDOWS;
@@ -584,7 +584,7 @@ public class JniInchiNativeCodeLoader {
             } else {
                 platform = PLAT_UNKNOWN;
             }
-            
+
             log("Detected plaform " + PLATFORM_NAME[platform]);
 
             return platform;
@@ -592,10 +592,10 @@ public class JniInchiNativeCodeLoader {
 
         /**
          * Detects which architecture the sytem is running.
-         * 
+         *
          * @return
          */
-        protected int findArchitecture() {
+        private int findArchitecture() {
             String osarch = System.getProperty("os.arch", "").toLowerCase();
             if (osarch.endsWith("86")) {
                 architecture = ARCH_X86;
@@ -604,7 +604,7 @@ public class JniInchiNativeCodeLoader {
             } else {
                 architecture = ARCH_UNKNOWN;
             }
-            
+
             log("Detected architecture " + ARCHITECTURE_NAME[architecture]);
 
             return architecture;
@@ -612,10 +612,10 @@ public class JniInchiNativeCodeLoader {
 
         /**
          * Gets absolute path to current working directory.
-         * 
+         *
          * @return
          */
-        protected File findCurrentWorkingDirectory() {
+        private File findCurrentWorkingDirectory() {
             File f = new File(".");
             String abspath = f.getAbsolutePath();
             if (abspath.endsWith(File.separator + ".")) {
@@ -629,10 +629,10 @@ public class JniInchiNativeCodeLoader {
 
         /**
          * Gets directory that contains class files or jar file.
-         * 
+         *
          * @return
          */
-        protected File findClassRootDirectory() {
+        private File findClassRootDirectory() {
             ClassLoader cldr = CLAZZ.getClassLoader();
             // Find this class
             URL clUrl = cldr.getResource(CLASSFILE);
@@ -657,7 +657,7 @@ public class JniInchiNativeCodeLoader {
                     }
                 }
             }
-            
+
             // Check if loaded from jar
             if (classFilePath.startsWith("jar:file")) {
                 usingJarFile = true;
@@ -671,7 +671,7 @@ public class JniInchiNativeCodeLoader {
                         .indexOf(CLASSFILE));
                 classRootDirectory = new File(path).getAbsoluteFile();
             }
-            
+
             log("Root dir: " + classRootDirectory);
             log("Using jar file: " + usingJarFile);
 
@@ -680,10 +680,10 @@ public class JniInchiNativeCodeLoader {
 
         /**
          * Gets list of paths that Java will search to load native libraries.
-         * 
+         *
          * @return
          */
-        protected List findLibrarySearchLocations() {
+        private List findLibrarySearchLocations() {
             librarySearchLocations = new ArrayList();
 
             // Put code root and current working directory at top of seach list
@@ -720,17 +720,17 @@ public class JniInchiNativeCodeLoader {
 
             return (librarySearchLocations);
         }
-        
+
         /**
          * Print message, if in debug mode.
-         * 
+         *
          * @param message
          */
-        private void log(String message) {
+        private void log(final String message) {
             if (DEBUG)
                 System.out.println(message);
         }
-        
+
     }
 
 }

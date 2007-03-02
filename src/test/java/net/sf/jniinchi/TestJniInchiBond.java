@@ -7,11 +7,11 @@ import org.junit.Test;
 
 public class TestJniInchiBond extends TestCase {
 
-    protected static JniInchiAtom atO = new JniInchiAtom(0, 0, 0, "O");
-    protected static JniInchiAtom atT = new JniInchiAtom(1.21, 0, 0, "O");
+    private static JniInchiAtom atO = new JniInchiAtom(0, 0, 0, "O");
+    private static JniInchiAtom atT = new JniInchiAtom(1.21, 0, 0, "O");
 
     protected static JniInchiBond getTestBond() {
-        return(new JniInchiBond(atO, atT, INCHI_BOND_TYPE.DOUBLE));
+        return new JniInchiBond(atO, atT, INCHI_BOND_TYPE.DOUBLE);
     }
 
     /*
@@ -20,10 +20,10 @@ public class TestJniInchiBond extends TestCase {
     @Test
     public void testJniInchiBondJniInchiAtomJniInchiAtomINCHI_BOND_TYPEINCHI_BOND_STEREO() {
         JniInchiBond bond = new JniInchiBond(atO, atT, INCHI_BOND_TYPE.DOUBLE, INCHI_BOND_STEREO.DOUBLE_EITHER);
-        Assert.assertEquals(atO, bond.atomOrigin);
-        Assert.assertEquals(atT, bond.atomTarget);
-        Assert.assertEquals(INCHI_BOND_TYPE.DOUBLE, bond.type);
-        Assert.assertEquals(INCHI_BOND_STEREO.DOUBLE_EITHER, bond.stereo);
+        Assert.assertEquals(atO, bond.getOriginAtom());
+        Assert.assertEquals(atT, bond.getTargetAtom());
+        Assert.assertEquals(INCHI_BOND_TYPE.DOUBLE, bond.getBondType());
+        Assert.assertEquals(INCHI_BOND_STEREO.DOUBLE_EITHER, bond.getBondStereo());
     }
 
     /*
@@ -32,10 +32,10 @@ public class TestJniInchiBond extends TestCase {
     @Test
     public void testJniInchiBondJniInchiAtomJniInchiAtomINCHI_BOND_TYPE() {
         JniInchiBond bond = new JniInchiBond(atO, atT, INCHI_BOND_TYPE.DOUBLE);
-        Assert.assertEquals(atO, bond.atomOrigin);
-        Assert.assertEquals(atT, bond.atomTarget);
-        Assert.assertEquals(INCHI_BOND_TYPE.DOUBLE, bond.type);
-        Assert.assertEquals(INCHI_BOND_STEREO.NONE, bond.stereo);
+        Assert.assertEquals(atO, bond.getOriginAtom());
+        Assert.assertEquals(atT, bond.getTargetAtom());
+        Assert.assertEquals(INCHI_BOND_TYPE.DOUBLE, bond.getBondType());
+        Assert.assertEquals(INCHI_BOND_STEREO.NONE, bond.getBondStereo());
     }
 
     /*
@@ -44,9 +44,9 @@ public class TestJniInchiBond extends TestCase {
     @Test
     public void testSetStereoDefinition() {
         JniInchiBond bond = new JniInchiBond(atO, atT, INCHI_BOND_TYPE.DOUBLE);
-        Assert.assertEquals(INCHI_BOND_STEREO.NONE, bond.stereo);
+        Assert.assertEquals(INCHI_BOND_STEREO.NONE, bond.getBondStereo());
         bond.setStereoDefinition(INCHI_BOND_STEREO.DOUBLE_EITHER);
-        Assert.assertEquals(INCHI_BOND_STEREO.DOUBLE_EITHER, bond.stereo);
+        Assert.assertEquals(INCHI_BOND_STEREO.DOUBLE_EITHER, bond.getBondStereo());
     }
 
     /*

@@ -1,6 +1,6 @@
 /* File: JniInchiException.java
  * Author: Sam Adams
- * 
+ *
  * Copyright (C) 2006 Sam Adams
  */
 package net.sf.jniinchi;
@@ -10,26 +10,31 @@ package net.sf.jniinchi;
  * @author Sam Adams
  */
 public class JniInchiException extends Exception {
-	
+
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * Constructor.
      */
     public JniInchiException() {
         super();
     }
-    
+
     /**
-     * Constructor.
-     * 
-     * @param message
+     * Constructs a new exception with the specified detail message.
+     *
+     * @param message  the detail message.
      */
-    public JniInchiException(String message) {
+    public JniInchiException(final String message) {
         super(message);
     }
-    
-    public JniInchiException(Exception ex) {
+
+    /**
+     * Constructs a new exception with the specified cause.
+     *
+     * @param ex    the cause.
+     */
+    public JniInchiException(final Exception ex) {
         super(ex);
     }
 }

@@ -9,6 +9,8 @@ extern "C" {
 #endif
 #undef net_sf_jniinchi_JniInchiWrapper_MAXVAL
 #define net_sf_jniinchi_JniInchiWrapper_MAXVAL 20L
+#undef net_sf_jniinchi_JniInchiWrapper_MAX_LOCK_TIMEOUT
+#define net_sf_jniinchi_JniInchiWrapper_MAX_LOCK_TIMEOUT 15L
 #undef net_sf_jniinchi_JniInchiWrapper_WINDOWS
 #define net_sf_jniinchi_JniInchiWrapper_WINDOWS 1L
 #undef net_sf_jniinchi_JniInchiWrapper_LINUX

@@ -11,7 +11,7 @@ public class TestJniInchiOutputStructure {
     @Test
     public void testGetReturnStatus() {
         JniInchiOutputStructure output = new JniInchiOutputStructure();
-        output.retStatus = INCHI_RET.OKAY;
+        output.setRetStatus(INCHI_RET.OKAY);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
     }
 
@@ -21,7 +21,7 @@ public class TestJniInchiOutputStructure {
     @Test
     public void testGetMessage() {
         JniInchiOutputStructure output = new JniInchiOutputStructure();
-        output.message = "Test message";
+        output.setMessage("Test message");
         Assert.assertEquals("Test message", output.getMessage());
     }
 
@@ -31,7 +31,7 @@ public class TestJniInchiOutputStructure {
     @Test
     public void testGetLog() {
         JniInchiOutputStructure output = new JniInchiOutputStructure();
-        output.log = "Test log";
+        output.setLog("Test log");
         Assert.assertEquals("Test log", output.getLog());
     }
 
@@ -42,7 +42,7 @@ public class TestJniInchiOutputStructure {
     public void testGetWarningFlags() {
         JniInchiOutputStructure output = new JniInchiOutputStructure();
         long[][] flags = {{1, 2}, {3, 4}};
-        output.warningFlags = flags;
+        output.setWarningFlags(flags);
         Assert.assertEquals(flags, output.getWarningFlags());
     }
 

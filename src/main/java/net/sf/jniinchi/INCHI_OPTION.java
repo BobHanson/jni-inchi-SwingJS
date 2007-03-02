@@ -1,6 +1,6 @@
 /* File: INCHI_OPTION.java
  * Author: Sam Adams
- * 
+ *
  * Copyright (C) 2006 Sam Adams
  */
 package net.sf.jniinchi;
@@ -13,40 +13,40 @@ import java.util.Map;
  * @author Sam Adams
  */
 public class INCHI_OPTION {
-    
+
     // --- MUST BE BEFORE DECLARATIONS ---
     /**
      * List of options.
      */
     private static Map lcMap = new HashMap(21);
     // ---
-    
-    
+
+
     /**
      * Use Chiral Flag.
      */
     public static final INCHI_OPTION SUCF = new INCHI_OPTION("SUCF");
-    
+
     /**
      * Set Chiral Flag.
      */
     public static final INCHI_OPTION ChiralFlagON = new INCHI_OPTION("ChiralFlagON");
-    
+
     /**
      * Set Not-Chiral Flag.
      */
     public static final INCHI_OPTION ChiralFlagOFF = new INCHI_OPTION("ChiralFlagOFF");
-    
+
     /**
      * Exclude stereo (Default: Include Absolute stereo).
      */
     public static final INCHI_OPTION SNon = new INCHI_OPTION("SNon");
-    
+
     /**
      * Absolute stereo.
      */
     public static final INCHI_OPTION SAbs = new INCHI_OPTION("SAbs");
-    
+
     /**
      * Relative stereo.
      */
@@ -56,7 +56,7 @@ public class INCHI_OPTION {
      * Racemic stereo.
      */
     public static final INCHI_OPTION SRac = new INCHI_OPTION("SRac");
-    
+
     /**
      * Include omitted unknown/undefined stereo.
      */
@@ -117,38 +117,38 @@ public class INCHI_OPTION {
      * Fix bug leading to missing or undefined sp3 parity.
      */
     public static final INCHI_OPTION FixSp3Bug  = new INCHI_OPTION("FixSp3Bug");
-    
+
     /**
      * Include Phosphines Stereochemistry.
      */
     public static final INCHI_OPTION SPXYZ = new INCHI_OPTION("SPXYZ");
-    
+
     /**
      * Include Arsines Stereochemistry
      */
     public static final INCHI_OPTION SAsXYZ = new INCHI_OPTION("SPXYZ");
-    
-    
-    
-    
+
+
+
+
     /**
      * Name.
      */
     private final String name;
-    
+
     /**
      * Constructor.
      */
-    private INCHI_OPTION(String name) { this.name = name; lcMap.put(name.toLowerCase(), this); };
-    
+    private INCHI_OPTION(final String name) { this.name = name; lcMap.put(name.toLowerCase(), this); };
+
     public String getName() {
         return name;
     }
-    
+
     public String toString() {
         return name;
     }
-    
+
     protected static Map getLowercaseMap() {
         return lcMap;
     }

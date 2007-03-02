@@ -137,4 +137,20 @@
     </dependency>
   </dependencies>
 
+<reporting>
+     <plugins>
+
+       <plugin>
+         <artifactId>maven-javadoc-plugin</artifactId>
+         <configuration>
+           <quiet>true</quiet>
+         </configuration>
+       </plugin>
+       
+       <plugin>
+         <artifactId>maven-surefire-report-plugin</artifactId>
+       </plugin>
+       
+     </plugins>
+   </reporting>
 </project>

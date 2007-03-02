@@ -19,13 +19,13 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getChlorineAtom(String options) throws JniInchiException {
+    private static JniInchiInput getChlorineAtom(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
         input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
 
-        return(input);
+        return input;
     }
 
     /**
@@ -35,7 +35,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getChlorineIon(String options) throws JniInchiException {
+    private static JniInchiInput getChlorineIon(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -43,7 +43,7 @@ public class TestJniInchiWrapper {
         a1.setCharge(-1);
         input.getAtom(0).setRadical(INCHI_RADICAL.SINGLET);
 
-        return(input);
+        return input;
     }
 
     /**
@@ -53,14 +53,14 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getHydrogenChlorideImplicitH(String options) throws JniInchiException {
+    private static JniInchiInput getHydrogenChlorideImplicitH(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
         JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
         a1.setImplicitH(1);
 
-        return(input);
+        return input;
     }
 
     /**
@@ -70,14 +70,14 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getHydrogenChlorideImplicitP(String options) throws JniInchiException {
+    private static JniInchiInput getHydrogenChlorideImplicitP(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
         JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
         a1.setImplicitProtium(1);
 
-        return(input);
+        return input;
     }
 
     /**
@@ -87,14 +87,14 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getHydrogenChlorideImplicitD(String options) throws JniInchiException {
+    private static JniInchiInput getHydrogenChlorideImplicitD(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
         JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
         a1.setImplicitDeuterium(1);
 
-        return(input);
+        return input;
     }
 
     /**
@@ -104,14 +104,14 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getHydrogenChlorideImplicitT(String options) throws JniInchiException {
+    private static JniInchiInput getHydrogenChlorideImplicitT(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
         JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
         a1.setImplicitTritium(1);
 
-        return(input);
+        return input;
     }
 
     /**
@@ -121,14 +121,14 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getChlorine37Atom(String options) throws JniInchiException {
+    private static JniInchiInput getChlorine37Atom(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
         JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
         a1.setIsotopicMass(37);
 
-        return(input);
+        return input;
     }
 
     /**
@@ -138,14 +138,14 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getChlorine37ByIsotopicMassShiftAtom(String options) throws JniInchiException {
+    private static JniInchiInput getChlorine37ByIsotopicMassShiftAtom(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
         JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
         a1.setIsotopicMassShift(+2);
 
-        return(input);
+        return input;
     }
 
     /**
@@ -155,7 +155,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getMethylRadical(String options) throws JniInchiException {
+    private static JniInchiInput getMethylRadical(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -163,7 +163,7 @@ public class TestJniInchiWrapper {
         a1.setImplicitH(3);
         a1.setRadical(INCHI_RADICAL.DOUBLET);
 
-        return(input);
+        return input;
     }
 
     /**
@@ -174,7 +174,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getEthane(String options) throws JniInchiException {
+    private static JniInchiInput getEthane(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -186,7 +186,7 @@ public class TestJniInchiWrapper {
         // Add bond
         input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
 
-        return(input);
+        return input;
     }
 
     /**
@@ -197,7 +197,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getEthene(String options) throws JniInchiException {
+    private static JniInchiInput getEthene(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -209,7 +209,7 @@ public class TestJniInchiWrapper {
         // Add bond
         input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.DOUBLE));
 
-        return(input);
+        return input;
     }
 
     /**
@@ -220,7 +220,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getEthyne(String options) throws JniInchiException {
+    private static JniInchiInput getEthyne(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -232,7 +232,7 @@ public class TestJniInchiWrapper {
         // Add bond
         input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.TRIPLE));
 
-        return(input);
+        return input;
     }
 
 
@@ -244,7 +244,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getE12dichloroethene2D(String options) throws JniInchiException {
+    private static JniInchiInput getE12dichloroethene2D(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -260,7 +260,7 @@ public class TestJniInchiWrapper {
         input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
         input.addBond(new JniInchiBond(a2, a4, INCHI_BOND_TYPE.SINGLE));
 
-        return(input);
+        return input;
     }
 
     /**
@@ -271,7 +271,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getZ12dichloroethene2D(String options) throws JniInchiException {
+    private static JniInchiInput getZ12dichloroethene2D(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -287,7 +287,7 @@ public class TestJniInchiWrapper {
         input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
         input.addBond(new JniInchiBond(a2, a4, INCHI_BOND_TYPE.SINGLE));
 
-        return(input);
+        return input;
     }
 
     /**
@@ -298,7 +298,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput get12dichloroethene0D(String options) throws JniInchiException {
+    private static JniInchiInput get12dichloroethene0D(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -314,7 +314,7 @@ public class TestJniInchiWrapper {
         input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
         input.addBond(new JniInchiBond(a2, a4, INCHI_BOND_TYPE.SINGLE));
 
-        return(input);
+        return input;
     }
 
     /**
@@ -325,7 +325,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getE12dichloroethene0D(String options) throws JniInchiException {
+    private static JniInchiInput getE12dichloroethene0D(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -344,7 +344,7 @@ public class TestJniInchiWrapper {
         // Add stereo parities
         input.addStereo0D(JniInchiStereo0D.createNewDoublebondStereo0D(a3, a1, a2, a4, INCHI_PARITY.EVEN));
 
-        return(input);
+        return input;
     }
 
     /**
@@ -355,7 +355,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getZ12dichloroethene0D(String options) throws JniInchiException {
+    private static JniInchiInput getZ12dichloroethene0D(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -374,7 +374,7 @@ public class TestJniInchiWrapper {
         // Add stereo parities
         input.addStereo0D(JniInchiStereo0D.createNewDoublebondStereo0D(a3, a1, a2, a4, INCHI_PARITY.ODD));
 
-        return(input);
+        return input;
     }
 
     /**
@@ -385,7 +385,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getLAlanine3D(String options) throws JniInchiException {
+    private static JniInchiInput getLAlanine3D(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -408,7 +408,7 @@ public class TestJniInchiWrapper {
         input.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
         input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
 
-        return(input);
+        return input;
     }
 
     /**
@@ -419,7 +419,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getDAlanine3D(String options) throws JniInchiException {
+    private static JniInchiInput getDAlanine3D(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -442,7 +442,7 @@ public class TestJniInchiWrapper {
         input.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
         input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
 
-        return(input);
+        return input;
     }
 
     /**
@@ -452,7 +452,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getAlanine2D(String options) throws JniInchiException {
+    private static JniInchiInput getAlanine2D(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -475,7 +475,7 @@ public class TestJniInchiWrapper {
         input.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
         input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
 
-        return(input);
+        return input;
     }
 
     /**
@@ -486,7 +486,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getLAlanine2D(String options) throws JniInchiException {
+    private static JniInchiInput getLAlanine2D(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -509,7 +509,7 @@ public class TestJniInchiWrapper {
         input.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
         input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
 
-        return(input);
+        return input;
     }
 
     /**
@@ -520,7 +520,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getDAlanine2D(String options) throws JniInchiException {
+    private static JniInchiInput getDAlanine2D(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -543,7 +543,7 @@ public class TestJniInchiWrapper {
         input.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
         input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
 
-        return(input);
+        return input;
     }
 
 
@@ -553,7 +553,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getAlanine0D(String options) throws JniInchiException {
+    private static JniInchiInput getAlanine0D(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -576,7 +576,7 @@ public class TestJniInchiWrapper {
         input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
         input.addBond(new JniInchiBond(a1, a7, INCHI_BOND_TYPE.SINGLE));
 
-        return(input);
+        return input;
     }
 
     /**
@@ -587,7 +587,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getLAlanine0D(String options) throws JniInchiException {
+    private static JniInchiInput getLAlanine0D(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -613,7 +613,7 @@ public class TestJniInchiWrapper {
         // Add stereo parities
         input.addStereo0D(JniInchiStereo0D.createNewTetrahedralStereo0D(a1, a3, a4, a7, a2, INCHI_PARITY.ODD));
 
-        return(input);
+        return input;
     }
 
     /**
@@ -624,7 +624,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    protected static JniInchiInput getDAlanine0D(String options) throws JniInchiException {
+    private static JniInchiInput getDAlanine0D(final String options) throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
@@ -649,7 +649,7 @@ public class TestJniInchiWrapper {
 
         // Add stereo parities
         input.addStereo0D(JniInchiStereo0D.createNewTetrahedralStereo0D(a1, a3, a4, a7, a2, INCHI_PARITY.EVEN));
-        return(input);
+        return input;
     }
 
 
@@ -1352,7 +1352,7 @@ public class TestJniInchiWrapper {
         Assert.assertEquals("InChI Bond: Cl-C // Type: SINGLE // Stereo: NONE", outputZ.getBond(2).getDebugString());
         Assert.assertEquals("InChI Stereo0D: - [H,C,C,H] Type::DOUBLEBOND // Parity:ODD", outputZ.getStereo0D(0).getDebugString());
     };
-    
+
     /**
      * Tests thread safety - starts ten threads, and sets them generating
      * InChIs for randomly picked elements. Checks generated InChIs are as
@@ -1363,94 +1363,71 @@ public class TestJniInchiWrapper {
     public void multithreading() {
         int nthreads = 10;
         TestThread[] threads = new TestThread[nthreads];
-        for (int i = 0; i < nthreads; i ++) {
+        for (int i = 0; i < nthreads; i++) {
             threads[i] = new TestThread(i);
             threads[i].start();
         }
-        
+
         try {
             Thread.sleep(500);
         } catch (InterruptedException ie) {
             Assert.assertTrue("Interrupted", false);
         }
-        
+
         boolean allRunning = true;
-        
-        for (int i = 0; i < nthreads; i ++) {
+
+        for (int i = 0; i < nthreads; i++) {
             if (threads[i].runCount < 1) {
                 allRunning = false;
             }
             threads[i].timeToStop = true;
         }
-        
+
         Assert.assertTrue("All threads running", allRunning);
-        
+
         try {
             Thread.sleep(100);
         } catch (InterruptedException ie) {
             Assert.assertTrue("Interrupted", false);
         }
-        
+
         boolean allDead = true;
-        
-        for (int i = 0; i < nthreads; i ++) {
+
+        for (int i = 0; i < nthreads; i++) {
             if (threads[i].isAlive()) {
                 allDead = false;
             }
         }
-        
+
         Assert.assertTrue("All threads stopped", allDead);
-        
+
         int failureCount = 0;
-        
-        for (int i = 0; i < nthreads; i ++) {
+
+        for (int i = 0; i < nthreads; i++) {
             failureCount += threads[i].failCount;
         }
-        
+
         Assert.assertEquals("Fail count", 0, failureCount);
     }
 
 
 
-    protected void debug(JniInchiOutput output) {
-        System.out.println(output.getReturnStatus());
-        System.out.println(output.getMessage());
-        //System.out.println(output.getLog());
-        System.out.println(output.getInchi());
-        System.out.println(output.getAuxInfo());
-        System.out.println();
-    }
-
-    protected void debug(JniInchiOutputStructure output) {
-        System.out.println(output.getReturnStatus());
-        System.out.println(output.getMessage());
-        System.out.println(
-                output.getWarningFlags()[0][0] + ", "
-                + output.getWarningFlags()[0][1] + ", "
-                + output.getWarningFlags()[1][0] + ", "
-                + output.getWarningFlags()[1][1]);
-        System.out.println(output.getLog());
-        //System.out.println(output.getLog());
-        System.out.println();
-    }
-    
-    
     private class TestThread extends Thread {
 
         private String[] ELS = {"H", "He", "Li", "Be", "B", "C", "N",
             "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar"};
-        
+
         public boolean timeToStop;
-        
+
         public int failCount;
         public int runCount;
         public JniInchiException ex;
         public int i;
-        
-        public TestThread(int i) {
+
+        public TestThread(final int i) {
             this.i = i;
         }
-        
+
         public void run() {
             timeToStop = false;
             failCount = 0;
@@ -1458,24 +1435,24 @@ public class TestJniInchiWrapper {
             Random rand = new Random();
             while (!timeToStop) {
                 // System.out.println(i + " " + runCount + " " + failCount);
-                runCount ++;
+                runCount++;
                 JniInchiInput input = new JniInchiInput();
                 String element = ELS[rand.nextInt(ELS.length)];
                 input.addAtom(new JniInchiAtom(0, 0, 0, element));
                 try {
                     JniInchiOutput output = JniInchiWrapper.getInchi(input);
                     if (INCHI_RET.OKAY != output.getReturnStatus()) {
-                        failCount ++;
+                        failCount++;
                     } else if (!("InChI=1/" + element).equals(output.getInchi())) {
-                        failCount ++;
+                        failCount++;
                     }
                 } catch (JniInchiException e) {
-                    failCount ++;
+                    failCount++;
                     ex = e;
                     break;
                 }
             }
         }
-        
+
     }
 }

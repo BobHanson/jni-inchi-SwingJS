@@ -37,11 +37,11 @@ public class Main {
         JniInchiNativeCodeLoader.setDebug(true);
         JniInchiNativeCodeLoader loader = JniInchiNativeCodeLoader.getLoader();
         loader.load();
-        
+
         try {
             loader.load();
             System.out.println();
-            
+
             System.out.println("Running checks");
             System.out.println();
 
@@ -56,7 +56,7 @@ public class Main {
 
             System.out.println("Generating structure from InChI");
             JniInchiOutputStructure out2 = JniInchiWrapper.getStructureFromInchi(new JniInchiInputInchi("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)"));
-            if (out2.atomList.size() == 6 && out2.bondList.size() == 5) {
+            if (out2.getNumAtoms() == 6 && out2.getNumBonds() == 5) {
                 System.out.println(" - OKAY");
             } else {
                 System.out.println(" - ERROR");
@@ -78,12 +78,12 @@ public class Main {
         System.out.println();
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
         // Output header message
         System.out.println();
         System.out.println("** JniInchi debugger **");
         System.out.println();
-        
+
         runChecks();
     }
 }

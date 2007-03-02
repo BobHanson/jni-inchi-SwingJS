@@ -17,17 +17,17 @@ public class JniInchiStructure {
     /**
      * List of atoms.
      */
-    protected List atomList = new ArrayList();
+    private List atomList = new ArrayList();
 
     /**
      * List of bonds.
      */
-    protected List bondList = new ArrayList();
+    private List bondList = new ArrayList();
 
     /**
      * List of stero parities.
      */
-    protected List stereoList = new ArrayList();
+    private List stereoList = new ArrayList();
 
 
     /**
@@ -60,7 +60,7 @@ public class JniInchiStructure {
      */
     public JniInchiAtom addAtom(JniInchiAtom atom) {
         atomList.add(atom);
-        return(atom);
+        return atom;
     }
 
     /**
@@ -71,7 +71,7 @@ public class JniInchiStructure {
      */
     public JniInchiBond addBond(JniInchiBond bond) {
         bondList.add(bond);
-        return(bond);
+        return bond;
     }
 
     /**
@@ -82,35 +82,35 @@ public class JniInchiStructure {
      */
     public JniInchiStereo0D addStereo0D(JniInchiStereo0D parity) {
         stereoList.add(parity);
-        return(parity);
+        return parity;
     }
 
 
     /**
      * Returns atom from structure.
-     * @param i	Index of atom to return.
+     * @param i    Index of atom to return.
      * @return
      */
-    public JniInchiAtom getAtom(int i) {
-        return((JniInchiAtom) atomList.get(i));
+    public JniInchiAtom getAtom(final int i) {
+        return (JniInchiAtom) atomList.get(i);
     }
 
     /**
      * Returns bond from structure.
-     * @param i	Index of bond to return.
+     * @param i    Index of bond to return.
      * @return
      */
-    public JniInchiBond getBond(int i) {
-        return((JniInchiBond) bondList.get(i));
+    public JniInchiBond getBond(final int i) {
+        return (JniInchiBond) bondList.get(i);
     }
 
     /**
      * Returns stereo parity from structure.
-     * @param i	Index of stereo parity to return.
+     * @param i    Index of stereo parity to return.
      * @return
      */
-    public JniInchiStereo0D getStereo0D(int i) {
-        return((JniInchiStereo0D) stereoList.get(i));
+    public JniInchiStereo0D getStereo0D(final int i) {
+        return (JniInchiStereo0D) stereoList.get(i);
     }
 
     public void setStructure(JniInchiStructure structure) {

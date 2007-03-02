@@ -1,6 +1,6 @@
 /* File: JniInchiAtom.java
  * Author: Sam Adams
- * 
+ *
  * Copyright (C) 2006 Sam Adams
  */
 package net.sf.jniinchi;
@@ -10,73 +10,73 @@ package net.sf.jniinchi;
  * @author Sam Adams
  */
 public class JniInchiAtom {
-    
+
     /**
      * Indicates relative rather than absolute isotopic mass. Value
      * from inchi_api.h.
      */
     protected static final int ISOTOPIC_SHIFT_FLAG = 10000;
-    
+
     /**
      * Atom x-coordinate.
      */
-    protected double x;
-    
+    private double x;
+
     /**
      * Atom y-coordinate.
      */
-    protected double y;
-    
+    private double y;
+
     /**
      * Atom z-coordinate.
      */
-    protected double z;
-    
+    private double z;
+
     /**
-     * Chemical element symbol eg C, O, Fe, Hg. 
+     * Chemical element symbol eg C, O, Fe, Hg.
      */
-    protected String elname;
-    
+    private String elname;
+
     /**
      * Number of implicit hydrogens on atom. If set to -1, InChI will add
      * implicit H automatically.
      */
-    protected int implicitH = 0;
-    
+    private int implicitH = 0;
+
     /**
      * Number of implicit protiums (isotopic 1-H) on atom.
      */
-    protected int implicitP = 0;
-    
+    private int implicitP = 0;
+
     /**
      * Number of implicit deuteriums (isotopic 2-H) on atom.
      */
-    protected int implicitD = 0;
-    
+    private int implicitD = 0;
+
     /**
      * Number of implicit tritiums (isotopic 3-H) on atom.
      */
-    protected int implicitT = 0;
-    
+    private int implicitT = 0;
+
     /**
      * Mass of isotope. If set to 0, no isotopic mass set; otherwise, isotopic
      * mass, or ISOTOPIC_SHIFT_FLAG + (mass - average atomic mass).
      */
-    protected int isotopic_mass = 0;
-    
+    private int isotopic_mass = 0;
+
     /**
      * Radical status of atom.
      */
-    protected INCHI_RADICAL radical = INCHI_RADICAL.NONE;
-    
+    private INCHI_RADICAL radical = INCHI_RADICAL.NONE;
+
     /**
      * Charge on atom.
      */
-    protected int charge = 0;
-    
+    private int charge = 0;
+
     /**
      * <p>Create new atom.
-     * 
+     *
      * <p>Coordinates and element symbol must be set (unknown
      * coordinates/dimensions should be set to zero).  All other
      * parameters are initialised to default values:
@@ -89,189 +89,196 @@ public class JniInchiAtom {
      *    Isotopic mass = 0 (non isotopic)<br>
      *    Radical status = NONE  (radical status not defined)
      * </tt>
-     * 
+     *
      * @param x     x-coordinate
      * @param y     y-coordinate
      * @param z     z-coordinate
      * @param el    Chemical element symbol
      */
-    public JniInchiAtom(double x, double y, double z, String el) {
+    public JniInchiAtom(final double x, final double y, final double z, final String el) {
         this.x = x;
         this.y = y;
         this.z = z;
-        
+
         this.elname = el;
     }
-    
+
     /**
      * Sets charge on atom.
-     * 
+     *
      * @param charge
      */
-    public void setCharge(int charge) {
+    public void setCharge(final int charge) {
         this.charge = charge;
     }
-    
+
     /**
      * Sets radical status of atom.
-     * 
+     *
      * @param radical
      */
-    public void setRadical(INCHI_RADICAL radical) {
+    public void setRadical(final INCHI_RADICAL radical) {
         this.radical = radical;
     }
-    
+
     /**
      * Sets isotopic mass. If set to 0, non-isotopic.
-     * 
+     *
      * @param mass  Isotopic mass
      */
-    public void setIsotopicMass(int mass) {
+    public void setIsotopicMass(final int mass) {
         this.isotopic_mass = mass;
     }
-    
+
     /**
      * Sets isotopic mass, relative to standard mass.
-     * 
+     *
      * @param shift  Isotopic mass minus average atomic mass
      */
-    public void setIsotopicMassShift(int shift) {
-        this.isotopic_mass = ISOTOPIC_SHIFT_FLAG + shift; 
+    public void setIsotopicMassShift(final int shift) {
+        this.isotopic_mass = ISOTOPIC_SHIFT_FLAG + shift;
     }
-    
+
     /**
      * Sets number of implicit hydrogens on atom. If set to -1, InChI will add
      * implicit H automatically.
-     * 
+     *
      * @param n  Number of implicit hydrogen
      */
-    public void setImplicitH(int n) {
+    public void setImplicitH(final int n) {
         this.implicitH = n;
     }
-    
+
     /**
      * Sets number of implicit protium (1H) on atom.
      * @param n  Number of implicit protium
      */
-    public void setImplicitProtium(int n) {
+    public void setImplicitProtium(final int n) {
         this.implicitP = n;
     }
-    
+
     /**
      * Sets number of implicit deuterium (2H) on atom.
-     * 
+     *
      * @param n  Number of implicit deuterium
      */
-    public void setImplicitDeuterium(int n) {
+    public void setImplicitDeuterium(final int n) {
         this.implicitD = n;
     }
-    
+
     /**
      * Sets number of implicit tritium (3H) on atom.
      * @param n  Number of implicit tritium
      */
-    public void setImplicitTritium(int n) {
+    public void setImplicitTritium(final int n) {
         this.implicitT = n;
     }
-    
+
     /**
      * Returns chemical element symbol of atom.
      * @return
      */
     public String getElementType() {
-    	return(elname);
+        return elname;
     }
-    
+
     /**
      * Returns charge on atom.
      * @return
      */
     public int getCharge() {
-    	return(charge);
+        return charge;
     }
-    
+
     /**
      * Returns radical state of atom.
      * @return
      */
     public INCHI_RADICAL getRadical() {
-    	return(radical);
+        return radical;
     }
-    
+
     /**
      * Returns atom's X-coordinate.
      * @return
      */
     public double getX() {
-    	return(x);
+        return x;
     }
-    
+
     /**
      * Returns atom's Y-coordinate.
      * @return
      */
     public double getY() {
-    	return(y);
+        return y;
     }
-    
+
     /**
      * Returns atom's Z-coordinate.
      * @return
      */
     public double getZ() {
-    	return(z);
+        return z;
     }
-    
+
     /**
      * Returns number of implicit hydrogens on atom.
      * @return
      */
     public int getImplicitH() {
-    	return(implicitH);
+        return implicitH;
     }
-    
+
     /**
      * Returns number of implicit protiums (1H) on atom.
      * @return
      */
     public int getImplicitProtium() {
-    	return(implicitP);
+        return implicitP;
     }
-    
+
     /**
      * Returns number of implicit deuteriums (2H) on atom.
      * @return
      */
     public int getImplicitDeuterium() {
-    	return(implicitD);
+        return implicitD;
     }
-    
+
     /**
      * Returns number of implicit tritiums (3H) on atom.
      * @return
      */
     public int getImplicitTritium() {
-    	return(implicitT);
+        return implicitT;
     }
-    
+
+    /**
+     * Returns isotopic mass of atom.
+     * @return
+     */
+    public int getIsotopicMass() {
+        return isotopic_mass;
+    }
+
     /**
      * Generates string representation of information on atom,
      * for debugging purposes.
      */
     public String getDebugString() {
-    	return("InChI Atom: "
-        	+ elname
-        	+ " [" + x + "," + y + "," + z + "] "
-        	+ "Charge:" + charge + " // "
-        	+ "Iso Mass:" + isotopic_mass + " // "
-        	+ "Implicit H:" + implicitH
-        	+ " P:" + implicitP
-        	+ " D:" + implicitD
-        	+ " T:" + implicitT
-        	+ " // Radical: " + radical
-        	);
+        return "InChI Atom: "
+            + elname
+            + " [" + x + "," + y + "," + z + "] "
+            + "Charge:" + charge + " // "
+            + "Iso Mass:" + isotopic_mass + " // "
+            + "Implicit H:" + implicitH
+            + " P:" + implicitP
+            + " D:" + implicitD
+            + " T:" + implicitT
+            + " // Radical: " + radical;
     }
-    
+
     /**
      * Outputs information on atom, for debugging purposes.
      */
