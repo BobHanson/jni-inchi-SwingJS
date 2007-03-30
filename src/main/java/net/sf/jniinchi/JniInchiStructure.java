@@ -72,7 +72,8 @@ public class JniInchiStructure {
      * @param atom  Atom to add
      * @return      Added atom
      */
-    public JniInchiAtom addAtom(JniInchiAtom atom) {
+    @SuppressWarnings("unchecked")
+	public JniInchiAtom addAtom(JniInchiAtom atom) {
         atomList.add(atom);
         return atom;
     }
@@ -83,7 +84,8 @@ public class JniInchiStructure {
      * @param bond  Bond to add
      * @return      Added bond
      */
-    public JniInchiBond addBond(JniInchiBond bond) {
+    @SuppressWarnings("unchecked")
+	public JniInchiBond addBond(JniInchiBond bond) {
         bondList.add(bond);
         return bond;
     }
@@ -94,7 +96,8 @@ public class JniInchiStructure {
      * @param parity  Parity to add
      * @return        Added parity
      */
-    public JniInchiStereo0D addStereo0D(JniInchiStereo0D parity) {
+    @SuppressWarnings("unchecked")
+	public JniInchiStereo0D addStereo0D(JniInchiStereo0D parity) {
         stereoList.add(parity);
         return parity;
     }

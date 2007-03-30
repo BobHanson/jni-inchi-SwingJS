@@ -702,7 +702,8 @@ public class JniInchiNativeCodeLoader {
          *
          * @return
          */
-        private List findLibrarySearchLocations() {
+        @SuppressWarnings("unchecked")
+		private List findLibrarySearchLocations() {
             librarySearchLocations = new ArrayList();
 
             // Put code root and current working directory at top of seach list

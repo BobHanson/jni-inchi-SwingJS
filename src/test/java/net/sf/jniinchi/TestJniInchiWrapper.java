@@ -995,7 +995,8 @@ public class TestJniInchiWrapper {
     /**
      * Tests option lists are canonicalised correctly.
      */
-    @Test
+    @SuppressWarnings("unchecked")
+	@Test
     public void testCheckOptionsList() throws JniInchiException {
         List opList = new ArrayList();
         opList.add(INCHI_OPTION.Compress);

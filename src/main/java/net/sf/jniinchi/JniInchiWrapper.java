@@ -164,7 +164,8 @@ public class JniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    public static JniInchiOutput getInchi(JniInchiInput input) throws JniInchiException {
+    @SuppressWarnings("unchecked")
+	public static JniInchiOutput getInchi(JniInchiInput input) throws JniInchiException {
         JniInchiWrapper wrapper = getWrapper();
         try {
             wrapper.getLock();

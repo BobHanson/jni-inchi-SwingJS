@@ -153,7 +153,8 @@ public class INCHI_OPTION {
     /**
      * Constructor.
      */
-    private INCHI_OPTION(final String name) { this.name = name; lcMap.put(name.toLowerCase(), this); };
+    @SuppressWarnings("unchecked")
+	private INCHI_OPTION(final String name) { this.name = name; lcMap.put(name.toLowerCase(), this); };
 
     public String getName() {
         return name;

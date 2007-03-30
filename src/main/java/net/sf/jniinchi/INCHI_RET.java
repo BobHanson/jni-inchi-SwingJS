@@ -106,7 +106,8 @@ public class INCHI_RET {
     /**
      * Constructor.
      */
-    private INCHI_RET(final String name, final int indx) { this.name = name; this.indx = indx; list.add(this); };
+    @SuppressWarnings("unchecked")
+	private INCHI_RET(final String name, final int indx) { this.name = name; this.indx = indx; list.add(this); };
 
     public int getIndx() {
         return indx;
