@@ -3,7 +3,7 @@
   ----------
   Sam Adams
   ----------
-  02 March 2007
+  30 March 2007
   ----------
 
 Welcome to JNI InChI Wrapper
@@ -14,9 +14,14 @@ Welcome to JNI InChI Wrapper
   supported:
 
   * InChI generation from structures with 3D, 2D, or no coordinates
-  
+
   * Structure generation (without coordinates) from InChI
-  
+
   * Access to the full range of options supported by InChI
-  
+
   * Full support for InChI's handling of stereochemistry
+
+News
+
+  JNI InChI v0.4.1 has now been released. The main feature of this release is
+  that JNI InChI is now safe for use in multi-threaded environments.
