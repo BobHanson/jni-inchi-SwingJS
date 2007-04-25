@@ -996,7 +996,7 @@ public class TestJniInchiWrapper {
      * Tests option lists are canonicalised correctly.
      */
     @SuppressWarnings("unchecked")
-	@Test
+    @Test
     public void testCheckOptionsList() throws JniInchiException {
         List opList = new ArrayList();
         opList.add(INCHI_OPTION.Compress);
@@ -1406,7 +1406,7 @@ public class TestJniInchiWrapper {
         Assert.assertTrue("All threads running", allRunning);
 
         try {
-            Thread.sleep(100);
+            Thread.sleep(500);
         } catch (InterruptedException ie) {
             Assert.assertTrue("Interrupted", false);
         }

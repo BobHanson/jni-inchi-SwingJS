@@ -54,11 +54,9 @@ public class Main {
         System.out.println("Loading native code");
         System.out.println();
         JniInchiNativeCodeLoader.setDebug(true);
-        JniInchiNativeCodeLoader loader = JniInchiNativeCodeLoader.getLoader();
-        loader.load();
+        JniInchiNativeCodeLoader.getLoader();
 
         try {
-            loader.load();
             System.out.println();
 
             System.out.println("Running checks");

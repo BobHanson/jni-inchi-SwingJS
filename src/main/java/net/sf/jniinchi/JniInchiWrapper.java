@@ -86,8 +86,7 @@ public class JniInchiWrapper {
      */
     public static void loadLibrary() throws LoadNativeLibraryException {
         if (!libraryLoaded) {
-            JniInchiNativeCodeLoader loader = JniInchiNativeCodeLoader.getLoader();
-            loader.load();
+            JniInchiNativeCodeLoader.getLoader();
         }
     }
 
@@ -165,7 +164,7 @@ public class JniInchiWrapper {
      * @throws JniInchiException
      */
     @SuppressWarnings("unchecked")
-	public static JniInchiOutput getInchi(JniInchiInput input) throws JniInchiException {
+    public static JniInchiOutput getInchi(JniInchiInput input) throws JniInchiException {
         JniInchiWrapper wrapper = getWrapper();
         try {
             wrapper.getLock();
