@@ -1,0 +1,241 @@
+  ----------
+  JNI InChI Wrapper - Guide
+  ----------
+  Sam Adams
+  ----------
+  26 April 2007
+  ----------
+
+Introduction
+
+  JNI InChI Wrapper is a library indended for use by developers of other
+  projects. It does not enable users to generate InChIs from molecule file
+  formats such as .mol, .cml, .mol2, or SMILES strings. If you want to do any
+  of these, you should take a look at the {{{http://almost.cubic.uni-koeln.de/cdk/cdk_top}Chemistry Development Kit (CDK)}},
+  which includes InChI generation powered by the JNI InChI Wrapper. If, however,
+  you are a software developer and you want want to generate the InChI for a
+  molecule that you already hold in memory, JNI InChI Wrapper is what you need.
+
+InChI Generation
+
+  The main aim of the JNI InChI Wrapper is to enable the generation of InChIs
+  from within Java. The InChI libaray's functionality is accessed through
+  the net.sf.jniinchi.JniInchiWrapper class. To generate an InChI, first a
+  representation of the molecule must be constructed that the InChI library
+  can recognise. This is achieved by creating JniInchiAtoms, JniInchiBonds and
+  JniInchiStereo0Ds, and adding them to a JniInchiInput object. This is illustrated
+  in the examples below:
+
++--
+// Example input - 2D E-1,2-dichloroethene
+JniInchiInput input = new JniInchiInput();
+
+// Generate atoms
+JniInchiAtom a1 = input.addAtom(new JniInchiAtom(2.866, -0.250, 0.000, "C"));
+JniInchiAtom a2 = input.addAtom(new JniInchiAtom(3.732, 0.250, 0.000, "C"));
+JniInchiAtom a3 = input.addAtom(new JniInchiAtom(2.000, 2.500, 0.000, "Cl"));
+JniInchiAtom a4 = input.addAtom(new JniInchiAtom(4.598, -0.250, 0.000, "Cl"));
+a1.setImplicitH(1);
+a2.setImplicitH(1);
+
+// Add bond
+input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.DOUBLE));
+input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
+input.addBond(new JniInchiBond(a2, a4, INCHI_BOND_TYPE.SINGLE));
+
+JniInchiOutput output = JniInchiWrapper.getInchi(input);
+
+
+
+// Example input - 0D D-Alanine
+JniInchiInput input = new JniInchiInput();
+
+// Generate atoms
+JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
+JniInchiAtom a2 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
+JniInchiAtom a3 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "N"));
+JniInchiAtom a4 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
+JniInchiAtom a5 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "O"));
+JniInchiAtom a6 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "O"));
+JniInchiAtom a7 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "H"));
+a3.setImplicitH(2);
+a4.setImplicitH(3);
+a5.setImplicitH(1);
+
+// Add bonds
+input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
+input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
+input.addBond(new JniInchiBond(a1, a4, INCHI_BOND_TYPE.SINGLE));
+input.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
+input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
+input.addBond(new JniInchiBond(a1, a7, INCHI_BOND_TYPE.SINGLE));
+
+// Add stereo parities
+input.addStereo0D(JniInchiStereo0D.createNewTetrahedralStereo0D(a1, a3, a4, a7, a2, INCHI_PARITY.EVEN));
+
+JniInchiOutput output = JniInchiWrapper.getInchi(input);
++--
+
+  Further examples can be found in the
+  {{{http://jni-inchi.svn.sourceforge.net/viewvc/jni-inchi/trunk/src/test/java/net/sf/jniinchi/TestJniInchiWrapper.java?view=markup}TestJniInchiWrapper}} class,
+  the {{{http://cdk.svn.sourceforge.net/viewvc/cdk/trunk/cdk/src/org/openscience/cdk/inchi/InChIGenerator.java?view=markup}CDK}},
+  and {{{http://cml.svn.sourceforge.net/viewvc/cml/jumbo5/trunk/src/main/java/org/xmlcml/cml/inchi/InChIGenerator.java?view=markup}JUMBO}}.
+
+
+* Output
+
+  The JniInchiOutput object returned contains the results of the InChI generation:
+
+*----------------------------+--------------------------------------------+
+ INCHI_RET getReturnStatus() | Returns the status code (see below)
+*----------------------------+--------------------------------------------+
+ String getInchi()           | Returns the generated InChI
+*----------------------------+--------------------------------------------+
+ String getAuxInfo()         | Returns the generated AuxInfo
+*----------------------------+--------------------------------------------+
+ String getMessage()         | Returns warning or error message
+*----------------------------+--------------------------------------------+
+ String getLog()             | Returns log messages from InChI generation
+*----------------------------+--------------------------------------------+
+
+** Return status codes
+
+  The InChI generation process returns a status code which describes how successful
+  the process was:
+
+*--------+-------------------------------------------------------------------------------+
+ SKIP    | Not used
+*--------+-------------------------------------------------------------------------------+
+ EOF     | No structural data has been provided
+*--------+-------------------------------------------------------------------------------+
+ OKAY    | Success, no errors or warnings
+*--------+-------------------------------------------------------------------------------+
+ WARNING | Success, warning(s) issued
+*--------+-------------------------------------------------------------------------------+
+ ERROR   | Error: no InChI has been created
+*--------+-------------------------------------------------------------------------------+
+ FATAL   | Severe error: no InChI has been created (typically, memory allocation failure)
+*--------+-------------------------------------------------------------------------------+
+ UNKNOWN | Unknown program error
+*--------+-------------------------------------------------------------------------------+
+ BUSY    | Previous call to InChI has not returned yet
+*--------+-------------------------------------------------------------------------------+
+
+  <(Documentation from inchi_api.h)>
+
+* Options
+
+  JNI InChI Wrapper supports the full range of options that InChI generation takes:
+
+*--------------+---------------------+
+ SUCF          | Use Chiral Flag
+*--------------+---------------------+
+ ChiralFlagON  | Set Chiral Flag
+*--------------+---------------------+
+ ChiralFlagOFF | Set Not-Chiral Flag
+*--------------+---------------------+
+
+*-------------------*---------------*------------------------------------------*
+ <<Options>>        | <<Equivalent to>> | <<Chiral Flag Information stored in AuxInfo>>
+*-------------------+---------------+------------------------------------------+
+ SUCF ChiralFlagON  | SABS          | Chiral Flag
+*-------------------+---------------+------------------------------------------+
+ SUCF ChiralFlagOFF | SREL          | Not-Chiral Flag
+*-------------------+---------------+------------------------------------------+
+ SUCF               | SREL          | none
+*-------------------+---------------+------------------------------------------+
+ ChiralFlagON       | none          | Chiral Flag
+*-------------------+---------------+------------------------------------------+
+ ChiralFlagOFF      | none          | Not-Chiral Flag
+*-------------------+---------------+------------------------------------------+
+
+  Other options:
+
+*---------------------+--------------------------------------------------------+
+ SNon                 | Exclude stereo (Default: Include Absolute stereo)
+*---------------------+--------------------------------------------------------+
+ SRel                 | Relative stereo
+*---------------------+--------------------------------------------------------+
+ SRac                 | Racemic stereo
+*---------------------+--------------------------------------------------------+
+ SUU                  | Include omitted unknown/undefined stereo
+*---------------------+--------------------------------------------------------+
+ NEWPS                | Narrow end of wedge points to stereocenter (default: both)
+*---------------------+--------------------------------------------------------+
+ RecMet               | Include reconnected bond to metal results
+*---------------------+--------------------------------------------------------+
+ FixedH               | Mobile H Perception Off (Default: On)
+*---------------------+--------------------------------------------------------+
+ AuxNone              | Omit auxiliary information (default: Include)
+*---------------------+--------------------------------------------------------+
+ NoADP                | Disable Aggressive Deprotonation (for testing only)
+*---------------------+--------------------------------------------------------+
+ Compress             | Compressed output
+*---------------------+--------------------------------------------------------+
+ DoNotAddH            | Overrides inchi_Atom::num_iso_H[0] == -1
+*---------------------+--------------------------------------------------------+
+ Wnumber              | Set time-out per structure in seconds; W0 means unlimited In InChI library the default value is unlimited
+*---------------------+--------------------------------------------------------+
+ OutputSDF            | Output SDfile instead of InChI
+*---------------------+--------------------------------------------------------+
+ WarnOnEmptyStructure | Warn and produce empty InChI for empty structure
+*---------------------+--------------------------------------------------------+
+
+  <(Documentation from inchi_api.h)>
+
+
+InChI-to-Structure
+
+  JNI InChI Wrapper also supports InChI-to-Structure conversion:
+
++--
+JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/C2H6/c1-2/h1-2H3");
+JniInchiOutputStructure output = JniInchiWrapper.getStructureFromInchi(input);
+
+INCHI_RET retStatus = output.getReturnStatus());
+int nat = output.getNumAtoms();
+int nbo = output.getNumBonds();
+int nst = output.getNumStereo0D();
+
+JniInchiAtom at0 = output.getAtom(0);
++--
+
+
+InChI-to-InChI
+
+  The InChI libary also provides an option to convert InChI-to-InChI. This will
+  most probably be of use if you wish to convert between compressed and
+  uncompressed InChIs:
+
++--
+String inchi = "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)";
+
+// Compress InChI
+JniInchiOutput cout = JniInchiWrapper.getInchiFromInchi(new JniInchiInputInchi(inchi, "-compress"));
+String compressedInchi = cout.getInchi();
+
+// compressedInchi = InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF
+
+
+// Uncompress InChI
+JniInchiOutput ucout = JniInchiWrapper.getInchiFromInchi(new JniInchiInputInchi(compressedInchi));
+String uncompressedInchi = ucout.getInchi();
+
+// uncompressedInchi = InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)
++--
+
+
+Native Code
+
+  JNI InChI Wrapper does not contain a Java version of the InChI algorithm, it
+  wraps up the InChI library distributed by IUPAC, making its functionality
+  available to Java programmers. The InChI library is only available in C, and
+  is not sufficiently well documented for it to be easy to produce an implementation
+  in another language, without first reverse engineering the existing code.
+
+  The problem with using native code is that the cross-platform benefits of java
+  are lost. In an attempt to overcome this the JNI InChI Wrapper contains a
+  mechanism package the native files with the java code, to deploy the
+  appropriate ones on a system, as required. This is all handled by the
+  net.sf.jniinchi.JniInchiNativeCodeLoader class.
+

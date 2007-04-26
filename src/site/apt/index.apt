@@ -3,7 +3,7 @@
   ----------
   Sam Adams
   ----------
-  30 March 2007
+  26 April 2007
   ----------
 
 Welcome to JNI InChI Wrapper
@@ -23,5 +23,17 @@ Welcome to JNI InChI Wrapper
 
 News
 
-  JNI InChI v0.4.1 has now been released. The main feature of this release is
+* 26 April 2007
+
+  * New documentation added to website.
+
+  * Work on v0.5 is underway. This release will feature improved native code deployment, allowing support
+  for architectures other than x86.
+
+  * {{{http://www.iupac.org/inchi/adopters.html} IUPAC}} are now linking to this project.
+
+
+* 30 March 2007
+
+  * JNI InChI v0.4.1 has now been released. The main feature of this release is
   that JNI InChI is now safe for use in multi-threaded environments.

@@ -63,6 +63,7 @@ public class Main {
             System.out.println();
 
             System.out.println("Generating InChI from structure");
+
             JniInchiStructure mol = getTestMolecule();
             JniInchiOutput out1 = JniInchiWrapper.getInchi(new JniInchiInput(mol));
             if ("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)".equals(out1.getInchi())) {

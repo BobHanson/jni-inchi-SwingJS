@@ -68,6 +68,15 @@ public class JniInchiInput extends JniInchiStructure {
     }
 
     /**
+     * Constructor.
+     * @throws JniInchiException
+     */
+    public JniInchiInput(JniInchiStructure struct, String opts) throws JniInchiException {
+        this(opts);
+        setStructure(struct);
+    }
+
+    /**
      * Returns options string.
      * @return
      */
