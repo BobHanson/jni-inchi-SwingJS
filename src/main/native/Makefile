@@ -36,20 +36,29 @@ LDFLAGS = -shared
 
 # os-dependent bits
 UNAME := $(shell uname)
+OSNAME := $(shell uname -o)
+PLATNAME := $(shell uname -m)
 
 ifeq ($(UNAME),Linux)
 LINUX = 1
+OS = "LINUX"
 else
 ifeq ($(findstring MINGW,$(UNAME)),MINGW)
 WINDOWS = 1
+OS = "WINDOWS"
 else
 ifeq ($(findstring CYGWIN,$(UNAME)),CYGWIN)
 WINDOWS = 1
+OS = "WINDOWS"
 else
 f := $(error Platform $(UNAME) not supported)
 endif
 endif
 endif
+
+PLAT = "X86"
+
+OSPLAT := ${OS}-${PLAT}
 
 
 ifdef LINUX
@@ -84,6 +93,11 @@ $(CLASSES): $(JNIHEADERS)
 $(OBJECT:S): $(CLASSES)
 
 $(TARGET): $(OBJECTS) $(INCHILINK)
+	@echo ${UNAME}
+	@echo ${OSNAME}
+	@echo ${PLATNAME}
+	@echo ${OS}
+	@echo ${OSPLAT}
 	$(LINK.cpp) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o $(TARGET)
 
 # Generate header file, using javah

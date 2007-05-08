@@ -41,6 +41,11 @@
       <name>WWMM</name>
       <url>dav:http://wwmm.ch.cam.ac.uk/maven2</url>
     </repository>
+    <site>
+      <id>shell.sourceforge</id>
+      <name>sourceforge</name>
+      <url>scpexe://shell.sourceforge.net/home/users/s/se/sea36/jni-inchi/htdocs</url>
+    </site>
   </distributionManagement>
 
   <developers>
@@ -125,6 +130,20 @@
         </executions>
       </plugin>
 
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>net.sf.jniinchi.Main</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
     </plugins>
 
     <extensions>
@@ -152,20 +171,17 @@
     </dependency>
   </dependencies>
 
-<reporting>
-     <plugins>
-
-       <plugin>
-         <artifactId>maven-javadoc-plugin</artifactId>
-         <configuration>
-           <quiet>true</quiet>
-         </configuration>
-       </plugin>
-
-       <plugin>
-         <artifactId>maven-surefire-report-plugin</artifactId>
-       </plugin>
-
-     </plugins>
-   </reporting>
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <quiet>true</quiet>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>

@@ -20,18 +20,7 @@
 package net.sf.jniinchi;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.StringTokenizer;
 
 import net.sf.jnati.NativeCodeException;
 import net.sf.jnati.NativeLibraryLoader;
