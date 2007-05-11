@@ -104,7 +104,12 @@ public class JniInchiNativeCodeLoader extends NativeLibraryLoader {
         }
 
         File inchiFile = new File(path, INCHI_LIB_NAMES[i]);
-        File jniFile = new File(path, JNI_LIB_PREFIX[i] + getVersionString() + JNI_LIB_SUFFIX[i]);
+        File jniFile;
+        if (PLATFORM.WINDOWS == os) {
+            jniFile = new File(path, JNI_LIB_PREFIX[i] + getVersionString() + JNI_LIB_SUFFIX[i]);
+        } else {
+            jniFile = new File(path, JNI_LIB_PREFIX[i] + JNI_LIB_SUFFIX[i] + getVersionString());
+        }
 
         // Load InChI native code
         try {
