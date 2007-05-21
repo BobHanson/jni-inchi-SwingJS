@@ -1771,7 +1771,6 @@ public class TestJniInchiWrapper {
             runCount = 0;
             Random rand = new Random();
             while (!timeToStop) {
-                // System.err.println(i + " " + runCount + " ... ");
                 runCount++;
                 JniInchiInput input = new JniInchiInput();
                 String element = ELS[rand.nextInt(ELS.length)];
@@ -1789,11 +1788,8 @@ public class TestJniInchiWrapper {
                     ex = e;
                     break;
                 }
-                // System.err.println(i + " " + (runCount - 1) + " finished. "
-                // + ((timeToStop) ? " for good. " : ""));
                 yield();
             }
-            System.err.println(i + " has finished");
             finished = true;
         }
 
