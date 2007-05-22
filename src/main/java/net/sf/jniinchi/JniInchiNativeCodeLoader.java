@@ -27,7 +27,7 @@ import net.sf.jnati.NativeLibraryLoader;
 import net.sf.jnati.JnatiConstants.ARCHITECTURE;
 import net.sf.jnati.JnatiConstants.PLATFORM;
 
-public class JniInchiNativeCodeLoader extends NativeLibraryLoader {
+class JniInchiNativeCodeLoader extends NativeLibraryLoader {
 
     private static boolean DEBUG = false;
 
@@ -35,14 +35,22 @@ public class JniInchiNativeCodeLoader extends NativeLibraryLoader {
 
     private static final int CURRENT_NATIVE_VERSION_MINOR = 4;
 
-    // Property names
 
+    /**
+     * InChI library file names - windows/linux
+     */
     private static String[] INCHI_LIB_NAMES = { "libinchi.1.01.00.dll",
             "libinchi.so.1.01.00" };
 
+    /**
+     * JniInChI library file prefixes - windows/linux
+     */
     private static String[] JNI_LIB_PREFIX = { "libJniInchi.",
             "libJniInchi." };
 
+    /**
+     * JniInChI library file suffixes - windows/linux
+     */
     private static String[] JNI_LIB_SUFFIX = { ".dll", "so." };
 
     /**

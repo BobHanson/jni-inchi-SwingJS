@@ -76,12 +76,7 @@ public class JniInchiWrapper {
     private static boolean libraryLoaded = false;
 
     /**
-     * Loads native library. If unable to load on first attempt (usually because
-     * native library files are not in the library search path), method checks
-     * whether the current working directory (either by full path, or as '.')
-     * is in the library search path, and if so attempts to copy the native
-     * library files there, and then load them.
-     *
+     * Loads native library.
      * @throws JniInchiException Library failed to load
      */
     public static void loadLibrary() throws LoadNativeLibraryException {

@@ -33,7 +33,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Generates input for a chlorine atom.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -50,7 +50,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Generates input for a chlorine atom.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -70,7 +70,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Generates input for hydrogen chloride, with implicit H atom.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -89,7 +89,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Generates input for hydrogen chloride, with implicit protium atom.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -108,7 +108,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Generates input for hydrogen chloride, with implicit deuterium atom.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -127,7 +127,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Generates input for hydrogen chloride, with implicit tritium atom.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -146,7 +146,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Generates input for a 37Cl atom by isotopic mass.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -165,7 +165,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Generates input for a 37Cl atom by isotopic mass shift.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -184,7 +184,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Generates input for a methyl radical, with implicit hydrogens.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -205,7 +205,7 @@ public class TestJniInchiWrapper {
     /**
      * Generates input for an ethane molecule, with no coordinates and implicit
      * hydrogens.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -231,7 +231,7 @@ public class TestJniInchiWrapper {
     /**
      * Generates input for an ethene molecule, with no coordinates and implicit
      * hydrogens.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -257,7 +257,7 @@ public class TestJniInchiWrapper {
     /**
      * Generates input for an ethyne molecule, with no coordinates and implicit
      * hydrogens.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -283,7 +283,7 @@ public class TestJniInchiWrapper {
     /**
      * Generates input for an (E)-1,2-dichloroethene molecule, with 2D
      * coordinates and implicit hydrogens.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -315,7 +315,7 @@ public class TestJniInchiWrapper {
     /**
      * Generates input for an (E)-1,2-dichloroethene molecule, with 2D
      * coordinates and implicit hydrogens.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -347,7 +347,7 @@ public class TestJniInchiWrapper {
     /**
      * Generates input for an (E)-1,2-dichloroethene molecule, with 0D
      * coordinates.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -379,7 +379,7 @@ public class TestJniInchiWrapper {
     /**
      * Generates input for an (E)-1,2-dichloroethene molecule, with 0D
      * coordinates and stereo parities.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -415,7 +415,7 @@ public class TestJniInchiWrapper {
     /**
      * Generates input for an (E)-1,2-dichloroethene molecule, with 2D
      * coordinates and stereo parities.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -451,7 +451,7 @@ public class TestJniInchiWrapper {
     /**
      * Generates input for L-alanine molecule, with 3D coordinates and implicit
      * hydrogens.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -492,7 +492,7 @@ public class TestJniInchiWrapper {
     /**
      * Generates input for D-alanine molecule, with 3D coordinates and implicit
      * hydrogens.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -532,7 +532,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Generates input for alanine molecule, with 2D coordinates.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -573,7 +573,7 @@ public class TestJniInchiWrapper {
     /**
      * Generates input for L-alanine molecule, with 2D coordinates and bond
      * stereo definitions.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -615,7 +615,7 @@ public class TestJniInchiWrapper {
     /**
      * Generates input for D-alanine molecule, with 2D coordinates and bond
      * stereo definitions.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -656,7 +656,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Generates input for alanine molecule with no coordinates.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -691,7 +691,7 @@ public class TestJniInchiWrapper {
     /**
      * Generates input for L-alanine molecule with no coordinates but 0D stereo
      * parities.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -730,7 +730,7 @@ public class TestJniInchiWrapper {
     /**
      * Generates input for D-alanine molecule with no coordinates but 0D stereo
      * parities.
-     * 
+     *
      * @param options
      * @return
      * @throws JniInchiException
@@ -769,7 +769,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests element name is correctly passed to InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -782,7 +782,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests charge is correctly passed to InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -795,7 +795,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests isotopic mass is correctly passed to InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -808,7 +808,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests isotopic mass shift is correctly passed to InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -822,7 +822,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests implicit hydrogen count is correctly passed to InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -835,7 +835,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests implicit protium count is correctly passed to InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -848,7 +848,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests implicit deuterium count is correctly passed to InChi.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -861,7 +861,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests implicit tritium count is correctly passed to InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -874,7 +874,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests radical state is correctly passed to InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -889,7 +889,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests single bond is correctly passed to InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -902,7 +902,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests double bond is correctly passed to InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -915,7 +915,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests triple bond is correctly passed to InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -930,7 +930,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests 2D coordinates are correctly passed to InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -953,7 +953,7 @@ public class TestJniInchiWrapper {
     /**
      * Tests InChI generation from L and D-Alanine molecules, with 3D
      * coordinates.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -978,10 +978,10 @@ public class TestJniInchiWrapper {
     /**
      * Tests InChI generation from L and D-Alanine molecules, with 3D
      * coordinates.
-     * 
+     *
      * Fails due to bug in InChI software. See
      * testGetInchiFromLandDAlanine2DWithFixSp3Bug() for workaround.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -994,13 +994,13 @@ public class TestJniInchiWrapper {
          * Assert.assertEquals("Omitted undefined stereo", output.getMessage());
          * Assert.assertEquals("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)",
          * output.getInchi());
-         * 
+         *
          * JniInchiInput inputL = getLAlanine2D(""); JniInchiOutput outputL =
          * JniInchiWrapper.getInchi(inputL); Assert.assertEquals(INCHI_RET.OKAY,
          * outputL.getReturnStatus());
          * Assert.assertEquals("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
          * outputL.getInchi());
-         * 
+         *
          * JniInchiInput inputD = getDAlanine2D(""); JniInchiOutput outputD =
          * JniInchiWrapper.getInchi(inputD); Assert.assertEquals(INCHI_RET.OKAY,
          * outputD.getReturnStatus());
@@ -1012,7 +1012,7 @@ public class TestJniInchiWrapper {
     /**
      * Tests InChI generation from L and D-Alanine molecules, with 3D
      * coordinates, using FixSp3Bug option from InChI software v1.01
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1044,7 +1044,7 @@ public class TestJniInchiWrapper {
     /**
      * Tests InChI generation from L and D-Alanine molecules, with no
      * coordinates but tetrahedral stereo parities.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1074,7 +1074,7 @@ public class TestJniInchiWrapper {
     /**
      * Tests InChI generation from E and Z 1,2-dichloroethene molecules, with no
      * coordinates but doublebond stereo parities.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1118,7 +1118,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests option strings are handled checked canonicalised.
-     * 
+     *
      * @throws JniInchiException
      */
     @Test
@@ -1132,7 +1132,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests passing options to inchi.
-     * 
+     *
      * @throws Exception
      */
     // @Test
@@ -1170,7 +1170,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests element name is correctly read from InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1190,7 +1190,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests charge is correctly read from InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1212,7 +1212,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests isotopic mass is correctly read from InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1232,7 +1232,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests implicit hydrogen count is correctly read from InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1252,7 +1252,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests implicit protium count is correctly read from InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1273,7 +1273,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests implicit deuterium count is correctly read from InChi.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1294,7 +1294,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests implicit tritium count is correctly read from InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1315,7 +1315,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests radical state is correctly read from InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1339,7 +1339,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests single bond is correctly read from InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1366,7 +1366,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests double bond is correctly read from InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1393,7 +1393,7 @@ public class TestJniInchiWrapper {
 
     /**
      * Tests triple bond is correctly read from InChI.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1423,7 +1423,7 @@ public class TestJniInchiWrapper {
     /**
      * Tests generation of L and D-Alanine molecules, from InChIs with
      * tetrahedral stereo parities.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1567,7 +1567,7 @@ public class TestJniInchiWrapper {
     /**
      * Tests generation of E and Z 1,2-dichloroethene molecules, from InChIs
      * with doublebond stereo parities.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -1691,7 +1691,7 @@ public class TestJniInchiWrapper {
     /**
      * Tests thread safety - starts ten threads, and sets them generating InChIs
      * for randomly picked elements. Checks generated InChIs are as expected.
-     * 
+     *
      */
     @Test
     public void multithreading() {
@@ -1705,7 +1705,7 @@ public class TestJniInchiWrapper {
         try {
             Thread.sleep(100);
         } catch (InterruptedException ie) {
-            Assert.assertTrue("Interrupted", false);
+            Assert.fail("Interrupted");
         }
 
         boolean allRunning = true;
@@ -1724,7 +1724,7 @@ public class TestJniInchiWrapper {
         try {
             Thread.sleep(500);
         } catch (InterruptedException ie) {
-            Assert.assertTrue("Interrupted", false);
+            Assert.fail("Interrupted");
         }
 
         boolean allFinished = true;
