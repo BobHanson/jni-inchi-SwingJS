@@ -2,7 +2,8 @@
 MAIN_VERSION = .1
 VERSION = $(MAIN_VERSION).01.00
 LIBNAME = libinchi
-TARGET_DIR = ../../../../target/classes
+TARGET_DIR = ../../../../target/native
+OBJDIR = $(TARGET_DIR)/o/inchi
 
 LDFLAGS = -shared
 CFLAGS = -ansi -O3 
@@ -42,7 +43,7 @@ TARGET = $(TARGET_DIR)/$(TARGET_FILE)
 
 # === InChI Library Object files ============
 
-INCHI_LIB_OBJS = ichican2.o       ichicano.o \
+_INCHI_LIB_OBJS = ichican2.o       ichicano.o \
                  ichicans.o       ichiisot.o \
                  ichilnct.o       ichimak2.o \
                  ichimake.o       ichimap1.o \
@@ -60,6 +61,8 @@ INCHI_LIB_OBJS = ichican2.o       ichicano.o \
                  inchi_dll_main.o runichi.o  \
                  strutil.o        util.o
 
+INCHI_LIB_OBJS = $(addprefix $(OBJDIR)/,$(_INCHI_LIB_OBJS))
+
 all: $(TARGET)
 
 clean:
@@ -69,4 +72,11 @@ clean:
 $(TARGET): $(INCHI_LIB_OBJS)
 	$(CC) $(LDFLAGS) $(OUTPUT_OPTION) $^
 
+$(OBJDIR):
+	mkdir -p $@
+	
+$(TARGET_DIR):
+	mkdir -p $@
 
+$(OBJDIR)/%.o: %.c $(OBJDIR)
+	$(CC) $(CFLAGS) -c -o $@ $<

@@ -5,11 +5,12 @@
 LIBNAME = JniInchi
 CODE_VERSION = .1.4
 
-CLASSES = JniInchiWrapper.cpp
-OBJECTS = JniInchiWrapper.o
-JNIHEADERS = net_sf_jniinchi_JniInchiWrapper.h
+TARGET_DIR = ../../../target/native
+OBJDIR = $(TARGET_DIR)/o/jniinchi
 
-TARGET_DIR = ../../../target/classes
+CLASSES = JniInchiWrapper.cpp
+OBJECTS = $(OBJDIR)/JniInchiWrapper.o
+JNIHEADERS = net_sf_jniinchi_JniInchiWrapper.h
 
 JAVA_CLASS = net.sf.jniinchi.JniInchiWrapper
 JAVA_BUILD_DIR = ../../../target/classes
@@ -90,14 +91,12 @@ clean:
 
 $(CLASSES): $(JNIHEADERS)
 
-$(OBJECT:S): $(CLASSES)
+$(OBJECTS): $(CLASSES) $(OBJDIR)
+
+$(OBJDIR):
+	mkdir -p $@
 
 $(TARGET): $(OBJECTS) $(INCHILINK)
-	@echo ${UNAME}
-	@echo ${OSNAME}
-	@echo ${PLATNAME}
-	@echo ${OS}
-	@echo ${OSPLAT}
 	$(LINK.cpp) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o $(TARGET)
 
 # Generate header file, using javah
@@ -113,3 +112,6 @@ endif
 
 INCHI:
 	cd inchi && $(MAKE)
+
+$(OBJDIR)/%.o: %.cpp $(OBJDIR)
+	$(CC) $(CPPFLAGS) -c -o $@ $<
