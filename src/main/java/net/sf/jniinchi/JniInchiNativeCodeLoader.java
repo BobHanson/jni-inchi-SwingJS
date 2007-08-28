@@ -31,27 +31,19 @@ class JniInchiNativeCodeLoader extends NativeLibraryLoader {
 
     private static boolean DEBUG = false;
 
-    private static final int CURRENT_NATIVE_VERSION_MAJOR = 1;
-
-    private static final int CURRENT_NATIVE_VERSION_MINOR = 4;
-
+    private static final String CURRENT_NATIVE_VERSION = "1.5";
 
     /**
-     * InChI library file names - windows/linux
+     * JniInChI library file prefix
      */
-    private static String[] INCHI_LIB_NAMES = { "libinchi.1.01.00.dll",
-            "libinchi.so.1.01.00" };
-
-    /**
-     * JniInChI library file prefixes - windows/linux
-     */
-    private static String[] JNI_LIB_PREFIX = { "libJniInchi.",
-            "libJniInchi." };
+    private static String JNI_LIB_PREFIX = "libJniInchi";
+    
+    private static String DOT = ".";
 
     /**
      * JniInChI library file suffixes - windows/linux
      */
-    private static String[] JNI_LIB_SUFFIX = { ".dll", "so." };
+    private static String[] JNI_LIB_SUFFIX = { "dll", "so" };
 
     /**
      * Singleton.
@@ -91,7 +83,7 @@ class JniInchiNativeCodeLoader extends NativeLibraryLoader {
      * Constructor. Sets/detects properties.
      */
     private JniInchiNativeCodeLoader() throws NativeCodeException, IOException {
-        super("jniinchi", getVersionString());
+        super("jniinchi", CURRENT_NATIVE_VERSION);
     }
 
     /**
@@ -110,21 +102,12 @@ class JniInchiNativeCodeLoader extends NativeLibraryLoader {
         } else {
             throw new NativeCodeException("Unsupported OS: " + os.name());
         }
-
-        File inchiFile = new File(path, INCHI_LIB_NAMES[i]);
+        
         File jniFile;
         if (PLATFORM.WINDOWS == os) {
-            jniFile = new File(path, JNI_LIB_PREFIX[i] + getVersionString() + JNI_LIB_SUFFIX[i]);
+            jniFile = new File(path, JNI_LIB_PREFIX + DOT + CURRENT_NATIVE_VERSION + DOT + JNI_LIB_SUFFIX[i]);
         } else {
-            jniFile = new File(path, JNI_LIB_PREFIX[i] + JNI_LIB_SUFFIX[i] + getVersionString());
-        }
-
-        // Load InChI native code
-        try {
-            log("Loading InChI library");
-            System.load(inchiFile.getAbsolutePath());
-        } catch (UnsatisfiedLinkError ule) {
-            die("Error loading InChI library: " + ule.getMessage());
+            jniFile = new File(path, JNI_LIB_PREFIX + DOT + JNI_LIB_SUFFIX[i] + DOT + CURRENT_NATIVE_VERSION);
         }
 
         // Load JNI InChI native code
@@ -138,15 +121,11 @@ class JniInchiNativeCodeLoader extends NativeLibraryLoader {
         // Check version match
         try {
             log("Checking correct version is loaded");
-            int majorVersion = JniInchiWrapper.LibInchiGetVersionMajor();
-            int minorVersion = JniInchiWrapper.LibInchiGetVersionMinor();
+            String nativeVersion = JniInchiWrapper.LibInchiGetVersion();
 
-            if (CURRENT_NATIVE_VERSION_MAJOR != majorVersion
-                    || CURRENT_NATIVE_VERSION_MINOR != minorVersion) {
-                die("Native code is version " + majorVersion + "."
-                        + minorVersion + "; expected "
-                        + CURRENT_NATIVE_VERSION_MAJOR + "."
-                        + CURRENT_NATIVE_VERSION_MINOR);
+            if (!CURRENT_NATIVE_VERSION.equals(nativeVersion)) {
+                die("Native code is version " + nativeVersion + "; expected "
+                        + CURRENT_NATIVE_VERSION);
 
             }
         } catch (UnsatisfiedLinkError ule) {
@@ -165,15 +144,6 @@ class JniInchiNativeCodeLoader extends NativeLibraryLoader {
     private void log(final String message) {
         if (DEBUG)
             System.out.println(message);
-    }
-
-    /**
-     * Returns string representation of current native code version.
-     *
-     * @return
-     */
-    private static String getVersionString() {
-        return (CURRENT_NATIVE_VERSION_MAJOR + "." + CURRENT_NATIVE_VERSION_MINOR);
     }
 
     private void die(final String message) throws NativeCodeException {

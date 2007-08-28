@@ -1,4 +1,0 @@
-<manifest id="jniinchi" version="1.4" platform="LINUX" architecture="X86">
-  <file>libinchi.so.1.01.00</file>
-  <file>libJniInchi.so.1.4</file>
-</manifest>

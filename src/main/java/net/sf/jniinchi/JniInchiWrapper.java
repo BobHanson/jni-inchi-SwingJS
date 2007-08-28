@@ -782,8 +782,6 @@ public class JniInchiWrapper {
 
     private native int LibInchiGetStereoParity(final int stIndex);
 
-    protected native static int LibInchiGetVersionMajor();
-
-    protected native static int LibInchiGetVersionMinor();
+    protected native static String LibInchiGetVersion();
 
 }

@@ -329,18 +329,10 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoPar
 
 /*
  * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetVersionMajor
- * Signature: ()I
+ * Method:    LibInchiGetVersion
+ * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersionMajor
-  (JNIEnv *, jclass);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetVersionMinor
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersionMinor
+JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersion
   (JNIEnv *, jclass);
 
 #ifdef __cplusplus

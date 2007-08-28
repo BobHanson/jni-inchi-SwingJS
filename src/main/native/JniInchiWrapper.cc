@@ -23,8 +23,7 @@
 #include "net_sf_jniinchi_JniInchiWrapper.h"
 #include <inchi_api.h>
 
-#define NATIVE_LIB_VERSION_MAJOR 1
-#define NATIVE_LIB_VERSION_MINOR 4
+#define NATIVE_LIB_VERSION "1.5"
 
 using namespace std;
 
@@ -653,13 +652,8 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoPar
   }
 
 
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersionMajor
+JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersion
   (JNIEnv *env, jclass) {
-      return NATIVE_LIB_VERSION_MAJOR;
-  }
-
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersionMinor
-  (JNIEnv *env, jclass) {
-      return NATIVE_LIB_VERSION_MINOR;
+      return env->NewStringUTF(NATIVE_LIB_VERSION);
   }
 
