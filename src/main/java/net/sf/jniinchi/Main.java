@@ -53,7 +53,6 @@ public class Main {
     public static void runChecks() throws JniInchiException {
         System.out.println("Loading native code");
         System.out.println();
-        JniInchiNativeCodeLoader.setDebug(true);
         JniInchiNativeCodeLoader.getLoader();
 
         try {

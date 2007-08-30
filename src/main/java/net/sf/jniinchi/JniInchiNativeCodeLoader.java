@@ -29,8 +29,6 @@ import net.sf.jnati.JnatiConstants.PLATFORM;
 
 class JniInchiNativeCodeLoader extends NativeLibraryLoader {
 
-    private static boolean DEBUG = false;
-
     private static final String CURRENT_NATIVE_VERSION = "1.5";
 
     /**
@@ -71,15 +69,6 @@ class JniInchiNativeCodeLoader extends NativeLibraryLoader {
     }
 
     /**
-     * Sets debug mode.
-     *
-     * @param debug
-     */
-    public static void setDebug(boolean debug) {
-        DEBUG = debug;
-    }
-
-    /**
      * Constructor. Sets/detects properties.
      */
     private JniInchiNativeCodeLoader() throws NativeCodeException, IOException {
@@ -92,7 +81,7 @@ class JniInchiNativeCodeLoader extends NativeLibraryLoader {
      * @throws LoadNativeLibraryException
      */
     @Override
-    protected void loadLibraries(ARCHITECTURE arch, PLATFORM os, String path) throws NativeCodeException {
+    protected void loadLibraries(ARCHITECTURE arch, PLATFORM os, File path) throws NativeCodeException {
 
         int i;
         if (PLATFORM.WINDOWS == os) {
@@ -103,66 +92,39 @@ class JniInchiNativeCodeLoader extends NativeLibraryLoader {
             throw new NativeCodeException("Unsupported OS: " + os.name());
         }
         
-        File jniFile;
+        String filename;
         if (PLATFORM.WINDOWS == os) {
-            jniFile = new File(path, JNI_LIB_PREFIX + DOT + CURRENT_NATIVE_VERSION + DOT + JNI_LIB_SUFFIX[i]);
+            filename = JNI_LIB_PREFIX + DOT + CURRENT_NATIVE_VERSION + DOT + JNI_LIB_SUFFIX[i];
         } else {
-            jniFile = new File(path, JNI_LIB_PREFIX + DOT + JNI_LIB_SUFFIX[i] + DOT + CURRENT_NATIVE_VERSION);
+            filename = JNI_LIB_PREFIX + DOT + JNI_LIB_SUFFIX[i] + DOT + CURRENT_NATIVE_VERSION;
         }
-
+        File jniFile = new File(path, filename);
+        
         // Load JNI InChI native code
         try {
-            log("Loading JNI library");
+            logger.debug("Loading library: " + jniFile.getAbsolutePath());
             System.load(jniFile.getAbsolutePath());
-        } catch (UnsatisfiedLinkError ule) {
-            die("Error loading JNI InChI library: " + ule.getMessage());
+        } catch (UnsatisfiedLinkError e) {
+        	logger.error("Error loading JNI InChI library", e);
+        	throw new NativeCodeException("Unable to load JNI InChI library", e);
         }
 
         // Check version match
+        String nativeVersion;
         try {
-            log("Checking correct version is loaded");
-            String nativeVersion = JniInchiWrapper.LibInchiGetVersion();
-
-            if (!CURRENT_NATIVE_VERSION.equals(nativeVersion)) {
-                die("Native code is version " + nativeVersion + "; expected "
-                        + CURRENT_NATIVE_VERSION);
-
-            }
-        } catch (UnsatisfiedLinkError ule) {
-            die("Error getting native code version - cannot find native method. "
-                    + ule.getMessage());
+        	nativeVersion = JniInchiWrapper.LibInchiGetVersion();
+        } catch (UnsatisfiedLinkError e) {
+        	logger.error("Unable to get native code version", e);
+        	throw new NativeCodeException("Unable to check JNI InChI native code version", e);
         }
+        if (!CURRENT_NATIVE_VERSION.equals(nativeVersion)) {
+        	logger.error("Native code version mismatch; expected " + CURRENT_NATIVE_VERSION + ", found " + nativeVersion);
+            throw new NativeCodeException("JNI InChI native code version mismatch: expected "
+                    + CURRENT_NATIVE_VERSION + ", found " + nativeVersion);
 
-        log("Native code loaded");
-    }
-
-    /**
-     * Print message, if in debug mode.
-     *
-     * @param message
-     */
-    private void log(final String message) {
-        if (DEBUG)
-            System.out.println(message);
-    }
-
-    private void die(final String message) throws NativeCodeException {
-
-        System.err.println();
-        System.err
-                .println("JNI InChI has failed to load the native libraries required.");
-        System.err.println();
-        System.err
-                .println("The most common problems are either the native library files being placed in");
-        System.err
-                .println("locations that JNI InChI does not know to search, or needing recompiling for");
-        System.err.println("your system.");
-        // 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-        System.err.println();
-        System.err.println("ERROR MESSAGE: " + message);
-        System.err.println();
-        throw new NativeCodeException(
-                "Failed to load native code. See STDERR for details.");
+        }
+        logger.debug("Native code version found: " + nativeVersion);
+        logger.info("Native code loaded");
     }
 
 }

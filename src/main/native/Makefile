@@ -10,7 +10,6 @@ OBJDIR = $(TARGET_DIR)/o
 JNI_OBJDIR = $(OBJDIR)
 INCHI_OBJDIR = $(OBJDIR)/inchi
 
-CLASSES = JniInchiWrapper.cpp
 JNI_OBJECTS = $(OBJDIR)/JniInchiWrapper.o
 JNI_HEADERS = net_sf_jniinchi_JniInchiWrapper.h
 
