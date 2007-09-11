@@ -57,6 +57,8 @@ char * optionString;
 char * szMessage;
 char * szLog;
 
+char * inchiKey = new char[26];
+
 
 /**
  * Start new InChI library data record.  See <tt>inchi_api.h</tt> for details.
@@ -657,3 +659,37 @@ JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersio
       return env->NewStringUTF(NATIVE_LIB_VERSION);
   }
 
+
+
+
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGenerateInchiKey
+  (JNIEnv *env, jobject, jstring inchi) {
+
+      // Get inchi string
+      // int len = env->GetStringLength(inchi);
+      const char *inchiString = env->GetStringUTFChars(inchi, 0);
+      int ret = GetINCHIKeyFromINCHI(inchiString, inchiKey);
+      env->ReleaseStringUTFChars(inchi, inchiString);
+
+      return ret;
+  }
+
+
+JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetInchiKey
+  (JNIEnv *env, jobject) {
+
+      return env->NewStringUTF(inchiKey);
+  }
+  
+ 
+ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiCheckInchiKey
+  (JNIEnv *env, jobject, jstring key) {
+
+      // Get inchi string
+      const char *keyString = env->GetStringUTFChars(key, 0);
+      int ret = CheckINCHIKey(keyString);
+      env->ReleaseStringUTFChars(key, keyString);
+
+      return ret;
+  }
+ 

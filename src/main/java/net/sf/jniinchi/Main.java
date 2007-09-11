@@ -19,6 +19,11 @@
  */
 package net.sf.jniinchi;
 
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+
 /**
  * Simple test class, for debugging purposes.
  * @author sea36
@@ -100,6 +105,18 @@ public class Main {
         System.out.println();
         System.out.println("** JniInchi debugger **");
         System.out.println();
+        
+        // Set up logging
+		Logger root = Logger.getRootLogger();
+		root.setLevel(Level.ALL);
+		root.removeAllAppenders();
+		
+		PatternLayout layout = new PatternLayout("%-5p %c - %m%n");
+		
+		// Create console appender
+		ConsoleAppender aconn = new ConsoleAppender(layout, ConsoleAppender.SYSTEM_ERR);
+		aconn.setThreshold(Level.ALL);
+		root.addAppender(aconn);
 
         runChecks();
     }

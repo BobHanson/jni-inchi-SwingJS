@@ -1687,6 +1687,66 @@ public class TestJniInchiWrapper {
                 "InChI Stereo0D: - [H,C,C,H] Type::DOUBLEBOND // Parity:ODD",
                 outputZ.getStereo0D(0).getDebugString());
     };
+    
+    
+    /**
+     * Tests InchiKey generation. (Example from InChI 1.02-beta release notes).
+     * @throws JniInchiException 
+     */
+    @Test
+    public void testGetInchiKeyForCafeine() throws JniInchiException {
+    	String inchi = "InChI=1/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
+    	JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
+    	Assert.assertEquals(INCHI_KEY.OK, output.getReturnStatus());
+    	Assert.assertEquals("RYYVLZVUVIJVGH-UHFFFAOYAW", output.getKey());
+	}
+    
+    @Test
+    public void testCheckInchiKeyValid() throws JniInchiException {
+    	String key = "RYYVLZVUVIJVGH-UHFFFAOYAW";
+    	INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
+    	Assert.assertEquals(INCHI_KEY_STATUS.VALID, status);
+    }
+    
+    @Test
+    public void testCheckInchiKeyInvalidLength() throws JniInchiException {
+    	String key1 = "RYYVLZVUVIJVGH-UHFFFAOYA";
+    	INCHI_KEY_STATUS status1 = JniInchiWrapper.checkInChIKey(key1);
+    	Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LENGTH, status1);
+    	
+    	String key2 = "RYYVLZVUVIJVGH-UHFFFAOYAWX";
+    	INCHI_KEY_STATUS status2 = JniInchiWrapper.checkInChIKey(key2);
+    	Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LENGTH, status2);
+    }
+    
+    @Test
+    public void testCheckInchiKeyInvalidLayout() throws JniInchiException {
+    	String key = "RYYVLZVUVIJVGHXUHFFFAOYAW";
+    	INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
+    	Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LAYOUT, status);
+    }
+    
+    @Test
+    public void testCheckInchiKeyInvalidChecksum() throws JniInchiException {
+    	String key = "RYYVLZVUVIJVGH-UHFFFAOYAA";
+    	INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
+    	Assert.assertEquals(INCHI_KEY_STATUS.INVALID_CHECKSUM, status);
+    }
+    
+    /* Option doesn't work yet
+    @Test
+    @Ignore
+    public void testGenerateInchiKeyViaOptions() throws JniInchiException {
+    	JniInchiInput input = getLAlanine3D("-key");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+//        Assert.assertEquals(null, output.getInchi());
+//        Assert.assertEquals(null, output.getAuxInfo());
+//        Assert.assertEquals(null, output.getMessage());
+//        Assert.assertEquals(null, output.getLog());
+    }
+    */
+    
 
     /**
      * Tests thread safety - starts ten threads, and sets them generating InChIs

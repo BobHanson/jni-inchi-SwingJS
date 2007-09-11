@@ -8,32 +8,26 @@ CODE_VERSION = 1.5
 TARGET_DIR = ../../../target/native
 OBJDIR = $(TARGET_DIR)/o
 JNI_OBJDIR = $(OBJDIR)
-INCHI_OBJDIR = $(OBJDIR)/inchi
+INCHI_OBJDIR = $(OBJDIR)/inchi-1.02-beta
 
+INCHI_SRC_DIR = inchi-1.02-beta
 JNI_OBJECTS = $(OBJDIR)/JniInchiWrapper.o
 JNI_HEADERS = net_sf_jniinchi_JniInchiWrapper.h
 
 JAVA_CLASS = net.sf.jniinchi.JniInchiWrapper
 JAVA_BUILD_DIR = ../../../target/classes
 
-_INCHI_LIB_OBJS = ichican2.o       ichicano.o \
-                 ichicans.o       ichiisot.o \
-                 ichilnct.o       ichimak2.o \
-                 ichimake.o       ichimap1.o \
-                 ichimap2.o       ichimap4.o \
-                 ichinorm.o       ichiparm.o \
-                 ichiprt1.o       ichiprt2.o \
-                 ichiprt3.o       ichiqueu.o \
-                 ichiring.o       ichisort.o \
-                 ichister.o       ichitaut.o \
-                 ichi_bns.o       inchi_dll.o \
-                 ichiread.o       ichirvr1.o \
-                 ichirvr2.o       ichirvr3.o \
-                 ichirvr4.o       ichirvr5.o \
-                 ichirvr6.o       ichirvr7.o \
-                 inchi_dll_main.o runichi.o  \
-                 strutil.o        util.o
-INCHI_OBJECTS = $(addprefix $(OBJDIR)/inchi/,$(_INCHI_LIB_OBJS))
+_INCHI_LIB_OBJS = ichican2.o ichicano.o ichicans.o ichiisot.o \
+                  ichilnct.o ichimak2.o ichimake.o ichimap1.o \
+                  ichimap2.o ichimap4.o ichinorm.o ichiparm.o \
+                  ichiprt1.o ichiprt2.o ichiprt3.o ichiqueu.o \
+                  ichiread.o ichiring.o ichirvr1.o ichirvr2.o \
+                  ichirvr3.o ichirvr4.o ichirvr5.o ichirvr6.o \
+                  ichirvr7.o ichisort.o ichister.o ichitaut.o \
+                  ichi_bns.o ikey_base26.o ikey_dll.o inchi_dll.o \
+                  inchi_dll_a.o inchi_dll_a2.o inchi_dll_main.o \
+                  runichi.o sha2.o strutil.o util.o
+INCHI_OBJECTS = $(addprefix $(OBJDIR)/$(INCHI_SRC_DIR)/,$(_INCHI_LIB_OBJS))
 
 # classpath for javah
 JAVAH_CLASSPATH = $(JAVA_BUILD_DIR)
@@ -45,7 +39,7 @@ JAVAH_CMD = $(JAVAH) $(JAVAH_FLAGS) $(OUTPUT_OPTION)
 JAVA_CLASS_FILE = $(addsuffix .class, $(subst .,/,$(JAVA_CLASS)))
 
 # Preprocessor and compiler flags
-CXXFLAGS = -I. -Iinchi -I"${JAVA_HOME}/include"
+CXXFLAGS = -I. -I$(INCHI_SRC_DIR) -I"${JAVA_HOME}/include"
 CFLAGS = -Os
 
 
@@ -104,15 +98,15 @@ clean:
 	$(RM) $(JNI_HEADERS)
 	$(RM) $(JNI_OBJECTS)
 	$(RM) $(INCHI_OBJECTS)
-	rmdir $(OBJDIR)/inchi
+	rmdir $(INCHI_OBJDIR)
 	rmdir $(OBJDIR)
 
 $(TARGET): $(JNI_OBJECTS) $(INCHI_OBJECTS)
 	$(LINK.cpp) $(JNI_OBJECTS) $(INCHI_OBJECTS) $(LDFLAGS) $(LDLIBS) -o $(TARGET)
 
 
-$(OBJDIR)/inchi/%.o: $(INCHI_OBJDIR)
-	$(CC) $(CFLAGS) -c -o $@ inchi/$*.c
+$(OBJDIR)/$(INCHI_SRC_DIR)/%.o: $(INCHI_OBJDIR)
+	$(CC) $(CFLAGS) -c -o $@ $(INCHI_SRC_DIR)/$*.c
 
 $(OBJDIR)/%.o: $(JNI_HEADERS) $(JNI_OBJDIR)
 	-@ echo compiling $@

@@ -46,7 +46,7 @@ public class INCHI_RET {
     /**
      * List of return types.
      */
-    private static List list = new ArrayList(18);
+    private static List list = new ArrayList(8);
     // ---
 
 

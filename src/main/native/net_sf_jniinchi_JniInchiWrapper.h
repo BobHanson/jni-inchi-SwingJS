@@ -335,6 +335,30 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoPar
 JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersion
   (JNIEnv *, jclass);
 
+/*
+ * Class:     net_sf_jniinchi_JniInchiWrapper
+ * Method:    LibInchiGenerateInchiKey
+ * Signature: (Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGenerateInchiKey
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     net_sf_jniinchi_JniInchiWrapper
+ * Method:    LibInchiGetInchiKey
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetInchiKey
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     net_sf_jniinchi_JniInchiWrapper
+ * Method:    LibInchiCheckInchiKey
+ * Signature: (Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiCheckInchiKey
+  (JNIEnv *, jobject, jstring);
+
 #ifdef __cplusplus
 }
 #endif

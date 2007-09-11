@@ -32,7 +32,7 @@ public class INCHI_OPTION {
     /**
      * List of options.
      */
-    private static Map lcMap = new HashMap(21);
+    private static Map lcMap = new HashMap(22);
     // ---
 
 
@@ -142,8 +142,11 @@ public class INCHI_OPTION {
      */
     public static final INCHI_OPTION SAsXYZ = new INCHI_OPTION("SPXYZ");
 
-
-
+    /* -- DOESN'T WORK
+     * Generate InChIKey
+     * /
+    public static final INCHI_OPTION Key = new INCHI_OPTION("Key");
+	*/
 
     /**
      * Name.

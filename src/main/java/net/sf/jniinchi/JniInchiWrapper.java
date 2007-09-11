@@ -528,6 +528,58 @@ public class JniInchiWrapper {
         }
     }
 
+    
+    public static JniInchiOutputKey getInChIKey(final String inchi) throws JniInchiException {
+    	JniInchiWrapper wrapper = getWrapper();
+        try {
+            wrapper.getLock();
+        } catch (TimeoutException ex) {
+            throw new JniInchiException(ex);
+        }
+        
+        int ret = wrapper.LibInchiGenerateInchiKey(inchi);
+        String key = wrapper.LibInchiGetInchiKey();
+        
+        wrapper.releaseLock();
+        
+        INCHI_KEY retStatus;
+        switch (ret) {
+        	case 0:	retStatus = INCHI_KEY.OK;	break;
+        	case 1: retStatus = INCHI_KEY.UNKNOWN_ERROR;	break;
+        	case 2: retStatus = INCHI_KEY.EMPTY_INPUT;	break;
+        	case 3: retStatus = INCHI_KEY.NOT_INCHI_INPUT;	break;
+        	case 4: retStatus = INCHI_KEY.NOT_ENOUGH_MEMORY;	break;
+        	case 5: retStatus = INCHI_KEY.ERROR_IN_FLAG_CHAR;	break;
+        	default: throw new JniInchiException("Unknown return status: " + ret);
+        }
+        
+        return new JniInchiOutputKey(retStatus, key);
+    }
+    
+    
+    public static INCHI_KEY_STATUS checkInChIKey(final String key) throws JniInchiException {
+    	JniInchiWrapper wrapper = getWrapper();
+        try {
+            wrapper.getLock();
+        } catch (TimeoutException ex) {
+            throw new JniInchiException(ex);
+        }
+        
+        int ret = wrapper.LibInchiCheckInchiKey(key);
+        INCHI_KEY_STATUS retStatus;
+        switch(ret) {
+        	case 0:	retStatus = INCHI_KEY_STATUS.VALID; break;
+        	case 1:	retStatus = INCHI_KEY_STATUS.INVALID_LENGTH; break;
+        	case 2: retStatus = INCHI_KEY_STATUS.INVALID_LAYOUT; break;
+        	case 3: retStatus = INCHI_KEY_STATUS.INVALID_CHECKSUM; break;
+        	default: throw new JniInchiException("Unknown return status: " + ret);
+        }
+        
+        wrapper.releaseLock();
+        
+        return retStatus;
+    }
+    
 
     private boolean locked = false;
 
@@ -783,5 +835,10 @@ public class JniInchiWrapper {
     private native int LibInchiGetStereoParity(final int stIndex);
 
     protected native static String LibInchiGetVersion();
+    
+    private native int LibInchiGenerateInchiKey(final String inchi);
+    
+    private native String LibInchiGetInchiKey();
 
+    private native int LibInchiCheckInchiKey(final String key);
 }
