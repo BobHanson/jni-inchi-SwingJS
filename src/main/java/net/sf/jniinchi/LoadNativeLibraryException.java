@@ -19,6 +19,8 @@
  */
 package net.sf.jniinchi;
 
+import net.sf.jnati.NativeCodeException;
+
 public class LoadNativeLibraryException extends JniInchiException {
 
 private static final long serialVersionUID = 2L;
@@ -38,5 +40,9 @@ private static final long serialVersionUID = 2L;
     public LoadNativeLibraryException(final String message) {
         super(message);
     }
+
+	public LoadNativeLibraryException(Throwable ex) {
+		super(ex);
+	}
 
 }

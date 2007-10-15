@@ -48,7 +48,7 @@ public class JniInchiException extends Exception {
      *
      * @param ex    the cause.
      */
-    public JniInchiException(final Exception ex) {
+    public JniInchiException(final Throwable ex) {
         super(ex);
     }
 }
