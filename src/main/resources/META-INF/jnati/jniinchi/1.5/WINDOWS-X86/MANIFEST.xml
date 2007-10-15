@@ -1,3 +1,4 @@
 <manifest id="jniinchi" version="1.5" platform="WINDOWS" architecture="X86">
-  <file>libJniInchi.1.5.dll</file>
+  <file library="true">libJniInchi.1.5-WINDOWS-X86.dll</file>
 </manifest>
+

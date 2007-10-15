@@ -528,7 +528,7 @@ public class JniInchiWrapper {
         }
     }
 
-    
+
     public static JniInchiOutputKey getInChIKey(final String inchi) throws JniInchiException {
     	JniInchiWrapper wrapper = getWrapper();
         try {
@@ -536,12 +536,12 @@ public class JniInchiWrapper {
         } catch (TimeoutException ex) {
             throw new JniInchiException(ex);
         }
-        
+
         int ret = wrapper.LibInchiGenerateInchiKey(inchi);
         String key = wrapper.LibInchiGetInchiKey();
-        
+
         wrapper.releaseLock();
-        
+
         INCHI_KEY retStatus;
         switch (ret) {
         	case 0:	retStatus = INCHI_KEY.OK;	break;
@@ -552,11 +552,11 @@ public class JniInchiWrapper {
         	case 5: retStatus = INCHI_KEY.ERROR_IN_FLAG_CHAR;	break;
         	default: throw new JniInchiException("Unknown return status: " + ret);
         }
-        
+
         return new JniInchiOutputKey(retStatus, key);
     }
-    
-    
+
+
     public static INCHI_KEY_STATUS checkInChIKey(final String key) throws JniInchiException {
     	JniInchiWrapper wrapper = getWrapper();
         try {
@@ -564,7 +564,7 @@ public class JniInchiWrapper {
         } catch (TimeoutException ex) {
             throw new JniInchiException(ex);
         }
-        
+
         int ret = wrapper.LibInchiCheckInchiKey(key);
         INCHI_KEY_STATUS retStatus;
         switch(ret) {
@@ -574,12 +574,12 @@ public class JniInchiWrapper {
         	case 3: retStatus = INCHI_KEY_STATUS.INVALID_CHECKSUM; break;
         	default: throw new JniInchiException("Unknown return status: " + ret);
         }
-        
+
         wrapper.releaseLock();
-        
+
         return retStatus;
     }
-    
+
 
     private boolean locked = false;
 
@@ -835,9 +835,9 @@ public class JniInchiWrapper {
     private native int LibInchiGetStereoParity(final int stIndex);
 
     protected native static String LibInchiGetVersion();
-    
+
     private native int LibInchiGenerateInchiKey(final String inchi);
-    
+
     private native String LibInchiGetInchiKey();
 
     private native int LibInchiCheckInchiKey(final String key);

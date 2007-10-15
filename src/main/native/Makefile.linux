@@ -1,13 +1,13 @@
 #
-# Root makefile for JNI-InChI
+# Makefile for JNI-InChI - Linux Settings
 #
 # Author: Sam Adams <sea36@cam.ac.uk>
 #         Unilever Centre for Molecular Science Informatics
 #         University Of Cambrige, UK
 #
-all:
-	cd src/main/native && $(MAKE) all
 
-clean:
-	cd src/main/native && $(MAKE) clean
+CXXFLAGS = -I$(JAVA_HOME)/include/linux -fPIC
 
+LIB_PREFIX = lib
+LIB_SUFFIX = .so
+LIB_OS = LINUX
