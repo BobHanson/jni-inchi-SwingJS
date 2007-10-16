@@ -19,13 +19,14 @@
  */
 package net.sf.jniinchi;
 
-import java.io.IOException;
-
 import net.sf.jnati.NativeCodeException;
 import net.sf.jnati.NativeLibraryLoader;
 
 class JniInchiNativeCodeLoader extends NativeLibraryLoader {
 
+	/**
+	 * Expected version of the native code.
+	 */
     private static final String NATIVE_CODE_VERSION = "1.5";
 
     /**
@@ -34,8 +35,7 @@ class JniInchiNativeCodeLoader extends NativeLibraryLoader {
     private static JniInchiNativeCodeLoader loader;
 
     /**
-     * Singleton getter.
-     *
+     * Instance getter, for singleton pattern.
      * @return
      * @throws LoadNativeLibraryException
      */
@@ -46,13 +46,15 @@ class JniInchiNativeCodeLoader extends NativeLibraryLoader {
     	return loader;
     }
 
+    /**
+     * Instance builder, for singleton pattern.
+     * @throws LoadNativeLibraryException
+     */
     private static synchronized void createLoader() throws LoadNativeLibraryException {
         if (loader == null) {
             try {
                 loader = new JniInchiNativeCodeLoader();
             } catch (NativeCodeException ex) {
-                throw new LoadNativeLibraryException(ex);
-            } catch (IOException ex) {
                 throw new LoadNativeLibraryException(ex);
             }
         }
@@ -61,9 +63,16 @@ class JniInchiNativeCodeLoader extends NativeLibraryLoader {
     /**
      * Constructor. Sets/detects properties.
      */
-    private JniInchiNativeCodeLoader() throws NativeCodeException, IOException {
-        super("jniinchi", NATIVE_CODE_VERSION);
+    private JniInchiNativeCodeLoader() throws NativeCodeException {
+        // Super checks/deploys native code, loads librarys into memory
+    	// Throws NativeCodeException if error occurs
+    	super("jniinchi", NATIVE_CODE_VERSION);
+
+    	// Check expected version of native code loaded
+    	// Throws NativeCodeException if unable to make call / wrong version
         checkNativeCodeVersion();
+
+        // Everything is set up!
     }
 
     /**
@@ -72,13 +81,15 @@ class JniInchiNativeCodeLoader extends NativeLibraryLoader {
      */
     private void checkNativeCodeVersion() throws NativeCodeException {
 
+    	logger.trace("Checking native code version");
+
     	// Get native code version string
     	String nativeVersion;
         try {
         	nativeVersion = JniInchiWrapper.LibInchiGetVersion();
         } catch (UnsatisfiedLinkError e) {
         	logger.error("Unable to get native code version", e);
-        	throw new NativeCodeException("Unable to check JNI InChI native code version", e);
+        	throw new NativeCodeException("Unable get native code version", e);
         }
 
         // Compare to expected version
@@ -87,8 +98,8 @@ class JniInchiNativeCodeLoader extends NativeLibraryLoader {
             throw new NativeCodeException("JNI InChI native code version mismatch: expected "
                     + NATIVE_CODE_VERSION + ", found " + nativeVersion);
         }
-        logger.debug("Native code version found: " + nativeVersion);
 
+        logger.trace("Expected native code version found: " + nativeVersion);
     }
 
 }

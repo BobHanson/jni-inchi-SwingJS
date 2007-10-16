@@ -19,7 +19,6 @@
  */
 package net.sf.jniinchi;
 
-import net.sf.jnati.NativeCodeException;
 
 public class LoadNativeLibraryException extends JniInchiException {
 
