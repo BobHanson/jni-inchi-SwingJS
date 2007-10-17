@@ -32,6 +32,9 @@ endif
 ifeq ($(MNAME), a64)
 LIB_ARCH = AMD64
 endif
+ifeq ($(MNAME), x86_64) # eg srcf
+LIB_ARCH = AMD64
+endif
 
 ifndef LIB_ARCH
 f := $(error Architecture $(MNAME) $(LIB_ARCH) not supported)
@@ -120,20 +123,18 @@ copies: resourcecopy buildcopy
 resourcecopy: build
 	-@ echo Copying to $(RESOURCE_LIB_PATH)/$(TARGET_FILE)
 	mkdir -p $(RESOURCE_LIB_PATH)
-	-@ echo -e "\
-<manifest id=\"jniinchi\" version=\"$(VERSION)\" platform=\"$(LIB_OS)\" architecture=\"$(LIB_ARCH)\">\n\
-  <file library=\"true\">$(TARGET_FILE)</file>\n\
-</manifest>\n" > $(RESOURCE_LIB_PATH)/MANIFEST.xml
+	-@ echo "<manifest id=\"jniinchi\" version=\"$(VERSION)\" platform=\"$(LIB_OS)\" architecture=\"$(LIB_ARCH)\">" > $(RESOURCE_LIB_PATH)/MANIFEST.xml
+	-@ echo "  <file library=\"true\">$(TARGET_FILE)</file>" >> $(RESOURCE_LIB_PATH)/MANIFEST.xml
+	-@ echo "</manifest>" >> $(RESOURCE_LIB_PATH)/MANIFEST.xml
 	-@ cp $(TARGET) $(RESOURCE_LIB_PATH)/$(TARGET_FILE)
 
 .PHONY: buildcopy
 buildcopy: build
 	-@ echo Copying to $(TARGET_LIB_PATH)/$(TARGET_FILE)
 	mkdir -p $(TARGET_LIB_PATH)
-	-@ echo -e "\
-<manifest id=\"jniinchi\" version=\"$(VERSION)\" platform=\"$(LIB_OS)\" architecture=\"$(LIB_ARCH)\">\n\
-  <file  library=\"true\">$(TARGET_FILE)</file>\n\
-</manifest>\n" > $(TARGET_LIB_PATH)/MANIFEST.xml
+	-@ echo "<manifest id=\"jniinchi\" version=\"$(VERSION)\" platform=\"$(LIB_OS)\" architecture=\"$(LIB_ARCH)\">" > $(RESOURCE_LIB_PATH)/MANIFEST.xml
+	-@ echo "  <file library=\"true\">$(TARGET_FILE)</file>" >> $(RESOURCE_LIB_PATH)/MANIFEST.xml
+	-@ echo "</manifest>" >> $(RESOURCE_LIB_PATH)/MANIFEST.xml
 	-@ cp $(TARGET) $(TARGET_LIB_PATH)/$(TARGET_FILE)
 
 .PHONY: build

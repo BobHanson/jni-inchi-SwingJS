@@ -6,6 +6,7 @@
 #         University Of Cambrige, UK
 #
 
+CFLAGS = -fPIC
 CXXFLAGS = -I$(JAVA_HOME)/include/linux -fPIC
 
 LIB_PREFIX = lib
