@@ -9,6 +9,6 @@
 CXXFLAGS = -I"$(JAVA_HOME)/include/win32"
 LDFLAGS += -Wl,--add-stdcall-alias
 
-LIB_PREFIX = 
+LIB_PREFIX = lib 
 LIB_SUFFIX = .dll
 LIB_OS = WINDOWS
