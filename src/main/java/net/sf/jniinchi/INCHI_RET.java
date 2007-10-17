@@ -120,4 +120,21 @@ public class INCHI_RET {
     protected static List getList() {
         return list;
     }
+
+	public static INCHI_RET getValue(int ret) {
+        INCHI_RET retStatus;
+        switch(ret) {
+        	case -2: retStatus = INCHI_RET.SKIP; break;
+        	case -1: retStatus = INCHI_RET.EOF; break;
+        	case 0:  retStatus = INCHI_RET.OKAY; break;
+        	case 1:  retStatus = INCHI_RET.WARNING; break;
+        	case 2:  retStatus = INCHI_RET.ERROR; break;
+        	case 3:  retStatus = INCHI_RET.FATAL; break;
+        	case 4:  retStatus = INCHI_RET.UNKNOWN; break;
+        	case 5:  retStatus = INCHI_RET.BUSY; break;
+        	default:
+        		retStatus = null;
+        }
+        return retStatus;
+	}
 }

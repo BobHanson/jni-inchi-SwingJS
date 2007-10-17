@@ -81,4 +81,18 @@ public class INCHI_KEY_STATUS {
     protected static List getList() {
         return list;
     }
+
+    public static INCHI_KEY_STATUS getValue(int value) {
+    	INCHI_KEY_STATUS keyStatus;
+    	switch (value) {
+    		case 0: keyStatus = INCHI_KEY_STATUS.VALID; break;
+    		case 1: keyStatus = INCHI_KEY_STATUS.INVALID_LENGTH; break;
+    		case 2: keyStatus = INCHI_KEY_STATUS.INVALID_LAYOUT; break;
+    		case 3: keyStatus = INCHI_KEY_STATUS.INVALID_CHECKSUM; break;
+    		default:
+    			keyStatus = null;
+    	}
+    	return keyStatus;
+    }
+
 }

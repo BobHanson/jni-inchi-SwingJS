@@ -71,4 +71,17 @@ public class INCHI_BOND_TYPE {
     public String toString() {
         return name;
     }
+
+	public static INCHI_BOND_TYPE getValue(int btype) {
+		INCHI_BOND_TYPE type;
+		switch (btype) {
+			case 1: type = INCHI_BOND_TYPE.SINGLE; break;
+			case 2: type = INCHI_BOND_TYPE.DOUBLE; break;
+			case 3: type = INCHI_BOND_TYPE.TRIPLE; break;
+			case 4: type = INCHI_BOND_TYPE.ALTERN; break;
+			default:
+				type = null;
+        }
+        return type;
+	}
 }

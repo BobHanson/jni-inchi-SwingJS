@@ -90,4 +90,19 @@ public class INCHI_KEY {
     protected static List getList() {
         return list;
     }
+
+	public static INCHI_KEY getValue(int ret) {
+		INCHI_KEY retStatus;
+        switch (ret) {
+        	case 0:	retStatus = INCHI_KEY.OK;	break;
+        	case 1: retStatus = INCHI_KEY.UNKNOWN_ERROR;	break;
+        	case 2: retStatus = INCHI_KEY.EMPTY_INPUT;	break;
+        	case 3: retStatus = INCHI_KEY.NOT_INCHI_INPUT;	break;
+        	case 4: retStatus = INCHI_KEY.NOT_ENOUGH_MEMORY;	break;
+        	case 5: retStatus = INCHI_KEY.ERROR_IN_FLAG_CHAR;	break;
+        	default:
+        		retStatus = null;
+        }
+        return retStatus;
+	}
 }

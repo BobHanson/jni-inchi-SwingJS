@@ -76,4 +76,18 @@ public class INCHI_PARITY {
     public String toString() {
         return name;
     }
+
+	public static INCHI_PARITY getValue(int parity) {
+		INCHI_PARITY stereoParity;
+        switch (parity) {
+	    	case 0:	stereoParity = INCHI_PARITY.NONE; break;
+	    	case 1:	stereoParity = INCHI_PARITY.ODD; break;
+	    	case 2:	stereoParity = INCHI_PARITY.EVEN; break;
+	    	case 3:	stereoParity = INCHI_PARITY.UNKNOWN; break;
+	    	case 4:	stereoParity = INCHI_PARITY.UNDEFINED; break;
+	    	default:
+	    		stereoParity = null;
+        }
+        return stereoParity;
+	}
 }

@@ -247,19 +247,16 @@ public class JniInchiWrapper {
             }
 
             // Call inchi library
-            int retVal = wrapper.LibInchiGenerateInchi();
+            int ret = wrapper.LibInchiGenerateInchi();
 
             // Fetch results
             JniInchiOutput output = new JniInchiOutput();
 
-            List retCodes = INCHI_RET.getList();
-            for (int i = 0; i < retCodes.size(); i++) {
-                INCHI_RET ret = (INCHI_RET) retCodes.get(i);
-                if (retVal == ret.getIndx()) {
-                    output.setRetStatus(ret);
-                    break;
-                }
+            INCHI_RET retStatus = INCHI_RET.getValue(ret);
+            if (retStatus == null) {
+            	throw new JniInchiException("Unrecognised return status: " + ret);
             }
+            output.setRetStatus(retStatus);
 
             output.setInchi(wrapper.LibInchiGetInchi());
             output.setAuxInfo(wrapper.LibInchiGetAuxInfo());
@@ -293,19 +290,16 @@ public class JniInchiWrapper {
             String inchiString = input.getInchi();
 
             // Call inchi library
-            int retVal = wrapper.LibInchiGenerateInchiFromInchi(inchiString, options);
+            int ret = wrapper.LibInchiGenerateInchiFromInchi(inchiString, options);
 
             // Fetch results
             JniInchiOutput output = new JniInchiOutput();
 
-            List retCodes = INCHI_RET.getList();
-            for (int i = 0; i < retCodes.size(); i++) {
-                INCHI_RET ret = (INCHI_RET) retCodes.get(i);
-                if (retVal == ret.getIndx()) {
-                    output.setRetStatus(ret);
-                    break;
-                }
+            INCHI_RET retStatus = INCHI_RET.getValue(ret);
+            if (retStatus == null) {
+            	throw new JniInchiException("Unrecognised return status: " + ret);
             }
+            output.setRetStatus(retStatus);
 
             output.setInchi(wrapper.LibInchiGetInchi());
             output.setAuxInfo(wrapper.LibInchiGetAuxInfo());
@@ -392,18 +386,12 @@ public class JniInchiWrapper {
                 atom.setCharge(wrapper.LibInchiGetAtomCharge(i));
                 atom.setIsotopicMass(wrapper.LibInchiGetAtomIsotopicMass(i));
 
-                int radical = wrapper.LibInchiGetAtomRadical(i);
-                if (radical == 0) {
-                    atom.setRadical(INCHI_RADICAL.NONE);
-                } else if (radical == 1) {
-                    atom.setRadical(INCHI_RADICAL.SINGLET);
-                } else if (radical == 2) {
-                    atom.setRadical(INCHI_RADICAL.DOUBLET);
-                } else if (radical == 3) {
-                    atom.setRadical(INCHI_RADICAL.TRIPLET);
-                } else {
-                    throw new JniInchiException("Unknown radical state: " + radical);
+                int rad = wrapper.LibInchiGetAtomRadical(i);
+                INCHI_RADICAL radical = INCHI_RADICAL.getValue(rad);
+                if (radical == null) {
+                	throw new JniInchiException("Unknown radical state: " + rad);
                 }
+                atom.setRadical(radical);
 
                 output.addAtom(atom);
                 //atom.debug();
@@ -428,16 +416,8 @@ public class JniInchiWrapper {
                         throw new JniInchiException("Bond order mismatch: " + i + "-" + j);
                     }
                     if (bo0 > 0) {
-                        INCHI_BOND_TYPE type = null;
-                        if (bo0 == 1) {
-                            type = INCHI_BOND_TYPE.SINGLE;
-                        } else if (bo0 == 2) {
-                            type = INCHI_BOND_TYPE.DOUBLE;
-                        } else if (bo0 == 3) {
-                            type = INCHI_BOND_TYPE.TRIPLE;
-                        } else if (bo0 == 4) {
-                            type = INCHI_BOND_TYPE.ALTERN;
-                        } else {
+                        INCHI_BOND_TYPE type = INCHI_BOND_TYPE.getValue(bo0);
+                        if (type == null) {
                             throw new JniInchiException("Unknown bond type: " + bo0);
                         }
 
@@ -448,18 +428,8 @@ public class JniInchiWrapper {
                             throw new JniInchiException("Bond stereo mismatch: " + i + "-" + j);
                         }
 
-                        INCHI_BOND_STEREO stereo = null;
-                        if (bs0 == 0) {
-                            stereo = INCHI_BOND_STEREO.NONE;
-                        } else if (bs0 == 1) {
-                            stereo = INCHI_BOND_STEREO.SINGLE_1UP;
-                        } else if (bs0 == 4) {
-                            stereo = INCHI_BOND_STEREO.SINGLE_1EITHER;
-                        } else if (bs0 == 6) {
-                            stereo = INCHI_BOND_STEREO.SINGLE_1DOWN;
-                        } else if (bs0 == 3) {
-                            stereo = INCHI_BOND_STEREO.DOUBLE_EITHER;
-                        } else  {
+                        INCHI_BOND_STEREO stereo = INCHI_BOND_STEREO.getValue(bs0);
+                        if (stereo == null) {
                             throw new JniInchiException("Unknown bond stereo: " + bs0);
                         }
 
@@ -482,32 +452,14 @@ public class JniInchiWrapper {
                 int type = wrapper.LibInchiGetStereoType(i);
                 int parity = wrapper.LibInchiGetStereoParity(i);
 
-                INCHI_STEREOTYPE stereoType;
-                if (type == 0) {
-                    stereoType = INCHI_STEREOTYPE.NONE;
-                } else if (type == 1) {
-                    stereoType = INCHI_STEREOTYPE.DOUBLEBOND;
-                } else if (type == 2) {
-                    stereoType = INCHI_STEREOTYPE.TETRAHEDRAL;
-                } else if (type == 3) {
-                    stereoType = INCHI_STEREOTYPE.ALLENE;
-                } else {
-                    throw new JniInchiException("Unknown stereo0D type: " + type);
+                INCHI_STEREOTYPE stereoType = INCHI_STEREOTYPE.getValue(type);
+                if (stereoType == null) {
+                	throw new JniInchiException("Unknown stereo0D type: " + type);
                 }
 
-                INCHI_PARITY stereoParity;
-                if (parity == 0) {
-                    stereoParity = INCHI_PARITY.NONE;
-                } else if (parity == 1) {
-                    stereoParity = INCHI_PARITY.ODD;
-                } else if (parity == 2) {
-                    stereoParity = INCHI_PARITY.EVEN;
-                } else if (parity == 3) {
-                    stereoParity = INCHI_PARITY.UNKNOWN;
-                } else if (parity == 4) {
-                    stereoParity = INCHI_PARITY.UNDEFINED;
-                } else {
-                    throw new JniInchiException("Unknown stereo0D parity: " + parity);
+                INCHI_PARITY stereoParity = INCHI_PARITY.getValue(parity);
+                if (stereoParity == null) {
+                	throw new JniInchiException("Unknown stereo0D parity: " + parity);
                 }
 
                 JniInchiStereo0D stereo = new JniInchiStereo0D(
@@ -542,15 +494,9 @@ public class JniInchiWrapper {
 
         wrapper.releaseLock();
 
-        INCHI_KEY retStatus;
-        switch (ret) {
-        	case 0:	retStatus = INCHI_KEY.OK;	break;
-        	case 1: retStatus = INCHI_KEY.UNKNOWN_ERROR;	break;
-        	case 2: retStatus = INCHI_KEY.EMPTY_INPUT;	break;
-        	case 3: retStatus = INCHI_KEY.NOT_INCHI_INPUT;	break;
-        	case 4: retStatus = INCHI_KEY.NOT_ENOUGH_MEMORY;	break;
-        	case 5: retStatus = INCHI_KEY.ERROR_IN_FLAG_CHAR;	break;
-        	default: throw new JniInchiException("Unknown return status: " + ret);
+        INCHI_KEY retStatus = INCHI_KEY.getValue(ret);
+        if (retStatus == null) {
+        	new JniInchiException("Unknown return status: " + ret);
         }
 
         return new JniInchiOutputKey(retStatus, key);
@@ -566,13 +512,9 @@ public class JniInchiWrapper {
         }
 
         int ret = wrapper.LibInchiCheckInchiKey(key);
-        INCHI_KEY_STATUS retStatus;
-        switch(ret) {
-        	case 0:	retStatus = INCHI_KEY_STATUS.VALID; break;
-        	case 1:	retStatus = INCHI_KEY_STATUS.INVALID_LENGTH; break;
-        	case 2: retStatus = INCHI_KEY_STATUS.INVALID_LAYOUT; break;
-        	case 3: retStatus = INCHI_KEY_STATUS.INVALID_CHECKSUM; break;
-        	default: throw new JniInchiException("Unknown return status: " + ret);
+        INCHI_KEY_STATUS retStatus = INCHI_KEY_STATUS.getValue(ret);
+        if (retStatus == null) {
+        	throw new JniInchiException("Unknown return status: " + ret);
         }
 
         wrapper.releaseLock();

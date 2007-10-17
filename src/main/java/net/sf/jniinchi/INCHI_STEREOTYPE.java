@@ -71,4 +71,17 @@ public class INCHI_STEREOTYPE {
     public String toString() {
         return name;
     }
+
+	public static INCHI_STEREOTYPE getValue(int type) {
+		INCHI_STEREOTYPE stereoType;
+		switch (type) {
+			case 0: stereoType = INCHI_STEREOTYPE.NONE; break;
+			case 1: stereoType = INCHI_STEREOTYPE.DOUBLEBOND; break;
+			case 2: stereoType = INCHI_STEREOTYPE.TETRAHEDRAL; break;
+			case 3: stereoType = INCHI_STEREOTYPE.ALLENE; break;
+			default:
+				stereoType = null;
+		}
+		return stereoType;
+	}
 }

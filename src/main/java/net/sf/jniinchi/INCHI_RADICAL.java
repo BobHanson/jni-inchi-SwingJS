@@ -83,4 +83,17 @@ public class INCHI_RADICAL {
     public String toString() {
         return name;
     }
+
+	public static INCHI_RADICAL getValue(int rad) {
+		INCHI_RADICAL radical;
+		switch (rad) {
+			case 0: radical = INCHI_RADICAL.NONE; break;
+			case 1: radical = INCHI_RADICAL.SINGLET; break;
+			case 2: radical = INCHI_RADICAL.DOUBLET; break;
+			case 3: radical = INCHI_RADICAL.TRIPLET; break;
+			default:
+				radical = null;
+		}
+		return radical;
+	}
 }

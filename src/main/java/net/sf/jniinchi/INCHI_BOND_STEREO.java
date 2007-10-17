@@ -91,4 +91,18 @@ public class INCHI_BOND_STEREO {
     public String toString() {
         return name;
     }
+
+	public static INCHI_BOND_STEREO getValue(int bster) {
+		INCHI_BOND_STEREO stereo;
+		switch (bster) {
+			case 0: stereo = INCHI_BOND_STEREO.NONE; break;
+			case 1: stereo = INCHI_BOND_STEREO.SINGLE_1UP; break;
+			case 4: stereo = INCHI_BOND_STEREO.SINGLE_1EITHER; break;
+			case 6: stereo = INCHI_BOND_STEREO.SINGLE_1DOWN; break;
+			case 3: stereo = INCHI_BOND_STEREO.DOUBLE_EITHER; break;
+			default:
+				stereo = null;
+		}
+		return stereo;
+	}
 }
