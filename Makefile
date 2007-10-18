@@ -11,3 +11,5 @@ all:
 clean:
 	cd src/main/native && $(MAKE) clean
 
+jar:
+	cd src/main/native && $(MAKE) jar

@@ -59,12 +59,13 @@ endif
 VERSION = 1.5
 
 LIB_OS_ARCH = $(LIB_OS)-$(LIB_ARCH)
-LIB_VERSION = .$(VERSION)-$(LIB_OS_ARCH)
+LIB_VERSION = $(VERSION)-$(LIB_OS_ARCH)
 
 TARGET_PATH = ../../../target/native
-TARGET_FILE = $(LIB_PREFIX)JniInchi$(LIB_VERSION)$(LIB_SUFFIX)
+TARGET_FILE = $(LIB_PREFIX)JniInchi-$(LIB_VERSION)$(LIB_SUFFIX)
 TARGET = $(TARGET_PATH)/$(TARGET_FILE)
-
+JAR_WORKDIR = $(TARGET_PATH)/jar
+JAR = $(TARGET_PATH)/JniInchi-$(LIB_VERSION).jar
 
 OBJDIR = $(TARGET_PATH)/o
 
@@ -79,8 +80,8 @@ JAVAH = "$(JAVA_HOME)/bin/javah"
 JAVAH_FLAGS += -classpath $(JAVA_CLASSPATH)
 JAVAH_CMD = $(JAVAH) $(JAVAH_FLAGS) $(OUTPUT_OPTION)
 
-TARGET_LIB_PATH = $(JAVA_CLASSPATH)/META-INF/jnati/jniinchi/$(VERSION)/$(LIB_OS_ARCH)
-RESOURCE_LIB_PATH = ../resources/META-INF/jnati/jniinchi/$(VERSION)/$(LIB_OS_ARCH)
+RESOURCE_PATH = ../resources
+ARTIFACT_PATH = META-INF/jnati/jniinchi/$(VERSION)/$(LIB_OS_ARCH)
 
 LDFLAGS += -s -shared
 CXXFLAGS += -Os -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR)
@@ -111,31 +112,32 @@ all: copies
 .PHONY: clean
 clean:
 	$(RM) $(TARGET) $(JNI_OBJECTS) $(INCHI_OBJECTS) $(JNI_HEADER)
-	-@ if ([[ -d  $(JNI_OBJDIR) ]]); then rmdir $(JNI_OBJDIR); fi
-	-@ if ([[ -d  $(INCHI_OBJDIR) ]]); then rmdir $(INCHI_OBJDIR); fi
-	-@ if ([[ -d  $(OBJDIR) ]]); then rmdir $(OBJDIR); fi
-	
+	$(RM) -r $(JNI_OBJDIR) $(INCHI_OBJDIR) $(OBJDIR)
+
+.PHONY: jar
+jar: buildresource
+	-@ jar -cMf $(JAR) -C $(JAR_WORKDIR) META-INF
+
+.PHONY: buildresource
+buildresource: build
+	mkdir -p $(JAR_WORKDIR)/$(ARTIFACT_PATH)
+	-@ echo "<manifest id=\"jniinchi\" version=\"$(VERSION)\" platform=\"$(LIB_OS)\" architecture=\"$(LIB_ARCH)\">" > $(JAR_WORKDIR)/$(ARTIFACT_PATH)/MANIFEST.xml
+	-@ echo "  <file library=\"true\">$(TARGET_FILE)</file>" >> $(JAR_WORKDIR)/$(ARTIFACT_PATH)/MANIFEST.xml
+	-@ echo "</manifest>" >> $(JAR_WORKDIR)/$(ARTIFACT_PATH)/MANIFEST.xml
+	-@ cp $(TARGET) $(JAR_WORKDIR)/$(ARTIFACT_PATH)/$(TARGET_FILE)
 
 .PHONY: copies
 copies: resourcecopy buildcopy
 
 .PHONY: resourcecopy 
-resourcecopy: build
-	-@ echo Copying to $(RESOURCE_LIB_PATH)/$(TARGET_FILE)
-	mkdir -p $(RESOURCE_LIB_PATH)
-	-@ echo "<manifest id=\"jniinchi\" version=\"$(VERSION)\" platform=\"$(LIB_OS)\" architecture=\"$(LIB_ARCH)\">" > $(RESOURCE_LIB_PATH)/MANIFEST.xml
-	-@ echo "  <file library=\"true\">$(TARGET_FILE)</file>" >> $(RESOURCE_LIB_PATH)/MANIFEST.xml
-	-@ echo "</manifest>" >> $(RESOURCE_LIB_PATH)/MANIFEST.xml
-	-@ cp $(TARGET) $(RESOURCE_LIB_PATH)/$(TARGET_FILE)
+resourcecopy: buildresource
+	-@ echo Copying to $(RESOURCE_PATH)
+	-@ cp -r $(JAR_WORKDIR)/META-INF $(RESOURCE_PATH)
 
 .PHONY: buildcopy
-buildcopy: build
-	-@ echo Copying to $(TARGET_LIB_PATH)/$(TARGET_FILE)
-	mkdir -p $(TARGET_LIB_PATH)
-	-@ echo "<manifest id=\"jniinchi\" version=\"$(VERSION)\" platform=\"$(LIB_OS)\" architecture=\"$(LIB_ARCH)\">" > $(RESOURCE_LIB_PATH)/MANIFEST.xml
-	-@ echo "  <file library=\"true\">$(TARGET_FILE)</file>" >> $(RESOURCE_LIB_PATH)/MANIFEST.xml
-	-@ echo "</manifest>" >> $(RESOURCE_LIB_PATH)/MANIFEST.xml
-	-@ cp $(TARGET) $(TARGET_LIB_PATH)/$(TARGET_FILE)
+buildcopy: buildresource
+	-@ echo Copying to $(JAVA_CLASSPATH)
+	-@ cp -r $(JAR_WORKDIR)/META-INF $(JAVA_CLASSPATH)
 
 .PHONY: build
 build: nativedirs $(TARGET)
