@@ -666,24 +666,24 @@ public class TestJniInchiWrapper {
         JniInchiInput input = new JniInchiInput(options);
 
         // Generate atoms
+        JniInchiAtom a0 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
         JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
-        JniInchiAtom a2 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
-        JniInchiAtom a3 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "N"));
-        JniInchiAtom a4 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
+        JniInchiAtom a2 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "N"));
+        JniInchiAtom a3 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "C"));
+        JniInchiAtom a4 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "O"));
         JniInchiAtom a5 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "O"));
-        JniInchiAtom a6 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "O"));
-        JniInchiAtom a7 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "H"));
-        a3.setImplicitH(2);
-        a4.setImplicitH(3);
-        a5.setImplicitH(1);
+        JniInchiAtom a6 = input.addAtom(new JniInchiAtom(0.0, 0.0, 0.0, "H"));
+        a2.setImplicitH(2);
+        a3.setImplicitH(3);
+        a4.setImplicitH(1);
 
         // Add bonds
-        input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a0, a1, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a0, a2, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a0, a3, INCHI_BOND_TYPE.SINGLE));
         input.addBond(new JniInchiBond(a1, a4, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
-        input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
-        input.addBond(new JniInchiBond(a1, a7, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a1, a5, INCHI_BOND_TYPE.DOUBLE));
+        input.addBond(new JniInchiBond(a0, a6, INCHI_BOND_TYPE.SINGLE));
 
         return input;
     }
@@ -774,10 +774,12 @@ public class TestJniInchiWrapper {
      */
     @Test
     public void testGetInchiFromChlorineAtom() throws Exception {
+    	for (int i = 0; i < 20; i++) {
         JniInchiInput input = getChlorineAtom("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
         Assert.assertEquals("InChI=1/Cl", output.getInchi());
+    	}
     }
 
     /**
@@ -1803,6 +1805,45 @@ public class TestJniInchiWrapper {
 
         Assert.assertEquals("Fail count", 0, failureCount);
     }
+    
+    
+    @Test
+    public void testTooManyAtoms() throws JniInchiException {
+    	JniInchiInput input = new JniInchiInput();
+    	for (int i = 0; i < 2000; i++) {
+    		input.addAtom(new JniInchiAtom(0, 0, 0, "C"));
+    	}
+    	try {
+    		JniInchiWrapper.getInchi(input);
+    		Assert.fail("too many atoms");
+    	} catch (IllegalArgumentException e) {
+    		; // pass
+    	}
+    }
+    
+    
+    @Test
+    public void testMemory() throws JniInchiException {
+    	int ntest = 1000;
+    	
+    	for (int i = 0; i < ntest; i++) {
+    		JniInchiInput input = getAlanine2D("/FixedH");
+    		JniInchiOutput out = JniInchiWrapper.getInchi(input);
+    		
+//    		if (i == 0) {
+//    			System.out.println(out);
+//    		}
+    		
+    		if (i % 1000 == 0) {
+    			Runtime rt = Runtime.getRuntime();
+    			rt.gc();
+    			System.out.println(i + "\t" + (rt.totalMemory() - rt.freeMemory()));
+    		}
+    	}
+    	
+    }
+    
+    
 
     private class TestThread extends Thread {
 
@@ -1817,7 +1858,7 @@ public class TestJniInchiWrapper {
 
         public int runCount;
 
-        public JniInchiException ex;
+        public Exception ex;
 
         public int i;
 
@@ -1843,9 +1884,10 @@ public class TestJniInchiWrapper {
                             .equals(output.getInchi())) {
                         failCount++;
                     }
-                } catch (JniInchiException e) {
+                } catch (Exception e) {
                     failCount++;
                     ex = e;
+                    System.err.println("Error: " + e.getMessage());
                     break;
                 }
                 yield();

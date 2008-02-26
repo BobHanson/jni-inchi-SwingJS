@@ -38,12 +38,12 @@ public class JniInchiBond {
     /**
      * Bond type.
      */
-    private INCHI_BOND_TYPE type;
+    private INCHI_BOND_TYPE type = INCHI_BOND_TYPE.NONE;
 
     /**
      * Bond 2D stereo definition.
      */
-    private INCHI_BOND_STEREO stereo;
+    private INCHI_BOND_STEREO stereo = INCHI_BOND_STEREO.NONE;
 
     /**
      * Create bond.
@@ -60,6 +60,13 @@ public class JniInchiBond {
         this.atomTarget = atT;
         this.type = type;
         this.stereo = stereo;
+    }
+    
+    
+    JniInchiBond(JniInchiAtom atO, JniInchiAtom atT,
+            int type, int stereo) {
+
+    	this(atO, atT, INCHI_BOND_TYPE.getValue(type), INCHI_BOND_STEREO.getValue(stereo));
     }
 
     /**
@@ -135,4 +142,13 @@ public class JniInchiBond {
     public void debug() {
         System.out.println(getDebugString());
     }
+    
+    int getInchiBondType() {
+    	return type.getIndx();
+    }
+    
+    int getInchiBondStereo() {
+    	return stereo.getIndx();
+    }
+    
 }

@@ -19,7 +19,6 @@
  */
 package net.sf.jniinchi;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -168,110 +167,12 @@ public class JniInchiWrapper {
         }
 
         try {
-
-            // Create arrays
-            int nat = input.getNumAtoms();
-            int nst = input.getNumStereo0D();
-
-            String options = input.getOptions();
-            if (options.length() == 0) {
-                options = " ";
-            }
-            wrapper.LibInchiStartInput(nat, nst, options);
-
-            // Load atom data
-            Map atomIndxMap = new HashMap();
-            for (int i = 0; i < nat; i++) {
-                JniInchiAtom atom = input.getAtom(i);
-                atomIndxMap.put(atom, new Integer(i));
-                if (!wrapper.LibInchiSetAtom(i, atom.getX(), atom.getY(), atom.getZ(), atom.getElementType(),
-                        atom.getIsotopicMass(), atom.getImplicitH(), atom.getImplicitProtium(),
-                        atom.getImplicitDeuterium(), atom.getImplicitTritium(), atom.getRadical().getIndx(),
-                        atom.getCharge())) {
-
-                    wrapper.LibInchiFreeInputMem();
-                    throw new JniInchiException("JNI: Failed to set atoms");
-                }
-            }
-
-            int[]   atomNumNeighbors = new int[nat];
-            int[][] atomNeighbors = new int[nat][MAXVAL];
-            int[][] atomBondTypes = new int[nat][MAXVAL];
-            int[][] atomBondStereo = new int[nat][MAXVAL];
-
-
-            // Load bond data (note, bonds only need to be recorded in one atom's
-            // neighbor list, not both
-            for (int i = 0; i < input.getNumBonds(); i++) {
-                JniInchiBond bond = input.getBond(i);
-                int atOi = ((Integer) atomIndxMap.get(bond.getOriginAtom())).intValue();
-                int atTi = ((Integer) atomIndxMap.get(bond.getTargetAtom())).intValue();
-
-                int bondNo = atomNumNeighbors[atOi];
-                atomNeighbors[atOi][bondNo] = atTi;
-                atomBondTypes[atOi][bondNo] = bond.getBondType().getIndx();
-                atomBondStereo[atOi][bondNo] = bond.getBondStereo().getIndx();
-
-                atomNumNeighbors[atOi]++;
-            }
-
-            for (int i = 0; i < nat; i++) {
-                if (!wrapper.LibInchiSetAtomBonds(i, atomNumNeighbors[i],
-                        atomNeighbors[i], atomBondTypes[i], atomBondStereo[i])) {
-                    wrapper.LibInchiFreeInputMem();
-                    throw new JniInchiException("JNI: Failed to set atom neighbours");
-                }
-            }
-
-
-            // Load 0D Stereo parities
-            for (int i = 0; i < nst; i++) {
-                JniInchiStereo0D stereo = (JniInchiStereo0D) input.getStereo0D(i);
-                int parity = (int) (stereo.getParity().getIndx()
-                        | (stereo.getDisconnectedParity().getIndx() << 3));
-
-                int atCi = (stereo.getStereoType() == INCHI_STEREOTYPE.DOUBLEBOND ?
-                        JniInchiStereo0D.NO_ATOM
-                        : ((Integer) atomIndxMap.get(stereo.getCentralAtom())).intValue());
-                JniInchiAtom[] neighbors = stereo.getNeighbors();
-                int at0i = ((Integer) atomIndxMap.get(neighbors[0])).intValue();
-                int at1i = ((Integer) atomIndxMap.get(neighbors[1])).intValue();
-                int at2i = ((Integer) atomIndxMap.get(neighbors[2])).intValue();
-                int at3i = ((Integer) atomIndxMap.get(neighbors[3])).intValue();
-
-                if (!wrapper.LibInchiSetStereo(i, atCi, at0i, at1i, at2i, at3i,
-                        stereo.getStereoType().getIndx(), parity)) {
-                    wrapper.LibInchiFreeInputMem();
-                    throw new JniInchiException("JNI: Failed to set stereos");
-                }
-            }
-
-            // Call inchi library
-            int ret = wrapper.LibInchiGenerateInchi();
-
-            // Fetch results
-            JniInchiOutput output = new JniInchiOutput();
-
-            INCHI_RET retStatus = INCHI_RET.getValue(ret);
-            if (retStatus == null) {
-            	throw new JniInchiException("Unrecognised return status: " + ret);
-            }
-            output.setRetStatus(retStatus);
-
-            output.setInchi(wrapper.LibInchiGetInchi());
-            output.setAuxInfo(wrapper.LibInchiGetAuxInfo());
-            output.setMessage(wrapper.LibInchiGetMessage());
-            output.setLog(wrapper.LibInchiGetLog());
-
-            wrapper.LibInchiFreeInputMem();
-            wrapper.LibInchiFreeOutputMem();
-
-            return output;
+        	return wrapper.getINCHI(input);
         } finally {
             wrapper.releaseLock();
         }
     }
-
+     
 
     public static JniInchiOutput getInchiFromInchi(JniInchiInputInchi input) throws JniInchiException {
         JniInchiWrapper wrapper = getWrapper();
@@ -292,20 +193,19 @@ public class JniInchiWrapper {
             // Call inchi library
             int ret = wrapper.LibInchiGenerateInchiFromInchi(inchiString, options);
 
-            // Fetch results
-            JniInchiOutput output = new JniInchiOutput();
-
             INCHI_RET retStatus = INCHI_RET.getValue(ret);
             if (retStatus == null) {
             	throw new JniInchiException("Unrecognised return status: " + ret);
             }
-            output.setRetStatus(retStatus);
-
-            output.setInchi(wrapper.LibInchiGetInchi());
-            output.setAuxInfo(wrapper.LibInchiGetAuxInfo());
-            output.setMessage(wrapper.LibInchiGetMessage());
-            output.setLog(wrapper.LibInchiGetLog());
-
+            
+            JniInchiOutput output = 
+            	new JniInchiOutput(
+            			retStatus,
+            			wrapper.LibInchiGetInchi(),
+            			wrapper.LibInchiGetAuxInfo(),
+            			wrapper.LibInchiGetMessage(),
+            			wrapper.LibInchiGetLog());
+            
             wrapper.LibInchiFreeInputMem();
             wrapper.LibInchiFreeOutputMem();
 
@@ -324,7 +224,8 @@ public class JniInchiWrapper {
      * @throws JniInchiException
      */
     public static JniInchiOutputStructure getStructureFromInchi(JniInchiInputInchi input) throws JniInchiException {
-        JniInchiWrapper wrapper = getWrapper();
+        
+    	JniInchiWrapper wrapper = getWrapper();
         try {
             wrapper.getLock();
         } catch (TimeoutException ex) {
@@ -333,10 +234,13 @@ public class JniInchiWrapper {
 
         try {
 
-            String options = input.getOptions();
-            if (options.length() == 0) {
-                options = " ";
-            }
+        	return wrapper.GetStructFromINCHI(input.getInchi(), input.getOptions());
+        	
+        	/*
+//            String options = input.getOptions();
+//            if (options.length() == 0) {
+//                options = " ";
+//            }
             String inchiString = input.getInchi();
             int retVal = wrapper.LibInchiGetStruct(inchiString, options);
 
@@ -474,7 +378,7 @@ public class JniInchiWrapper {
             wrapper.LibInchiFreeStructMem();
 
             return output;
-
+        	 */
         } finally {
             wrapper.releaseLock();
         }
@@ -488,18 +392,15 @@ public class JniInchiWrapper {
         } catch (TimeoutException ex) {
             throw new JniInchiException(ex);
         }
+        
+        try {
 
-        int ret = wrapper.LibInchiGenerateInchiKey(inchi);
-        String key = wrapper.LibInchiGetInchiKey();
-
-        wrapper.releaseLock();
-
-        INCHI_KEY retStatus = INCHI_KEY.getValue(ret);
-        if (retStatus == null) {
-        	new JniInchiException("Unknown return status: " + ret);
+        	return wrapper.getINCHIKeyFromINCHI(inchi);
+        	
+        } finally {
+        	wrapper.releaseLock();
         }
 
-        return new JniInchiOutputKey(retStatus, key);
     }
 
 
@@ -511,15 +412,19 @@ public class JniInchiWrapper {
             throw new JniInchiException(ex);
         }
 
-        int ret = wrapper.LibInchiCheckInchiKey(key);
-        INCHI_KEY_STATUS retStatus = INCHI_KEY_STATUS.getValue(ret);
-        if (retStatus == null) {
-        	throw new JniInchiException("Unknown return status: " + ret);
+        try {
+	        int ret = wrapper.CheckINCHIKey(key);
+	        INCHI_KEY_STATUS retStatus = INCHI_KEY_STATUS.getValue(ret);
+	        if (retStatus == null) {
+	        	throw new JniInchiException("Unknown return status: " + ret);
+	        }
+	        
+	        return retStatus;
+	        
+        } finally {
+        	wrapper.releaseLock();
         }
 
-        wrapper.releaseLock();
-
-        return retStatus;
     }
 
 
@@ -541,68 +446,6 @@ public class JniInchiWrapper {
 
 
 
-    /**
-     * Start new InChI library data record.  See <tt>inchi_api.h</tt> for details.
-     *
-     * @param numAtoms        Number of atoms in molecule.
-     * @param numStereo        Number of stereo parities defined.
-     * @param options        Options string.
-     */
-    private native void LibInchiStartInput(final int numAtoms, final int numStereo,
-            final String options);
-
-    /**
-     * Add atom definition.  See <tt>inchi_api.h</tt> for details.
-     *
-     * @param indx        Atom number
-     * @param x            x-coordinate
-     * @param y            y-coordinate
-     * @param z            z-coordinate
-     * @param elname    Element chemical symbol
-     * @param isoMass    Isotopic mass
-     * @param numH        Number of implicit hydrogens
-     * @param numP        Number of implicit 1H
-     * @param numD        Number of implicit 2H
-     * @param numT        Number of implicit 3H
-     * @param radical    Radical definition
-     * @param charge    Charge on atom
-     */
-    private native boolean LibInchiSetAtom(final int indx, final double x, final double y, final double z,
-            final String elname, final int isoMass, final int numH, final int numP, final int numD,
-            final int numT, final int radical, final int charge);
-
-    /**
-     * Set atom neighbours.  See <tt>inchi_api.h</tt> for details.
-     *
-     * @param indx        Atom number
-     * @param nBonds    Number of bonds
-     * @param neighbors Array of other atom in each bond
-     * @param type        Array of type of each bond
-     * @param stereo    Array of stereo definition for each bond
-     */
-    private native boolean LibInchiSetAtomBonds(final int indx, final int nBonds,
-            final int[] neighbors, final int[] type, final int[] stereo);
-
-    /**
-     * Add stereo parity definition.  See <tt>inchi_api.h</tt> for details.
-     *
-     * @param indx        Parity Number
-     * @param atC        Central atom
-     * @param at0        Atom 0
-     * @param at1        Atom 1
-     * @param at2        Atom 2
-     * @param at3        Atom 3
-     * @param type        Stereo parity type
-     * @param parity    Parity
-     */
-    private native boolean LibInchiSetStereo(final int indx, final int atC, final int at0, final int at1,
-            final int at2, final int at3, final int type, final int parity);
-
-    /**
-     * Generate InChI from loaded data.  See <tt>inchi_api.h</tt> for details.
-     * @return    Return status
-     */
-    private native int LibInchiGenerateInchi();
 
     /**
      * Generates InChI from InChI string.
@@ -645,142 +488,21 @@ public class JniInchiWrapper {
     private native void LibInchiFreeOutputMem();
 
 
-    /**
-     * Generates structure from InChI string.
-     * @param inchi        InChI string
-     * @param options    Options
-     * @return        Return status.
-     */
-    private native int LibInchiGetStruct(final String inchi, final String options);
-
-    private native long LibInchiGetStructWarningFlags00();
-    private native long LibInchiGetStructWarningFlags01();
-    private native long LibInchiGetStructWarningFlags10();
-    private native long LibInchiGetStructWarningFlags11();
-
-    /**
-     * Frees memory used by InChI library.  Must be called once structure has
-     * been generated and all data fetched.
-     */
-    private native void LibInchiFreeStructMem();
-
-    /**
-     * Fetches number of atoms in InChI structure.
-     */
-    private native int LibInchiGetNumAtoms();
-
-    /**
-     * Fetches number of stereo parities in InChI structure.
-     */
-    private native int LibInchiGetNumStereo();
-
-    /**
-     * Fetches X coordinate of atom.
-     * @param atIndx    Atom index number
-     */
-    private native double LibInchiGetAtomX(final int atIndx);
-
-    /**
-     * Fetches Y coordinate of atom.
-     * @param atIndx    Atom index number
-     */
-    private native double LibInchiGetAtomY(final int atIndx);
-
-    /**
-     * Fetches Z coordinate of atom.
-     * @param atIndx    Atom index number
-     */
-    private native double LibInchiGetAtomZ(final int atIndx);
-
-    /**
-     * Fetches chemical element of atom.
-     * @param atIndx    Atom index number
-     */
-    private native String LibInchiGetAtomElement(final int atIndx);
-
-    /**
-     * Fetches isotopic mass/isotopic mass shift of atom.
-     * @param atIndx    Atom index number
-     */
-    private native int LibInchiGetAtomIsotopicMass(final int atIndx);
-
-    /**
-     * Fetches radical status of atom.
-     * @param atIndx    Atom index number
-     */
-    private native int LibInchiGetAtomRadical(final int atIndx);
-
-    /**
-     * Fetches charge on atom.
-     * @param atIndx    Atom index number
-     */
-    private native int LibInchiGetAtomCharge(final int atIndx);
-
-    /**
-     * Fetches number of implicit hydrogens on atom.
-     * @param atIndx    Atom index number
-     */
-    private native int LibInchiGetAtomImplicitH(final int atIndx);
-
-    /**
-     * Fetches number of implicit protium (1H) on atom.
-     * @param atIndx    Atom index number
-     */
-    private native int LibInchiGetAtomImplicitP(final int atIndx);
-
-    /**
-     * Fetches number of implicit deuterium (2H) on atom.
-     * @param atIndx    Atom index number
-     */
-    private native int LibInchiGetAtomImplicitD(final int atIndx);
-
-    /**
-     * Fetches number of implicit tritum (3H) on atom.
-     * @param atIndx    Atom index number
-     */
-    private native int LibInchiGetAtomImplicitT(final int atIndx);
-
-    /**
-     * Fetches number of bonds on atom.
-     * @param atIndx    Atom index number
-     */
-    private native int LibInchiGetAtomNumBonds(final int atIndx);
-
-    /**
-     * Fetches index of neighbouring atom.
-     * @param atIndx    Atom index number
-     * @param bondIndx    Bond index number
-     */
-    private native int LibInchiGetAtomNeighbour(final int atIndx, final int bondIndx);
-
-    /**
-     * Fetches bond type (order).
-     * @param atIndx    Atom index number
-     * @param bondIndx    Bond index number
-     */
-    private native int LibInchiGetAtomBondType(final int atIndx, final int bondIndx);
-
-    /**
-     * Fetches bond stereochemistry.
-     * @param atIndx    Atom index number
-     * @param bondIndx    Bond index number
-     */
-    private native int LibInchiGetAtomBondStereo(final int atIndx, final int bondIndx);
-
-
-    private native int LibInchiGetStereoCentralAtom(final int stIndex);
-
-    private native int LibInchiGetStereoNeighbourAtom(final int stIndex, final int atIndx);
-
-    private native int LibInchiGetStereoType(final int stIndex);
-
-    private native int LibInchiGetStereoParity(final int stIndex);
 
     protected native static String LibInchiGetVersion();
 
-    private native int LibInchiGenerateInchiKey(final String inchi);
-
-    private native String LibInchiGetInchiKey();
-
-    private native int LibInchiCheckInchiKey(final String key);
+    
+    
+    
+    private native JniInchiOutput getINCHI(JniInchiInput input);
+    
+    private native JniInchiOutputKey getINCHIKeyFromINCHI(String inchi);
+    
+    private native int CheckINCHIKey(String key);
+    
+    private native JniInchiOutputStructure GetStructFromINCHI(String inchi, String options);
+    
 }
+
+
+

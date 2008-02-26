@@ -29,8 +29,7 @@ public class TestJniInchiOutput {
      */
     @Test
     public void testGetReturnStatus() {
-        JniInchiOutput output = new JniInchiOutput();
-        output.setRetStatus(INCHI_RET.OKAY);
+        JniInchiOutput output = new JniInchiOutput(INCHI_RET.OKAY, null, null, null, null);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
     }
 
@@ -39,8 +38,7 @@ public class TestJniInchiOutput {
      */
     @Test
     public void testGetInchi() {
-        JniInchiOutput output = new JniInchiOutput();
-        output.setInchi("Inchi=1/C6H6/c1-2-4-6-5-3-1/h1-6H");
+        JniInchiOutput output = new JniInchiOutput(null, "Inchi=1/C6H6/c1-2-4-6-5-3-1/h1-6H", null, null, null);
         Assert.assertEquals("Inchi=1/C6H6/c1-2-4-6-5-3-1/h1-6H", output.getInchi());
     }
 
@@ -49,8 +47,7 @@ public class TestJniInchiOutput {
      */
     @Test
     public void testGetAuxInfo() {
-        JniInchiOutput output = new JniInchiOutput();
-        output.setAuxInfo("AuxInfo=1/0/N:1,2,6,3,5,4/E:(1,2,3,4,5,6)/rA:6nCCCCCC/rB:d1;s2;d3;s4;s1d5;/rC:-.7145,.4125,0;-.7145,-.4125,0;0,-.825,0;.7145,-.4125,0;.7145,.4125,0;0,.825,0;");
+        JniInchiOutput output = new JniInchiOutput(null, null, "AuxInfo=1/0/N:1,2,6,3,5,4/E:(1,2,3,4,5,6)/rA:6nCCCCCC/rB:d1;s2;d3;s4;s1d5;/rC:-.7145,.4125,0;-.7145,-.4125,0;0,-.825,0;.7145,-.4125,0;.7145,.4125,0;0,.825,0;", null, null);
         Assert.assertEquals("AuxInfo=1/0/N:1,2,6,3,5,4/E:(1,2,3,4,5,6)/rA:6nCCCCCC/rB:d1;s2;d3;s4;s1d5;/rC:-.7145,.4125,0;-.7145,-.4125,0;0,-.825,0;.7145,-.4125,0;.7145,.4125,0;0,.825,0;", output.getAuxInfo());
     }
 
@@ -59,8 +56,7 @@ public class TestJniInchiOutput {
      */
     @Test
     public void testGetMessage() {
-        JniInchiOutput output = new JniInchiOutput();
-        output.setMessage("Test message");
+        JniInchiOutput output = new JniInchiOutput(null, null, null, "Test message", null);
         Assert.assertEquals("Test message", output.getMessage());
     }
 
@@ -69,8 +65,7 @@ public class TestJniInchiOutput {
      */
     @Test
     public void testGetLog() {
-        JniInchiOutput output = new JniInchiOutput();
-        output.setLog("Test log");
+        JniInchiOutput output = new JniInchiOutput(null, null, null, null, "Test log");
         Assert.assertEquals("Test log", output.getLog());
     }
 }

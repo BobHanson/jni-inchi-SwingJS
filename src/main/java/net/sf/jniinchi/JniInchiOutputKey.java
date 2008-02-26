@@ -21,6 +21,10 @@ public class JniInchiOutputKey {
 	private String block1, block2;
 	private char flagChar, checkChar;
 	
+	public JniInchiOutputKey(final int ret, final String key) throws JniInchiException {
+		this(INCHI_KEY.getValue(ret), key);
+	}
+	
 	public JniInchiOutputKey(final INCHI_KEY retStatus, final String key) throws JniInchiException {
 		if (retStatus == null) {
 			throw new NullPointerException("Null return status");

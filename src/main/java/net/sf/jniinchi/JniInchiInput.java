@@ -46,7 +46,7 @@ public class JniInchiInput extends JniInchiStructure {
      * @throws JniInchiException
      */
     public JniInchiInput(final String opts) throws JniInchiException {
-        this.options = JniInchiWrapper.checkOptions(opts);
+        this.options = opts == null ? "" : JniInchiWrapper.checkOptions(opts);
     }
 
     /**

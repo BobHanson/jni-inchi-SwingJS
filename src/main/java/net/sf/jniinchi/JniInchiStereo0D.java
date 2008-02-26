@@ -83,6 +83,14 @@ public class JniInchiStereo0D {
         this.parity = parity;
     }
 
+    JniInchiStereo0D(final JniInchiAtom atC, final JniInchiAtom at0,
+            final JniInchiAtom at1, final JniInchiAtom at2, final JniInchiAtom at3,
+            final int type, final int parity) {
+    	
+    	this(atC, at0, at1, at2, at3, INCHI_STEREOTYPE.getValue(type), INCHI_PARITY.getValue(parity));
+    }
+
+    
     /**
      * Set second parity (for disconnected systems)
      * @param parity
@@ -105,6 +113,10 @@ public class JniInchiStereo0D {
      */
     public JniInchiAtom[] getNeighbors() {
         return neighbors;
+    }
+    
+    public JniInchiAtom getNeighbor(int i) {
+    	return neighbors[i];
     }
 
     /**
@@ -258,4 +270,14 @@ public class JniInchiStereo0D {
         JniInchiStereo0D stereo = new JniInchiStereo0D(null, at0, at1, at2, at3, INCHI_STEREOTYPE.DOUBLEBOND, parity);
         return stereo;
     }
+    
+    
+    int getInchiStereoType() {
+    	return type.getIndx();
+    }
+    
+    int getInchiParity() {
+    	return parity.getIndx();
+    }
+    
 }

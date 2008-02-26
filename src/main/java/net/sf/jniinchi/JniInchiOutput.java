@@ -51,6 +51,18 @@ public class JniInchiOutput {
      */
     private String sLog;
 
+    
+    public JniInchiOutput(int ret, String inchi, String auxInfo, String message, String log) {
+    	this(INCHI_RET.getValue(ret), inchi, auxInfo, message, log);
+    }
+    
+    public JniInchiOutput(INCHI_RET ret, String inchi, String auxInfo, String message, String log) {
+    	this.retStatus = ret;
+    	this.sInchi = inchi;
+    	this.sAuxInfo = auxInfo;
+    	this.sMessage = message;
+    	this.sLog = log;
+    }
 
     /**
      * Gets return status from InChI process.  OKAY and WARNING indicate
@@ -109,4 +121,9 @@ public class JniInchiOutput {
         this.sAuxInfo = auxInfo;
     }
 
+    
+    @Override
+    public String toString() {
+    	return "InChI_Output: " + retStatus + "/" + sInchi + "/" + sAuxInfo + "/" + sMessage + "/" + sLog;
+    }
 }

@@ -135,4 +135,12 @@ public class JniInchiStructure {
         this.bondList = structure.bondList;
         this.stereoList = structure.stereoList;
     }
+    
+    int getAtomIndex(JniInchiAtom atom) {
+    	return atomList.indexOf(atom);
+    }
+    
+    int getStereo0DIndex(JniInchiStereo0D stereo) {
+    	return stereoList.indexOf(stereo);
+    }
 }

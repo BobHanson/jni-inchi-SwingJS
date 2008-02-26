@@ -51,8 +51,18 @@ public class JniInchiOutputStructure extends JniInchiStructure {
      */
     private long[][] warningFlags = new long[2][2];
 
+    
+    public JniInchiOutputStructure(int ret) {
+    	this(INCHI_RET.getValue(ret));
+    }
+    
 
-    /**
+    public JniInchiOutputStructure(INCHI_RET value) {
+		this.retStatus = value;
+	}
+
+
+	/**
      * Gets return status from InChI process.  OKAY and WARNING indicate
      * InChI has been generated, in all other cases InChI generation
      * has failed.
@@ -102,6 +112,10 @@ public class JniInchiOutputStructure extends JniInchiStructure {
 
     protected void setWarningFlags(final long[][] warningFlags) {
         this.warningFlags = warningFlags;
+    }
+    
+    protected void setWarningFlags(long f00, long f01, long f10, long f11) {
+    	this.warningFlags = new long[][] {{f00, f01}, {f10, f11}};
     }
 
 

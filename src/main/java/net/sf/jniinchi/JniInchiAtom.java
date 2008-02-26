@@ -211,7 +211,7 @@ public class JniInchiAtom {
     public INCHI_RADICAL getRadical() {
         return radical;
     }
-
+    
     /**
      * Returns atom's X-coordinate.
      * @return
@@ -276,6 +276,16 @@ public class JniInchiAtom {
         return isotopic_mass;
     }
 
+    
+    int getInchiRadical() {
+    	return radical.getIndx();
+    }
+    
+    void setInchiRadical(int radical) {
+    	this.radical = INCHI_RADICAL.getValue(radical);
+    }
+
+    
     /**
      * Generates string representation of information on atom,
      * for debugging purposes.

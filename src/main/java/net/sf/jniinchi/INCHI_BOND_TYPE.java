@@ -25,6 +25,8 @@ package net.sf.jniinchi;
  */
 public class INCHI_BOND_TYPE {
 
+	
+	public static final INCHI_BOND_TYPE NONE =  new INCHI_BOND_TYPE("NONE", 0);
 
     /**
      * Single bond.
@@ -45,6 +47,8 @@ public class INCHI_BOND_TYPE {
      * Alternating (single-double) bond.
      */
     public static final INCHI_BOND_TYPE ALTERN   = new INCHI_BOND_TYPE("ALTERN", 4);
+
+	
 
 
 

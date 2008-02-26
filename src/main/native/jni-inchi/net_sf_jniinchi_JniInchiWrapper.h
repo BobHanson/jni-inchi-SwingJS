@@ -17,46 +17,6 @@ extern "C" {
 #define net_sf_jniinchi_JniInchiWrapper_LINUX 2L
 /*
  * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiStartInput
- * Signature: (IILjava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiStartInput
-  (JNIEnv *, jobject, jint, jint, jstring);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiSetAtom
- * Signature: (IDDDLjava/lang/String;IIIIIII)Z
- */
-JNIEXPORT jboolean JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtom
-  (JNIEnv *, jobject, jint, jdouble, jdouble, jdouble, jstring, jint, jint, jint, jint, jint, jint, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiSetAtomBonds
- * Signature: (II[I[I[I)Z
- */
-JNIEXPORT jboolean JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetAtomBonds
-  (JNIEnv *, jobject, jint, jint, jintArray, jintArray, jintArray);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiSetStereo
- * Signature: (IIIIIIII)Z
- */
-JNIEXPORT jboolean JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiSetStereo
-  (JNIEnv *, jobject, jint, jint, jint, jint, jint, jint, jint, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGenerateInchi
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGenerateInchi
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
  * Method:    LibInchiGenerateInchiFromInchi
  * Signature: (Ljava/lang/String;Ljava/lang/String;)I
  */
@@ -113,222 +73,6 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeOutputMe
 
 /*
  * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetStruct
- * Signature: (Ljava/lang/String;Ljava/lang/String;)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStruct
-  (JNIEnv *, jobject, jstring, jstring);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetStructWarningFlags00
- * Signature: ()J
- */
-JNIEXPORT jlong JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStructWarningFlags00
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetStructWarningFlags01
- * Signature: ()J
- */
-JNIEXPORT jlong JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStructWarningFlags01
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetStructWarningFlags10
- * Signature: ()J
- */
-JNIEXPORT jlong JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStructWarningFlags10
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetStructWarningFlags11
- * Signature: ()J
- */
-JNIEXPORT jlong JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStructWarningFlags11
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiFreeStructMem
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeStructMem
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetNumAtoms
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetNumAtoms
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetNumStereo
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetNumStereo
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomX
- * Signature: (I)D
- */
-JNIEXPORT jdouble JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomX
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomY
- * Signature: (I)D
- */
-JNIEXPORT jdouble JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomY
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomZ
- * Signature: (I)D
- */
-JNIEXPORT jdouble JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomZ
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomElement
- * Signature: (I)Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomElement
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomIsotopicMass
- * Signature: (I)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomIsotopicMass
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomRadical
- * Signature: (I)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomRadical
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomCharge
- * Signature: (I)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomCharge
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomImplicitH
- * Signature: (I)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImplicitH
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomImplicitP
- * Signature: (I)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImplicitP
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomImplicitD
- * Signature: (I)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImplicitD
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomImplicitT
- * Signature: (I)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomImplicitT
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomNumBonds
- * Signature: (I)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomNumBonds
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomNeighbour
- * Signature: (II)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomNeighbour
-  (JNIEnv *, jobject, jint, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomBondType
- * Signature: (II)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomBondType
-  (JNIEnv *, jobject, jint, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAtomBondStereo
- * Signature: (II)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAtomBondStereo
-  (JNIEnv *, jobject, jint, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetStereoCentralAtom
- * Signature: (I)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoCentralAtom
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetStereoNeighbourAtom
- * Signature: (II)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoNeighbourAtom
-  (JNIEnv *, jobject, jint, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetStereoType
- * Signature: (I)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoType
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetStereoParity
- * Signature: (I)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetStereoParity
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
  * Method:    LibInchiGetVersion
  * Signature: ()Ljava/lang/String;
  */
@@ -337,27 +81,35 @@ JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersio
 
 /*
  * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGenerateInchiKey
- * Signature: (Ljava/lang/String;)I
+ * Method:    getINCHI
+ * Signature: (Lnet/sf/jniinchi/JniInchiInput;)Lnet/sf/jniinchi/JniInchiOutput;
  */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGenerateInchiKey
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_getINCHI
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     net_sf_jniinchi_JniInchiWrapper
+ * Method:    getINCHIKeyFromINCHI
+ * Signature: (Ljava/lang/String;)Lnet/sf/jniinchi/JniInchiOutputKey;
+ */
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_getINCHIKeyFromINCHI
   (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetInchiKey
- * Signature: ()Ljava/lang/String;
+ * Method:    CheckINCHIKey
+ * Signature: (Ljava/lang/String;)I
  */
-JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetInchiKey
-  (JNIEnv *, jobject);
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_CheckINCHIKey
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiCheckInchiKey
- * Signature: (Ljava/lang/String;)I
+ * Method:    GetStructFromINCHI
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lnet/sf/jniinchi/JniInchiOutputStructure;
  */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiCheckInchiKey
-  (JNIEnv *, jobject, jstring);
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCHI
+  (JNIEnv *, jobject, jstring, jstring);
 
 #ifdef __cplusplus
 }
