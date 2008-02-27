@@ -6,6 +6,9 @@
 #         University Of Cambrige, UK
 #
 
+VERSION = 1.6
+
+
 # Detect platform, and include correct makefile
 UNAME := $(shell uname)
 MNAME := $(shell uname -m)
@@ -56,7 +59,6 @@ endif
 endif
 endif
 
-VERSION = 1.5
 
 LIB_OS_ARCH = $(LIB_OS)-$(LIB_ARCH)
 LIB_VERSION = $(VERSION)-$(LIB_OS_ARCH)

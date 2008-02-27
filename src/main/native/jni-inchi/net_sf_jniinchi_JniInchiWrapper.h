@@ -17,62 +17,6 @@ extern "C" {
 #define net_sf_jniinchi_JniInchiWrapper_LINUX 2L
 /*
  * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGenerateInchiFromInchi
- * Signature: (Ljava/lang/String;Ljava/lang/String;)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGenerateInchiFromInchi
-  (JNIEnv *, jobject, jstring, jstring);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetInchi
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetInchi
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetAuxInfo
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetAuxInfo
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetMessage
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetMessage
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiGetLog
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetLog
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiFreeInputMem
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeInputMem
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    LibInchiFreeOutputMem
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiFreeOutputMem
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
  * Method:    LibInchiGetVersion
  * Signature: ()Ljava/lang/String;
  */
@@ -81,18 +25,42 @@ JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersio
 
 /*
  * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    getINCHI
+ * Method:    init
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_init
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     net_sf_jniinchi_JniInchiWrapper
+ * Method:    GetINCHI
  * Signature: (Lnet/sf/jniinchi/JniInchiInput;)Lnet/sf/jniinchi/JniInchiOutput;
  */
-JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_getINCHI
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
   (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    getINCHIKeyFromINCHI
+ * Method:    GetINCHIfromINCHI
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lnet/sf/jniinchi/JniInchiOutput;
+ */
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIfromINCHI
+  (JNIEnv *, jobject, jstring, jstring);
+
+/*
+ * Class:     net_sf_jniinchi_JniInchiWrapper
+ * Method:    GetStructFromINCHI
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lnet/sf/jniinchi/JniInchiOutputStructure;
+ */
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCHI
+  (JNIEnv *, jobject, jstring, jstring);
+
+/*
+ * Class:     net_sf_jniinchi_JniInchiWrapper
+ * Method:    GetINCHIKeyFromINCHI
  * Signature: (Ljava/lang/String;)Lnet/sf/jniinchi/JniInchiOutputKey;
  */
-JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_getINCHIKeyFromINCHI
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromINCHI
   (JNIEnv *, jobject, jstring);
 
 /*
@@ -102,14 +70,6 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_getINCHIKeyFromIN
  */
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_CheckINCHIKey
   (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    GetStructFromINCHI
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lnet/sf/jniinchi/JniInchiOutputStructure;
- */
-JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCHI
-  (JNIEnv *, jobject, jstring, jstring);
 
 #ifdef __cplusplus
 }

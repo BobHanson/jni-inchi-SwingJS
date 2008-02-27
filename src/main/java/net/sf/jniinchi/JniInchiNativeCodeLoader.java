@@ -27,7 +27,7 @@ class JniInchiNativeCodeLoader extends NativeLibraryLoader {
 	/**
 	 * Expected version of the native code.
 	 */
-    private static final String NATIVE_CODE_VERSION = "1.5";
+    private static final String NATIVE_CODE_VERSION = "1.6";
 
     /**
      * Singleton.

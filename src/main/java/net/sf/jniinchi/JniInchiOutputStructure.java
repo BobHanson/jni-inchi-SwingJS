@@ -52,8 +52,11 @@ public class JniInchiOutputStructure extends JniInchiStructure {
     private long[][] warningFlags = new long[2][2];
 
     
-    public JniInchiOutputStructure(int ret) {
+    public JniInchiOutputStructure(int ret, String message, String log, long w00, long w01, long w10, long w11) {
     	this(INCHI_RET.getValue(ret));
+    	setMessage(message);
+    	setLog(log);
+    	setWarningFlags(w00, w01, w10, w11);
     }
     
 

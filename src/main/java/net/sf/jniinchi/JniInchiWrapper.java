@@ -96,6 +96,7 @@ public class JniInchiWrapper {
      */
     private JniInchiWrapper() throws LoadNativeLibraryException {
         loadLibrary();
+        init();
     }
 
 
@@ -167,7 +168,7 @@ public class JniInchiWrapper {
         }
 
         try {
-        	return wrapper.getINCHI(input);
+        	return wrapper.GetINCHI(input);
         } finally {
             wrapper.releaseLock();
         }
@@ -183,34 +184,7 @@ public class JniInchiWrapper {
         }
 
         try {
-
-            String options = input.getOptions();
-            if (options.length() == 0) {
-                options = " ";
-            }
-            String inchiString = input.getInchi();
-
-            // Call inchi library
-            int ret = wrapper.LibInchiGenerateInchiFromInchi(inchiString, options);
-
-            INCHI_RET retStatus = INCHI_RET.getValue(ret);
-            if (retStatus == null) {
-            	throw new JniInchiException("Unrecognised return status: " + ret);
-            }
-            
-            JniInchiOutput output = 
-            	new JniInchiOutput(
-            			retStatus,
-            			wrapper.LibInchiGetInchi(),
-            			wrapper.LibInchiGetAuxInfo(),
-            			wrapper.LibInchiGetMessage(),
-            			wrapper.LibInchiGetLog());
-            
-            wrapper.LibInchiFreeInputMem();
-            wrapper.LibInchiFreeOutputMem();
-
-            return output;
-
+        	return wrapper.GetINCHIfromINCHI(input.getInchi(), input.getOptions());
         } finally {
             wrapper.releaseLock();
         }
@@ -233,152 +207,7 @@ public class JniInchiWrapper {
         }
 
         try {
-
         	return wrapper.GetStructFromINCHI(input.getInchi(), input.getOptions());
-        	
-        	/*
-//            String options = input.getOptions();
-//            if (options.length() == 0) {
-//                options = " ";
-//            }
-            String inchiString = input.getInchi();
-            int retVal = wrapper.LibInchiGetStruct(inchiString, options);
-
-            JniInchiOutputStructure output = new JniInchiOutputStructure();
-
-            List retCodes = INCHI_RET.getList();
-            for (int i = 0; i < retCodes.size(); i++) {
-                INCHI_RET ret = (INCHI_RET) retCodes.get(i);
-                if (retVal == ret.getIndx()) {
-                    output.setRetStatus(ret);
-                    break;
-                }
-            }
-
-            // Get warning flags.
-            long[][] flags = new long[2][2];
-            flags[0][0] = wrapper.LibInchiGetStructWarningFlags00();
-            flags[0][1] = wrapper.LibInchiGetStructWarningFlags01();
-            flags[1][0] = wrapper.LibInchiGetStructWarningFlags10();
-            flags[1][1] = wrapper.LibInchiGetStructWarningFlags11();
-            output.setWarningFlags(flags);
-
-            output.setMessage(wrapper.LibInchiGetMessage());
-            output.setLog(wrapper.LibInchiGetLog());
-
-            // Get structural data
-            int numAtoms = wrapper.LibInchiGetNumAtoms();
-            int numStereo = wrapper.LibInchiGetNumStereo();
-
-            int[][] bondTypes = new int[numAtoms][numAtoms];
-            int[][] bondStereos = new int[numAtoms][numAtoms];
-
-            // Generate atoms
-            for (int i = 0; i < numAtoms; i++) {
-                String el = wrapper.LibInchiGetAtomElement(i);
-                double x = wrapper.LibInchiGetAtomX(i);
-                double y = wrapper.LibInchiGetAtomY(i);
-                double z = wrapper.LibInchiGetAtomZ(i);
-
-                JniInchiAtom atom = new JniInchiAtom(x, y, z, el);
-
-                atom.setImplicitH(wrapper.LibInchiGetAtomImplicitH(i));
-                atom.setImplicitProtium(wrapper.LibInchiGetAtomImplicitP(i));
-                atom.setImplicitDeuterium(wrapper.LibInchiGetAtomImplicitD(i));
-                atom.setImplicitTritium(wrapper.LibInchiGetAtomImplicitT(i));
-
-                atom.setCharge(wrapper.LibInchiGetAtomCharge(i));
-                atom.setIsotopicMass(wrapper.LibInchiGetAtomIsotopicMass(i));
-
-                int rad = wrapper.LibInchiGetAtomRadical(i);
-                INCHI_RADICAL radical = INCHI_RADICAL.getValue(rad);
-                if (radical == null) {
-                	throw new JniInchiException("Unknown radical state: " + rad);
-                }
-                atom.setRadical(radical);
-
-                output.addAtom(atom);
-                //atom.debug();
-
-                int numBonds = wrapper.LibInchiGetAtomNumBonds(i);
-                for (int j = 0; j < numBonds; j++) {
-                    int neighbour = wrapper.LibInchiGetAtomNeighbour(i, j);
-                    int order = wrapper.LibInchiGetAtomBondType(i, j);
-                    int stereo = wrapper.LibInchiGetAtomBondStereo(i, j);
-
-                    bondTypes[i][neighbour] = order;
-                    bondStereos[i][neighbour] = stereo;
-                }
-            }
-
-            // Generate bonds
-            for (int i = 0; i < numAtoms; i++) {
-                for (int j = 0; j < i; j++) {
-                    int bo0 = bondTypes[i][j];
-                    int bo1 = bondTypes[j][i];
-                    if (bo0 != bo1) {
-                        throw new JniInchiException("Bond order mismatch: " + i + "-" + j);
-                    }
-                    if (bo0 > 0) {
-                        INCHI_BOND_TYPE type = INCHI_BOND_TYPE.getValue(bo0);
-                        if (type == null) {
-                            throw new JniInchiException("Unknown bond type: " + bo0);
-                        }
-
-                        int bs0 = bondStereos[i][j];
-                        int bs1 = bondStereos[j][i];
-
-                        if (bs0 != bs1) {
-                            throw new JniInchiException("Bond stereo mismatch: " + i + "-" + j);
-                        }
-
-                        INCHI_BOND_STEREO stereo = INCHI_BOND_STEREO.getValue(bs0);
-                        if (stereo == null) {
-                            throw new JniInchiException("Unknown bond stereo: " + bs0);
-                        }
-
-                        JniInchiBond bond = new JniInchiBond(output.getAtom(i), output.getAtom(j), type, stereo);
-
-                        output.addBond(bond);
-                        //bond.debug();
-                    }
-                }
-            }
-
-            // Generate stereo parities
-            for (int i = 0; i < numStereo; i++) {
-                int centralAt = wrapper.LibInchiGetStereoCentralAtom(i);
-                int at0 = wrapper.LibInchiGetStereoNeighbourAtom(i, 0);
-                int at1 = wrapper.LibInchiGetStereoNeighbourAtom(i, 1);
-                int at2 = wrapper.LibInchiGetStereoNeighbourAtom(i, 2);
-                int at3 = wrapper.LibInchiGetStereoNeighbourAtom(i, 3);
-
-                int type = wrapper.LibInchiGetStereoType(i);
-                int parity = wrapper.LibInchiGetStereoParity(i);
-
-                INCHI_STEREOTYPE stereoType = INCHI_STEREOTYPE.getValue(type);
-                if (stereoType == null) {
-                	throw new JniInchiException("Unknown stereo0D type: " + type);
-                }
-
-                INCHI_PARITY stereoParity = INCHI_PARITY.getValue(parity);
-                if (stereoParity == null) {
-                	throw new JniInchiException("Unknown stereo0D parity: " + parity);
-                }
-
-                JniInchiStereo0D stereo = new JniInchiStereo0D(
-                        stereoType == INCHI_STEREOTYPE.DOUBLEBOND ? null : output.getAtom(centralAt),
-                        output.getAtom(at0), output.getAtom(at1), output.getAtom(at2),
-                        output.getAtom(at3), stereoType, stereoParity);
-
-                output.addStereo0D(stereo);
-                //stereo.debug();
-            }
-
-            wrapper.LibInchiFreeStructMem();
-
-            return output;
-        	 */
         } finally {
             wrapper.releaseLock();
         }
@@ -395,7 +224,7 @@ public class JniInchiWrapper {
         
         try {
 
-        	return wrapper.getINCHIKeyFromINCHI(inchi);
+        	return wrapper.GetINCHIKeyFromINCHI(inchi);
         	
         } finally {
         	wrapper.releaseLock();
@@ -447,60 +276,22 @@ public class JniInchiWrapper {
 
 
 
-    /**
-     * Generates InChI from InChI string.
-     * @param inchi     InChI string
-     * @param options   Options
-     * @return      Return status.
-     */
-    private native int LibInchiGenerateInchiFromInchi(final String inchi, final String options);;
-
-    /**
-     * Fetches InChI string from InChI library.
-     */
-    private native String LibInchiGetInchi();
-
-        /**
-     * Fetches AuxInfo string from InChI library.
-     */
-    private native String LibInchiGetAuxInfo();
-
-    /**
-     * Fetches Message string from InChI library.
-     */
-    private native String LibInchiGetMessage();
-
-    /**
-     * Fetches Log string from InChI library.
-     */
-    private native String LibInchiGetLog();
-
-    /**
-     * Frees memory used by InChI library.  Must be called once InChI has
-     * been generated and all data fetched.
-     */
-    private native void LibInchiFreeInputMem();
-
-    /**
-     * Frees memory used by InChI library.  Must be called once InChI has
-     * been generated and all data fetched.
-     */
-    private native void LibInchiFreeOutputMem();
-
-
 
     protected native static String LibInchiGetVersion();
 
     
+    private native void init();
     
     
-    private native JniInchiOutput getINCHI(JniInchiInput input);
+    private native JniInchiOutput GetINCHI(JniInchiInput input);
     
-    private native JniInchiOutputKey getINCHIKeyFromINCHI(String inchi);
-    
-    private native int CheckINCHIKey(String key);
+    private native JniInchiOutput GetINCHIfromINCHI(String inchi, String options);
     
     private native JniInchiOutputStructure GetStructFromINCHI(String inchi, String options);
+
+    private native JniInchiOutputKey GetINCHIKeyFromINCHI(String inchi);
+    
+    private native int CheckINCHIKey(String key);
     
 }
 

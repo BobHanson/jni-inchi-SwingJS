@@ -1697,10 +1697,12 @@ public class TestJniInchiWrapper {
      */
     @Test
     public void testGetInchiKeyForCafeine() throws JniInchiException {
+//    	for (int i = 0; i < 200000; i++) {
     	String inchi = "InChI=1/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
     	JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
     	Assert.assertEquals(INCHI_KEY.OK, output.getReturnStatus());
     	Assert.assertEquals("RYYVLZVUVIJVGH-UHFFFAOYAW", output.getKey());
+//    	}
 	}
     
     @Test
@@ -1830,14 +1832,10 @@ public class TestJniInchiWrapper {
     		JniInchiInput input = getAlanine2D("/FixedH");
     		JniInchiOutput out = JniInchiWrapper.getInchi(input);
     		
-//    		if (i == 0) {
-//    			System.out.println(out);
-//    		}
-    		
     		if (i % 1000 == 0) {
     			Runtime rt = Runtime.getRuntime();
     			rt.gc();
-    			System.out.println(i + "\t" + (rt.totalMemory() - rt.freeMemory()));
+//    			System.out.println(i + "\t" + (rt.totalMemory() - rt.freeMemory()));
     		}
     	}
     	
