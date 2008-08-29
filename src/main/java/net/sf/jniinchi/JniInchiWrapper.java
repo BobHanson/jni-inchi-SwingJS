@@ -24,6 +24,11 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeoutException;
 
+import net.sf.jnati.deploy.NativeCodeException;
+import net.sf.jnati.deploy.NativeLibraryLoader;
+
+import org.apache.log4j.Logger;
+
 /**
  * <p>JNI Wrapper for International Chemical Identifier (InChI) C++ library.
  *
@@ -42,6 +47,12 @@ import java.util.concurrent.TimeoutException;
  * @author Sam Adams
  */
 public class JniInchiWrapper {
+	
+	private static final Logger LOG = Logger.getLogger(JniInchiWrapper.class);
+
+	private static final String ID = "jniinchi";
+    private static final String VERSION = "1.6";
+
 
     /**
      * Size of atom neighbors (bonds) array (value from InChI library).
@@ -53,37 +64,73 @@ public class JniInchiWrapper {
      */
     private static final int MAX_LOCK_TIMEOUT = 15;
 
-    private static final int WINDOWS = 1;
-    private static final int LINUX = 2;
-
-    private static JniInchiWrapper inchiWrapper;
-
-        /**
+    /**
      * Flag indicating windows or linux.
      */
-    private static final int PLATFORM =
-        System.getProperty("os.name", "").toLowerCase().startsWith("windows") ? WINDOWS : LINUX;
+    private static final boolean IS_WINDOWS = System.getProperty("os.name", "").toLowerCase().startsWith("windows");
 
     /**
      * Switch character for passing options. / in windows, - on other systems.
      */
-    protected static final String flagChar = PLATFORM == WINDOWS ? "/" : "-";
+    static final String flagChar = IS_WINDOWS ? "/" : "-";
 
     /**
      * Records whether native library has been loaded by system.
      */
     private static boolean libraryLoaded = false;
 
+    private static JniInchiWrapper inchiWrapper;
+
+    
     /**
      * Loads native library.
      * @throws JniInchiException Library failed to load
      */
-    public static void loadLibrary() throws LoadNativeLibraryException {
+    public static synchronized void loadLibrary() throws LoadNativeLibraryException {
         if (!libraryLoaded) {
-            JniInchiNativeCodeLoader.getLoader();
+        	try {
+            	NativeLibraryLoader.loadLibrary(ID, VERSION);
+            	
+                // Check expected version of native code loaded
+            	// Throws NativeCodeException if unable to make call / wrong version
+                checkNativeCodeVersion();
+
+                // Everything is set up!
+                libraryLoaded = true;
+            } catch (NativeCodeException ex) {
+                throw new LoadNativeLibraryException(ex);
+            }
         }
     }
 
+    /**
+     * Checks the expected native code version has been loaded.
+     * @throws NativeCodeException
+     */
+    private static void checkNativeCodeVersion() throws NativeCodeException {
+
+    	LOG.trace("Checking native code version");
+
+    	// Get native code version string
+    	String nativeVersion;
+        try {
+        	nativeVersion = JniInchiWrapper.LibInchiGetVersion();
+        } catch (UnsatisfiedLinkError e) {
+        	LOG.error("Unable to get native code version", e);
+        	throw new NativeCodeException("Unable get native code version", e);
+        }
+
+        // Compare to expected version
+        if (!VERSION.equals(nativeVersion)) {
+        	LOG.error("Native code version mismatch; expected " + VERSION + ", found " + nativeVersion);
+            throw new NativeCodeException("JNI InChI native code version mismatch: expected "
+                    + VERSION + ", found " + nativeVersion);
+        }
+
+        LOG.trace("Expected native code version found: " + nativeVersion);
+    }
+
+    
     private static synchronized JniInchiWrapper getWrapper() throws LoadNativeLibraryException {
         if (inchiWrapper == null) {
             inchiWrapper = new JniInchiWrapper();
@@ -275,14 +322,11 @@ public class JniInchiWrapper {
 
 
 
-
-
     protected native static String LibInchiGetVersion();
 
     
     private native void init();
-    
-    
+        
     private native JniInchiOutput GetINCHI(JniInchiInput input);
     
     private native JniInchiOutput GetINCHIfromINCHI(String inchi, String options);

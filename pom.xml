@@ -21,9 +21,6 @@
     </license>
   </licenses>
 
-  <!--  <issueManagement>  </issueManagement>  -->
-  <!--  <ciManagement>...</ciManagement>  -->
-  <!--  <mailingLists>...</mailingLists>  -->
   <scm>
     <connection>
       scm:svn:http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi
@@ -158,8 +155,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>net.sf</groupId>
-      <artifactId>jnati</artifactId>
+      <groupId>net.sf.jnati</groupId>
+      <artifactId>jnati-deploy</artifactId>
       <version>0.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>

@@ -77,6 +77,9 @@ JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersio
 // === JNI INITIALIZERS === //
 
 
+//
+// Initialises the jclass pointer clazz to point to the named class
+//
 bool initClass(JNIEnv *env, jclass *clazz, char *name) {
     
     if (NULL != (*clazz)) {
@@ -118,7 +121,7 @@ bool initClassRefs(JNIEnv *env) {
 
 
 bool initMethodRefs(JNIEnv *env) {
-          
+    
     if (0== (getNumAtoms = env->GetMethodID(jniInchiStructure, "getNumAtoms", "()I"))) return false;
     if (0== (getNumBonds = env->GetMethodID(jniInchiStructure, "getNumBonds", "()I"))) return false;
     if (0== (getNumStereo0D = env->GetMethodID(jniInchiStructure, "getNumStereo0D", "()I"))) return false;
@@ -190,11 +193,6 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_init
 
 
 
-
-
-
-
-
   
   
 tagINCHI_InputINCHI getInchiInputINCHI(JNIEnv *env, jstring inchi, jstring options) {
@@ -216,7 +214,7 @@ tagINCHI_InputINCHI getInchiInputINCHI(JNIEnv *env, jstring inchi, jstring optio
     cerr << "options: " << szOptions << "\n";
     #endif
     
-    tagINCHI_InputINCHI input;                         // Allocate memory
+    tagINCHI_InputINCHI input;                       // Allocate memory
     memset(&input, 0, sizeof(tagINCHI_InputINCHI));  // Set initial values to 0
     
     input.szInChI = szInchi;
@@ -589,7 +587,6 @@ JNIEXPORT jobject Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCHI
  */
 JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromINCHI
     (JNIEnv *env, jobject obj, jstring inchi) {
-        
         
     const char *inchiString = env->GetStringUTFChars(inchi, 0);
     

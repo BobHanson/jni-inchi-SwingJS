@@ -58,7 +58,7 @@ public class Main {
     public static void runChecks() throws JniInchiException {
         System.out.println("Loading native code");
         System.out.println();
-        JniInchiNativeCodeLoader.getLoader();
+        JniInchiWrapper.loadLibrary();
 
         try {
             System.out.println();
@@ -101,6 +101,7 @@ public class Main {
     }
 
     public static void main(final String[] args) throws Exception {
+    	
         // Output header message
         System.out.println();
         System.out.println("** JniInchi debugger **");
@@ -110,6 +111,7 @@ public class Main {
 		Logger root = Logger.getRootLogger();
 		root.setLevel(Level.ALL);
 		root.removeAllAppenders();
+		Logger.getLogger("sea36.config").setLevel(Level.WARN);
 		
 		PatternLayout layout = new PatternLayout("%-5p %c - %m%n");
 		

@@ -1824,22 +1824,6 @@ public class TestJniInchiWrapper {
     }
     
     
-    @Test
-    public void testMemory() throws JniInchiException {
-    	int ntest = 1000;
-    	
-    	for (int i = 0; i < ntest; i++) {
-    		JniInchiInput input = getAlanine2D("/FixedH");
-    		JniInchiOutput out = JniInchiWrapper.getInchi(input);
-    		
-    		if (i % 1000 == 0) {
-    			Runtime rt = Runtime.getRuntime();
-    			rt.gc();
-//    			System.out.println(i + "\t" + (rt.totalMemory() - rt.freeMemory()));
-    		}
-    	}
-    	
-    }
     
     
 
