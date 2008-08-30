@@ -1,21 +1,20 @@
 /*
- * JNI InChI Wrapper - A Java Native Interface Wrapper for InChI.
- * Copyright (C) 2006-2007  Sam Adams
+ *  JNI InChI Wrapper - A Java Native Interface Wrapper for InChI.
+ *  Copyright 2006, 2007, 2008 Sam Adams <sea36 at users.sourceforge.net>
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published
+ *  by the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA  02110-1301, USA
  */
 package net.sf.jniinchi;
 
@@ -56,62 +55,69 @@ public class Main {
     }
 
     public static void runChecks() throws JniInchiException {
-        System.out.println("Loading native code");
-        System.out.println();
-        JniInchiWrapper.loadLibrary();
+        System.err.println("Loading native code");
+        System.err.println();
 
         try {
-            System.out.println();
+        	JniInchiWrapper.loadLibrary();
 
-            System.out.println("Running checks");
-            System.out.println();
+        	System.err.println();
+        	System.err.println("Native code version: " + JniInchiWrapper.LibInchiGetVersion());
+        	System.err.println();
 
-            System.out.println("Generating InChI from structure");
+            System.err.println("Running checks");
+            System.err.println();
+
+            System.err.println("Generating InChI from structure");
 
             JniInchiStructure mol = getTestMolecule();
             JniInchiOutput out1 = JniInchiWrapper.getInchi(new JniInchiInput(mol));
             if ("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)".equals(out1.getInchi())) {
-                System.out.println(" - OKAY");
+                System.err.println(" - OKAY");
             } else {
-                System.out.println(" - ERROR");
+                System.err.println(" - ERROR");
             }
 
-            System.out.println("Generating structure from InChI");
+            System.err.println("Generating structure from InChI");
             JniInchiOutputStructure out2 = JniInchiWrapper.getStructureFromInchi(new JniInchiInputInchi("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)"));
             if (out2.getNumAtoms() == 6 && out2.getNumBonds() == 5) {
-                System.out.println(" - OKAY");
+                System.err.println(" - OKAY");
             } else {
-                System.out.println(" - ERROR");
+                System.err.println(" - ERROR");
             }
 
-            System.out.println("Converting structure back to InChI");
+            System.err.println("Converting structure back to InChI");
             JniInchiOutput out3 = JniInchiWrapper.getInchi(new JniInchiInput(out2));
             if ("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)".equals(out3.getInchi())) {
-                System.out.println(" - OKAY");
+                System.err.println(" - OKAY");
             } else {
-                System.out.println(" - ERROR");
+                System.err.println(" - ERROR");
             }
-        } catch (LoadNativeLibraryException lnle) {
-            System.out.println(" - ERROR");
+        } catch (Exception e) {
+            System.err.println(" - ERROR");
+            e.printStackTrace();
         }
 
-        System.out.println();
-        System.out.println("Checks done.");
-        System.out.println();
+        System.err.println();
+        System.err.println("Checks done.");
+        System.err.println();
     }
 
     public static void main(final String[] args) throws Exception {
     	
         // Output header message
-        System.out.println();
-        System.out.println("** JniInchi debugger **");
-        System.out.println();
+        System.err.println();
+        System.err.println("** JniInchi debugger **");
+        System.err.println();
         
         // Set up logging
 		Logger root = Logger.getRootLogger();
-		root.setLevel(Level.ALL);
+		if (args.length == 1 && "-debug".equals(args[1])) {
+			root.setLevel(Level.ALL);
+		} else {
+			root.setLevel(Level.WARN);
+		}
 		root.removeAllAppenders();
-		Logger.getLogger("sea36.config").setLevel(Level.WARN);
 		
 		PatternLayout layout = new PatternLayout("%-5p %c - %m%n");
 		

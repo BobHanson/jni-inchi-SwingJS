@@ -9,9 +9,9 @@ InChI library source files
    secretariat@iupac.org), and distributed under the terms of the GNU Lesser
    General Public License.
 
-These are contained in /src/main/native/inchi
+These are contained in /src/main/native/inchi*
 
 All other content is copyright (C) Sam Adams - licenced under the GNU Lesser
-General Public License (see license.txt).
+General Public License.
 
 ********************************************************************************

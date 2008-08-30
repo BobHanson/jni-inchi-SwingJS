@@ -1,7 +1,7 @@
 Java Native Interface for InChI
 ===============================
 
-(C) 2006-2007 Sam Adams, sea36@cam.ac.uk
+(C) 2006, 2007, 2008 Sam Adams, sea36 at users.sourceforge.net
 Unilever Centre for Molecular Science Informatics, University of Cambridge, UK
 
 Precompiled InChI library files and the API header file have been included in
@@ -46,7 +46,7 @@ hopefully be soon.
     /pom.xml                Maven Project Object Model file
     /src/main/java          Java source code
     /src/main/native        C++ source code
-    /src/main/native/inchi  InChI source code
+    /src/main/native/inchi* InChI source code
     /src/test/java          Java unit tests
 
 
@@ -120,9 +120,9 @@ The first of which is used to generate an InChI from a structure, and the second
 to generate a structure from an InChI.
 
 
-6. Compatability
+6. Compatibility
 
-The JNI wrapper is written in Java 1.4, to allow compatability with as many
+The JNI wrapper is written in Java 1.4, to allow compatibility with as many
 applications as possible.
 
 

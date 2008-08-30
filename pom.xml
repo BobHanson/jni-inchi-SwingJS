@@ -1,12 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
   <modelVersion>4.0.0</modelVersion>
+  
   <groupId>net.sf</groupId>
   <artifactId>jniinchi</artifactId>
-  <packaging>jar</packaging>
   <version>0.5-SNAPSHOT</version>
+  
   <name>JNI InChI Wrapper</name>
   <url>http://jniinchi.sourceforge.net/</url>
   <description>
@@ -14,10 +16,11 @@
     wrappers for the InChI (International Chemical Identifier) C++
     library distributed by IUPAC.
   </description>
+  
   <licenses>
     <license>
       <name>GNU Lesser General Public License</name>
-      <url>http://www.fsf.org/licensing/licenses/lgpl.txt</url>
+      <url>http://www.gnu.org/licenses/</url>
     </license>
   </licenses>
 
@@ -36,7 +39,7 @@
     <repository>
       <id>wwmm</id>
       <name>WWMM</name>
-      <url>dav:http://wwmm.ch.cam.ac.uk/maven2</url>
+      <url>http://wwmm.ch.cam.ac.uk/maven2</url>
     </repository>
     <site>
       <id>shell.sourceforge</id>
@@ -49,7 +52,7 @@
     <developer>
       <id>sea36</id>
       <name>Sam Adams</name>
-      <email>sea36::at::cam.ac.uk</email>
+      <email>sea36::at::users.sourceforge.net</email>
       <organization>UCC, Cambridge</organization>
       <roles>
         <role>Developer</role>
