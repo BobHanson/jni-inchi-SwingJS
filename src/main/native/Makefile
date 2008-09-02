@@ -28,7 +28,11 @@ else
 ifeq ($(LIB_OS),LINUX)
 include Makefile.linux
 else
+ifeq ($(LIB_OS),MAC)
+include Makefile.mac
+else
 f := $(error Platform $(LIB_OS) not supported)
+endif
 endif
 endif
 

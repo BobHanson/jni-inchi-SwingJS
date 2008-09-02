@@ -1,0 +1,15 @@
+#
+# Makefile for JNI-InChI - Linux Settings
+#
+# Author: Sam Adams <sea36@cam.ac.uk>
+#         Unilever Centre for Molecular Science Informatics
+#         University Of Cambrige, UK
+#
+
+#CFLAGS = -fPIC
+#CXXFLAGS = -fPIC
+LDFLAGS = -dynamiclib
+
+LIB_PREFIX = lib
+LIB_SUFFIX = .dylib
+# LIB_OS = LINUX

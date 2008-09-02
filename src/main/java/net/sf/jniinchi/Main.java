@@ -112,7 +112,7 @@ public class Main {
         
         // Set up logging
 		Logger root = Logger.getRootLogger();
-		if (args.length == 1 && "-debug".equals(args[1])) {
+		if (args.length == 1 && "-debug".equals(args[0])) {
 			root.setLevel(Level.ALL);
 		} else {
 			root.setLevel(Level.WARN);
