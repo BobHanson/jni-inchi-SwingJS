@@ -1,63 +1,37 @@
 #
 # Makefile for JNI-InChI
 #
-# Author: Sam Adams <sea36@cam.ac.uk>
+# Author: Sam Adams <sea36@users.sourceforge.net>
 #         Unilever Centre for Molecular Science Informatics
 #         University Of Cambrige, UK
 #
 
+# Native code version
 VERSION = 1.6
 
-
-# Detect platform, and include correct makefile
-UNAME := $(shell uname)
-MNAME := $(shell uname -m)
-
-# Detect architecture
-ifeq ($(MNAME), x86)
-LIB_ARCH = X86
-endif
-ifeq ($(MNAME), i686)
-LIB_ARCH = X86
-endif
-ifeq ($(MNAME), i586)
-LIB_ARCH = X86
-endif
-ifeq ($(MNAME), i486)
-LIB_ARCH = X86
-endif
-ifeq ($(MNAME), i386)
-LIB_ARCH = X86
-endif
-ifeq ($(MNAME), amd64)
-LIB_ARCH = AMD64
-endif
-ifeq ($(MNAME), a64)
-LIB_ARCH = AMD64
-endif
-ifeq ($(MNAME), x86_64) # eg srcf
-LIB_ARCH = AMD64
+ifndef JAVA_HOME
+f := $(error JAVA_HOME is not defined)
 endif
 
-ifndef LIB_ARCH
-f := $(error Architecture $(MNAME) $(LIB_ARCH) not supported)
-endif
+# Detect OS/Architecture
+LIB_OS := $(shell mvn -q -f ../../../pom.xml exec:java -Dexec.mainClass=net.sf.jnati.SystemTool -Dexec.args=os)
+LIB_ARCH := $(shell mvn -q -f ../../../pom.xml exec:java -Dexec.mainClass=net.sf.jnati.SystemTool -Dexec.args=arch)
 
 
-# Detect OS
-ifeq ($(UNAME),Linux)
+# Include OS specific configuration
+# Platform specific files must set:
+#	LIB_PREFIX
+#	LIB_SUFFIX
+ifeq ($(LIB_OS),WINDOWS)
+include Makefile.windows
+else
+ifeq ($(LIB_OS),LINUX)
 include Makefile.linux
 else
-ifeq ($(findstring MINGW,$(UNAME)),MINGW)
-include Makefile.windows
-else
-ifeq ($(findstring CYGWIN,$(UNAME)),CYGWIN)
-include Makefile.windows
-else
-f := $(error Platform $(UNAME) not supported)
+f := $(error Platform $(LIB_OS) not supported)
 endif
 endif
-endif
+
 
 
 LIB_OS_ARCH = $(LIB_OS)-$(LIB_ARCH)
@@ -78,12 +52,16 @@ JAVA_SOURCE = ../java/net/sf/jniinchi/JniInchiWrapper.java
 JAVA_CLASS = net.sf.jniinchi.JniInchiWrapper
 JAVA_CLASSPATH = ../../../target/classes
 JAVA_CLASS_FILE = net/sf/jniinchi/JniInchiWrapper.class
+
+
 JAVAH = "$(JAVA_HOME)/bin/javah"
+# f := $(error Cannot find javah. Ensure JAVA_HOME is correctly set.)
+
 JAVAH_FLAGS += -classpath $(JAVA_CLASSPATH)
 JAVAH_CMD = $(JAVAH) $(JAVAH_FLAGS) $(OUTPUT_OPTION)
 
 RESOURCE_PATH = ../resources
-ARTIFACT_PATH = META-INF/jnati/jniinchi/$(VERSION)/$(LIB_OS_ARCH)
+ARTIFACT_PATH = META-INF/jniinchi/$(VERSION)/$(LIB_OS_ARCH)
 
 LDFLAGS += -s -shared
 CXXFLAGS += -Os -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR)
@@ -163,4 +141,9 @@ $(JNI_HEADER): $(JAVA_SOURCE) $(JAVA_CLASSPATH)/$(JAVA_CLASS_FILE)
 	$(JAVAH_CMD) -o $@ $(JAVA_CLASS)
 
 $(JAVA_CLASSPATH)/$(JAVA_CLASS_FILE):
-	f := $(error Class file '$(JAVA_CLASSPATH)/$(JAVA_CLASS_FILE)' not found. Run 'mvn compile' first)
+	f := $(error Class file '$(JAVA_CLASSPATH)/$(JAVA_CLASS_FILE)' not found. Run 'mvn compile'.)
+
+.PHONY: debug
+debug:
+	-@ echo "OS: $(LIB_OS)"
+	-@ echo "ARCH: $(LIB_ARCH)"

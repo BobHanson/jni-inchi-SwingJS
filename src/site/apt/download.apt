@@ -3,8 +3,6 @@
   ----------
   Sam Adams
   ----------
-  02 March 2007
-  ----------
 
 Download
 
@@ -22,6 +20,6 @@ Download
 
   Releases and snapshots are published to a maven repository at
   {{http://wwmm.ch.cam.ac.uk/maven2/}}.  You can link to these in your
-   maven 2 pom.
+   Maven 2 pom.
  
 

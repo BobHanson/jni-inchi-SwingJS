@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faqs title="Frequently Asked Questions" toplink="false">
+
+  <part id="general">
+    <title>General</title>
+
+    <faq id="compile-native">
+      <question>
+        How do I compile JNI InChI's native code for my operating system/architecture?
+      </question>
+      <answer>
+        <p>
+JNI InChI's native code compilation is integrated into the Maven build process.
+Executing the goal 'mvn package' will compile both the Java code and the C++
+code, run the unit test suite to ensure the code has compiled correctly, and
+build a JAR file: target/jniinchi-(version).jar.
+        </p>
+      </answer>
+    </faq>
+
+    <faq id="jnati-dir">
+      <question>
+        What is this .jnati directory that has appeared in my home directory?
+      </question>
+      <answer>
+        <p>
+When JNI InChI is used the native library must be loaded.  The JNI InChI JAR
+file contains precompiled native code for several operating systems and
+architectures, but these cannot be loaded from within the JAR file. JNI InChI
+uses a library called JNati to select the correct native library for your
+platform, and extract it from the JAR file. JNati caches the library file in the
+.jnati directory, so it can be loaded.
+      </answer>
+    </faq>    
+  </part>
+
+</faqs>

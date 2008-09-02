@@ -1823,6 +1823,19 @@ public class TestJniInchiWrapper {
     }
     
     
+    @Test
+    public void testStructureToInchiBug2085031() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi(
+                "InChI=1/C24H33N3O5/c1-23(2,3)26-21(29)20(17-11-8-7-9-12-17)27(16-18-13-10-14-31-18)19(28)15-25-22(30)32-24(4,5)6/h7-14,20H,15-16H2,1-6H3,(H,25,30)(H,26,29)");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        System.err.println(output.getMessage());
+        System.err.println(output.getReturnStatus());
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        System.err.println(output.getLog());
+        System.err.println(output.getNumAtoms());
+    }
+    
     
     
 

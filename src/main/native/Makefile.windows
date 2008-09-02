@@ -11,4 +11,4 @@ LDFLAGS += -Wl,--add-stdcall-alias
 
 LIB_PREFIX =  
 LIB_SUFFIX = .dll
-LIB_OS = WINDOWS
+# LIB_OS = WINDOWS

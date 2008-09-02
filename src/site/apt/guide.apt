@@ -3,8 +3,6 @@
   ----------
   Sam Adams
   ----------
-  26 April 2007
-  ----------
 
 Introduction
 
@@ -12,6 +10,7 @@ Introduction
   projects. It does not enable users to generate InChIs from molecule file
   formats such as .mol, .cml, .mol2, or SMILES strings. If you want to do any
   of these, you should take a look at the {{{http://almost.cubic.uni-koeln.de/cdk/cdk_top}Chemistry Development Kit (CDK)}},
+  or JUMBO {{{http://cml.sourceforge.net}}}
   which includes InChI generation powered by the JNI InChI Wrapper. If, however,
   you are a software developer and you want want to generate the InChI for a
   molecule that you already hold in memory, JNI InChI Wrapper is what you need.

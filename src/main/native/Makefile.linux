@@ -11,4 +11,4 @@ CXXFLAGS = -I$(JAVA_HOME)/include/linux -fPIC
 
 LIB_PREFIX = lib
 LIB_SUFFIX = .so
-LIB_OS = LINUX
+# LIB_OS = LINUX

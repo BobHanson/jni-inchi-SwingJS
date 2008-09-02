@@ -97,6 +97,11 @@ public class JniInchiWrapper {
                 // Everything is set up!
                 libraryLoaded = true;
             } catch (NativeCodeException ex) {
+            	System.err.println();
+            	System.err.println("Error loading JNI InChI native code.");
+            	System.err.println("You may need to recompile the native code for your platform.");
+            	System.err.println("See http://jni-inchi.sourceforge.net for instructions.");
+            	System.err.println();
                 throw new LoadNativeLibraryException(ex);
             }
         }
@@ -260,6 +265,12 @@ public class JniInchiWrapper {
     }
 
 
+    /**
+     * Generate InChIKey from InChI string.
+     * @param inchi
+     * @return
+     * @throws JniInchiException
+     */
     public static JniInchiOutputKey getInChIKey(final String inchi) throws JniInchiException {
     	JniInchiWrapper wrapper = getWrapper();
         try {
@@ -279,6 +290,12 @@ public class JniInchiWrapper {
     }
 
 
+    /**
+     * Check InChIKey.
+     * @param key
+     * @return
+     * @throws JniInchiException
+     */
     public static INCHI_KEY_STATUS checkInChIKey(final String key) throws JniInchiException {
     	JniInchiWrapper wrapper = getWrapper();
         try {

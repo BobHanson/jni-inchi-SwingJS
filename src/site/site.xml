@@ -21,6 +21,7 @@
       <item name="Download" href="download.html" />
       <item name="Who is using it?" href="users.html" />
       <item name="Guide" href="guide.html" />
+      <item name="FAQ" href="faq.html" />
     </menu>
 
     ${reports}
