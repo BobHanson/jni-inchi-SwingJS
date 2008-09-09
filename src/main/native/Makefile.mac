@@ -1,5 +1,5 @@
 #
-# Makefile for JNI-InChI - Linux Settings
+# Makefile for JNI-InChI - Macintosh Settings
 #
 # Author: Sam Adams <sea36@cam.ac.uk>
 #         Unilever Centre for Molecular Science Informatics
@@ -11,5 +11,4 @@
 LDFLAGS = -dynamiclib
 
 LIB_PREFIX = lib
-LIB_SUFFIX = .dylib
-# LIB_OS = LINUX
+LIB_SUFFIX = .jnilib
