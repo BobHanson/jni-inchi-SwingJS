@@ -35,6 +35,13 @@
     <url>http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi</url>
   </scm>
 
+<repositories>
+<repository>
+<id>wwmm</id>
+<url>http://wwmm.ch.cam.ac.uk/maven2</url>
+</repository>
+</repositories>
+
   <distributionManagement>
     <repository>
       <id>wwmm</id>
@@ -93,7 +100,7 @@
         </configuration>
       </plugin>
 
-      <plugin>
+<!--      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.1-beta-1</version>
@@ -129,7 +136,7 @@
 
         </executions>
       </plugin>
-
+-->
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>

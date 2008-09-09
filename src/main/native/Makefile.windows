@@ -7,7 +7,7 @@
 #
 
 CXXFLAGS = -I"$(JAVA_HOME)/include/win32"
-LDFLAGS += -Wl,--add-stdcall-alias
+LDFLAGS += -Wl,--add-stdcall-alias -s -shared
 
 LIB_PREFIX =  
 LIB_SUFFIX = .dll

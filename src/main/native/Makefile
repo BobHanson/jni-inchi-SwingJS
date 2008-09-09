@@ -67,7 +67,7 @@ JAVAH_CMD = $(JAVAH) $(JAVAH_FLAGS) $(OUTPUT_OPTION)
 RESOURCE_PATH = ../resources
 ARTIFACT_PATH = META-INF/jniinchi/$(VERSION)/$(LIB_OS_ARCH)
 
-LDFLAGS += -s -shared
+# LDFLAGS += -s -shared
 CXXFLAGS += -Os -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR)
 CFLAGS += -Os
 

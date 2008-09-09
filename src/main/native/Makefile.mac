@@ -8,7 +8,7 @@
 
 #CFLAGS = -fPIC
 #CXXFLAGS = -fPIC
-LDFLAGS = -dynamiclib
+LDFLAGS = -dynamiclib -single_module
 
 LIB_PREFIX = lib
 LIB_SUFFIX = .jnilib
