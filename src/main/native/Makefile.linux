@@ -6,9 +6,9 @@
 #         University Of Cambrige, UK
 #
 
-CFLAGS = -fPIC
-CXXFLAGS = -I$(JAVA_HOME)/include/linux -fPIC
+CFLAGS += -fPIC
+CXXFLAGS += -I$(JAVA_HOME)/include/linux -fPIC
+LDFLAGS += -shared
 
 LIB_PREFIX = lib
 LIB_SUFFIX = .so
-# LIB_OS = LINUX

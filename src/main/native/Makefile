@@ -47,7 +47,7 @@ TARGET = $(TARGET_PATH)/$(TARGET_FILE)
 JAR_WORKDIR = $(TARGET_PATH)/jar
 JAR = $(TARGET_PATH)/jniinchi-$(LIB_VERSION).jar
 
-OBJDIR = $(TARGET_PATH)/o
+OBJDIR = $(TARGET_PATH)/o/$(LIB_OS_ARCH)
 
 INCHI_SRCDIR = inchi-1.02-beta
 INCHI_OBJDIR = $(OBJDIR)/inchi
@@ -67,8 +67,8 @@ JAVAH_CMD = $(JAVAH) $(JAVAH_FLAGS) $(OUTPUT_OPTION)
 RESOURCE_PATH = ../resources
 ARTIFACT_PATH = META-INF/jniinchi/$(VERSION)/$(LIB_OS_ARCH)
 
-# LDFLAGS += -s -shared
-CXXFLAGS += -Os -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR)
+LDFLAGS += -s
+CXXFLAGS += -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR)
 CFLAGS += -Os
 
 _INCHI_OBJECTS =	ichican2.o ichicano.o ichicans.o ichiisot.o \
