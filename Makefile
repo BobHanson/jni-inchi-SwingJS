@@ -13,3 +13,6 @@ clean:
 
 jar:
 	cd src/main/native && $(MAKE) jar
+
+archives:
+	cd src/main/native && $(MAKE) archives

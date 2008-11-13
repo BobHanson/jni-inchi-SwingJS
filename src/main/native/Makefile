@@ -151,3 +151,13 @@ $(JAVA_CLASSPATH)/$(JAVA_CLASS_FILE):
 debug:
 	-@ echo "OS: $(LIB_OS)"
 	-@ echo "ARCH: $(LIB_ARCH)"
+
+.PHONY: archives
+VERSIONS = $(shell ls ../resources/META-INF/jniinchi/$(VERSION) )
+archives: $(addprefix jniinchi-$(VERSION)-, $(addsuffix .jar, $(VERSIONS)))
+
+jniinchi-$(VERSION)-%.jar:
+	$(RM) -r $(TARGET_PATH)/jartemp
+	mkdir -p $(TARGET_PATH)/jartemp/META-INF/jniinchi/$(VERSION)/$*
+	cp ../resources/META-INF/jniinchi/$(VERSION)/$*/* $(TARGET_PATH)/jartemp/META-INF/jniinchi/$(VERSION)/$*
+	jar -cMf ../../../jniinchi-$(VERSION)-$*.jar -C $(TARGET_PATH)/jartemp META-INF
