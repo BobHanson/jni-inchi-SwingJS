@@ -2,22 +2,22 @@
  *  JNI InChI Wrapper - A Java Native Interface Wrapper for InChI.
  *  Copyright 2006, 2007, 2008 Sam Adams <sea36 at users.sourceforge.net>
  * 
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published
- *  by the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+ * or see <http://www.gnu.org/licenses/>.
  */
 package net.sf.jniinchi;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,9 +36,9 @@ public class TestJniInchiAtom {
     public void testJniInchiAtomConstructor() {
         JniInchiAtom atom = getNewTestAtom();
         // Check configured parameters
-        Assert.assertEquals(1.0, atom.getX());
-        Assert.assertEquals(2.0, atom.getY());
-        Assert.assertEquals(3.0, atom.getZ());
+        Assert.assertEquals(1.0, atom.getX(), 1E-6);
+        Assert.assertEquals(2.0, atom.getY(), 1E-6);
+        Assert.assertEquals(3.0, atom.getZ(), 1E-6);
         Assert.assertEquals("C", atom.getElementType());
 
         // Check default values set correctly
@@ -178,7 +178,7 @@ public class TestJniInchiAtom {
     @Test
     public void testGetX() {
         JniInchiAtom atom = getNewTestAtom();
-        Assert.assertEquals(1.0, atom.getX());
+        Assert.assertEquals(1.0, atom.getX(), 1E-6);
     }
 
     /**
@@ -188,7 +188,7 @@ public class TestJniInchiAtom {
     @Test
     public void testGetY() {
         JniInchiAtom atom = getNewTestAtom();
-        Assert.assertEquals(2.0, atom.getY());
+        Assert.assertEquals(2.0, atom.getY(), 1E-6);
     }
 
     /**
@@ -198,7 +198,7 @@ public class TestJniInchiAtom {
     @Test
     public void testGetZ() {
         JniInchiAtom atom = getNewTestAtom();
-        Assert.assertEquals(3.0, atom.getZ());
+        Assert.assertEquals(3.0, atom.getZ(), 1E-6);
     }
 
     /**

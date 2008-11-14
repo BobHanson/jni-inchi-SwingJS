@@ -2,21 +2,23 @@
  *  JNI InChI Wrapper - A Java Native Interface Wrapper for InChI.
  *  Copyright 2006, 2007, 2008 Sam Adams <sea36 at users.sourceforge.net>
  * 
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published
- *  by the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+ * or see <http://www.gnu.org/licenses/>.
  */
 package net.sf.jniinchi;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1824,16 +1826,21 @@ public class TestJniInchiWrapper {
     
     
     @Test
-    public void testStructureToInchiBug2085031() throws Exception {
+    public void testStructureToInchiBug2085031a() throws Exception {
         JniInchiInputInchi input = new JniInchiInputInchi(
                 "InChI=1/C24H33N3O5/c1-23(2,3)26-21(29)20(17-11-8-7-9-12-17)27(16-18-13-10-14-31-18)19(28)15-25-22(30)32-24(4,5)6/h7-14,20H,15-16H2,1-6H3,(H,25,30)(H,26,29)");
         JniInchiOutputStructure output = JniInchiWrapper
                 .getStructureFromInchi(input);
-        System.err.println(output.getMessage());
-        System.err.println(output.getReturnStatus());
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        System.err.println(output.getLog());
-        System.err.println(output.getNumAtoms());
+    }
+    
+    @Test
+    public void testStructureToInchiBug2085031b() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi(
+                "InChI=1/C24H33N3O5/c1-23(2,3)26-21(29)20(17-11-8-7-9-12-17)27(16-18-13-10-14-31-18)19(28)15-25-22(30)32-24(4,5)6/h7-14,20H,15-16H2,1-6H3,(H,25,30)(H,26,29) ");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.EOF, output.getReturnStatus());
     }
     
     

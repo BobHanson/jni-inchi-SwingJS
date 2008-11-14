@@ -35,24 +35,19 @@
     <url>http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi</url>
   </scm>
 
-<repositories>
-<repository>
-<id>wwmm</id>
-<url>http://wwmm.ch.cam.ac.uk/maven2</url>
-</repository>
-</repositories>
+  <repositories>
+    <repository>
+      <id>wwmm</id>
+      <url>http://wwmm.ch.cam.ac.uk/maven2</url>
+    </repository>
+  </repositories>
 
   <distributionManagement>
     <repository>
       <id>wwmm</id>
       <name>WWMM</name>
-      <url>http://wwmm.ch.cam.ac.uk/maven2</url>
+      <url>dav:http://wwmm.ch.cam.ac.uk/maven2</url>
     </repository>
-    <site>
-      <id>shell.sourceforge</id>
-      <name>sourceforge</name>
-      <url>scpexe://shell.sourceforge.net/home/users/s/se/sea36/jni-inchi/htdocs</url>
-    </site>
   </distributionManagement>
 
   <developers>
@@ -152,30 +147,23 @@
 
     </plugins>
 
-<!--    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-webdav</artifactId>
-        <version>1.0-beta-2</version>
-      </extension>
-    </extensions>
--->
-
   </build>
 
   <dependencies>
+    
     <dependency>
       <groupId>net.sf.jnati</groupId>
       <artifactId>jnati-deploy</artifactId>
       <version>0.1-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
+    
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.1</version>
+      <version>4.5</version>
       <scope>test</scope>
     </dependency>
+    
   </dependencies>
 
   <reporting>

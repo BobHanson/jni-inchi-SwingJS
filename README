@@ -110,7 +110,7 @@ to generate a structure from an InChI.
 
 JNI InChI is designed to run without requiring any configuration, however there
 are a number of customisations that can be made, if required.  For more details
-see the JNativ project documentation.
+see the jnati project documentation.
 
 
 7. Compatibility

@@ -12,10 +12,28 @@
       <answer>
         <p>
 JNI InChI's native code compilation is integrated into the Maven build process.
-Executing the goal 'mvn package' will compile both the Java code and the C++
-code, run the unit test suite to ensure the code has compiled correctly, and
-build a JAR file: target/jniinchi-(version).jar.
+To compile the code you should get the source package from the 'download'
+page, or check the project out of the subversion repository.
         </p>
+        <p>
+In order to build JNI InChI the following software is required:
+<ul>
+<li>Java (JDK) 1.4 or higher</li>
+<li>Maven 2.0</li>
+<li>GNU Make</li>
+<li>GCC/G++</li>
+</ul>
+The JAVA_HOME environment variable MUST be set, pointing to the location of
+the JDK.
+		</p>
+		<p>
+The Maven build system takes care of JNI InChI's dependencies, and runs Make to
+build the native code required. From JNI InChI's root directory (containing the
+file pom.xml) simply run 'mvn package' to compile a JAR file for your system.
+Maven will compile the Java code, call Make to build the C++ code, run a suite
+of unit tests to ensure the code has compiled successfully and package
+everything into a JAR file in the target directory: jniinchi-(version).jar
+		</p>
       </answer>
     </faq>
 
@@ -25,14 +43,28 @@ build a JAR file: target/jniinchi-(version).jar.
       </question>
       <answer>
         <p>
-When JNI InChI is used the native library must be loaded.  The JNI InChI JAR
-file contains precompiled native code for several operating systems and
-architectures, but these cannot be loaded from within the JAR file. JNI InChI
-uses a library called JNati to select the correct native library for your
-platform, and extract it from the JAR file. JNati caches the library file in the
-.jnati directory, so it can be loaded.
+When JNI InChI is run the native code must also be loaded.  JNI InChI uses a
+library called jnati (http://jnati.sourceforge.net) to select the correct native
+library for your system.  If the necessary files cannot be located, jnati checks
+to see whether they are bundled inside a JAR file, or downloads them from a 
+remote repository.  If so, these files are then cached in the .jnati directory,
+so they can be reused next time JNI InChI is run.
+		</p>
       </answer>
     </faq>    
+    
+    
+    <faq id="other">
+      <question>
+        My question wasn't answered, what should I do?
+      </question>
+      <answer>
+        <p>
+e-mail me: sea36 at users.sourceforge.net.
+		</p>
+      </answer>
+    </faq>   
+    
   </part>
 
 </faqs>
