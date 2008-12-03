@@ -40,12 +40,12 @@ following features are supported:
 While the Java code is cross-platfrom, the C++ InChI library requires compiling
 for a specific operating system/architecture. JNI InChI includes precompiled
 binaries for several common platfroms, and automatically deploys and loads the
-appropriate library using the JNativ library. Compilation of the native code
+appropriate library using the JNati library. Compilation of the native code
 is integrated into the build system making it simple to compile JNI InChI for
 use on other platforms.
 
 * http://jni-inchi.sourceforge.net
-* http://jnativ.sourceforge.net
+* http://jnati.sourceforge.net
 * http://www.iupac.org/inchi/
 * http://java.sun.com/j2se/1.4.2/docs/guide/jni/
 

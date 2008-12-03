@@ -100,7 +100,7 @@ public class JniInchiWrapper {
             } catch (NativeCodeException ex) {
             	System.err.println();
             	System.err.println("Error loading JNI InChI native code.");
-            	System.err.println("You may need to recompile the native code for your platform.");
+            	System.err.println("You may need to compile the native code for your platform.");
             	System.err.println("See http://jni-inchi.sourceforge.net for instructions.");
             	System.err.println();
                 throw new LoadNativeLibraryException(ex);

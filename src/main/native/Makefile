@@ -1,7 +1,7 @@
 #
 # Makefile for JNI-InChI
 #
-# Author: Sam Adams <sea36@users.sourceforge.net>
+# Author: Sam Adams <sea36 at users.sourceforge.net>
 #         Unilever Centre for Molecular Science Informatics
 #         University Of Cambrige, UK
 #

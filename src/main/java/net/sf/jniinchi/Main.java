@@ -117,7 +117,7 @@ public class Main {
 		if (args.length == 1 && "-debug".equals(args[0])) {
 			root.setLevel(Level.ALL);
 		} else {
-			root.setLevel(Level.ALL);
+			root.setLevel(Level.INFO);
 		}
 		root.removeAllAppenders();
 		

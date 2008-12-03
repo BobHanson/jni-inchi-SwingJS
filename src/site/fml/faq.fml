@@ -5,6 +5,25 @@
   <part id="general">
     <title>General</title>
 
+    <faq id="error">
+      <question>
+        I got the following message: 'Error loading JNI InChI native code', what
+        does it mean?
+      </question>
+      <answer>
+        <p>
+The program you are using is making use of the JNI InChI library. The JNI InChI
+library provides a wrapper to the InChI software produced by IUPAC, enabling its
+use from within java.  Unlike java programs the InChI software is not platform
+independent. JNI InChI includes versions of the InChI code for a number of
+common operating systems and architectures, but if you received the above error
+you probably need to compile the code for you system. For instructions, see the
+next question. 
+        </p>
+      </answer>
+    </faq>
+    
+
     <faq id="compile-native">
       <question>
         How do I compile JNI InChI's native code for my operating system/architecture?
@@ -29,11 +48,17 @@ the JDK.
 		<p>
 The Maven build system takes care of JNI InChI's dependencies, and runs Make to
 build the native code required. From JNI InChI's root directory (containing the
-file pom.xml) simply run 'mvn package' to compile a JAR file for your system.
+file pom.xml) simply run 'mvn package' to compile a JAR file for your system, or
+'mvn install' to compile it, and install it in your local Maven repository.
 Maven will compile the Java code, call Make to build the C++ code, run a suite
 of unit tests to ensure the code has compiled successfully and package
 everything into a JAR file in the target directory: jniinchi-(version).jar
 		</p>
+		<p>
+If you have previously tried using JNI InChI, there you may need to clear cached
+old versions of the native code from your system. To do this, delete the
+contents of the <tt>~/.jnati/jni-inchi</tt> directory.
+	    </p>		
       </answer>
     </faq>
 
@@ -52,7 +77,6 @@ so they can be reused next time JNI InChI is run.
 		</p>
       </answer>
     </faq>    
-    
     
     <faq id="other">
       <question>

@@ -1760,38 +1760,43 @@ public class TestJniInchiWrapper {
      */
     @Test
     public void multithreading() {
-        int nthreads = 10;
+        
+    	// Start threads
+    	int nthreads = 10;
         TestThread[] threads = new TestThread[nthreads];
         for (int i = 0; i < nthreads; i++) {
             threads[i] = new TestThread(i);
             threads[i].start();
         }
 
+        // Wait for threads to get going
         try {
-            Thread.sleep(100);
+            Thread.sleep(200);
         } catch (InterruptedException ie) {
             Assert.fail("Interrupted");
         }
 
         boolean allRunning = true;
 
+        // Stop threads
         for (int i = 0; i < nthreads; i++) {
             if (threads[i].runCount < 1) {
                 allRunning = false;
             }
-            // System.err.println(i +" stopping.");
             threads[i].timeToStop = true;
             Thread.yield();
         }
 
         Assert.assertTrue("All threads running", allRunning);
 
+        // Wait for threads to stop
         try {
-            Thread.sleep(500);
+            Thread.sleep(2000);
         } catch (InterruptedException ie) {
             Assert.fail("Interrupted");
         }
 
+        // Check threads have finished
         boolean allFinished = true;
         for (int i = 0; i < nthreads; i++) {
             if (!threads[i].finished) {
