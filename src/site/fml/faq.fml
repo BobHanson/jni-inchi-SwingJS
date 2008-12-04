@@ -48,16 +48,30 @@ the JDK.
 		<p>
 The Maven build system takes care of JNI InChI's dependencies, and runs Make to
 build the native code required. From JNI InChI's root directory (containing the
-file pom.xml) simply run 'mvn package' to compile a JAR file for your system, or
-'mvn install' to compile it, and install it in your local Maven repository.
-Maven will compile the Java code, call Make to build the C++ code, run a suite
-of unit tests to ensure the code has compiled successfully and package
-everything into a JAR file in the target directory: jniinchi-(version).jar
+file pom.xml) simply run Maven with the desired goal:
+		</p>
+		<p>
+<b>To install JNI InChI in you local Maven repository:</b><br/>
+<tt>mvn install</tt><br/>
+		</p>
+		<p>
+<b>To compile JNI InChI, and create a JAR file:</b><br/>
+<tt>mvn package</tt><br/>
+[ This will create a JAR file: target/jniinchi-(version).jar ]
+		</p>
+		<p>
+<b>To compile JNI InChI, and create a JAR file including dependencies :</b><br/>
+<tt>mvn assembly:assembly</tt><br/>
+[ This will create a JAR file: target/jniinchi-(version)-jar-with-dependencies.jar ]
+		</p>
+		<p>
+All these commands will compile the Java code, call Make to build the C++ code
+and run a suite of unit tests to ensure the code has compiled successfully.
 		</p>
 		<p>
 If you have previously tried using JNI InChI, there you may need to clear cached
 old versions of the native code from your system. To do this, delete the
-contents of the <tt>~/.jnati/jni-inchi</tt> directory.
+contents of the <tt>~/.jnati/repo/jni-inchi</tt> directory.
 	    </p>		
       </answer>
     </faq>

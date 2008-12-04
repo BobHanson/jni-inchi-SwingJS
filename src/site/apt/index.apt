@@ -21,6 +21,18 @@ Welcome to JNI InChI Wrapper
 
 News
 
+* 04 December 2008
+
+  * JNI-InChI v0.5 released.
+  
+    * Improved native code deployment: support for Macs; support for different
+    architectures; download pre-complied code from remote repository
+    
+    * Memory leak in native code fixed
+    
+    * Upgrade to InChI-1.02-beta: support for InChIKey
+
+
 * 26 April 2007
 
   * New documentation added to website.
