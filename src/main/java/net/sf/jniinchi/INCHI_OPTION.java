@@ -1,7 +1,7 @@
 /*
  *  JNI InChI Wrapper - A Java Native Interface Wrapper for InChI.
  *  Copyright 2006, 2007, 2008 Sam Adams <sea36 at users.sourceforge.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
@@ -133,6 +133,12 @@ public class INCHI_OPTION {
     public static final INCHI_OPTION FixSp3Bug  = new INCHI_OPTION("FixSp3Bug");
 
     /**
+     * Same as FixSp3Bug.
+     */
+    public static final INCHI_OPTION FB  = new INCHI_OPTION("FB");
+
+
+    /**
      * Include Phosphines Stereochemistry.
      */
     public static final INCHI_OPTION SPXYZ = new INCHI_OPTION("SPXYZ");
@@ -146,7 +152,7 @@ public class INCHI_OPTION {
      * Generate InChIKey
      * /
     public static final INCHI_OPTION Key = new INCHI_OPTION("Key");
-	*/
+    */
 
     /**
      * Name.
@@ -157,7 +163,7 @@ public class INCHI_OPTION {
      * Constructor.
      */
     @SuppressWarnings("unchecked")
-	private INCHI_OPTION(final String name) { this.name = name; lcMap.put(name.toLowerCase(), this); };
+    private INCHI_OPTION(final String name) { this.name = name; lcMap.put(name.toLowerCase(), this); };
 
     public String getName() {
         return name;

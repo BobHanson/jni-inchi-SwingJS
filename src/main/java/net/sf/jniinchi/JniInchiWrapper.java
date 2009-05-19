@@ -1,7 +1,7 @@
 /*
  *  JNI InChI Wrapper - A Java Native Interface Wrapper for InChI.
  *  Copyright 2006, 2007, 2008 Sam Adams <sea36 at users.sourceforge.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
@@ -47,17 +47,11 @@ import org.apache.log4j.Logger;
  * @author Sam Adams
  */
 public class JniInchiWrapper {
-	
-	private static final Logger LOG = Logger.getLogger(JniInchiWrapper.class);
 
-	private static final String ID = "jniinchi";
-    private static final String VERSION = "1.6";
+    private static final Logger LOG = Logger.getLogger(JniInchiWrapper.class);
 
-
-    /**
-     * Size of atom neighbors (bonds) array (value from InChI library).
-     */
-    private static final int MAXVAL = 20;
+    private static final String ID = "jniinchi";
+    private static final String VERSION = "1.7";
 
     /**
      * Maximum time to wait for a lock (in seconds).
@@ -81,28 +75,28 @@ public class JniInchiWrapper {
 
     private static JniInchiWrapper inchiWrapper;
 
-    
+
     /**
      * Loads native library.
      * @throws JniInchiException Library failed to load
      */
     public static synchronized void loadLibrary() throws LoadNativeLibraryException {
         if (!libraryLoaded) {
-        	try {
-            	NativeLibraryLoader.loadLibrary(ID, VERSION);
-            	
+            try {
+                NativeLibraryLoader.loadLibrary(ID, VERSION);
+
                 // Check expected version of native code loaded
-            	// Throws NativeCodeException if unable to make call / wrong version
+                // Throws NativeCodeException if unable to make call / wrong version
                 checkNativeCodeVersion();
 
                 // Everything is set up!
                 libraryLoaded = true;
             } catch (NativeCodeException ex) {
-            	System.err.println();
-            	System.err.println("Error loading JNI InChI native code.");
-            	System.err.println("You may need to compile the native code for your platform.");
-            	System.err.println("See http://jni-inchi.sourceforge.net for instructions.");
-            	System.err.println();
+                System.err.println();
+                System.err.println("Error loading JNI InChI native code.");
+                System.err.println("You may need to compile the native code for your platform.");
+                System.err.println("See http://jni-inchi.sourceforge.net for instructions.");
+                System.err.println();
                 throw new LoadNativeLibraryException(ex);
             }
         }
@@ -114,20 +108,20 @@ public class JniInchiWrapper {
      */
     private static void checkNativeCodeVersion() throws NativeCodeException {
 
-    	LOG.trace("Checking native code version");
+        LOG.trace("Checking native code version");
 
-    	// Get native code version string
-    	String nativeVersion;
+        // Get native code version string
+        String nativeVersion;
         try {
-        	nativeVersion = JniInchiWrapper.LibInchiGetVersion();
+            nativeVersion = JniInchiWrapper.LibInchiGetVersion();
         } catch (UnsatisfiedLinkError e) {
-        	LOG.error("Unable to get native code version", e);
-        	throw new NativeCodeException("Unable get native code version", e);
+            LOG.error("Unable to get native code version", e);
+            throw new NativeCodeException("Unable get native code version", e);
         }
 
         // Compare to expected version
         if (!VERSION.equals(nativeVersion)) {
-        	LOG.error("Native code version mismatch; expected " + VERSION + ", found " + nativeVersion);
+            LOG.error("Native code version mismatch; expected " + VERSION + ", found " + nativeVersion);
             throw new NativeCodeException("JNI InChI native code version mismatch: expected "
                     + VERSION + ", found " + nativeVersion);
         }
@@ -135,7 +129,7 @@ public class JniInchiWrapper {
         LOG.trace("Expected native code version found: " + nativeVersion);
     }
 
-    
+
     private static synchronized JniInchiWrapper getWrapper() throws LoadNativeLibraryException {
         if (inchiWrapper == null) {
             inchiWrapper = new JniInchiWrapper();
@@ -220,12 +214,12 @@ public class JniInchiWrapper {
         }
 
         try {
-        	return wrapper.GetINCHI(input);
+            return wrapper.GetINCHI(input);
         } finally {
             wrapper.releaseLock();
         }
     }
-     
+
 
     public static JniInchiOutput getInchiFromInchi(JniInchiInputInchi input) throws JniInchiException {
         JniInchiWrapper wrapper = getWrapper();
@@ -236,7 +230,7 @@ public class JniInchiWrapper {
         }
 
         try {
-        	return wrapper.GetINCHIfromINCHI(input.getInchi(), input.getOptions());
+            return wrapper.GetINCHIfromINCHI(input.getInchi(), input.getOptions());
         } finally {
             wrapper.releaseLock();
         }
@@ -250,8 +244,8 @@ public class JniInchiWrapper {
      * @throws JniInchiException
      */
     public static JniInchiOutputStructure getStructureFromInchi(JniInchiInputInchi input) throws JniInchiException {
-        
-    	JniInchiWrapper wrapper = getWrapper();
+
+        JniInchiWrapper wrapper = getWrapper();
         try {
             wrapper.getLock();
         } catch (TimeoutException ex) {
@@ -259,7 +253,7 @@ public class JniInchiWrapper {
         }
 
         try {
-        	return wrapper.GetStructFromINCHI(input.getInchi(), input.getOptions());
+            return wrapper.GetStructFromINCHI(input.getInchi(), input.getOptions());
         } finally {
             wrapper.releaseLock();
         }
@@ -273,19 +267,19 @@ public class JniInchiWrapper {
      * @throws JniInchiException
      */
     public static JniInchiOutputKey getInChIKey(final String inchi) throws JniInchiException {
-    	JniInchiWrapper wrapper = getWrapper();
+        JniInchiWrapper wrapper = getWrapper();
         try {
             wrapper.getLock();
         } catch (TimeoutException ex) {
             throw new JniInchiException(ex);
         }
-        
+
         try {
 
-        	return wrapper.GetINCHIKeyFromINCHI(inchi);
-        	
+            return wrapper.GetINCHIKeyFromINCHI(inchi);
+
         } finally {
-        	wrapper.releaseLock();
+            wrapper.releaseLock();
         }
 
     }
@@ -298,7 +292,7 @@ public class JniInchiWrapper {
      * @throws JniInchiException
      */
     public static INCHI_KEY_STATUS checkInChIKey(final String key) throws JniInchiException {
-    	JniInchiWrapper wrapper = getWrapper();
+        JniInchiWrapper wrapper = getWrapper();
         try {
             wrapper.getLock();
         } catch (TimeoutException ex) {
@@ -306,16 +300,16 @@ public class JniInchiWrapper {
         }
 
         try {
-	        int ret = wrapper.CheckINCHIKey(key);
-	        INCHI_KEY_STATUS retStatus = INCHI_KEY_STATUS.getValue(ret);
-	        if (retStatus == null) {
-	        	throw new JniInchiException("Unknown return status: " + ret);
-	        }
-	        
-	        return retStatus;
-	        
+            int ret = wrapper.CheckINCHIKey(key);
+            INCHI_KEY_STATUS retStatus = INCHI_KEY_STATUS.getValue(ret);
+            if (retStatus == null) {
+                throw new JniInchiException("Unknown return status: " + ret);
+            }
+
+            return retStatus;
+
         } finally {
-        	wrapper.releaseLock();
+            wrapper.releaseLock();
         }
 
     }
@@ -338,23 +332,19 @@ public class JniInchiWrapper {
     }
 
 
-
     protected native static String LibInchiGetVersion();
 
-    
+
     private native void init();
-        
+
     private native JniInchiOutput GetINCHI(JniInchiInput input);
-    
+
     private native JniInchiOutput GetINCHIfromINCHI(String inchi, String options);
-    
+
     private native JniInchiOutputStructure GetStructFromINCHI(String inchi, String options);
 
     private native JniInchiOutputKey GetINCHIKeyFromINCHI(String inchi);
-    
+
     private native int CheckINCHIKey(String key);
-    
+
 }
-
-
-

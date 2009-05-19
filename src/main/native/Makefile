@@ -7,7 +7,7 @@
 #
 
 # Native code version
-VERSION = 1.6
+VERSION = 1.7
 
 ifndef JAVA_HOME
 f := $(error JAVA_HOME is not defined)
@@ -68,7 +68,7 @@ RESOURCE_PATH = ../resources
 ARTIFACT_PATH = META-INF/jniinchi/$(VERSION)/$(LIB_OS_ARCH)
 
 LDFLAGS += -s
-CXXFLAGS += -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR)
+CFLAGS += -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR)
 CFLAGS += -Os
 
 _INCHI_OBJECTS =	ichican2.o ichicano.o ichicans.o ichiisot.o \
@@ -87,7 +87,7 @@ INCHI_OBJECTS = $(addprefix $(INCHI_OBJDIR)/,$(_INCHI_OBJECTS))
 JNI_SRCDIR = jni-inchi
 JNI_OBJDIR = $(OBJDIR)/jni
 JNI_OBJECTS = $(JNI_OBJDIR)/JniInchiWrapper.o
-JNI_HEADER = $(JNI_SRCDIR)/net_sf_jniinchi_JniInchiWrapper.h
+JNI_HEADERS = $(JNI_SRCDIR)/net_sf_jniinchi_JniInchiWrapper.h
 
 
 all: copies
@@ -95,7 +95,7 @@ all: copies
 
 .PHONY: clean
 clean:
-	$(RM) $(TARGET) $(JNI_OBJECTS) $(INCHI_OBJECTS) $(JNI_HEADER)
+	$(RM) $(TARGET) $(JNI_OBJECTS) $(INCHI_OBJECTS) $(JNI_HEADERS)
 	$(RM) -r $(JNI_OBJDIR) $(INCHI_OBJDIR) $(OBJDIR)
 
 .PHONY: jar
@@ -138,14 +138,16 @@ $(TARGET): $(INCHI_OBJECTS) $(JNI_OBJECTS)
 $(INCHI_OBJDIR)/%.o: $(INCHI_SRCDIR)/%.c
 	$(COMPILE.c) $< -o $@
 
-$(JNI_OBJDIR)/%.o: $(JNI_SRCDIR)/%.cc $(JNI_HEADER)
-	$(COMPILE.cc) $< -o $@
+# $(JNI_OBJDIR)/%.o: $(JNI_SRCDIR)/%.cc $(JNI_HEADERS)
+#	$(COMPILE.cc) $< -o $@
+$(JNI_OBJDIR)/%.o: $(JNI_SRCDIR)/%.c $(JNI_HEADERS)
+	$(COMPILE.c) $< -o $@
 
-$(JNI_HEADER): $(JAVA_SOURCE) $(JAVA_CLASSPATH)/$(JAVA_CLASS_FILE)
+$(JNI_HEADERS): $(JAVA_SOURCE) $(JAVA_CLASSPATH)/$(JAVA_CLASS_FILE)
 	$(JAVAH_CMD) -o $@ $(JAVA_CLASS)
 
 $(JAVA_CLASSPATH)/$(JAVA_CLASS_FILE):
-	f := $(error Class file '$(JAVA_CLASSPATH)/$(JAVA_CLASS_FILE)' not found. Run 'mvn compile'.)
+	mvn -f ../../../pom.xml compile
 
 .PHONY: debug
 debug:

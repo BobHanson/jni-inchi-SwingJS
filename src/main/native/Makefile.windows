@@ -6,7 +6,7 @@
 #         University Of Cambrige, UK
 #
 
-CXXFLAGS += -I"$(JAVA_HOME)/include/win32"
+CFLAGS += -I"$(JAVA_HOME)/include/win32"
 LDFLAGS += -Wl,--add-stdcall-alias -shared
 
 LIB_PREFIX =  

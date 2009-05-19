@@ -1,7 +1,7 @@
 /*
  *  JNI InChI Wrapper - A Java Native Interface Wrapper for InChI.
  *  Copyright 2006, 2007, 2008 Sam Adams <sea36 at users.sourceforge.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
@@ -579,7 +579,7 @@ public class TestJniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    private static JniInchiInput getLAlanine2D(final String options)
+    private static JniInchiInput getLAlanine2Da(final String options)
             throws JniInchiException {
         JniInchiInput input = new JniInchiInput(options);
 
@@ -606,6 +606,41 @@ public class TestJniInchiWrapper {
         input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
         input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE))
                 .setStereoDefinition(INCHI_BOND_STEREO.SINGLE_1DOWN);
+        input.addBond(new JniInchiBond(a1, a4, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
+
+        return input;
+    }
+
+
+    private static JniInchiInput getLAlanine2Db(final String options)
+            throws JniInchiException {
+        JniInchiInput input = new JniInchiInput(options);
+
+        // Generate atoms
+        JniInchiAtom a1 = input
+                .addAtom(new JniInchiAtom(264.0, 968.0, 0.0, "C"));
+        JniInchiAtom a2 = input
+                .addAtom(new JniInchiAtom(295.0, 985.0, 0.0, "C"));
+        JniInchiAtom a3 = input
+                .addAtom(new JniInchiAtom(233.0, 986.0, 0.0, "N"));
+        JniInchiAtom a4 = input
+                .addAtom(new JniInchiAtom(264.0, 932.0, 0.0, "C"));
+        JniInchiAtom a5 = input
+                .addAtom(new JniInchiAtom(326.0, 967.0, 0.0, "O"));
+        JniInchiAtom a6 = input.addAtom(new JniInchiAtom(295.0, 1021.0, 0.0,
+                "O"));
+
+        a1.setImplicitH(1);
+        a3.setImplicitH(2);
+        a4.setImplicitH(3);
+        a5.setImplicitH(1);
+
+        // Add bonds
+        input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a3, a1, INCHI_BOND_TYPE.SINGLE))
+                .setStereoDefinition(INCHI_BOND_STEREO.SINGLE_1UP);
         input.addBond(new JniInchiBond(a1, a4, INCHI_BOND_TYPE.SINGLE));
         input.addBond(new JniInchiBond(a2, a5, INCHI_BOND_TYPE.SINGLE));
         input.addBond(new JniInchiBond(a2, a6, INCHI_BOND_TYPE.DOUBLE));
@@ -766,6 +801,90 @@ public class TestJniInchiWrapper {
         return input;
     }
 
+
+    private JniInchiInput getNSC7414a(String options) throws JniInchiException {
+
+        JniInchiInput input = new JniInchiInput(options);
+
+        // Generate atoms
+        JniInchiAtom a1 = input.addAtom(new JniInchiAtom(-1.1292, -0.5292, 0.0, "C"));
+        JniInchiAtom a2 = input.addAtom(new JniInchiAtom(-1.1333, -1.5917, 0.0, "C"));
+        JniInchiAtom a3 = input.addAtom(new JniInchiAtom(-1.1333, 0.5333, 0.0, "C"));
+        JniInchiAtom a4 = input.addAtom(new JniInchiAtom(-1.1375, -2.6542, 0.0, "C"));
+        JniInchiAtom a5 = input.addAtom(new JniInchiAtom(0.8375, 0.5625, 0.0, "C"));
+        JniInchiAtom a6 = input.addAtom(new JniInchiAtom(0.9917, -2.4667, 0.0, "C"));
+        JniInchiAtom a7 = input.addAtom(new JniInchiAtom(2.2417, -0.6542, 0.0, "C"));
+        JniInchiAtom a8 = input.addAtom(new JniInchiAtom(4.3000, -0.5000, 0.0, "C"));
+        JniInchiAtom a9 = input.addAtom(new JniInchiAtom(5.8583, 0.9667, 0.0, "C"));
+        JniInchiAtom a10 = input.addAtom(new JniInchiAtom(6.0167, -1.7500, 0.0, "C"));
+        JniInchiAtom a11 = input.addAtom(new JniInchiAtom(6.2042, -3.3417, 0.0, "C"));
+        a1.setImplicitH(-1);
+        a2.setImplicitH(-1);
+        a3.setImplicitH(-1);
+        a4.setImplicitH(-1);
+        a5.setImplicitH(-1);
+        a6.setImplicitH(-1);
+        a7.setImplicitH(-1);
+        a8.setImplicitH(-1);
+        a9.setImplicitH(-1);
+        a10.setImplicitH(-1);
+        a11.setImplicitH(-1);
+
+        input.addBond(new JniInchiBond(a6, a4, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a1, a2, INCHI_BOND_TYPE.DOUBLE));
+        input.addBond(new JniInchiBond(a7, a5, INCHI_BOND_TYPE.SINGLE, INCHI_BOND_STEREO.SINGLE_1UP));
+        input.addBond(new JniInchiBond(a7, a6, INCHI_BOND_TYPE.SINGLE, INCHI_BOND_STEREO.SINGLE_1UP));
+        input.addBond(new JniInchiBond(a2, a4, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a8, a7, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a9, a8, INCHI_BOND_TYPE.SINGLE, INCHI_BOND_STEREO.SINGLE_1UP));
+        input.addBond(new JniInchiBond(a5, a3, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a8, a10, INCHI_BOND_TYPE.SINGLE, INCHI_BOND_STEREO.SINGLE_1UP));
+        input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
+        input.addBond(new JniInchiBond(a11, a10, INCHI_BOND_TYPE.SINGLE));
+
+        input.addStereo0D(new JniInchiStereo0D(a7, a7, a5, a6, a8, INCHI_STEREOTYPE.TETRAHEDRAL, INCHI_PARITY.EVEN));
+        input.addStereo0D(new JniInchiStereo0D(a8, a8, a7, a9, a10, INCHI_STEREOTYPE.TETRAHEDRAL, INCHI_PARITY.ODD));
+
+        return input;
+    }
+
+    /*
+     *
+
+
+  -ClnMol-06180618052D
+
+ 11 11  0  0  0  0  0  0  0  0999 V2000
+   -1.1292   -0.5292    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	1
+   -1.1333   -1.5917    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	2
+   -1.1333    0.5333    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	3
+   -1.1375   -2.6542    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	4
+    0.8375    0.5625    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	5
+    0.9917   -2.4667    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	6
+    2.2417   -0.6542    0.0000 C   0  0  2  0  0  0  0  0  0  0  0  0	7
+    4.3000   -0.5000    0.0000 C   0  0  1  0  0  0  0  0  0  0  0  0	8
+    5.8583    0.9667    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	9
+    6.0167   -1.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	10
+    6.2042   -3.3417    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	11
+  6  4  1  0  0  0  0
+  1  2  2  0  0  0  0
+  7  5  1  1  0  0  0
+  7  6  1  1  0  0  0
+  2  4  1  0  0  0  0
+  8  7  1  0  0  0  0
+  9  8  1  1  0  0  0
+  5  3  1  0  0  0  0
+  8 10  1  1  0  0  0
+  1  3  1  0  0  0  0
+ 11 10  1  0  0  0  0
+M  END
+>  <ID>
+NSC-7414a
+
+     *
+     *
+     */
+
     // Test atom handling
 
     /**
@@ -775,12 +894,12 @@ public class TestJniInchiWrapper {
      */
     @Test
     public void testGetInchiFromChlorineAtom() throws Exception {
-    	for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 20; i++) {
         JniInchiInput input = getChlorineAtom("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
         Assert.assertEquals("InChI=1/Cl", output.getInchi());
-    	}
+        }
     }
 
     /**
@@ -1027,7 +1146,7 @@ public class TestJniInchiWrapper {
         Assert.assertEquals("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)",
                 output.getInchi());
 
-        JniInchiInput inputL = getLAlanine2D("-FixSp3Bug");
+        JniInchiInput inputL = getLAlanine2Da("-FixSp3Bug");
         JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
         Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
         Assert.assertEquals(
@@ -1041,6 +1160,30 @@ public class TestJniInchiWrapper {
                 "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1",
                 outputD.getInchi());
     };
+
+
+    /**
+     * Tests InChI generation from L-Alanine molecules, with 2D coordinates
+     * and wedge/hatch bonds, with bond drawn in opposite directions.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiStereoBondDirection() throws Exception {
+        JniInchiInput input = getLAlanine2Da("-FixSp3Bug");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(
+                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                output.getInchi());
+
+        JniInchiInput inputL = getLAlanine2Db("-FixSp3Bug");
+        JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
+        Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
+        Assert.assertEquals(
+                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                outputL.getInchi());
+    }
 
     // Test handling of no coordinates, with stereo parities
 
@@ -1102,6 +1245,21 @@ public class TestJniInchiWrapper {
         Assert.assertEquals("InChI=1/C2H2Cl2/c3-1-2-4/h1-2H/b2-1-", outputZ
                 .getInchi());
     };
+
+
+
+    @Test
+    public void testGetInchiFromNSC7414a() throws JniInchiException {
+          JniInchiInput input = getNSC7414a("/fixedh /srel /fixsp3bug");
+          JniInchiOutput output = JniInchiWrapper.getInchi(input);
+          Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
+          Assert.assertEquals("Omitted undefined stereo; Ambiguous stereo: center(s)", output.getMessage());
+          Assert.assertEquals(
+                  "InChI=1/C11H20/c1-3-10(2)11-8-6-4-5-7-9-11/h4-5,10-11H,3,6-9H2,1-2H3",
+                  output.getInchi());
+    }
+
+
 
     // Test option checking
 
@@ -1337,6 +1495,8 @@ public class TestJniInchiWrapper {
          * Radical: DOUBLET", output.getAtom(0).getDebugString());
          */
     }
+
+
 
     // Test bond handling
 
@@ -1690,59 +1850,59 @@ public class TestJniInchiWrapper {
                 "InChI Stereo0D: - [H,C,C,H] Type::DOUBLEBOND // Parity:ODD",
                 outputZ.getStereo0D(0).getDebugString());
     };
-    
-    
+
+
     /**
      * Tests InchiKey generation. (Example from InChI 1.02-beta release notes).
-     * @throws JniInchiException 
+     * @throws JniInchiException
      */
     @Test
     public void testGetInchiKeyForCafeine() throws JniInchiException {
 //    	for (int i = 0; i < 200000; i++) {
-    	String inchi = "InChI=1/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
-    	JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
-    	Assert.assertEquals(INCHI_KEY.OK, output.getReturnStatus());
-    	Assert.assertEquals("RYYVLZVUVIJVGH-UHFFFAOYAW", output.getKey());
+        String inchi = "InChI=1/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
+        JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
+        Assert.assertEquals(INCHI_KEY.OK, output.getReturnStatus());
+        Assert.assertEquals("RYYVLZVUVIJVGH-UHFFFAOYAW", output.getKey());
 //    	}
-	}
-    
+    }
+
     @Test
     public void testCheckInchiKeyValid() throws JniInchiException {
-    	String key = "RYYVLZVUVIJVGH-UHFFFAOYAW";
-    	INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
-    	Assert.assertEquals(INCHI_KEY_STATUS.VALID, status);
+        String key = "RYYVLZVUVIJVGH-UHFFFAOYAW";
+        INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
+        Assert.assertEquals(INCHI_KEY_STATUS.VALID, status);
     }
-    
+
     @Test
     public void testCheckInchiKeyInvalidLength() throws JniInchiException {
-    	String key1 = "RYYVLZVUVIJVGH-UHFFFAOYA";
-    	INCHI_KEY_STATUS status1 = JniInchiWrapper.checkInChIKey(key1);
-    	Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LENGTH, status1);
-    	
-    	String key2 = "RYYVLZVUVIJVGH-UHFFFAOYAWX";
-    	INCHI_KEY_STATUS status2 = JniInchiWrapper.checkInChIKey(key2);
-    	Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LENGTH, status2);
+        String key1 = "RYYVLZVUVIJVGH-UHFFFAOYA";
+        INCHI_KEY_STATUS status1 = JniInchiWrapper.checkInChIKey(key1);
+        Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LENGTH, status1);
+
+        String key2 = "RYYVLZVUVIJVGH-UHFFFAOYAWX";
+        INCHI_KEY_STATUS status2 = JniInchiWrapper.checkInChIKey(key2);
+        Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LENGTH, status2);
     }
-    
+
     @Test
     public void testCheckInchiKeyInvalidLayout() throws JniInchiException {
-    	String key = "RYYVLZVUVIJVGHXUHFFFAOYAW";
-    	INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
-    	Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LAYOUT, status);
+        String key = "RYYVLZVUVIJVGHXUHFFFAOYAW";
+        INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
+        Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LAYOUT, status);
     }
-    
+
     @Test
     public void testCheckInchiKeyInvalidChecksum() throws JniInchiException {
-    	String key = "RYYVLZVUVIJVGH-UHFFFAOYAA";
-    	INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
-    	Assert.assertEquals(INCHI_KEY_STATUS.INVALID_CHECKSUM, status);
+        String key = "RYYVLZVUVIJVGH-UHFFFAOYAA";
+        INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
+        Assert.assertEquals(INCHI_KEY_STATUS.INVALID_CHECKSUM, status);
     }
-    
+
     /* Option doesn't work yet
     @Test
     @Ignore
     public void testGenerateInchiKeyViaOptions() throws JniInchiException {
-    	JniInchiInput input = getLAlanine3D("-key");
+        JniInchiInput input = getLAlanine3D("-key");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
 //        Assert.assertEquals(null, output.getInchi());
@@ -1751,7 +1911,7 @@ public class TestJniInchiWrapper {
 //        Assert.assertEquals(null, output.getLog());
     }
     */
-    
+
 
     /**
      * Tests thread safety - starts ten threads, and sets them generating InChIs
@@ -1760,9 +1920,9 @@ public class TestJniInchiWrapper {
      */
     @Test
     public void multithreading() {
-        
-    	// Start threads
-    	int nthreads = 10;
+
+        // Start threads
+        int nthreads = 10;
         TestThread[] threads = new TestThread[nthreads];
         for (int i = 0; i < nthreads; i++) {
             threads[i] = new TestThread(i);
@@ -1813,23 +1973,23 @@ public class TestJniInchiWrapper {
 
         Assert.assertEquals("Fail count", 0, failureCount);
     }
-    
-    
+
+
     @Test
     public void testTooManyAtoms() throws JniInchiException {
-    	JniInchiInput input = new JniInchiInput();
-    	for (int i = 0; i < 2000; i++) {
-    		input.addAtom(new JniInchiAtom(0, 0, 0, "C"));
-    	}
-    	try {
-    		JniInchiWrapper.getInchi(input);
-    		Assert.fail("too many atoms");
-    	} catch (IllegalArgumentException e) {
-    		; // pass
-    	}
+        JniInchiInput input = new JniInchiInput();
+        for (int i = 0; i < 2000; i++) {
+            input.addAtom(new JniInchiAtom(0, 0, 0, "C"));
+        }
+        try {
+            JniInchiWrapper.getInchi(input);
+            Assert.fail("too many atoms");
+        } catch (IllegalArgumentException e) {
+            ; // pass
+        }
     }
-    
-    
+
+
     @Test
     public void testStructureToInchiBug2085031a() throws Exception {
         JniInchiInputInchi input = new JniInchiInputInchi(
@@ -1838,7 +1998,7 @@ public class TestJniInchiWrapper {
                 .getStructureFromInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
     }
-    
+
     @Test
     public void testStructureToInchiBug2085031b() throws Exception {
         JniInchiInputInchi input = new JniInchiInputInchi(
@@ -1847,9 +2007,9 @@ public class TestJniInchiWrapper {
                 .getStructureFromInchi(input);
         Assert.assertEquals(INCHI_RET.EOF, output.getReturnStatus());
     }
-    
-    
-    
+
+
+
 
     private class TestThread extends Thread {
 

@@ -7,8 +7,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#undef net_sf_jniinchi_JniInchiWrapper_MAXVAL
-#define net_sf_jniinchi_JniInchiWrapper_MAXVAL 20L
 #undef net_sf_jniinchi_JniInchiWrapper_MAX_LOCK_TIMEOUT
 #define net_sf_jniinchi_JniInchiWrapper_MAX_LOCK_TIMEOUT 15L
 /*

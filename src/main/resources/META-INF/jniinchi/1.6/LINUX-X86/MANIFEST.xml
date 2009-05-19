@@ -1,3 +1,0 @@
-<manifest id="jniinchi" version="1.6" platform="LINUX" architecture="X86">
-  <file library="true">libJniInchi-1.6-LINUX-X86.so</file>
-</manifest>
