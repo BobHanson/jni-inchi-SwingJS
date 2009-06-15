@@ -108,12 +108,16 @@ public class JniInchiAtom {
      * @param y     y-coordinate
      * @param z     z-coordinate
      * @param el    Chemical element symbol
+     * @throws NullPointerException - if the element symbol is null.
      */
     public JniInchiAtom(final double x, final double y, final double z, final String el) {
         this.x = x;
         this.y = y;
         this.z = z;
 
+        if (el == null) {
+        	throw new NullPointerException("Chemical element must not be null");
+        }
         this.elname = el;
     }
 

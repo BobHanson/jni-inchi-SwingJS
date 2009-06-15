@@ -18,6 +18,8 @@
  * or see <http://www.gnu.org/licenses/>.
  */
 package net.sf.jniinchi;
+import static org.junit.Assert.*;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,19 +38,19 @@ public class TestJniInchiAtom {
     public void testJniInchiAtomConstructor() {
         JniInchiAtom atom = getNewTestAtom();
         // Check configured parameters
-        Assert.assertEquals(1.0, atom.getX(), 1E-6);
-        Assert.assertEquals(2.0, atom.getY(), 1E-6);
-        Assert.assertEquals(3.0, atom.getZ(), 1E-6);
-        Assert.assertEquals("C", atom.getElementType());
+        assertEquals(1.0, atom.getX(), 1E-6);
+        assertEquals(2.0, atom.getY(), 1E-6);
+        assertEquals(3.0, atom.getZ(), 1E-6);
+        assertEquals("C", atom.getElementType());
 
         // Check default values set correctly
-        Assert.assertEquals(0, atom.getCharge());
-        Assert.assertEquals(0, atom.getImplicitH());
-        Assert.assertEquals(0, atom.getImplicitProtium());
-        Assert.assertEquals(0, atom.getImplicitDeuterium());
-        Assert.assertEquals(0, atom.getImplicitTritium());
-        Assert.assertEquals(0, atom.getIsotopicMass());
-        Assert.assertEquals(INCHI_RADICAL.NONE, atom.getRadical());
+        assertEquals(0, atom.getCharge());
+        assertEquals(0, atom.getImplicitH());
+        assertEquals(0, atom.getImplicitProtium());
+        assertEquals(0, atom.getImplicitDeuterium());
+        assertEquals(0, atom.getImplicitTritium());
+        assertEquals(0, atom.getIsotopicMass());
+        assertEquals(INCHI_RADICAL.NONE, atom.getRadical());
     }
 
     /**
@@ -59,7 +61,7 @@ public class TestJniInchiAtom {
     public void testSetCharge() {
         JniInchiAtom atom = getNewTestAtom();
         atom.setCharge(+1);
-        Assert.assertEquals(+1, atom.getCharge());
+        assertEquals(+1, atom.getCharge());
     }
 
     /**
@@ -70,7 +72,7 @@ public class TestJniInchiAtom {
     public void testSetRadical() {
         JniInchiAtom atom = getNewTestAtom();
         atom.setRadical(INCHI_RADICAL.DOUBLET);
-        Assert.assertEquals(INCHI_RADICAL.DOUBLET, atom.getRadical());
+        assertEquals(INCHI_RADICAL.DOUBLET, atom.getRadical());
     }
 
     /**
@@ -81,7 +83,7 @@ public class TestJniInchiAtom {
     public void testSetIsotopicMass() {
         JniInchiAtom atom = getNewTestAtom();
         atom.setIsotopicMass(13);
-        Assert.assertEquals(13, atom.getIsotopicMass());
+        assertEquals(13, atom.getIsotopicMass());
     }
 
     /**
@@ -92,7 +94,7 @@ public class TestJniInchiAtom {
     public void testSetIsotopicMassShift() {
         JniInchiAtom atom = getNewTestAtom();
         atom.setIsotopicMassShift(+1);
-        Assert.assertEquals(JniInchiAtom.ISOTOPIC_SHIFT_FLAG + 1, atom.getIsotopicMass());
+        assertEquals(JniInchiAtom.ISOTOPIC_SHIFT_FLAG + 1, atom.getIsotopicMass());
     }
 
     /**
@@ -103,7 +105,7 @@ public class TestJniInchiAtom {
     public void testSetImplictH() {
         JniInchiAtom atom = getNewTestAtom();
         atom.setImplicitH(3);
-        Assert.assertEquals(3, atom.getImplicitH());
+        assertEquals(3, atom.getImplicitH());
     }
 
     /**
@@ -114,7 +116,7 @@ public class TestJniInchiAtom {
     public void testSetImplictProtium() {
         JniInchiAtom atom = getNewTestAtom();
         atom.setImplicitProtium(2);
-        Assert.assertEquals(2, atom.getImplicitProtium());
+        assertEquals(2, atom.getImplicitProtium());
     }
 
     /**
@@ -125,7 +127,7 @@ public class TestJniInchiAtom {
     public void testSetImplictDeuterium() {
         JniInchiAtom atom = getNewTestAtom();
         atom.setImplicitDeuterium(2);
-        Assert.assertEquals(2, atom.getImplicitDeuterium());
+        assertEquals(2, atom.getImplicitDeuterium());
     }
 
     /**
@@ -136,7 +138,7 @@ public class TestJniInchiAtom {
     public void testSetImplictTritium() {
         JniInchiAtom atom = getNewTestAtom();
         atom.setImplicitTritium(2);
-        Assert.assertEquals(2, atom.getImplicitTritium());
+        assertEquals(2, atom.getImplicitTritium());
     }
 
     /**
@@ -146,7 +148,7 @@ public class TestJniInchiAtom {
     @Test
     public void testGetElementType() {
         JniInchiAtom atom = getNewTestAtom();
-        Assert.assertEquals("C", atom.getElementType());
+        assertEquals("C", atom.getElementType());
     }
 
     /**
@@ -157,7 +159,7 @@ public class TestJniInchiAtom {
     public void testGetCharge() {
         JniInchiAtom atom = getNewTestAtom();
         atom.setCharge(+1);
-        Assert.assertEquals(+1, atom.getCharge());
+        assertEquals(+1, atom.getCharge());
     }
 
     /**
@@ -168,7 +170,7 @@ public class TestJniInchiAtom {
     public void testGetRadical() {
         JniInchiAtom atom = getNewTestAtom();
         atom.setRadical(INCHI_RADICAL.TRIPLET);
-        Assert.assertEquals(INCHI_RADICAL.TRIPLET, atom.getRadical());
+        assertEquals(INCHI_RADICAL.TRIPLET, atom.getRadical());
     }
 
     /**
@@ -178,7 +180,7 @@ public class TestJniInchiAtom {
     @Test
     public void testGetX() {
         JniInchiAtom atom = getNewTestAtom();
-        Assert.assertEquals(1.0, atom.getX(), 1E-6);
+        assertEquals(1.0, atom.getX(), 1E-6);
     }
 
     /**
@@ -188,7 +190,7 @@ public class TestJniInchiAtom {
     @Test
     public void testGetY() {
         JniInchiAtom atom = getNewTestAtom();
-        Assert.assertEquals(2.0, atom.getY(), 1E-6);
+        assertEquals(2.0, atom.getY(), 1E-6);
     }
 
     /**
@@ -198,7 +200,7 @@ public class TestJniInchiAtom {
     @Test
     public void testGetZ() {
         JniInchiAtom atom = getNewTestAtom();
-        Assert.assertEquals(3.0, atom.getZ(), 1E-6);
+        assertEquals(3.0, atom.getZ(), 1E-6);
     }
 
     /**
@@ -208,9 +210,9 @@ public class TestJniInchiAtom {
     @Test
     public void testGetImplicitH() {
         JniInchiAtom atom = getNewTestAtom();
-        Assert.assertEquals(0, atom.getImplicitH());
+        assertEquals(0, atom.getImplicitH());
         atom.setImplicitH(3);
-        Assert.assertEquals(3, atom.getImplicitH());
+        assertEquals(3, atom.getImplicitH());
     }
 
     /**
@@ -220,9 +222,9 @@ public class TestJniInchiAtom {
     @Test
     public void testGetImplicitProtium() {
         JniInchiAtom atom = getNewTestAtom();
-        Assert.assertEquals(0, atom.getImplicitProtium());
+        assertEquals(0, atom.getImplicitProtium());
         atom.setImplicitProtium(2);
-        Assert.assertEquals(2, atom.getImplicitProtium());
+        assertEquals(2, atom.getImplicitProtium());
     }
 
     /**
@@ -232,9 +234,9 @@ public class TestJniInchiAtom {
     @Test
     public void testGetImplicitDeuterium() {
         JniInchiAtom atom = getNewTestAtom();
-        Assert.assertEquals(0, atom.getImplicitDeuterium());
+        assertEquals(0, atom.getImplicitDeuterium());
         atom.setImplicitDeuterium(2);
-        Assert.assertEquals(2, atom.getImplicitDeuterium());
+        assertEquals(2, atom.getImplicitDeuterium());
     }
 
     /**
@@ -244,8 +246,19 @@ public class TestJniInchiAtom {
     @Test
     public void testGetImplicitTritium() {
         JniInchiAtom atom = getNewTestAtom();
-        Assert.assertEquals(0, atom.getImplicitTritium());
+        assertEquals(0, atom.getImplicitTritium());
         atom.setImplicitTritium(2);
-        Assert.assertEquals(2, atom.getImplicitTritium());
+        assertEquals(2, atom.getImplicitTritium());
     }
+    
+    @Test
+    public void testNullElementSymbol() {
+    	try {
+    		new JniInchiAtom(0, 0, 0, null);
+    		fail("Null element symbol");
+    	} catch (NullPointerException e) {
+    		// pass
+    	}
+    }
+    
 }
