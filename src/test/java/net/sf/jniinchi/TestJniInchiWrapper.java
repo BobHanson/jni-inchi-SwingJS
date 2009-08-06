@@ -1,21 +1,20 @@
-/*
- *  JNI InChI Wrapper - A Java Native Interface Wrapper for InChI.
- *  Copyright 2006, 2007, 2008 Sam Adams <sea36 at users.sourceforge.net>
+/**
+ * Copyright (C) 2006-2009 Sam Adams <sam.adams@cantab.net>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This file is part of JNI-InChI.
  *
- * This library is distributed in the hope that it will be useful,
+ * JNI-InChI is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * JNI-InChI is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
- * or see <http://www.gnu.org/licenses/>.
+ * License along with JNI-InChI. If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sf.jniinchi;
 
@@ -45,7 +44,7 @@ public class TestJniInchiWrapper {
 
         // Generate atoms
         input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000, "Cl"));
-
+        input.getAtom(0).setImplicitH(0);
         return input;
     }
 
@@ -160,6 +159,7 @@ public class TestJniInchiWrapper {
         JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000,
                 "Cl"));
         a1.setIsotopicMass(37);
+        a1.setImplicitH(0);
 
         return input;
     }
@@ -179,6 +179,7 @@ public class TestJniInchiWrapper {
         JniInchiAtom a1 = input.addAtom(new JniInchiAtom(0.000, 0.000, 0.000,
                 "Cl"));
         a1.setIsotopicMassShift(+2);
+        input.getAtom(0).setImplicitH(0);
 
         return input;
     }
@@ -842,8 +843,8 @@ public class TestJniInchiWrapper {
         input.addBond(new JniInchiBond(a1, a3, INCHI_BOND_TYPE.SINGLE));
         input.addBond(new JniInchiBond(a11, a10, INCHI_BOND_TYPE.SINGLE));
 
-        input.addStereo0D(new JniInchiStereo0D(a7, a7, a5, a6, a8, INCHI_STEREOTYPE.TETRAHEDRAL, INCHI_PARITY.EVEN));
-        input.addStereo0D(new JniInchiStereo0D(a8, a8, a7, a9, a10, INCHI_STEREOTYPE.TETRAHEDRAL, INCHI_PARITY.ODD));
+//        input.addStereo0D(new JniInchiStereo0D(a7, a7, a5, a6, a8, INCHI_STEREOTYPE.TETRAHEDRAL, INCHI_PARITY.EVEN));
+//        input.addStereo0D(new JniInchiStereo0D(a8, a8, a7, a9, a10, INCHI_STEREOTYPE.TETRAHEDRAL, INCHI_PARITY.ODD));
 
         return input;
     }
@@ -894,12 +895,10 @@ NSC-7414a
      */
     @Test
     public void testGetInchiFromChlorineAtom() throws Exception {
-        for (int i = 0; i < 20; i++) {
         JniInchiInput input = getChlorineAtom("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
         Assert.assertEquals("InChI=1/Cl", output.getInchi());
-        }
     }
 
     /**
@@ -1096,40 +1095,6 @@ NSC-7414a
     };
 
     // Test handling of 2D coordinates with bond stereo types
-
-    /**
-     * Tests InChI generation from L and D-Alanine molecules, with 3D
-     * coordinates.
-     *
-     * Fails due to bug in InChI software. See
-     * testGetInchiFromLandDAlanine2DWithFixSp3Bug() for workaround.
-     *
-     * @throws Exception
-     */
-    @Test
-    @Ignore
-    public void testGetInchiFromLandDAlanine2D() throws Exception {
-        /*
-         * JniInchiInput input = getAlanine2D(""); JniInchiOutput output =
-         * JniInchiWrapper.getInchi(input);
-         * Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
-         * Assert.assertEquals("Omitted undefined stereo", output.getMessage());
-         * Assert.assertEquals("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)",
-         * output.getInchi());
-         *
-         * JniInchiInput inputL = getLAlanine2D(""); JniInchiOutput outputL =
-         * JniInchiWrapper.getInchi(inputL); Assert.assertEquals(INCHI_RET.OKAY,
-         * outputL.getReturnStatus());
-         * Assert.assertEquals("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
-         * outputL.getInchi());
-         *
-         * JniInchiInput inputD = getDAlanine2D(""); JniInchiOutput outputD =
-         * JniInchiWrapper.getInchi(inputD); Assert.assertEquals(INCHI_RET.OKAY,
-         * outputD.getReturnStatus());
-         * Assert.assertEquals("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1",
-         * outputD.getInchi());
-         */
-    };
 
     /**
      * Tests InChI generation from L and D-Alanine molecules, with 3D
@@ -1358,17 +1323,16 @@ NSC-7414a
     @Ignore
     // FIXME
     public void testGetChlorineIonFromInchi() throws Exception {
-        /*
-         * JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/Cl/q-1",
-         * "-FixedH"); JniInchiOutputStructure output =
-         * JniInchiWrapper.getStructureFromInchi(input); //debug(output);
-         * Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-         * Assert.assertEquals(1, output.getNumAtoms()); Assert.assertEquals(0,
-         * output.getNumBonds()); Assert.assertEquals(0,
-         * output.getNumStereo0D()); Assert.assertEquals("InChI Atom: Cl
-         * [0.0,0.0,0.0] Charge:-1 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 //
-         * Radical: NONE", output.getAtom(0).getDebugString());
-         */
+        
+        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/Cl/q-1", "-FixedH");
+        JniInchiOutputStructure output = JniInchiWrapper.getStructureFromInchi(input);
+        System.out.println(output.getLog());
+        Assert.assertEquals("InChI Atom: Cl [0.0,0.0,0.0] Charge:-1 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE", output.getAtom(0).getDebugString());
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(1, output.getNumAtoms());
+        Assert.assertEquals(0, output.getNumBonds());
+        Assert.assertEquals(0, output.getNumStereo0D());
+        
     }
 
     /**
@@ -1483,17 +1447,14 @@ NSC-7414a
     @Ignore
     // Test fails due to problem with InChI library
     public void testGetMethylRadicalFromInchi() throws Exception {
-        /*
-         * JniInchiInputInchi input = new
-         * JniInchiInputInchi("InChI=1/CH3/h1H3"); JniInchiOutputStructure
-         * output = JniInchiWrapper.getStructureFromInchi(input);
-         * Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-         * Assert.assertEquals(1, output.getNumAtoms()); Assert.assertEquals(0,
-         * output.getNumBonds()); Assert.assertEquals(0,
-         * output.getNumStereo0D()); Assert.assertEquals("InChI Atom: C
-         * [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 //
-         * Radical: DOUBLET", output.getAtom(0).getDebugString());
-         */
+        
+        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/CH3/h1H3");
+        JniInchiOutputStructure output = JniInchiWrapper.getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(1, output.getNumAtoms());
+        Assert.assertEquals(0, output.getNumBonds()); 
+        Assert.assertEquals(0, output.getNumStereo0D());
+        Assert.assertEquals("InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: DOUBLET", output.getAtom(0).getDebugString());
     }
 
 
@@ -1927,11 +1888,12 @@ NSC-7414a
         for (int i = 0; i < nthreads; i++) {
             threads[i] = new TestThread(i);
             threads[i].start();
+            Thread.yield();
         }
 
         // Wait for threads to get going
         try {
-            Thread.sleep(200);
+            Thread.sleep(500);
         } catch (InterruptedException ie) {
             Assert.fail("Interrupted");
         }
@@ -1950,8 +1912,13 @@ NSC-7414a
         Assert.assertTrue("All threads running", allRunning);
 
         // Wait for threads to stop
+        long maxsleep = 10000;
+        long t0 = System.currentTimeMillis();
         try {
-            Thread.sleep(2000);
+	        for (int i = 0; i < nthreads; i++) {
+	        	long t1 = System.currentTimeMillis();
+	        	threads[i].join(maxsleep - (t1-t0));
+	        }
         } catch (InterruptedException ie) {
             Assert.fail("Interrupted");
         }
@@ -2042,6 +2009,7 @@ NSC-7414a
                 JniInchiInput input = new JniInchiInput();
                 String element = ELS[rand.nextInt(ELS.length)];
                 input.addAtom(new JniInchiAtom(0, 0, 0, element));
+                input.getAtom(0).setImplicitH(0);
                 try {
                     JniInchiOutput output = JniInchiWrapper.getInchi(input);
                     if (INCHI_RET.OKAY != output.getReturnStatus()) {
