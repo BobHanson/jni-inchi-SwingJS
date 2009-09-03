@@ -1905,19 +1905,18 @@ NSC-7414a
             if (threads[i].runCount < 1) {
                 allRunning = false;
             }
-            threads[i].timeToStop = true;
+            threads[i].finish();
             Thread.yield();
         }
 
         Assert.assertTrue("All threads running", allRunning);
 
         // Wait for threads to stop
-        long maxsleep = 10000;
-        long t0 = System.currentTimeMillis();
+        long tstop = System.currentTimeMillis() + 30000;
         try {
             for (int i = 0; i < nthreads; i++) {
-                long t1 = System.currentTimeMillis();
-                threads[i].join(maxsleep - (t1-t0));
+                long t0 = System.currentTimeMillis();
+                threads[i].join(Math.max(1,tstop-t0));
             }
         } catch (InterruptedException ie) {
             Assert.fail("Interrupted");
@@ -1926,7 +1925,7 @@ NSC-7414a
         // Check threads have finished
         boolean allFinished = true;
         for (int i = 0; i < nthreads; i++) {
-            if (!threads[i].finished) {
+            if (!threads[i].isDone()) {
                 allFinished = false;
                 break;
             }
@@ -1983,28 +1982,23 @@ NSC-7414a
         private String[] ELS = { "H", "He", "Li", "Be", "B", "C", "N", "O",
                 "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar" };
 
-        public boolean timeToStop;
+        private volatile boolean stop = false;
+        private volatile boolean done = false;
 
-        public boolean finished;
-
-        public int failCount;
-
-        public int runCount;
+        public volatile int failCount = 0;
+        public volatile int runCount = 0;
 
         public Exception ex;
 
-        public int i;
+        public final int threadIndex;
 
         public TestThread(final int i) {
-            this.i = i;
+            this.threadIndex = i;
         }
 
         public void run() {
-            timeToStop = false;
-            failCount = 0;
-            runCount = 0;
             Random rand = new Random();
-            while (!timeToStop) {
+            while (!stop) {
                 runCount++;
                 JniInchiInput input = new JniInchiInput();
                 String element = ELS[rand.nextInt(ELS.length)];
@@ -2026,7 +2020,15 @@ NSC-7414a
                 }
                 yield();
             }
-            finished = true;
+            done = true;
+        }
+
+        public void finish() {
+            this.stop = true;
+        }
+
+        public boolean isDone() {
+            return done;
         }
 
     }
