@@ -1251,7 +1251,7 @@ NSC-7414a
     public void testCheckOptionsString() throws JniInchiException {
         String options = JniInchiWrapper.checkOptions("  -ComPreSS  /SNon");
         String flag = JniInchiWrapper.flagChar;
-        Assert.assertEquals(flag + "Compress " + flag + "SNon ", options);
+        Assert.assertEquals(flag + "Compress " + flag + "SNon", options);
     }
 
     // Test option handling
@@ -1323,7 +1323,7 @@ NSC-7414a
     @Ignore
     // FIXME
     public void testGetChlorineIonFromInchi() throws Exception {
-        
+
         JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/Cl/q-1", "-FixedH");
         JniInchiOutputStructure output = JniInchiWrapper.getStructureFromInchi(input);
         System.out.println(output.getLog());
@@ -1332,7 +1332,7 @@ NSC-7414a
         Assert.assertEquals(1, output.getNumAtoms());
         Assert.assertEquals(0, output.getNumBonds());
         Assert.assertEquals(0, output.getNumStereo0D());
-        
+
     }
 
     /**
@@ -1447,12 +1447,12 @@ NSC-7414a
     @Ignore
     // Test fails due to problem with InChI library
     public void testGetMethylRadicalFromInchi() throws Exception {
-        
+
         JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/CH3/h1H3");
         JniInchiOutputStructure output = JniInchiWrapper.getStructureFromInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
         Assert.assertEquals(1, output.getNumAtoms());
-        Assert.assertEquals(0, output.getNumBonds()); 
+        Assert.assertEquals(0, output.getNumBonds());
         Assert.assertEquals(0, output.getNumStereo0D());
         Assert.assertEquals("InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: DOUBLET", output.getAtom(0).getDebugString());
     }
@@ -1915,10 +1915,10 @@ NSC-7414a
         long maxsleep = 10000;
         long t0 = System.currentTimeMillis();
         try {
-	        for (int i = 0; i < nthreads; i++) {
-	        	long t1 = System.currentTimeMillis();
-	        	threads[i].join(maxsleep - (t1-t0));
-	        }
+            for (int i = 0; i < nthreads; i++) {
+                long t1 = System.currentTimeMillis();
+                threads[i].join(maxsleep - (t1-t0));
+            }
         } catch (InterruptedException ie) {
             Assert.fail("Interrupted");
         }

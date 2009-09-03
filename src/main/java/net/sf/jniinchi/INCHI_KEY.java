@@ -18,8 +18,6 @@
  */
 package net.sf.jniinchi;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>Type-safe enumeration of InChI return codes.
@@ -36,36 +34,20 @@ import java.util.List;
  * <p>See <tt>inchi_api.h</tt>.
  * @author Sam Adams
  */
-public class INCHI_KEY {
+public enum INCHI_KEY {
 
-    // --- MUST BE BEFORE DECLARATIONS ---
-    /**
-     * List of return types.
-     */
-    private static List list = new ArrayList(6);
-    // ---
+    OK(0),
 
+    UNKNOWN_ERROR(1),
 
-    public static final INCHI_KEY OK      = new INCHI_KEY("OK", 0);
+    EMPTY_INPUT(2),
 
-    public static final INCHI_KEY UNKNOWN_ERROR = new INCHI_KEY("UNKNOWN_ERROR", 1);
+    NOT_INCHI_INPUT(3),
 
-    public static final INCHI_KEY EMPTY_INPUT      = new INCHI_KEY("EMPTY_INPUT", 2);
+    NOT_ENOUGH_MEMORY(4),
 
-    public static final INCHI_KEY NOT_INCHI_INPUT   = new INCHI_KEY("NOT_INCHI_INPUT", 3);
+    ERROR_IN_FLAG_CHAR(5);
 
-    public static final INCHI_KEY NOT_ENOUGH_MEMORY     = new INCHI_KEY("NOT_ENOUGH_MEMORY", 4);
-
-    public static final INCHI_KEY ERROR_IN_FLAG_CHAR     = new INCHI_KEY("ERROR_IN_FLAG_CHAR", 5);
-
-
-
-
-
-    /**
-     * Name.
-     */
-    private final String name;
 
     /**
      * Internal InChI index (from inchi_api.h).
@@ -75,33 +57,25 @@ public class INCHI_KEY {
     /**
      * Constructor.
      */
-    @SuppressWarnings("unchecked")
-	private INCHI_KEY(final String name, final int indx) { this.name = name; this.indx = indx; list.add(this); };
+    private INCHI_KEY(final int indx) {
+        this.indx = indx;
+    };
 
     public int getIndx() {
         return indx;
     }
 
-    public String toString() {
-        return name;
-    }
-
-    protected static List getList() {
-        return list;
-    }
-
-	public static INCHI_KEY getValue(int ret) {
-		INCHI_KEY retStatus;
+    public static INCHI_KEY getValue(int ret) {
         switch (ret) {
-        	case 0:	retStatus = INCHI_KEY.OK;	break;
-        	case 1: retStatus = INCHI_KEY.UNKNOWN_ERROR;	break;
-        	case 2: retStatus = INCHI_KEY.EMPTY_INPUT;	break;
-        	case 3: retStatus = INCHI_KEY.NOT_INCHI_INPUT;	break;
-        	case 4: retStatus = INCHI_KEY.NOT_ENOUGH_MEMORY;	break;
-        	case 5: retStatus = INCHI_KEY.ERROR_IN_FLAG_CHAR;	break;
-        	default:
-        		retStatus = null;
+            case 0:	return OK;
+            case 1: return UNKNOWN_ERROR;
+            case 2: return EMPTY_INPUT;
+            case 3: return NOT_INCHI_INPUT;
+            case 4: return NOT_ENOUGH_MEMORY;
+            case 5: return ERROR_IN_FLAG_CHAR;
+            default:
+                return null;
         }
-        return retStatus;
-	}
+    }
+
 }

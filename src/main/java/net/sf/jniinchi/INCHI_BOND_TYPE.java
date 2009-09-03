@@ -22,33 +22,30 @@ package net.sf.jniinchi;
  * Type-safe enumeration of InChI bond type definitions.  See <tt>inchi_api.h</tt>.
  * @author Sam Adams
  */
-public class INCHI_BOND_TYPE {
+public enum INCHI_BOND_TYPE {
 
-	
-	public static final INCHI_BOND_TYPE NONE =  new INCHI_BOND_TYPE("NONE", 0);
+
+    NONE("NONE", 0),
 
     /**
      * Single bond.
      */
-    public static final INCHI_BOND_TYPE SINGLE   = new INCHI_BOND_TYPE("SINGLE", 1);
+    SINGLE("SINGLE", 1),
 
     /**
      * Double bond.
      */
-    public static final INCHI_BOND_TYPE DOUBLE   = new INCHI_BOND_TYPE("DOUBLE", 2);
+    DOUBLE("DOUBLE", 2),
 
     /**
      * Triple bond.
      */
-    public static final INCHI_BOND_TYPE TRIPLE   = new INCHI_BOND_TYPE("TRIPLE", 3);
+    TRIPLE("TRIPLE", 3),
 
     /**
      * Alternating (single-double) bond.
      */
-    public static final INCHI_BOND_TYPE ALTERN   = new INCHI_BOND_TYPE("ALTERN", 4);
-
-	
-
+    ALTERN("ALTERN", 4);
 
 
 
@@ -75,16 +72,16 @@ public class INCHI_BOND_TYPE {
         return name;
     }
 
-	public static INCHI_BOND_TYPE getValue(int btype) {
-		INCHI_BOND_TYPE type;
-		switch (btype) {
-			case 1: type = INCHI_BOND_TYPE.SINGLE; break;
-			case 2: type = INCHI_BOND_TYPE.DOUBLE; break;
-			case 3: type = INCHI_BOND_TYPE.TRIPLE; break;
-			case 4: type = INCHI_BOND_TYPE.ALTERN; break;
-			default:
-				type = null;
+    public static INCHI_BOND_TYPE getValue(int btype) {
+        INCHI_BOND_TYPE type;
+        switch (btype) {
+            case 1: type = INCHI_BOND_TYPE.SINGLE; break;
+            case 2: type = INCHI_BOND_TYPE.DOUBLE; break;
+            case 3: type = INCHI_BOND_TYPE.TRIPLE; break;
+            case 4: type = INCHI_BOND_TYPE.ALTERN; break;
+            default:
+                type = null;
         }
         return type;
-	}
+    }
 }

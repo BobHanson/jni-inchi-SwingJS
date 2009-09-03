@@ -19,7 +19,6 @@
 package net.sf.jniinchi;
 
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeoutException;
 
@@ -150,13 +149,13 @@ public class JniInchiWrapper {
      *
      * @param ops  List of INCHI_OPTION
      */
-    protected static String checkOptions(List ops) throws JniInchiException {
+    protected static String checkOptions(List<INCHI_OPTION> ops) throws JniInchiException {
         StringBuffer sbOptions = new StringBuffer();
 
         for (int i = 0; i < ops.size(); i++) {
             Object op = ops.get(i);
             if (op instanceof INCHI_OPTION) {
-                sbOptions.append(flagChar + ((INCHI_OPTION) op).getName() + " ");
+                sbOptions.append(flagChar + ((INCHI_OPTION) op).name() + " ");
             } else {
                 throw new JniInchiException("Unrecognised InChI option");
             }
@@ -173,9 +172,7 @@ public class JniInchiWrapper {
      *                     switch (/ or -).
      */
     protected static String checkOptions(final String ops) throws JniInchiException {
-        Map optionMap = INCHI_OPTION.getLowercaseMap();
-
-        StringBuffer sbOptions = new StringBuffer();
+        StringBuilder sbOptions = new StringBuilder();
 
         StringTokenizer tok = new StringTokenizer(ops);
         while (tok.hasMoreTokens()) {
@@ -185,9 +182,12 @@ public class JniInchiWrapper {
                 op = op.substring(1);
             }
 
-            String lcop = op.toLowerCase();
-            if (optionMap.keySet().contains(lcop)) {
-                sbOptions.append(flagChar + optionMap.get(lcop) + " ");
+            INCHI_OPTION option = INCHI_OPTION.valueOfIgnoreCase(op);
+            if (option != null) {
+                sbOptions.append(flagChar + option.name());
+                if (tok.hasMoreTokens()) {
+                     sbOptions.append(" ");
+                }
             } else {
                 throw new JniInchiException("Unrecognised InChI option");
             }

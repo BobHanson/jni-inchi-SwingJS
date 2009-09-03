@@ -22,30 +22,27 @@ package net.sf.jniinchi;
  * Type-safe enumeration of InChI radical definitions.  See <tt>inchi_api.h</tt>.
  * @author Sam Adams
  */
-public class INCHI_RADICAL {
-
+public enum INCHI_RADICAL {
 
     /**
      * No radical status recorded.
      */
-    public static final INCHI_RADICAL NONE    = new INCHI_RADICAL("NONE", 0);
+    NONE("NONE", 0),
 
     /**
      * Singlet.
      */
-    public static final INCHI_RADICAL SINGLET = new INCHI_RADICAL("SINGLET", 1);
+    SINGLET("SINGLET", 1),
 
     /**
      * Doublet.
      */
-    public static final INCHI_RADICAL DOUBLET = new INCHI_RADICAL("DOUBLET", 2);
+    DOUBLET("DOUBLET", 2),
 
     /**
      * Triplet.
      */
-    public static final INCHI_RADICAL TRIPLET = new INCHI_RADICAL("TRIPLET", 3);
-
-
+    TRIPLET("TRIPLET", 3);
 
 
     /**
@@ -83,16 +80,16 @@ public class INCHI_RADICAL {
         return name;
     }
 
-	public static INCHI_RADICAL getValue(int rad) {
-		INCHI_RADICAL radical;
-		switch (rad) {
-			case 0: radical = INCHI_RADICAL.NONE; break;
-			case 1: radical = INCHI_RADICAL.SINGLET; break;
-			case 2: radical = INCHI_RADICAL.DOUBLET; break;
-			case 3: radical = INCHI_RADICAL.TRIPLET; break;
-			default:
-				radical = null;
-		}
-		return radical;
-	}
+    public static INCHI_RADICAL getValue(int rad) {
+        INCHI_RADICAL radical;
+        switch (rad) {
+            case 0: radical = NONE; break;
+            case 1: radical = SINGLET; break;
+            case 2: radical = DOUBLET; break;
+            case 3: radical = TRIPLET; break;
+            default:
+                radical = null;
+        }
+        return radical;
+    }
 }

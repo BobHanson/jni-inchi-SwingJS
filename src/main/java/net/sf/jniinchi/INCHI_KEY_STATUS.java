@@ -18,8 +18,6 @@
  */
 package net.sf.jniinchi;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>Type-safe enumeration of InChIKey check return codes.
@@ -34,23 +32,15 @@ import java.util.List;
  * <p>See <tt>inchi_api.h</tt>.
  * @author Sam Adams
  */
-public class INCHI_KEY_STATUS {
+public enum INCHI_KEY_STATUS {
 
-    // --- MUST BE BEFORE DECLARATIONS ---
-    /**
-     * List of return types.
-     */
-    private static List list = new ArrayList(4);
-    // ---
+    VALID("VALID", 0),
 
+    INVALID_LENGTH("INVALID_LENGTH", 1),
 
-    public static final INCHI_KEY_STATUS VALID      = new INCHI_KEY_STATUS("VALID", 0);
+    INVALID_LAYOUT("INVALID_LAYOUT", 2),
 
-    public static final INCHI_KEY_STATUS INVALID_LENGTH = new INCHI_KEY_STATUS("INVALID_LENGTH", 1);
-
-    public static final INCHI_KEY_STATUS INVALID_LAYOUT      = new INCHI_KEY_STATUS("INVALID_LAYOUT", 2);
-
-    public static final INCHI_KEY_STATUS INVALID_CHECKSUM   = new INCHI_KEY_STATUS("INVALID_CHECKSUM", 3);
+    INVALID_CHECKSUM("INVALID_CHECKSUM", 3);
 
 
     /**
@@ -66,8 +56,10 @@ public class INCHI_KEY_STATUS {
     /**
      * Constructor.
      */
-    @SuppressWarnings("unchecked")
-	private INCHI_KEY_STATUS(final String name, final int indx) { this.name = name; this.indx = indx; list.add(this); };
+    private INCHI_KEY_STATUS(final String name, final int indx) {
+        this.name = name;
+        this.indx = indx;
+    }
 
     public int getIndx() {
         return indx;
@@ -77,21 +69,17 @@ public class INCHI_KEY_STATUS {
         return name;
     }
 
-    protected static List getList() {
-        return list;
-    }
-
     public static INCHI_KEY_STATUS getValue(int value) {
-    	INCHI_KEY_STATUS keyStatus;
-    	switch (value) {
-    		case 0: keyStatus = INCHI_KEY_STATUS.VALID; break;
-    		case 1: keyStatus = INCHI_KEY_STATUS.INVALID_LENGTH; break;
-    		case 2: keyStatus = INCHI_KEY_STATUS.INVALID_LAYOUT; break;
-    		case 3: keyStatus = INCHI_KEY_STATUS.INVALID_CHECKSUM; break;
-    		default:
-    			keyStatus = null;
-    	}
-    	return keyStatus;
+        INCHI_KEY_STATUS keyStatus;
+        switch (value) {
+            case 0: keyStatus = INCHI_KEY_STATUS.VALID; break;
+            case 1: keyStatus = INCHI_KEY_STATUS.INVALID_LENGTH; break;
+            case 2: keyStatus = INCHI_KEY_STATUS.INVALID_LAYOUT; break;
+            case 3: keyStatus = INCHI_KEY_STATUS.INVALID_CHECKSUM; break;
+            default:
+                keyStatus = null;
+        }
+        return keyStatus;
     }
 
 }

@@ -22,48 +22,48 @@ package net.sf.jniinchi;
  * Type-safe enumeration of InChI 2D stereo definitions.  See <tt>inchi_api.h</tt>.
  * @author Sam Adams
  */
-public class INCHI_BOND_STEREO {
+public enum INCHI_BOND_STEREO {
 
 
     /**
      * No 2D stereo definition recorded.
      */
-    public static final INCHI_BOND_STEREO NONE              = new INCHI_BOND_STEREO("NONE", 0);
+    NONE("NONE", 0),
 
     /**
      * Stereocenter-related; positive: the sharp end points to this atom.
      */
-    public static final INCHI_BOND_STEREO SINGLE_1UP        = new INCHI_BOND_STEREO("SINGLE_1UP", 1);
+    SINGLE_1UP("SINGLE_1UP", 1),
 
     /**
      * Stereocenter-related; positive: the sharp end points to this atom.
      */
-    public static final INCHI_BOND_STEREO SINGLE_1EITHER    = new INCHI_BOND_STEREO("SINGLE_1EITHER", 4);
+    SINGLE_1EITHER("SINGLE_1EITHER", 4),
 
     /**
      * Stereocenter-related; positive: the sharp end points to this atom.
      */
-    public static final INCHI_BOND_STEREO SINGLE_1DOWN      = new INCHI_BOND_STEREO("SINGLE_1DOWN", 6);
+    SINGLE_1DOWN("SINGLE_1DOWN", 6),
 
     /**
      * Stereocenter-related; negative: the sharp end points to the opposite atom.
      */
-    public static final INCHI_BOND_STEREO SINGLE_2UP        = new INCHI_BOND_STEREO("SINGLE_2UP", -1);
+    SINGLE_2UP("SINGLE_2UP", -1),
 
     /**
      * Stereocenter-related; negative: the sharp end points to the opposite atom.
      */
-    public static final INCHI_BOND_STEREO SINGLE_2EITHER    = new INCHI_BOND_STEREO("SINGLE_2EITHER", -4);
+    SINGLE_2EITHER("SINGLE_2EITHER", -4),
 
     /**
      * Stereocenter-related; negative: the sharp end points to the opposite atom.
      */
-    public static final INCHI_BOND_STEREO SINGLE_2DOWN      = new INCHI_BOND_STEREO("SINGLE_2DOWN", -6);
+    SINGLE_2DOWN("SINGLE_2DOWN", -6),
 
     /**
      * Unknown stereobond geometry.
      */
-    public static final INCHI_BOND_STEREO DOUBLE_EITHER   = new INCHI_BOND_STEREO("DOUBLE_EITHER", 3);
+    DOUBLE_EITHER("DOUBLE_EITHER", 3);
 
 
 
@@ -91,17 +91,17 @@ public class INCHI_BOND_STEREO {
         return name;
     }
 
-	public static INCHI_BOND_STEREO getValue(int bster) {
-		INCHI_BOND_STEREO stereo;
-		switch (bster) {
-			case 0: stereo = INCHI_BOND_STEREO.NONE; break;
-			case 1: stereo = INCHI_BOND_STEREO.SINGLE_1UP; break;
-			case 4: stereo = INCHI_BOND_STEREO.SINGLE_1EITHER; break;
-			case 6: stereo = INCHI_BOND_STEREO.SINGLE_1DOWN; break;
-			case 3: stereo = INCHI_BOND_STEREO.DOUBLE_EITHER; break;
-			default:
-				stereo = null;
-		}
-		return stereo;
-	}
+    public static INCHI_BOND_STEREO getValue(int bster) {
+        INCHI_BOND_STEREO stereo;
+        switch (bster) {
+            case 0: stereo = INCHI_BOND_STEREO.NONE; break;
+            case 1: stereo = INCHI_BOND_STEREO.SINGLE_1UP; break;
+            case 4: stereo = INCHI_BOND_STEREO.SINGLE_1EITHER; break;
+            case 6: stereo = INCHI_BOND_STEREO.SINGLE_1DOWN; break;
+            case 3: stereo = INCHI_BOND_STEREO.DOUBLE_EITHER; break;
+            default:
+                stereo = null;
+        }
+        return stereo;
+    }
 }

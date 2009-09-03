@@ -18,161 +18,137 @@
  */
 package net.sf.jniinchi;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Type-safe enumeration of InChI options.  See <tt>inchi_api.h</tt>.
  * @author Sam Adams
  */
-public class INCHI_OPTION {
-
-    // --- MUST BE BEFORE DECLARATIONS ---
-    /**
-     * List of options.
-     */
-    private static Map lcMap = new HashMap(22);
-    // ---
-
+public enum INCHI_OPTION {
 
     /**
      * Use Chiral Flag.
      */
-    public static final INCHI_OPTION SUCF = new INCHI_OPTION("SUCF");
+    SUCF,
 
     /**
      * Set Chiral Flag.
      */
-    public static final INCHI_OPTION ChiralFlagON = new INCHI_OPTION("ChiralFlagON");
+    ChiralFlagON,
 
     /**
      * Set Not-Chiral Flag.
      */
-    public static final INCHI_OPTION ChiralFlagOFF = new INCHI_OPTION("ChiralFlagOFF");
+    ChiralFlagOFF,
 
     /**
      * Exclude stereo (Default: Include Absolute stereo).
      */
-    public static final INCHI_OPTION SNon = new INCHI_OPTION("SNon");
+    SNon,
 
     /**
      * Absolute stereo.
      */
-    public static final INCHI_OPTION SAbs = new INCHI_OPTION("SAbs");
+    SAbs,
 
     /**
      * Relative stereo.
      */
-    public static final INCHI_OPTION SRel = new INCHI_OPTION("SRel");
+    SRel,
 
     /**
      * Racemic stereo.
      */
-    public static final INCHI_OPTION SRac = new INCHI_OPTION("SRac");
+    SRac,
 
     /**
      * Include omitted unknown/undefined stereo.
      */
-    public static final INCHI_OPTION SUU = new INCHI_OPTION("SUU");
+    SUU,
 
     /**
-     * Narrow end of wedge points to stereocenter (default: both).
+     * Narrow end of wedge points to stereocentre (default: both).
      */
-    public static final INCHI_OPTION NEWPS = new INCHI_OPTION("NEWPS");
+    NEWPS,
 
     /**
      * Include reconnected bond to metal results.
      */
-    public static final INCHI_OPTION RecMet = new INCHI_OPTION("RecMet");
+    RecMet,
 
     /**
      * Mobile H Perception Off (Default: On).
      */
-    public static final INCHI_OPTION FixedH = new INCHI_OPTION("FixedH");
+    FixedH,
 
     /**
      * Omit auxiliary information (default: Include).
      */
-    public static final INCHI_OPTION AuxNone = new INCHI_OPTION("AuxNone");
+    AuxNone,
 
     /**
      * Disable Aggressive Deprotonation (for testing only).
      */
-    public static final INCHI_OPTION NoADP = new INCHI_OPTION("NoADP");
+    NoADP,
 
     /**
      * Compressed output.
      */
-    public static final INCHI_OPTION Compress = new INCHI_OPTION("Compress");
+    Compress,
 
     /**
      * Overrides inchi_Atom::num_iso_H[0] == -1.
      */
-    public static final INCHI_OPTION DoNotAddH = new INCHI_OPTION("DoNotAddH");
+    DoNotAddH,
 
     /**
      * Set time-out per structure in seconds; W0 means unlimited. In InChI
      * library the default value is unlimited
      */
-    public static final INCHI_OPTION Wnumber = new INCHI_OPTION("Wnumber");
+    Wnumber,
 
     /**
      * Output SDfile instead of InChI.
      */
-    public static final INCHI_OPTION OutputSDF = new INCHI_OPTION("OutputSDF");
+    OutputSDF,
 
     /**
      * Warn and produce empty InChI for empty structure.
      */
-    public static final INCHI_OPTION WarnOnEmptyStructure = new INCHI_OPTION("WarnOnEmptyStructure");
+    WarnOnEmptyStructure,
 
     /**
      * Fix bug leading to missing or undefined sp3 parity.
      */
-    public static final INCHI_OPTION FixSp3Bug  = new INCHI_OPTION("FixSp3Bug");
+    FixSp3Bug,
 
     /**
      * Same as FixSp3Bug.
      */
-    public static final INCHI_OPTION FB  = new INCHI_OPTION("FB");
-
+    FB,
 
     /**
      * Include Phosphines Stereochemistry.
      */
-    public static final INCHI_OPTION SPXYZ = new INCHI_OPTION("SPXYZ");
+    SPXYZ,
 
     /**
      * Include Arsines Stereochemistry
      */
-    public static final INCHI_OPTION SAsXYZ = new INCHI_OPTION("SPXYZ");
+    SAsXYZ;
 
     /* -- DOESN'T WORK
      * Generate InChIKey
      * /
-    public static final INCHI_OPTION Key = new INCHI_OPTION("Key");
+    Key,
     */
 
-    /**
-     * Name.
-     */
-    private final String name;
-
-    /**
-     * Constructor.
-     */
-    @SuppressWarnings("unchecked")
-    private INCHI_OPTION(final String name) { this.name = name; lcMap.put(name.toLowerCase(), this); };
-
-    public String getName() {
-        return name;
+    public static INCHI_OPTION valueOfIgnoreCase(String string) {
+        for (INCHI_OPTION option : INCHI_OPTION.values()) {
+            if (option.name().equalsIgnoreCase(string)) {
+                return option;
+            }
+        }
+        return null;
     }
 
-    public String toString() {
-        return name;
-    }
-
-    protected static Map getLowercaseMap() {
-        return lcMap;
-    }
 }
