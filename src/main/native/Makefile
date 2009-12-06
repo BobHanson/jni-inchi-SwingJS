@@ -133,7 +133,7 @@ nativedirs:
 	mkdir -p $(JNI_OBJDIR)
 
 $(TARGET): $(INCHI_OBJECTS) $(JNI_OBJECTS)
-	$(LINK.cc) $^ -o $@
+	$(LINK.c) $^ -o $@
 
 $(INCHI_OBJDIR)/%.o: $(INCHI_SRCDIR)/%.c
 	$(COMPILE.c) $< -o $@

@@ -19,6 +19,7 @@
  */
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "net_sf_jniinchi_JniInchiWrapper.h"
 #include <inchi_api.h>
