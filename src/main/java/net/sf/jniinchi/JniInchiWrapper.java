@@ -213,27 +213,10 @@ public class JniInchiWrapper {
         }
 
         try {
-            return wrapper.GetINCHI(input);
+            return wrapper.GetStdINCHI(input);
         } finally {
             wrapper.releaseLock();
         }
-    }
-
-
-    public static JniInchiOutput getInchiFromInchi(JniInchiInputInchi input) throws JniInchiException {
-        JniInchiWrapper wrapper = getWrapper();
-        try {
-            wrapper.getLock();
-        } catch (TimeoutException ex) {
-            throw new JniInchiException(ex);
-        }
-
-        try {
-            return wrapper.GetINCHIfromINCHI(input.getInchi(), input.getOptions());
-        } finally {
-            wrapper.releaseLock();
-        }
-
     }
 
     /**
@@ -252,7 +235,7 @@ public class JniInchiWrapper {
         }
 
         try {
-            return wrapper.GetStructFromINCHI(input.getInchi(), input.getOptions());
+            return wrapper.GetStructFromStdINCHI(input.getInchi(), input.getOptions());
         } finally {
             wrapper.releaseLock();
         }
@@ -275,37 +258,7 @@ public class JniInchiWrapper {
 
         try {
 
-            return wrapper.GetINCHIKeyFromINCHI(inchi);
-
-        } finally {
-            wrapper.releaseLock();
-        }
-
-    }
-
-
-    /**
-     * Check InChIKey.
-     * @param key
-     * @return
-     * @throws JniInchiException
-     */
-    public static INCHI_KEY_STATUS checkInChIKey(final String key) throws JniInchiException {
-        JniInchiWrapper wrapper = getWrapper();
-        try {
-            wrapper.getLock();
-        } catch (TimeoutException ex) {
-            throw new JniInchiException(ex);
-        }
-
-        try {
-            int ret = wrapper.CheckINCHIKey(key);
-            INCHI_KEY_STATUS retStatus = INCHI_KEY_STATUS.getValue(ret);
-            if (retStatus == null) {
-                throw new JniInchiException("Unknown return status: " + ret);
-            }
-
-            return retStatus;
+            return wrapper.GetStdINCHIKeyFromINCHI(inchi);
 
         } finally {
             wrapper.releaseLock();
@@ -336,14 +289,9 @@ public class JniInchiWrapper {
 
     private native void init();
 
-    private native JniInchiOutput GetINCHI(JniInchiInput input);
+    private native JniInchiOutput GetStdINCHI(JniInchiInput input);
 
-    private native JniInchiOutput GetINCHIfromINCHI(String inchi, String options);
+    private native JniInchiOutputStructure GetStructFromStdINCHI(String inchi, String options);
 
-    private native JniInchiOutputStructure GetStructFromINCHI(String inchi, String options);
-
-    private native JniInchiOutputKey GetINCHIKeyFromINCHI(String inchi);
-
-    private native int CheckINCHIKey(String key);
-
+    private native JniInchiOutputKey GetStdINCHIKeyFromINCHI(String inchi);
 }

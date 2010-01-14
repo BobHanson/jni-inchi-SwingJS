@@ -49,7 +49,12 @@ JAR = $(TARGET_PATH)/jniinchi-$(LIB_VERSION).jar
 
 OBJDIR = $(TARGET_PATH)/o/$(LIB_OS_ARCH)
 
-INCHI_SRCDIR = inchi-1.02-beta
+
+#INCHI_SRCDIR = inchi-1.02-beta
+
+#new inchi src dir
+INCHI_SRCDIR = inchi-1-API
+
 INCHI_OBJDIR = $(OBJDIR)/inchi
 
 JAVA_SOURCE = ../java/net/sf/jniinchi/JniInchiWrapper.java
@@ -71,16 +76,58 @@ LDFLAGS += -s
 CFLAGS += -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR)
 CFLAGS += -Os
 
-_INCHI_OBJECTS =	ichican2.o ichicano.o ichicans.o ichiisot.o \
-					ichilnct.o ichimak2.o ichimake.o ichimap1.o \
-					ichimap2.o ichimap4.o ichinorm.o ichiparm.o \
-					ichiprt1.o ichiprt2.o ichiprt3.o ichiqueu.o \
-					ichiread.o ichiring.o ichirvr1.o ichirvr2.o \
-					ichirvr3.o ichirvr4.o ichirvr5.o ichirvr6.o \
-					ichirvr7.o ichisort.o ichister.o ichitaut.o \
-					ichi_bns.o ikey_base26.o ikey_dll.o inchi_dll.o \
-					inchi_dll_a.o inchi_dll_a2.o inchi_dll_main.o \
-					runichi.o sha2.o strutil.o util.o
+#_INCHI_OBJECTS =	ichican2.o ichicano.o ichicans.o ichiisot.o \
+#					ichilnct.o ichimak2.o ichimake.o ichimap1.o \
+#					ichimap2.o ichimap4.o ichinorm.o ichiparm.o \
+#					ichiprt1.o ichiprt2.o ichiprt3.o ichiqueu.o \
+#					ichiread.o ichiring.o ichirvr1.o ichirvr2.o \
+#					ichirvr3.o ichirvr4.o ichirvr5.o ichirvr6.o \
+#					ichirvr7.o ichisort.o ichister.o ichitaut.o \
+#					ichi_bns.o ikey_base26.o ikey_dll.o inchi_dll.o \
+#					inchi_dll_a.o inchi_dll_a2.o inchi_dll_main.o \
+#					runichi.o sha2.o strutil.o util.o
+#
+
+_INCHI_OBJECTS =	ichi_bns.o \
+			ichi_io.o \
+			ichican2.o \
+			ichicano.o \
+			ichicans.o \
+			ichiisot.o \
+			ichilnct.o \
+			ichimak2.o \
+			ichimake.o \
+			ichimap1.o \
+			ichimap2.o \
+			ichimap4.o \
+			ichinorm.o \
+			ichiparm.o \
+			ichiprt1.o \
+			ichiprt2.o \
+			ichiprt3.o \
+			ichiqueu.o \
+			ichiread.o \
+			ichiring.o \
+			ichirvr1.o \
+			ichirvr2.o \
+			ichirvr3.o \
+			ichirvr4.o \
+			ichirvr5.o \
+			ichirvr6.o \
+			ichirvr7.o \
+			ichisort.o \
+			ichister.o \
+			ichitaut.o \
+			ikey_base26.o \
+			ikey_dll.o \
+			inchi_dll.o \
+			inchi_dll_a.o \
+			inchi_dll_a2.o \
+			inchi_dll_main.o \
+			runichi.o \
+			sha2.o \
+			strutil.o \
+			util.o
 
 INCHI_OBJECTS = $(addprefix $(INCHI_OBJDIR)/,$(_INCHI_OBJECTS))
 

@@ -27,42 +27,26 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_init
 
 /*
  * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    GetINCHI
+ * Method:    GetStdINCHI
  * Signature: (Lnet/sf/jniinchi/JniInchiInput;)Lnet/sf/jniinchi/JniInchiOutput;
  */
-JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHI
   (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    GetINCHIfromINCHI
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lnet/sf/jniinchi/JniInchiOutput;
- */
-JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIfromINCHI
-  (JNIEnv *, jobject, jstring, jstring);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    GetStructFromINCHI
+ * Method:    GetStructFromStdINCHI
  * Signature: (Ljava/lang/String;Ljava/lang/String;)Lnet/sf/jniinchi/JniInchiOutputStructure;
  */
-JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCHI
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromStdINCHI
   (JNIEnv *, jobject, jstring, jstring);
 
 /*
  * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    GetINCHIKeyFromINCHI
+ * Method:    GetStdINCHIKeyFromINCHI
  * Signature: (Ljava/lang/String;)Lnet/sf/jniinchi/JniInchiOutputKey;
  */
-JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromINCHI
-  (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     net_sf_jniinchi_JniInchiWrapper
- * Method:    CheckINCHIKey
- * Signature: (Ljava/lang/String;)I
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_CheckINCHIKey
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHIKeyFromINCHI
   (JNIEnv *, jobject, jstring);
 
 #ifdef __cplusplus

@@ -7,7 +7,7 @@
 
   <groupId>net.sf.jni-inchi</groupId>
   <artifactId>jni-inchi</artifactId>
-  <version>0.6-SNAPSHOT</version>
+  <version>0.7-SNAPSHOT</version>
 
   <name>JNI InChI Wrapper</name>
   <url>http://jniinchi.sourceforge.net/</url>
@@ -64,6 +64,16 @@
         <role>Developer</role>
       </roles>
     </developer>
+    <developer>
+      <id>berlinguyinca</id>
+      <name>Gert Wohlgemuth</name>
+      <email>wohlgemuth_gert::at::users.sourceforge.net</email>
+      <organization>UC, Davis</organization>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+
   </developers>
 
   <contributors>

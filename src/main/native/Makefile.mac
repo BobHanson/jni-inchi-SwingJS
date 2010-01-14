@@ -10,3 +10,4 @@ LDFLAGS = -dynamiclib -single_module
 
 LIB_PREFIX = lib
 LIB_SUFFIX = .jnilib
+CFLAGS += -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR) -arch i386 -arch x86_64

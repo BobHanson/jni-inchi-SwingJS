@@ -418,7 +418,7 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
 
 // === STRUCTURE to INCHI == //
 
-JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHI
     (JNIEnv *env, jobject obj, jobject input) {
 
     #ifdef DEBUG
@@ -438,13 +438,13 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
 //    cerr << "generating InChI...\n";
     #endif
 
-    int ret = GetINCHI(inchi_input, inchi_output);
+    int ret = GetStdINCHI(inchi_input, inchi_output);
 
     jobject output = getInchiOutput(env, ret, *inchi_output);
 
     free((*inchi_input).szOptions);
-    FreeINCHI(inchi_output);
-    Free_inchi_Input(inchi_input);
+    FreeStdINCHI(inchi_output);
+    Free_std_inchi_Input(inchi_input);
 
     return output;
 }
@@ -459,7 +459,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
  * @param options	Options
  * @return		Return status.
  */
-JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIfromINCHI
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHIKeyFromStdINCHI
     (JNIEnv *env, jobject obj, jstring inchi, jstring options) {
 
     inchi_InputINCHI *inchi_input = getInchiInputINCHI(env, inchi, options);
@@ -467,10 +467,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIfromINCHI
     inchi_Output *inchi_output;
     memset(inchi_output, 0, sizeof(inchi_Output));
 
-    int ret = GetINCHIfromINCHI(inchi_input, inchi_output);
+    int ret = GetStdINCHIKeyFromStdINCHI(inchi_input, inchi_output);
 
     jobject output = getInchiOutput(env, ret, *inchi_output);
-    FreeINCHI(inchi_output);
+    FreeStdINCHI(inchi_output);
 
     return output;
 
@@ -480,7 +480,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIfromINCHI
 
 // === INCHI to STRUCTURE === //
 
-JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCHI
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromStdINCHI
     (JNIEnv *env, jobject obj, jstring inchi, jstring options) {
 
     int i, j;
@@ -499,7 +499,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
     fprintf(stderr, "getting structure...\n");
     #endif
 
-    int ret = GetStructFromINCHI(inchi_input, inchi_output);
+    int ret = GetStructFromStdINCHI(inchi_input, inchi_output);
 
     #ifdef DEBUG
     fprintf(stderr, "ret: %d\n", ret);
@@ -603,7 +603,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
     }
 
 
-    FreeStructFromINCHI(inchi_output);
+    FreeStructFromStdINCHI(inchi_output);
 
     #ifdef DEBUG
     fprintf(stderr, "----\n\n");
@@ -622,7 +622,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
 /**
  * Generates InChI KEY from InChI.
  */
-JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromINCHI
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHIKeyFromINCHI
     (JNIEnv *env, jobject obj, jstring inchi) {
 
     const char *inchiString = (*env)->GetStringUTFChars(env, inchi, 0);
@@ -639,7 +639,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromIN
     fprintf(stderr, "getting InChIKey...\n");
     #endif
 
-    int ret = GetINCHIKeyFromINCHI(inchiString, inchiKey);
+    int ret = GetStdINCHIKeyFromStdINCHI(inchiString, inchiKey);
     (*env)->ReleaseStringUTFChars(env, inchi, inchiString);
 
     #ifdef DEBUG
@@ -656,37 +656,5 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromIN
     #endif
 
     return robj;
-
-}
-
-
-/**
- * Checks InChIKey
- */
-JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_CheckINCHIKey
-    (JNIEnv *env, jobject obj, jstring key) {
-
-    // Get inchi string
-    const char *keyString = (*env)->GetStringUTFChars(env, key, 0);
-
-    #ifdef DEBUG
-    fprintf(stderr, "** Check InChIKey\n");
-    fprintf(stderr, "key: %s\n", keyString);
-    fprintf(stderr, "checking InChIKey...\n");
-    #endif
-
-    int ret = CheckINCHIKey(keyString);
-
-    #ifdef DEBUG
-    fprintf(stderr, "ret: %d\n", ret);
-    #endif
-
-    (*env)->ReleaseStringUTFChars(env, key, keyString);
-
-    #ifdef DEBUG
-    fprintf(stderr, "----\n\n");
-    #endif
-
-    return ret;
 
 }

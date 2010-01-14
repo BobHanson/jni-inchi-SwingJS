@@ -30,7 +30,7 @@ public class JniInchiOutputKey {
 	 * Group 3 (char 24) flag
 	 * Group 4 (char 15) check char
 	 */
-	private final static Pattern pattern = Pattern.compile("([A-Z]{14})-([A-Z]{8})([A-Z])([A-Z])");
+	private final static Pattern pattern = Pattern.compile("([A-Z]{14})-([A-Z]{8})([A-Z])([A-Z])-([A-Z])");
 	
 	private final INCHI_KEY retStatus;
 	
