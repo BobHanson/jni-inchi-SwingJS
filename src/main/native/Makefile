@@ -7,7 +7,7 @@
 #
 
 # Native code version
-VERSION = 1.7
+VERSION = 1.8
 
 ifndef JAVA_HOME
 f := $(error JAVA_HOME is not defined)

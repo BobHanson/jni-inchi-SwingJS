@@ -252,7 +252,7 @@ jobject getInchiOutput(JNIEnv *env, int ret, tagINCHI_Output inchi_output) {
 
 // === STRUCTURE to INCHI == //
 
-JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHI
     (JNIEnv *env, jobject obj, jobject input) {
         
     jboolean iscopy = JNI_TRUE;        
@@ -412,7 +412,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
     cerr << "generating InChI...\n";
     #endif
     
-    int ret = GetINCHI(&inchi_input, &inchi_output);
+    int ret = GetStdINCHI(&inchi_input, &inchi_output);
     
     jobject output = getInchiOutput(env, ret, inchi_output);
     
@@ -455,7 +455,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIfromINCHI
 
 // === INCHI to STRUCTURE === //  
   
-JNIEXPORT jobject Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCHI
+JNIEXPORT jobject Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromStdINCHI
     (JNIEnv *env, jobject, jstring inchi, jstring options) {
 
     inchi_InputINCHI inchi_input = getInchiInputINCHI(env, inchi, options);
@@ -464,7 +464,7 @@ JNIEXPORT jobject Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCHI
     memset(&inchi_output,0,sizeof(inchi_OutputStruct));
     
     
-    int ret = GetStructFromINCHI(&inchi_input, &inchi_output);
+    int ret = GetStructFromStdINCHI(&inchi_input, &inchi_output);
     
     #ifdef DEBUG
     cerr << "ret: " << ret << "\n";
@@ -585,7 +585,7 @@ JNIEXPORT jobject Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCHI
 /**
  * Generates InChI KEY from inchi.
  */
-JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromINCHI
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHIKeyFromINCHI
     (JNIEnv *env, jobject obj, jstring inchi) {
         
     const char *inchiString = env->GetStringUTFChars(inchi, 0);
@@ -595,7 +595,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromIN
     #endif        
     
     char *inchiKey = new char[26];
-    int ret = GetINCHIKeyFromINCHI(inchiString, inchiKey);
+    int ret = GetStdINCHIKeyFromINCHI(inchiString, inchiKey);
     env->ReleaseStringUTFChars(inchi, inchiString);
   
     #ifdef DEBUG        

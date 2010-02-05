@@ -49,7 +49,7 @@ public class JniInchiWrapper {
     private static final Logger LOG = Logger.getLogger(JniInchiWrapper.class);
 
     private static final String ID = "jniinchi";
-    private static final String VERSION = "1.7";
+    private static final String VERSION = "1.8";
 
     /**
      * Maximum time to wait for a lock (in seconds).

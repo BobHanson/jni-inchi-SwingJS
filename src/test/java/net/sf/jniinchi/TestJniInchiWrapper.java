@@ -18,13 +18,13 @@
  */
 package net.sf.jniinchi;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class TestJniInchiWrapper {
 
@@ -1339,6 +1339,30 @@ public class TestJniInchiWrapper {
 		Assert.assertEquals(0, output.getNumStereo0D());
 
 	}
+
+    @Test
+    public void testGetAcetoneFromInchi()throws Exception {
+
+        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/C3H6O/c1-3(2)4/h1-2H3");
+		JniInchiOutputStructure output = JniInchiWrapper
+				.getStructureFromInchi(input);
+        System.out.println(output.getLog());
+
+        for(int i = 0; i < output.getNumAtoms();i++){
+            System.out.println(output.getAtom(i).getDebugString());
+        }
+    }    @Test
+    public void testGetAcetoneFromStdInchi()throws Exception {
+
+        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1S/C3H6O/c1-3(2)4/h1-2H3");
+		JniInchiOutputStructure output = JniInchiWrapper
+				.getStructureFromInchi(input);
+        System.out.println(output.getLog());
+
+        for(int i = 0; i < output.getNumAtoms();i++){
+            System.out.println(output.getAtom(i).getDebugString());
+        }
+    }
 
 	/**
 	 * Tests isotopic mass is correctly read from InChI.

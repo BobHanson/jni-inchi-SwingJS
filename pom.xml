@@ -6,8 +6,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>net.sf.jni-inchi</groupId>
-  <artifactId>jni-inchi</artifactId>
-  <version>0.7-SNAPSHOT</version>
+  <artifactId>jni-inchi-std</artifactId>
+  <version>0.8-SNAPSHOT</version>
 
   <name>JNI InChI Wrapper</name>
   <url>http://jniinchi.sourceforge.net/</url>
@@ -72,6 +72,7 @@
       <roles>
         <role>Developer</role>
       </roles>
+
     </developer>
 
   </developers>
@@ -155,7 +156,8 @@
 
         </executions>
       </plugin>
-      <plugin>
+
+      <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
           <descriptorRefs>
