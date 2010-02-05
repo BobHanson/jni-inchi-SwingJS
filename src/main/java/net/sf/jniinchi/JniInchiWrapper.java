@@ -95,6 +95,7 @@ public class JniInchiWrapper {
                 System.err.println("You may need to compile the native code for your platform.");
                 System.err.println("See http://jni-inchi.sourceforge.net for instructions.");
                 System.err.println();
+		ex.printStackTrace();
                 throw new LoadNativeLibraryException(ex);
             }
         }
