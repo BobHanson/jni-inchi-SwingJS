@@ -127,7 +127,7 @@
         <executions>
           <execution>
             <id>build-native</id>
-            <phase>process-classes</phase>
+            <phase>compile</phase>
             <goals>
               <goal>exec</goal>
             </goals>
@@ -138,20 +138,6 @@
               </arguments>
             </configuration>
           </execution>
-          <execution>
-            <id>clean-native</id>
-            <phase>clean</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <executable>make</executable>
-              <arguments>
-                <argument>clean</argument>
-              </arguments>
-            </configuration>
-          </execution>
-
         </executions>
       </plugin>
 
