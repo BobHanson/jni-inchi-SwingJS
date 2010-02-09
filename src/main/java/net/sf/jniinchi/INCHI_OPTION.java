@@ -26,74 +26,9 @@ package net.sf.jniinchi;
 public enum INCHI_OPTION {
 
     /**
-     * Use Chiral Flag.
-     */
-    SUCF,
-
-    /**
-     * Set Chiral Flag.
-     */
-    ChiralFlagON,
-
-    /**
-     * Set Not-Chiral Flag.
-     */
-    ChiralFlagOFF,
-
-    /**
      * Exclude stereo (Default: Include Absolute stereo).
      */
     SNon,
-
-    /**
-     * Absolute stereo.
-     */
-    SAbs,
-
-    /**
-     * Relative stereo.
-     */
-    SRel,
-
-    /**
-     * Racemic stereo.
-     */
-    SRac,
-
-    /**
-     * Include omitted unknown/undefined stereo.
-     */
-    SUU,
-
-    /**
-     * Narrow end of wedge points to stereocentre (default: both).
-     */
-    NEWPS,
-
-    /**
-     * Include reconnected bond to metal results.
-     */
-    RecMet,
-
-    /**
-     * Mobile H Perception Off (Default: On).
-     */
-    FixedH,
-
-    /**
-     * Omit auxiliary information (default: Include).
-     */
-    AuxNone,
-
-    /**
-     * Disable Aggressive Deprotonation (for testing only).
-     */
-    NoADP,
-
-    /**
-     * Compressed output.
-     */
-    Compress,
 
     /**
      * Overrides inchi_Atom::num_iso_H[0] == -1.
@@ -114,33 +49,8 @@ public enum INCHI_OPTION {
     /**
      * Warn and produce empty InChI for empty structure.
      */
-    WarnOnEmptyStructure,
+    WarnOnEmptyStructure;
 
-    /**
-     * Fix bug leading to missing or undefined sp3 parity.
-     */
-    FixSp3Bug,
-
-    /**
-     * Same as FixSp3Bug.
-     */
-    FB,
-
-    /**
-     * Include Phosphines Stereochemistry.
-     */
-    SPXYZ,
-
-    /**
-     * Include Arsines Stereochemistry
-     */
-    SAsXYZ;
-
-    /* -- DOESN'T WORK
-     * Generate InChIKey
-     * /
-    Key,
-    */
 
     public static INCHI_OPTION valueOfIgnoreCase(String string) {
         for (INCHI_OPTION option : INCHI_OPTION.values()) {

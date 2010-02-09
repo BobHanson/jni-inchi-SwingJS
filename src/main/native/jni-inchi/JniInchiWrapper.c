@@ -25,7 +25,7 @@
 #include <inchi_api.h>
 #include <ichisize.h>
 
-#define NATIVE_LIB_VERSION "1.8"
+#define NATIVE_LIB_VERSION "1.7-std"
 
 // Uncomment to enable debug mode
 // #define DEBUG 1

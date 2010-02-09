@@ -1099,10 +1099,9 @@ public class TestJniInchiWrapper {
 	 * @throws Exception
 	 */
 
-	@Ignore
 	@Test
 	public void testGetInchiFromLandDAlanine2DWithFixSp3Bug() throws Exception {
-		JniInchiInput input = getAlanine2D("-FixSp3Bug");
+		JniInchiInput input = getAlanine2D("");
 		JniInchiOutput output = JniInchiWrapper.getInchi(input);
 		Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
 		Assert.assertEquals("Omitted undefined stereo", output.getMessage());
@@ -1110,14 +1109,14 @@ public class TestJniInchiWrapper {
 				"InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)", output
 						.getInchi());
 
-		JniInchiInput inputL = getLAlanine2Da("-FixSp3Bug");
+		JniInchiInput inputL = getLAlanine2Da("");
 		JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
 		Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
 		Assert.assertEquals(
 				"InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
 				outputL.getInchi());
 
-		JniInchiInput inputD = getDAlanine2D("-FixSp3Bug");
+		JniInchiInput inputD = getDAlanine2D("");
 		JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
 		Assert.assertEquals(INCHI_RET.OKAY, outputD.getReturnStatus());
 		Assert.assertEquals(
@@ -1125,30 +1124,6 @@ public class TestJniInchiWrapper {
 				outputD.getInchi());
 	};
 
-	/**
-	 * Tests InChI generation from L-Alanine molecules, with 2D coordinates and
-	 * wedge/hatch bonds, with bond drawn in opposite directions.
-	 * 
-	 * @throws Exception
-	 */
-
-	@Ignore
-	@Test
-	public void testGetInchiStereoBondDirection() throws Exception {
-		JniInchiInput input = getLAlanine2Da("-FixSp3Bug");
-		JniInchiOutput output = JniInchiWrapper.getInchi(input);
-		Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-		Assert.assertEquals(
-				"InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
-				output.getInchi());
-
-		JniInchiInput inputL = getLAlanine2Db("-FixSp3Bug");
-		JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
-		Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
-		Assert.assertEquals(
-				"InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
-				outputL.getInchi());
-	}
 
 	// Test handling of no coordinates, with stereo parities
 
@@ -1211,18 +1186,13 @@ public class TestJniInchiWrapper {
 				.getInchi());
 	};
 
-	@Ignore
 	@Test
 	public void testGetInchiFromNSC7414a() throws JniInchiException {
-		JniInchiInput input = getNSC7414a("/fixedh /srel /fixsp3bug");
+		JniInchiInput input = getNSC7414a("");
 		JniInchiOutput output = JniInchiWrapper.getInchi(input);
-		Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
+		Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
 		Assert.assertEquals(
-				"Omitted undefined stereo; Ambiguous stereo: center(s)", output
-						.getMessage());
-		Assert
-				.assertEquals(
-						"InChI=1/C11H20/c1-3-10(2)11-8-6-4-5-7-9-11/h4-5,10-11H,3,6-9H2,1-2H3",
+						"InChI=1S/C11H20/c1-3-10(2)11-8-6-4-5-7-9-11/h4-5,10-11H,3,6-9H2,1-2H3/t10-/m0/s1",
 						output.getInchi());
 	}
 
@@ -1235,11 +1205,11 @@ public class TestJniInchiWrapper {
 	@Test
 	public void testCheckOptionsList() throws JniInchiException {
 		List opList = new ArrayList();
-		opList.add(INCHI_OPTION.Compress);
+		opList.add(INCHI_OPTION.DoNotAddH);
 		opList.add(INCHI_OPTION.SNon);
 		String options = JniInchiWrapper.checkOptions(opList);
 		String flag = JniInchiWrapper.flagChar;
-		Assert.assertEquals(flag + "Compress " + flag + "SNon ", options);
+		Assert.assertEquals(flag + "DoNotAddH " + flag + "SNon ", options);
 	}
 
 	/**
@@ -1249,9 +1219,9 @@ public class TestJniInchiWrapper {
 	 */
 	@Test
 	public void testCheckOptionsString() throws JniInchiException {
-		String options = JniInchiWrapper.checkOptions("  -ComPreSS  /SNon");
+		String options = JniInchiWrapper.checkOptions("  -DoNotAddH  /SNon");
 		String flag = JniInchiWrapper.flagChar;
-		Assert.assertEquals(flag + "Compress " + flag + "SNon", options);
+		Assert.assertEquals(flag + "DoNotAddH " + flag + "SNon", options);
 	}
 
 	// Test option handling
@@ -1857,21 +1827,6 @@ public class TestJniInchiWrapper {
 		Assert.assertEquals("QNAYBMKLOCPYGJ-UWTATZPHSA-N", output.getKey());
 	}
 
-	/*
-	 * Option doesn't work yet
-	 * 
-	 * @Test
-	 * 
-	 * @Ignore public void testGenerateInchiKeyViaOptions() throws
-	 * JniInchiException { JniInchiInput input = getLAlanine3D("-key");
-	 * JniInchiOutput output = JniInchiWrapper.getInchi(input);
-	 * Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus()); //
-	 * Assert.assertEquals(null, output.getInchi()); //
-	 * Assert.assertEquals(null, output.getAuxInfo()); //
-	 * Assert.assertEquals(null, output.getMessage()); //
-	 * Assert.assertEquals(null, output.getLog()); }
-	 */
-
 	/**
 	 * Tests thread safety - starts ten threads, and sets them generating InChIs
 	 * for randomly picked elements. Checks generated InChIs are as expected.
@@ -1881,7 +1836,7 @@ public class TestJniInchiWrapper {
 	public void multithreading() {
 
 		// Start threads
-		int nthreads = 10;
+		int nthreads = 5;
 		TestThread[] threads = new TestThread[nthreads];
 		for (int i = 0; i < nthreads; i++) {
 			threads[i] = new TestThread(i);
