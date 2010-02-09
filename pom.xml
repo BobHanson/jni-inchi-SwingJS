@@ -113,37 +113,22 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.1</version>
-        <executions>
+		          <executions>
+            <execution>
+              <id>build-native</id>
+              <phase>compile</phase>
+              <goals>
+                <goal>exec</goal>
+              </goals>
+              <configuration>
+                <executable>make</executable>
+                <arguments>
+                  <argument>all</argument>
+                </arguments>
+              </configuration>
+            </execution>
+          </executions>
 
-          <execution>
-            <id>build-native</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <executable>make</executable>
-              <arguments>
-                <argument>all</argument>
-              </arguments>
-            </configuration>
-          </execution>
-
-          <execution>
-            <id>clean-native</id>
-            <phase>clean</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <executable>make</executable>
-              <arguments>
-                <argument>clean</argument>
-              </arguments>
-            </configuration>
-          </execution>
-
-        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -158,20 +143,7 @@
           </archive>
         </configuration>
       </plugin>
-
-      <plugin>
-        <groupId>com.google.code.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <configuration>
-          <header>NOTICE.txt</header>
-          <includes>
-            <include>src/**/*.java</include>
-          </includes>
-          <aggregate>true</aggregate>
-          <failIfMissing>false</failIfMissing>
-        </configuration>
-      </plugin>
-
+	  
       <!-- Include POM.xml in source JAR -->
       <plugin>
         <artifactId>maven-source-plugin</artifactId>
@@ -215,6 +187,24 @@
     </dependency>
 
   </dependencies>
+  
+  <profiles>
+    <profile>
+	  <id>skipNative</id>
+	  <build>
+	    <plugins>
+		  <plugin>
+		  <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+		  <configuration>
+		    <skip>true</skip>
+	      </configuration>
+		  </plugin>
+		</plugins>
+	  </build>
+	</profile>
+  </profiles>
+  
 
   <reporting>
     <plugins>
@@ -229,4 +219,5 @@
       </plugin>
     </plugins>
   </reporting>
+  
 </project>
