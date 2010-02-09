@@ -2014,8 +2014,8 @@ NSC-7414a
                             .equals(output.getInchi())) {
                         failCount++;
                     }
-#                    System.err.print("("+threadIndex+")");
-#                    System.err.flush();
+//                    System.err.print("("+threadIndex+")");
+//                    System.err.flush();
                 } catch (Exception e) {
                     failCount++;
                     ex = e;
