@@ -1,230 +1,259 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
->
-  <modelVersion>4.0.0</modelVersion>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+        >
+    <modelVersion>4.0.0</modelVersion>
 
   <groupId>net.sf.jni-inchi</groupId>
   <artifactId>jni-inchi-std</artifactId>
   <version>0.6-std-SNAPSHOT</version>
 
-  <name>JNI InChI Wrapper</name>
-  <url>http://jniinchi.sourceforge.net/</url>
-  <description>
-    The JNI InChI Wrapper project provides JNI (Java Native Interface)
-    wrappers for the InChI (International Chemical Identifier) C
-    library distributed by IUPAC.
-  </description>
+    <name>JNI InChI Wrapper</name>
+    <url>http://jniinchi.sourceforge.net/</url>
+    <description>
+        The JNI InChI Wrapper project provides JNI (Java Native Interface)
+        wrappers for the InChI (International Chemical Identifier) C
+        library distributed by IUPAC.
+    </description>
 
-  <licenses>
-    <license>
-      <name>GNU Lesser General Public License v3</name>
-      <url>http://www.gnu.org/licenses/lgpl.txt</url>
-    </license>
-    <license>
-      <name>GNU General Public License v3</name>
-      <url>http://www.gnu.org/licenses/gpl.txt</url>
-    </license>
-  </licenses>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License v3</name>
+            <url>http://www.gnu.org/licenses/lgpl.txt</url>
+        </license>
+        <license>
+            <name>GNU General Public License v3</name>
+            <url>http://www.gnu.org/licenses/gpl.txt</url>
+        </license>
+    </licenses>
 
-  <scm>
-    <connection>
-      scm:svn:http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi
-    </connection>
-    <developerConnection>
-      scm:svn:https://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi
-    </developerConnection>
-    <tag>HEAD</tag>
-    <url>http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi</url>
-  </scm>
+    <scm>
+        <connection>
+            scm:svn:http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi
+        </connection>
+        <developerConnection>
+            scm:svn:https://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi
+        </developerConnection>
+        <tag>HEAD</tag>
+        <url>http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi</url>
+    </scm>
 
-  <repositories>
-    <repository>
-      <id>wwmm</id>
-      <url>http://wwmm.ch.cam.ac.uk/maven2</url>
-    </repository>
-  </repositories>
+    <repositories>
+        <repository>
+            <id>wwmm</id>
+            <url>http://wwmm.ch.cam.ac.uk/maven2</url>
+        </repository>
+    </repositories>
 
-  <distributionManagement>
-    <repository>
-      <id>wwmm</id>
-      <name>WWMM</name>
-      <url>dav:http://wwmm.ch.cam.ac.uk/maven2</url>
-    </repository>
-  </distributionManagement>
+    <distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>googlecode</id>
+			<url>svn:https://binbase-maven.googlecode.com/svn/trunk/repo</url>
+		</repository>
 
-  <developers>
-    <developer>
-      <id>sea36</id>
-      <name>Sam Adams</name>
-      <email>sea36::at::users.sourceforge.net</email>
-      <organization>UCC, Cambridge</organization>
-      <roles>
-        <role>Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>berlinguyinca</id>
-      <name>Gert Wohlgemuth</name>
-      <email>wohlgemuth_gert::at::users.sourceforge.net</email>
-      <organization>UC, Davis</organization>
-      <roles>
-        <role>Developer</role>
-      </roles>
+		<snapshotRepository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>googlecode</id>
+			<url>svn:https://binbase-maven.googlecode.com/svn/trunk/repo</url>
+		</snapshotRepository>
+    </distributionManagement>
 
-    </developer>
+    <developers>
+        <developer>
+            <id>sea36</id>
+            <name>Sam Adams</name>
+            <email>sea36::at::users.sourceforge.net</email>
+            <organization>UCC, Cambridge</organization>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>berlinguyinca</id>
+            <name>Gert Wohlgemuth</name>
+            <email>wohlgemuth_gert::at::users.sourceforge.net</email>
+            <organization>UC, Davis</organization>
+            <roles>
+                <role>Developer</role>
+            </roles>
 
-  </developers>
+        </developer>
 
-  <contributors>
-    <contributor>
-      <name>Jim Downing</name>
-      <organization>UCC, Cambridge</organization>
-      <roles>
-        <role>tester</role>
-      </roles>
-    </contributor>
-  </contributors>
+    </developers>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>mc-release</id>
-      <name>Local Maven repository of releases</name>
-      <url>http://mc-repo.googlecode.com/svn/maven2/releases</url>
-    </pluginRepository>
-  </pluginRepositories>
+    <contributors>
+        <contributor>
+            <name>Jim Downing</name>
+            <organization>UCC, Cambridge</organization>
+            <roles>
+                <role>tester</role>
+            </roles>
+        </contributor>
+    </contributors>
 
-  <build>
-    <plugins>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>mc-release</id>
+            <name>Local Maven repository of releases</name>
+            <url>http://mc-repo.googlecode.com/svn/maven2/releases</url>
+        </pluginRepository>
+    </pluginRepositories>
 
-      <!-- Use java 1.5 -->
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-          <optimize>true</optimize>
-        </configuration>
-      </plugin>
+    <build>
+        <plugins>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <mainClass>net.sf.jniinchi.Main</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
+            <!-- Use java 1.5 -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                    <optimize>true</optimize>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>net.sf.jniinchi.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
 
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.1</version>
-        <executions>
-          <execution>
-            <id>build-native</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <executable>make</executable>
-              <arguments>
-                <argument>all</argument>
-              </arguments>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1</version>
+                <executions>
 
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-          <archive>
-            <manifest>
-              <mainClass>net.sf.jniinchi.Main</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
+                    <execution>
+                        <id>build-native</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>make</executable>
+                            <arguments>
+                                <argument>all</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
 
-      <plugin>
-        <groupId>com.google.code.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <configuration>
-          <header>NOTICE.txt</header>
-          <includes>
-            <include>src/**/*.java</include>
-          </includes>
-          <aggregate>true</aggregate>
-          <failIfMissing>false</failIfMissing>
-        </configuration>
-      </plugin>
+                    <execution>
+                        <id>clean-native</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>make</executable>
+                            <arguments>
+                                <argument>clean</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
 
-      <!-- Include POM.xml in source JAR -->
-      <plugin>
-        <artifactId>maven-source-plugin</artifactId>
-        <configuration>
-          <includePom>true</includePom>
-        </configuration>
-      </plugin>
+                </executions>
+            </plugin>
 
-    </plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>net.sf.jniinchi.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
 
-    <!-- Include license files in JARs -->
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-      </resource>
-      <resource>
-        <directory>..</directory>
-        <targetPath>META-INF</targetPath>
-        <includes>
-          <include>LICENSE*</include>
-          <include>NOTICE*</include>
-        </includes>
-      </resource>
-    </resources>
+            <plugin>
+                <groupId>com.google.code.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <configuration>
+                    <header>NOTICE.txt</header>
+                    <includes>
+                        <include>src/**/*.java</include>
+                    </includes>
+                    <aggregate>true</aggregate>
+                    <failIfMissing>false</failIfMissing>
+                </configuration>
+            </plugin>
 
-  </build>
+            <!-- Include POM.xml in source JAR -->
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <configuration>
+                    <includePom>true</includePom>
+                </configuration>
+            </plugin>
 
-  <dependencies>
+        </plugins>
 
-    <dependency>
-      <groupId>net.sf.jnati</groupId>
-      <artifactId>jnati-deploy</artifactId>
-      <version>0.2-SNAPSHOT</version>
-    </dependency>
+        <!-- Include license files in JARs -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>..</directory>
+                <targetPath>META-INF</targetPath>
+                <includes>
+                    <include>LICENSE*</include>
+                    <include>NOTICE*</include>
+                </includes>
+            </resource>
+        </resources>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.5</version>
-      <scope>test</scope>
-    </dependency>
+        <!-- needed to deploy locally -->
+        <extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>1.9</version>
+            </extension>
+        </extensions>
+    </build>
 
-  </dependencies>
+    <dependencies>
 
-  <reporting>
-    <plugins>
-      <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <quiet>true</quiet>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-report-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </reporting>
+        <dependency>
+            <groupId>net.sf.jnati</groupId>
+            <artifactId>jnati-deploy</artifactId>
+            <version>0.2.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.5</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <quiet>true</quiet>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
   
   <profiles>
     <profile>

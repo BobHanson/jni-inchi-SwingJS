@@ -14,8 +14,8 @@ f := $(error JAVA_HOME is not defined)
 endif
 
 # Detect OS/Architecture
-LIB_OS := $(shell mvn -q -f ../../../pom.xml exec:java -Dexec.mainClass=net.sf.jnati.SystemTool -Dexec.args=os)
-LIB_ARCH := $(shell mvn -q -f ../../../pom.xml exec:java -Dexec.mainClass=net.sf.jnati.SystemTool -Dexec.args=arch)
+LIB_OS := $(shell mvn -q -f ../../../pom.xml exec:java -Dexec.mainClass=net.sf.jnati.SystemTool -Dexec.args=os | grep -v WAGON)
+LIB_ARCH := $(shell mvn -q -f ../../../pom.xml exec:java -Dexec.mainClass=net.sf.jnati.SystemTool -Dexec.args=arch | grep -v WAGON)
 
 
 # Include OS specific configuration
