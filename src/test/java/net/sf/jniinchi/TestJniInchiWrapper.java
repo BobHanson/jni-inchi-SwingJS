@@ -1883,7 +1883,7 @@ NSC-7414a
     public void multithreading() {
 
         // Start threads
-        int nthreads = 10;
+        int nthreads = 5;
         TestThread[] threads = new TestThread[nthreads];
         for (int i = 0; i < nthreads; i++) {
             threads[i] = new TestThread(i);
@@ -1997,8 +1997,10 @@ NSC-7414a
         }
 
         public void run() {
+            System.err.println("Thread "+threadIndex+" starting");
             Random rand = new Random();
             while (!stop) {
+                yield();
                 runCount++;
                 JniInchiInput input = new JniInchiInput();
                 String element = ELS[rand.nextInt(ELS.length)];
@@ -2012,15 +2014,18 @@ NSC-7414a
                             .equals(output.getInchi())) {
                         failCount++;
                     }
+#                    System.err.print("("+threadIndex+")");
+#                    System.err.flush();
                 } catch (Exception e) {
                     failCount++;
                     ex = e;
-                    System.err.println("Error: " + e.getMessage());
+                    System.err.println("Thread "+threadIndex+ " error: " + e.getMessage());
                     break;
                 }
                 yield();
             }
             done = true;
+            System.err.println("Thread "+threadIndex+" stopping");
         }
 
         public void finish() {
