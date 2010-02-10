@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>net.sf.jni-inchi</groupId>
   <artifactId>jni-inchi</artifactId>
-  <version>0.6-SNAPSHOT</version>
+  <version>0.6</version>
 
   <name>JNI InChI Wrapper</name>
   <url>http://jniinchi.sourceforge.net/</url>
@@ -20,39 +17,26 @@
   <licenses>
     <license>
       <name>GNU Lesser General Public License v3</name>
-      <url>http://www.gnu.org/licenses/lgpl.txt</url>
+      <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
     </license>
     <license>
       <name>GNU General Public License v3</name>
-      <url>http://www.gnu.org/licenses/gpl.txt</url>
+      <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
     </license>
   </licenses>
 
   <scm>
-    <connection>
-      scm:svn:http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi
-    </connection>
-    <developerConnection>
-      scm:svn:https://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi
-    </developerConnection>
-    <tag>HEAD</tag>
-    <url>http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi</url>
+    <connection>scm:svn:http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi/tags/jni-inchi-0.6</connection>
+    <developerConnection>scm:svn:https://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi/tags/jni-inchi-0.6</developerConnection>
+    <url>http://jni-inchi.svn.sourceforge.net/viewvc/jni-inchi/tags/jni-inchi-0.6</url>
   </scm>
 
   <repositories>
     <repository>
-      <id>wwmm</id>
-      <url>http://wwmm.ch.cam.ac.uk/maven2</url>
+      <id>jnati</id>
+      <url>http://jnati.sourceforge.net/m2repo</url>
     </repository>
   </repositories>
-
-  <distributionManagement>
-    <repository>
-      <id>wwmm</id>
-      <name>WWMM</name>
-      <url>dav:http://wwmm.ch.cam.ac.uk/maven2</url>
-    </repository>
-  </distributionManagement>
 
   <developers>
     <developer>
@@ -75,14 +59,6 @@
       </roles>
     </contributor>
   </contributors>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>mc-release</id>
-      <name>Local Maven repository of releases</name>
-      <url>http://mc-repo.googlecode.com/svn/maven2/releases</url>
-    </pluginRepository>
-  </pluginRepositories>
 
   <build>
     <plugins>
@@ -113,7 +89,7 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.1</version>
-		          <executions>
+		  <executions>
             <execution>
               <id>build-native</id>
               <phase>compile</phase>
@@ -128,9 +104,9 @@
               </configuration>
             </execution>
           </executions>
-
       </plugin>
-      <plugin>
+
+      <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
           <descriptorRefs>
@@ -176,9 +152,8 @@
     <dependency>
       <groupId>net.sf.jnati</groupId>
       <artifactId>jnati-deploy</artifactId>
-      <version>0.2-SNAPSHOT</version>
+      <version>0.2</version>
     </dependency>
-
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -204,20 +179,5 @@
 	  </build>
 	</profile>
   </profiles>
-  
-
-  <reporting>
-    <plugins>
-      <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <quiet>true</quiet>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-report-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </reporting>
-  
+    
 </project>
