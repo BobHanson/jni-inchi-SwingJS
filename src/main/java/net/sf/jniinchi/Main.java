@@ -73,14 +73,15 @@ public class Main {
 
             JniInchiStructure mol = getTestMolecule();
             JniInchiOutput out1 = JniInchiWrapper.getInchi(new JniInchiInput(mol));
-            if ("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)".equals(out1.getInchi())) {
+            if ("InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1".equals(out1.getInchi())) {
                 System.err.println(" - OKAY");
             } else {
                 System.err.println(" - ERROR");
+				System.err.println(out1.getInchi());
             }
 
             System.err.println("Generating structure from InChI");
-            JniInchiOutputStructure out2 = JniInchiWrapper.getStructureFromInchi(new JniInchiInputInchi("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)"));
+            JniInchiOutputStructure out2 = JniInchiWrapper.getStructureFromInchi(new JniInchiInputInchi("InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)"));
             if (out2.getNumAtoms() == 6 && out2.getNumBonds() == 5) {
                 System.err.println(" - OKAY");
             } else {
@@ -89,7 +90,7 @@ public class Main {
 
             System.err.println("Converting structure back to InChI");
             JniInchiOutput out3 = JniInchiWrapper.getInchi(new JniInchiInput(out2));
-            if ("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)".equals(out3.getInchi())) {
+            if ("InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)".equals(out3.getInchi())) {
                 System.err.println(" - OKAY");
             } else {
                 System.err.println(" - ERROR");
