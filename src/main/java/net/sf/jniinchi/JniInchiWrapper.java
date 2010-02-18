@@ -314,7 +314,7 @@ public class JniInchiWrapper {
     }
 
 
-    private boolean locked = false;
+    private volatile boolean locked = false;
 
     private synchronized void getLock() throws TimeoutException {
         long timeout = System.currentTimeMillis() + 1000 * MAX_LOCK_TIMEOUT;
