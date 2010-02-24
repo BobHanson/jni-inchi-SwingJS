@@ -1,31 +1,18 @@
   ----------
-  JNI InChI Wrapper - Guide
+  JNI-InChI - Guide
   ----------
   Sam Adams
   ----------
 
 Introduction
 
-  JNI InChI Wrapper is a library indended for use by developers of other
-  projects. It does not enable users to generate InChIs from molecule file
-  formats such as .mol, .cml, .mol2, or SMILES strings. If you want to do any
-  of these, you should take a look at the {{{http://almost.cubic.uni-koeln.de/cdk/cdk_top}Chemistry Development Kit (CDK)}},
-  or JUMBO {{{http://cml.sourceforge.net}}}
-  which includes InChI generation powered by the JNI InChI Wrapper. If, however,
-  you are a software developer and you want want to generate the InChI for a
-  molecule that you already hold in memory, JNI InChI Wrapper is what you need.
+  JNI-InChI is a library indended for use by developers of other projects. It does not enable users to generate InChIs from molecule file formats such as .mol, .cml, .mol2, or SMILES strings. If you want to do any of these, you should take a look at the {{{http://sourceforge.net/projects/cdk}Chemistry Development Kit (CDK)}}, or {{{http://sourceforge.net/projects/cml}JUMBO}} which includes InChI generation powered by the JNI-InChI. If, however, you are a software developer and you want want to generate the InChI for a molecule that you already hold in memory, JNI-InChI is what you need.
 
 InChI Generation
 
-  The main aim of the JNI InChI Wrapper is to enable the generation of InChIs
-  from within Java. The InChI libaray's functionality is accessed through
-  the net.sf.jniinchi.JniInchiWrapper class. To generate an InChI, first a
-  representation of the molecule must be constructed that the InChI library
-  can recognise. This is achieved by creating JniInchiAtoms, JniInchiBonds and
-  JniInchiStereo0Ds, and adding them to a JniInchiInput object. This is illustrated
-  in the examples below:
+  The main aim of the JNI-InChI is to enable the generation of InChIs from within Java. The InChI libaray's functionality is accessed through the net.sf.jniinchi.JniInchiWrapper class. To generate an InChI, first a representation of the molecule must be constructed that the InChI library can recognise. This is achieved by creating JniInchiAtoms, JniInchiBonds and JniInchiStereo0Ds, and adding them to a JniInchiInput object. This is illustrated in the examples below:
 
-+--
+----
 // Example input - 2D E-1,2-dichloroethene
 JniInchiInput input = new JniInchiInput();
 
@@ -73,12 +60,9 @@ input.addBond(new JniInchiBond(a1, a7, INCHI_BOND_TYPE.SINGLE));
 input.addStereo0D(JniInchiStereo0D.createNewTetrahedralStereo0D(a1, a3, a4, a7, a2, INCHI_PARITY.EVEN));
 
 JniInchiOutput output = JniInchiWrapper.getInchi(input);
-+--
+----
 
-  Further examples can be found in the
-  {{{http://jni-inchi.svn.sourceforge.net/viewvc/jni-inchi/trunk/src/test/java/net/sf/jniinchi/TestJniInchiWrapper.java?view=markup}TestJniInchiWrapper}} class,
-  the {{{http://cdk.svn.sourceforge.net/viewvc/cdk/trunk/cdk/src/org/openscience/cdk/inchi/InChIGenerator.java?view=markup}CDK}},
-  and {{{http://cml.svn.sourceforge.net/viewvc/cml/jumbo5/trunk/src/main/java/org/xmlcml/cml/inchi/InChIGenerator.java?view=markup}JUMBO}}.
+  Further examples can be found in the  {{{http://jni-inchi.svn.sourceforge.net/viewvc/jni-inchi/trunk/src/test/java/net/sf/jniinchi/TestJniInchiWrapper.java?view=markup}TestJniInchiWrapper}} class,  the {{{http://cdk.svn.sourceforge.net/viewvc/cdk/cdk/trunk/src/org/openscience/cdk/inchi/InChIGenerator.java?view=markup}CDK}}, and {{{http://cml.svn.sourceforge.net/viewvc/cml/inchi/src/main/java/org/xmlcml/cml/inchi/InChIGenerator.java?view=markup}JUMBO}}.
 
 
 * Output
@@ -99,8 +83,7 @@ JniInchiOutput output = JniInchiWrapper.getInchi(input);
 
 ** Return status codes
 
-  The InChI generation process returns a status code which describes how successful
-  the process was:
+  The InChI generation process returns a status code which describes how successful the process was:
 
 *--------+-------------------------------------------------------------------------------+
  SKIP    | Not used
@@ -124,7 +107,7 @@ JniInchiOutput output = JniInchiWrapper.getInchi(input);
 
 * Options
 
-  JNI InChI Wrapper supports the full range of options that InChI generation takes:
+  JNI-InChI supports the full range of options that InChI generation takes:
 
 *--------------+---------------------+
  SUCF          | Use Chiral Flag
@@ -185,7 +168,7 @@ JniInchiOutput output = JniInchiWrapper.getInchi(input);
 
 InChI-to-Structure
 
-  JNI InChI Wrapper also supports InChI-to-Structure conversion:
+  JNI-InChI also supports InChI-to-Structure conversion:
 
 +--
 JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/C2H6/c1-2/h1-2H3");
@@ -202,9 +185,7 @@ JniInchiAtom at0 = output.getAtom(0);
 
 InChI-to-InChI
 
-  The InChI libary also provides an option to convert InChI-to-InChI. This will
-  most probably be of use if you wish to convert between compressed and
-  uncompressed InChIs:
+  The InChI libary also provides an option to convert InChI-to-InChI. This will  most probably be of use if you wish to convert between compressed and  uncompressed InChIs:
 
 +--
 String inchi = "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)";
@@ -226,15 +207,6 @@ String uncompressedInchi = ucout.getInchi();
 
 Native Code
 
-  JNI InChI Wrapper does not contain a Java version of the InChI algorithm, it
-  wraps up the InChI library distributed by IUPAC, making its functionality
-  available to Java programmers. The InChI library is only available in C, and
-  is not sufficiently well documented for it to be easy to produce an implementation
-  in another language, without first reverse engineering the existing code.
+  JNI-InChI does not contain a Java version of the InChI algorithm, it wraps up the InChI library distributed by IUPAC, making its functionality available to Java programmers. The InChI library is only available in C, and is not sufficiently well documented for it to be easy to produce an implementation in another language, without first reverse engineering the existing code.
 
-  The problem with using native code is that the cross-platform benefits of java
-  are lost. In an attempt to overcome this the JNI InChI Wrapper contains a
-  mechanism package the native files with the java code, to deploy the
-  appropriate ones on a system, as required. This is all handled by the
-  net.sf.jniinchi.JniInchiNativeCodeLoader class.
-
+  The problem with using native code is that the cross-platform benefits of java are lost. In an attempt to overcome this the JNI-InChI contains a mechanism package the native files with the java code, to deploy the appropriate ones on a system, as required. This is all handled by the net.sf.jniinchi.JniInchiNativeCodeLoader class.

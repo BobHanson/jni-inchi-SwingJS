@@ -1,49 +1,40 @@
   ----------
-  JNI InChI Wrapper - Overview
+  JNI-InChI
   ----------
   Sam Adams
   ----------
 
-Welcome to JNI InChI Wrapper
+Welcome to JNI-InChI
 
-  JNI InChI Wrapper enables java software to generate IUPAC's International
-  Chemical Identifiers (InChIs) by making Java Native Interface (JNI) calls
-  to the InChI C++ library developed by IUPAC. The following features are
-  supported:
+  JNI-InChI enables Java software to generate IUPAC's {{{http://www.iupac.org/inchi/} International Chemical Identifiers (InChIs)}} by making Java Native Interface (JNI) calls to the InChI C library developed by IUPAC. The following features are supported:
 
   * InChI generation from structures with 3D, 2D, or no coordinates
-
+  
+  * InChIKey generation
+  
   * Structure generation (without coordinates) from InChI
-
+  
   * Access to the full range of options supported by InChI
-
+  
   * Full support for InChI's handling of stereochemistry
 
-News
+  []
 
-* 04 December 2008
+  JNI-InChI is a library indended for use by developers of other projects. It does not enable users to generate InChIs from molecule file formats such as .mol, .cml, .mol2, or SMILES strings. If you want to do any of these, you should take a look at the Chemistry Development Kit (CDK) or JUMBO, both of which include InChI generation powered by the JNI-InChI. If, however, you are a software developer and you want want to generate the InChI for a molecule that you already hold in memory, JNI-InChI is what you need.
 
-  * JNI-InChI v0.5 released.
+
+Latest version
   
-    * Improved native code deployment: support for Macs; support for different
-    architectures; download pre-complied code from remote repository
-    
-    * Memory leak in native code fixed
-    
-    * Upgrade to InChI-1.02-beta: support for InChIKey
+* 11 February 2010
 
+** JNI-InChI v0.6 and v0.6-std released.
 
-* 26 April 2007
+  For JNI-InChI v0.6, the native code has been converted from C++ to C. This should help to reduce the number of binary compatability problems, especially on Linux systems, since the C Application Binary Interface is much more stable than that for C++.
 
-  * New documentation added to website.
+  There are two versions of this release: v0.6 is build using IUPAC's InChI library {{{http://www.iupac.org/inchi/release102.html} 1.02beta}}, and generates InChIs and InChIKeys supporting the full range of options that can be passed to the InChI generation process. v0.6-std is build using IUPAC's InChI library {{{http://www.iupac.org/inchi/release102final.html} 1.02-final for Standard InChI/InChIKey}} and generates Standard InChIs and Standard InChIKeys.
 
-  * Work on v0.5 is underway. This release will feature improved native code deployment, allowing support
-  for architectures other than x86.
+  Thanks go to Gert Wohlgemuth for adapting JNI-InChI for Standard InChI generation.
 
-  * {{{http://www.iupac.org/inchi/adopters.html} IUPAC}} are now linking to this project.
+  Pre-compiled native code is included for Windows, 32-bit & 64-bit Linux and Mac OS.
 
-
-* 30 March 2007
-
-  * JNI InChI v0.4.1 has now been released. The main feature of this release is
-  that JNI InChI is now safe for use in multi-threaded environments.
+  Available for {{{https://sourceforge.net/projects/jni-inchi/files/} download from sourceforge}} and from the {{{http://jni-inchi.sourceforge.net/m2repo} JNI-InChI Maven repository}}.

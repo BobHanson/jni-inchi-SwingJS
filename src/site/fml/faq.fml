@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <faqs title="Frequently Asked Questions" toplink="false">
 
   <part id="general">
@@ -7,73 +6,49 @@
 
     <faq id="error">
       <question>
-        I got the following message: 'Error loading JNI InChI native code', what
-        does it mean?
+        I got the following message: 'Error loading JNI-InChI native code', what does it mean?
       </question>
       <answer>
-        <p>
-The program you are using is making use of the JNI InChI library. The JNI InChI
-library provides a wrapper to the InChI software produced by IUPAC, enabling its
-use from within java.  Unlike java programs the InChI software is not platform
-independent. JNI InChI includes versions of the InChI code for a number of
-common operating systems and architectures, but if you received the above error
-you probably need to compile the code for you system. For instructions, see the
-next question. 
-        </p>
+        <p>The program you are using is making use of the JNI-InChI library. The JNI-InChI library provides a wrapper to the InChI software produced by IUPAC, enabling its use from within java. Unlike java programs the InChI software is not platform independent. JNI-InChI includes versions of the InChI code for a number of common operating systems and architectures, but if you received the above error you probably need to compile the code for your system. For instructions, see the next question.</p>
       </answer>
-    </faq>
-    
+    </faq>    
 
     <faq id="compile-native">
       <question>
-        How do I compile JNI InChI's native code for my operating system/architecture?
+        How do I compile JNI-InChI's native code for my operating system/architecture?
       </question>
       <answer>
-        <p>
-JNI InChI's native code compilation is integrated into the Maven build process.
-To compile the code you should get the source package from the 'download'
-page, or check the project out of the subversion repository.
-        </p>
-        <p>
-In order to build JNI InChI the following software is required:
-<ul>
-<li>Java (JDK) 1.4 or higher</li>
-<li>Maven 2.0</li>
-<li>GNU Make</li>
-<li>GCC/G++</li>
-</ul>
-The JAVA_HOME environment variable MUST be set, pointing to the location of
-the JDK.
-		</p>
-		<p>
-The Maven build system takes care of JNI InChI's dependencies, and runs Make to
-build the native code required. From JNI InChI's root directory (containing the
-file pom.xml) simply run Maven with the desired goal:
-		</p>
-		<p>
-<b>To install JNI InChI in you local Maven repository:</b><br/>
-<tt>mvn install</tt><br/>
-		</p>
-		<p>
-<b>To compile JNI InChI, and create a JAR file:</b><br/>
-<tt>mvn package</tt><br/>
-[ This will create a JAR file: target/jniinchi-(version).jar ]
-		</p>
-		<p>
-<b>To compile JNI InChI, and create a JAR file including dependencies :</b><br/>
-<tt>mvn assembly:assembly</tt><br/>
-[ This will create a JAR file: target/jniinchi-(version)-jar-with-dependencies.jar ]
-		</p>
-		<p>
-All these commands will compile the Java code, call Make to build the C++ code
-and run a suite of unit tests to ensure the code has compiled successfully.
-		</p>
-		<p>
-If you have previously tried using JNI InChI, there you may need to clear cached
-old versions of the native code from your system. To do this, delete the
-contents of the <tt>~/.jnati/repo/jni-inchi</tt> directory.
-	    </p>		
-      </answer>
+    <p>JNI-InChI's native code compilation is integrated into the <a href="http://maven.apache.org">Apache Maven</a> build process.
+	To compile the code you need to get the source package from the <a href="download.html">download page</a>, or check the project out of the
+	<a href="https://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi">subversion repository</a>.</p>
+
+	<p>In order to build JNI-InChI the following software is required:</p>
+	<ul>
+		<li>Java (JDK) 1.5 or higher</li>
+        <li>Apache Maven 2.0</li>
+        <li>GNU Make</li>
+        <li>GCC</li>
+	</ul>
+	<p>The JAVA_HOME environment variable MUST be set, pointing to the location of the JDK.</p>
+
+    <p>The Maven build system takes care of JNI-InChI's dependencies, and runs Make to build the native code required. From JNI-InChI's root directory (containing the file pom.xml) simply run Maven with the desired goal:</p>
+
+    <p>To install JNI-InChI in you local Maven repository:</p>
+	<pre>mvn install</pre>
+
+    <p>To compile JNI-InChI, and create a JAR file:</p>
+    <pre>mvn package</pre>
+    <p><i>[ This will create a JAR file: target/jniinchi-(version).jar ]</i></p>
+
+    <p>To compile JNI-InChI, and create a JAR file including dependencies:</p>
+    <pre>mvn assembly:single</pre>
+    <p><i>[ This will create a JAR file: target/jniinchi-(version)-jar-with-dependencies.jar ]</i></p>
+
+    <p>All these commands will compile the Java code, call Make to build the C code and run a suite of unit tests to ensure the code has compiled successfully.</p>
+
+    <p>If you have previously tried using JNI-InChI, then you may need to clear cached old versions of the native code from your system. To do this, delete the contents of the ~/.jnati/repo/jni-inchi directory.</p>
+
+    </answer>
     </faq>
 
     <faq id="jnati-dir">
@@ -81,14 +56,7 @@ contents of the <tt>~/.jnati/repo/jni-inchi</tt> directory.
         What is this .jnati directory that has appeared in my home directory?
       </question>
       <answer>
-        <p>
-When JNI InChI is run the native code must also be loaded.  JNI InChI uses a
-library called jnati (http://jnati.sourceforge.net) to select the correct native
-library for your system.  If the necessary files cannot be located, jnati checks
-to see whether they are bundled inside a JAR file, or downloads them from a 
-remote repository.  If so, these files are then cached in the .jnati directory,
-so they can be reused next time JNI InChI is run.
-		</p>
+         <p>When JNI-InChI is run the native code must also be loaded. JNI-InChI uses a library called jnati (http://jnati.sourceforge.net) to select the correct native library for your system. If the necessary files cannot be located, jnati checks to see whether they are bundled inside a JAR file, or downloads them from a remote repository. If so, these files are then cached in the .jnati directory, so they can be reused next time JNI-InChI is run.</p>
       </answer>
     </faq>    
     
@@ -97,9 +65,7 @@ so they can be reused next time JNI InChI is run.
         My question wasn't answered, what should I do?
       </question>
       <answer>
-        <p>
-e-mail me: sea36 at users.sourceforge.net.
-		</p>
+        <p>e-mail me: sea36 at users.sourceforge.net.</p>
       </answer>
     </faq>   
     
