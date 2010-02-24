@@ -13,22 +13,20 @@ ifndef JAVA_HOME
 f := $(error JAVA_HOME is not defined)
 endif
 
-# Detect OS/Architecture
-LIB_OS := $(shell mvn -q -f ../../../pom.xml exec:java -Dexec.mainClass=net.sf.jnati.SystemTool -Dexec.args=os)
-LIB_ARCH := $(shell mvn -q -f ../../../pom.xml exec:java -Dexec.mainClass=net.sf.jnati.SystemTool -Dexec.args=arch)
-
-
 # Include OS specific configuration
-# Platform specific files must set:
-#	LIB_PREFIX
-#	LIB_SUFFIX
-ifeq ($(LIB_OS),WINDOWS)
+
+# PLATFORM environment variable must be set
+ifndef PLATFORM
+f := $(error PLATFORM is not defined)
+endif
+
+ifneq ($(findstring WINDOWS, $(PLATFORM)),)
 include Makefile.windows
 else
-ifeq ($(LIB_OS),LINUX)
+ifneq ($(findstring LINUX, $(PLATFORM)),)
 include Makefile.linux
 else
-ifeq ($(LIB_OS),MAC)
+ifneq ($(findstring MAC, $(PLATFORM)),)
 include Makefile.mac
 else
 f := $(error Platform $(LIB_OS) not supported)
@@ -38,8 +36,7 @@ endif
 
 
 
-LIB_OS_ARCH = $(LIB_OS)-$(LIB_ARCH)
-LIB_VERSION = $(VERSION)-$(LIB_OS_ARCH)
+LIB_VERSION = $(VERSION)-$(PLATFORM)
 
 TARGET_PATH = ../../../target/native
 TARGET_FILE = $(LIB_PREFIX)JniInchi-$(LIB_VERSION)$(LIB_SUFFIX)
@@ -87,7 +84,8 @@ INCHI_OBJECTS = $(addprefix $(INCHI_OBJDIR)/,$(_INCHI_OBJECTS))
 JNI_SRCDIR = jni-inchi
 JNI_OBJDIR = $(OBJDIR)/jni
 JNI_OBJECTS = $(JNI_OBJDIR)/JniInchiWrapper.o
-JNI_HEADERS = $(JNI_SRCDIR)/net_sf_jniinchi_JniInchiWrapper.h
+JNI_HEADER_DIR = ../../../target/generated-sources
+JNI_HEADERS = $(JNI_HEADER_DIR)/net_sf_jniinchi_JniInchiWrapper.h
 
 
 all: copies
@@ -141,10 +139,13 @@ $(INCHI_OBJDIR)/%.o: $(INCHI_SRCDIR)/%.c
 # $(JNI_OBJDIR)/%.o: $(JNI_SRCDIR)/%.cc $(JNI_HEADERS)
 #	$(COMPILE.cc) $< -o $@
 $(JNI_OBJDIR)/%.o: $(JNI_SRCDIR)/%.c $(JNI_HEADERS)
-	$(COMPILE.c) $< -o $@
+	$(COMPILE.c) $< -o $@ -I$(JNI_HEADER_DIR)
 
-$(JNI_HEADERS): $(JAVA_SOURCE) $(JAVA_CLASSPATH)/$(JAVA_CLASS_FILE)
+$(JNI_HEADERS): $(JAVA_SOURCE) $(JAVA_CLASSPATH)/$(JAVA_CLASS_FILE) $(JNI_HEADER_DIR)
 	$(JAVAH_CMD) -o $@ $(JAVA_CLASS)
+
+$(JNI_HEADER_DIR):
+	mkdir -p $(JNI_HEADER_DIR)	
 
 $(JAVA_CLASSPATH)/$(JAVA_CLASS_FILE):
 	mvn -f ../../../pom.xml compile
