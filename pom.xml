@@ -40,8 +40,19 @@
             <id>jnati</id>
             <url>http://jnati.sourceforge.net/m2repo</url>
         </repository>
+        <repository>
+            <id>ucc</id>
+            <url>http://maven.ch.cam.ac.uk/m2repo</url>
+        </repository>
     </repositories>
 
+  <pluginRepositories>
+      <pluginRepository>
+        <id>ucc</id>
+        <url>http://maven.ch.cam.ac.uk/m2repo</url>
+    </pluginRepository>
+  </pluginRepositories>
+    
     <developers>
         <developer>
             <id>sea36</id>
