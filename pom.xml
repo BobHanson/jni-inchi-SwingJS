@@ -39,18 +39,46 @@
         <repository>
             <id>jnati</id>
             <url>http://jnati.sourceforge.net/m2repo</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
-            <id>ucc</id>
-            <url>http://maven.ch.cam.ac.uk/m2repo</url>
+            <id>jnati-snapshots</id>
+            <url>http://jnati.sourceforge.net/m2-snapshot-repo</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
   <pluginRepositories>
       <pluginRepository>
-        <id>ucc</id>
-        <url>http://maven.ch.cam.ac.uk/m2repo</url>
-    </pluginRepository>
+            <id>jnati</id>
+            <url>http://jnati.sourceforge.net/m2repo</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>jnati-snapshots</id>
+            <url>http://jnati.sourceforge.net/m2-snapshot-repo</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
   </pluginRepositories>
     
     <developers>
