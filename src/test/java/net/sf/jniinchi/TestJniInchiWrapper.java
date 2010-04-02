@@ -898,7 +898,7 @@ NSC-7414a
         JniInchiInput input = getChlorineAtom("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/Cl", output.getInchi());
+        Assert.assertEquals("InChI=1S/Cl", output.getInchi());
     }
 
     /**
@@ -911,7 +911,7 @@ NSC-7414a
         JniInchiInput input = getChlorineIon("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/Cl/q-1", output.getInchi());
+        Assert.assertEquals("InChI=1S/Cl/q-1", output.getInchi());
     }
 
     /**
@@ -924,7 +924,7 @@ NSC-7414a
         JniInchiInput input = getChlorine37Atom("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/Cl/i1+2", output.getInchi());
+        Assert.assertEquals("InChI=1S/Cl/i1+2", output.getInchi());
     }
 
     /**
@@ -938,7 +938,7 @@ NSC-7414a
         JniInchiInput input = getChlorine37ByIsotopicMassShiftAtom("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/Cl/i1+2", output.getInchi());
+        Assert.assertEquals("InChI=1S/Cl/i1+2", output.getInchi());
     }
 
     /**
@@ -951,7 +951,7 @@ NSC-7414a
         JniInchiInput input = getHydrogenChlorideImplicitH("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/ClH/h1H", output.getInchi());
+        Assert.assertEquals("InChI=1S/ClH/h1H", output.getInchi());
     }
 
     /**
@@ -964,7 +964,7 @@ NSC-7414a
         JniInchiInput input = getHydrogenChlorideImplicitP("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/ClH/h1H/i/hH", output.getInchi());
+        Assert.assertEquals("InChI=1S/ClH/h1H/i/hH", output.getInchi());
     }
 
     /**
@@ -977,7 +977,7 @@ NSC-7414a
         JniInchiInput input = getHydrogenChlorideImplicitD("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/ClH/h1H/i/hD", output.getInchi());
+        Assert.assertEquals("InChI=1S/ClH/h1H/i/hD", output.getInchi());
     }
 
     /**
@@ -990,7 +990,7 @@ NSC-7414a
         JniInchiInput input = getHydrogenChlorideImplicitT("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/ClH/h1H/i/hT", output.getInchi());
+        Assert.assertEquals("InChI=1S/ClH/h1H/i/hT", output.getInchi());
     }
 
     /**
@@ -1003,7 +1003,7 @@ NSC-7414a
         JniInchiInput input = getMethylRadical("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/CH3/h1H3", output.getInchi());
+        Assert.assertEquals("InChI=1S/CH3/h1H3", output.getInchi());
     }
 
     // Test bond handling
@@ -1018,7 +1018,7 @@ NSC-7414a
         JniInchiInput input = getEthane("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/C2H6/c1-2/h1-2H3", output.getInchi());
+        Assert.assertEquals("InChI=1S/C2H6/c1-2/h1-2H3", output.getInchi());
     }
 
     /**
@@ -1031,7 +1031,7 @@ NSC-7414a
         JniInchiInput input = getEthene("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/C2H4/c1-2/h1-2H2", output.getInchi());
+        Assert.assertEquals("InChI=1S/C2H4/c1-2/h1-2H2", output.getInchi());
     }
 
     /**
@@ -1044,7 +1044,7 @@ NSC-7414a
         JniInchiInput input = getEthyne("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/C2H2/c1-2/h1-2H", output.getInchi());
+        Assert.assertEquals("InChI=1S/C2H2/c1-2/h1-2H", output.getInchi());
     }
 
     // Test 2D coordinate handling
@@ -1059,13 +1059,13 @@ NSC-7414a
         JniInchiInput inputE = getE12dichloroethene2D("");
         JniInchiOutput outputE = JniInchiWrapper.getInchi(inputE);
         Assert.assertEquals(INCHI_RET.OKAY, outputE.getReturnStatus());
-        Assert.assertEquals("InChI=1/C2H2Cl2/c3-1-2-4/h1-2H/b2-1+", outputE
+        Assert.assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H/b2-1+", outputE
                 .getInchi());
 
         JniInchiInput inputZ = getZ12dichloroethene2D("");
         JniInchiOutput outputZ = JniInchiWrapper.getInchi(inputZ);
         Assert.assertEquals(INCHI_RET.OKAY, outputZ.getReturnStatus());
-        Assert.assertEquals("InChI=1/C2H2Cl2/c3-1-2-4/h1-2H/b2-1-", outputZ
+        Assert.assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H/b2-1-", outputZ
                 .getInchi());
     }
 
@@ -1083,14 +1083,14 @@ NSC-7414a
         JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
         Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
         Assert.assertEquals(
-                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
                 outputL.getInchi());
 
         JniInchiInput inputD = getDAlanine3D("");
         JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
         Assert.assertEquals(INCHI_RET.OKAY, outputD.getReturnStatus());
         Assert.assertEquals(
-                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1",
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1",
                 outputD.getInchi());
     };
 
@@ -1104,25 +1104,25 @@ NSC-7414a
      */
     @Test
     public void testGetInchiFromLandDAlanine2DWithFixSp3Bug() throws Exception {
-        JniInchiInput input = getAlanine2D("-FixSp3Bug");
+        JniInchiInput input = getAlanine2D("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
         Assert.assertEquals("Omitted undefined stereo", output.getMessage());
-        Assert.assertEquals("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)",
+        Assert.assertEquals("InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)",
                 output.getInchi());
 
-        JniInchiInput inputL = getLAlanine2Da("-FixSp3Bug");
+        JniInchiInput inputL = getLAlanine2Da("");
         JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
         Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
         Assert.assertEquals(
-                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
                 outputL.getInchi());
 
-        JniInchiInput inputD = getDAlanine2D("-FixSp3Bug");
+        JniInchiInput inputD = getDAlanine2D("");
         JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
         Assert.assertEquals(INCHI_RET.OKAY, outputD.getReturnStatus());
         Assert.assertEquals(
-                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1",
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1",
                 outputD.getInchi());
     };
 
@@ -1135,18 +1135,18 @@ NSC-7414a
      */
     @Test
     public void testGetInchiStereoBondDirection() throws Exception {
-        JniInchiInput input = getLAlanine2Da("-FixSp3Bug");
+        JniInchiInput input = getLAlanine2Da("");
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
         Assert.assertEquals(
-                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
                 output.getInchi());
 
-        JniInchiInput inputL = getLAlanine2Db("-FixSp3Bug");
+        JniInchiInput inputL = getLAlanine2Db("");
         JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
         Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
         Assert.assertEquals(
-                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
                 outputL.getInchi());
     }
 
@@ -1164,21 +1164,21 @@ NSC-7414a
         JniInchiOutput output = JniInchiWrapper.getInchi(input);
         Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
         Assert.assertEquals("Omitted undefined stereo", output.getMessage());
-        Assert.assertEquals("InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)",
+        Assert.assertEquals("InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)",
                 output.getInchi());
 
         JniInchiInput inputL = getLAlanine0D("");
         JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
         Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
         Assert.assertEquals(
-                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
                 outputL.getInchi());
 
         JniInchiInput inputD = getDAlanine0D("");
         JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
         Assert.assertEquals(INCHI_RET.OKAY, outputD.getReturnStatus());
         Assert.assertEquals(
-                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1",
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1",
                 outputD.getInchi());
     };
 
@@ -1195,19 +1195,19 @@ NSC-7414a
         Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
         Assert.assertEquals("Omitted undefined stereo", output.getMessage());
         Assert
-                .assertEquals("InChI=1/C2H2Cl2/c3-1-2-4/h1-2H", output
+                .assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H", output
                         .getInchi());
 
         JniInchiInput inputE = getE12dichloroethene0D("");
         JniInchiOutput outputE = JniInchiWrapper.getInchi(inputE);
         Assert.assertEquals(INCHI_RET.OKAY, outputE.getReturnStatus());
-        Assert.assertEquals("InChI=1/C2H2Cl2/c3-1-2-4/h1-2H/b2-1+", outputE
+        Assert.assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H/b2-1+", outputE
                 .getInchi());
 
         JniInchiInput inputZ = getZ12dichloroethene0D("");
         JniInchiOutput outputZ = JniInchiWrapper.getInchi(inputZ);
         Assert.assertEquals(INCHI_RET.OKAY, outputZ.getReturnStatus());
-        Assert.assertEquals("InChI=1/C2H2Cl2/c3-1-2-4/h1-2H/b2-1-", outputZ
+        Assert.assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H/b2-1-", outputZ
                 .getInchi());
     };
 
@@ -1823,7 +1823,7 @@ NSC-7414a
         String inchi = "InChI=1/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
         JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
         Assert.assertEquals(INCHI_KEY.OK, output.getReturnStatus());
-        Assert.assertEquals("RYYVLZVUVIJVGH-UHFFFAOYAW", output.getKey());
+        Assert.assertEquals("RYYVLZVUVIJVGH-UHFFFAOYNA-N", output.getKey());
 //    	}
     }
 
@@ -2010,7 +2010,7 @@ NSC-7414a
                     JniInchiOutput output = JniInchiWrapper.getInchi(input);
                     if (INCHI_RET.OKAY != output.getReturnStatus()) {
                         failCount++;
-                    } else if (!("InChI=1/" + element)
+                    } else if (!("InChI=1S/" + element)
                             .equals(output.getInchi())) {
                         failCount++;
                     }

@@ -25,7 +25,7 @@
 #include <inchi_api.h>
 #include <ichisize.h>
 
-#define NATIVE_LIB_VERSION "1.7"
+#define NATIVE_LIB_VERSION "1.8"
 
 // Uncomment to enable debug mode
 // #define DEBUG 1
@@ -632,23 +632,43 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromIN
     fprintf(stderr, "inchi: %s\n", inchi);
     #endif
 
-    char *inchiKey = malloc(sizeof(char) * 26);
-    memset(inchiKey, 0, sizeof(char) * 26);
+    // The user-supplied buffer szINCHIKey should be at least 28 bytes long.
+    char *szINCHIKey = malloc(sizeof(char) * 28);
+    memset(szINCHIKey, 0, sizeof(char) * 28);
+
+    // hash extension (up to 256 bits; 1st block) string 
+    // Caller should allocate space for 64 characters + trailing NULL
+    char *szXtra1 = malloc(sizeof(char) * 65);
+    memset(szXtra1, 0, sizeof(char) * 65);
+
+    // hash extension (up to 256 bits; 2nd block) string
+    // Caller should allocate space for 64 characters + trailing NULL
+    char *szXtra2 = malloc(sizeof(char) * 65);
+    memset(szXtra2, 0, sizeof(char) * 65);
 
     #ifdef DEBUG
     fprintf(stderr, "getting InChIKey...\n");
     #endif
 
-    int ret = GetINCHIKeyFromINCHI(inchiString, inchiKey);
+    // xtra1 =1 calculate hash extension (up to 256 bits; 1st block)
+    // xtra2 =1 calculate hash extension (up to 256 bits; 2nd block)
+    const int xtra1 = 1;
+    const int xtra2 = 2;
+
+    int ret = GetINCHIKeyFromINCHI(inchiString, xtra1, xtra2, szINCHIKey, szXtra1, szXtra2);
     (*env)->ReleaseStringUTFChars(env, inchi, inchiString);
 
     #ifdef DEBUG
     fprintf(stderr, "ret: %d\n", ret);
-    fprintf(stderr, "key: %s\n", inchiKey);
+    fprintf(stderr, "key: %s\n", szINCHIKey);
     #endif
 
-    jstring key = (*env)->NewStringUTF(env, inchiKey);
-    free(inchiKey);
+    jstring key = (*env)->NewStringUTF(env, szINCHIKey);
+
+    free(szINCHIKey);
+    free(szXtra1);
+    free(szXtra2);
+
     jobject robj = (*env)->NewObject(env, jniInchiOutputKey, initJniInchiOutputKey, ret, key);
 
     #ifdef DEBUG

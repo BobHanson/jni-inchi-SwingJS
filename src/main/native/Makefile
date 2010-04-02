@@ -7,11 +7,15 @@
 #
 
 # Native code version
-VERSION = 1.7
+VERSION = 1.8
 
 ifndef JAVA_HOME
 f := $(error JAVA_HOME is not defined)
 endif
+
+JAVAH = "$(JAVA_HOME)/bin/javah"
+# f := $(error Cannot find javah. Ensure JAVA_HOME is correctly set.)
+
 
 # Include OS specific configuration
 
@@ -29,7 +33,7 @@ else
 ifneq ($(findstring MAC, $(PLATFORM)),)
 include Makefile.mac
 else
-f := $(error Platform $(LIB_OS) not supported)
+f := $(error Platform $(PLATFORM) not supported)
 endif
 endif
 endif
@@ -44,9 +48,9 @@ TARGET = $(TARGET_PATH)/$(TARGET_FILE)
 JAR_WORKDIR = $(TARGET_PATH)/jar
 JAR = $(TARGET_PATH)/jniinchi-$(LIB_VERSION).jar
 
-OBJDIR = $(TARGET_PATH)/o/$(LIB_OS_ARCH)
+OBJDIR = $(TARGET_PATH)/o/$(VERSION)
 
-INCHI_SRCDIR = inchi-1.02-beta
+INCHI_SRCDIR = inchi-1.03-pre
 INCHI_OBJDIR = $(OBJDIR)/inchi
 
 JAVA_SOURCE = ../java/net/sf/jniinchi/JniInchiWrapper.java
@@ -54,30 +58,24 @@ JAVA_CLASS = net.sf.jniinchi.JniInchiWrapper
 JAVA_CLASSPATH = ../../../target/classes
 JAVA_CLASS_FILE = net/sf/jniinchi/JniInchiWrapper.class
 
-
-JAVAH = "$(JAVA_HOME)/bin/javah"
-# f := $(error Cannot find javah. Ensure JAVA_HOME is correctly set.)
-
 JAVAH_FLAGS += -classpath $(JAVA_CLASSPATH)
 JAVAH_CMD = $(JAVAH) $(JAVAH_FLAGS) $(OUTPUT_OPTION)
 
 RESOURCE_PATH = ../resources
-ARTIFACT_PATH = META-INF/jniinchi/$(VERSION)/$(LIB_OS_ARCH)
+ARTIFACT_PATH = META-INF/jniinchi/$(VERSION)/$(PLATFORM)
 
 LDFLAGS += -s
 CFLAGS += -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR)
 CFLAGS += -Os
 
-_INCHI_OBJECTS =	ichican2.o ichicano.o ichicans.o ichiisot.o \
-					ichilnct.o ichimak2.o ichimake.o ichimap1.o \
-					ichimap2.o ichimap4.o ichinorm.o ichiparm.o \
-					ichiprt1.o ichiprt2.o ichiprt3.o ichiqueu.o \
-					ichiread.o ichiring.o ichirvr1.o ichirvr2.o \
-					ichirvr3.o ichirvr4.o ichirvr5.o ichirvr6.o \
-					ichirvr7.o ichisort.o ichister.o ichitaut.o \
-					ichi_bns.o ikey_base26.o ikey_dll.o inchi_dll.o \
-					inchi_dll_a.o inchi_dll_a2.o inchi_dll_main.o \
-					runichi.o sha2.o strutil.o util.o
+_INCHI_OBJECTS =	ichi_bns.o  ichi_io.o   ichican2.o  ichicano.o  ichicans.o \
+                    ichiisot.o  ichilnct.o  ichimak2.o  ichimake.o  ichimap1.o \
+                    ichimap2.o  ichimap4.o  ichinorm.o  ichiparm.o  ichiprt1.o \
+                    ichiprt2.o  ichiprt3.o  ichiqueu.o  ichiread.o  ichiring.o \
+                    ichirvr1.o  ichirvr2.o  ichirvr3.o  ichirvr4.o  ichirvr5.o \
+                    ichirvr6.o  ichirvr7.o  ichisort.o  ichister.o  ichitaut.o \
+                    ikey_base26.o ikey_dll.o inchi_dll.o inchi_dll_a.o inchi_dll_a2.o \
+                    inchi_dll_main.o runichi.o sha2.o strutil.o util.o
 
 INCHI_OBJECTS = $(addprefix $(INCHI_OBJDIR)/,$(_INCHI_OBJECTS))
 

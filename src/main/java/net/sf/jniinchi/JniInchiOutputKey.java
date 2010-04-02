@@ -53,19 +53,19 @@ public class JniInchiOutputKey {
 				throw new NullPointerException("Null InChIkey");
 			}
 			
-			Matcher m = pattern.matcher(key);
-			if (!m.matches()) {
-				throw new JniInchiException("Invalid key format: " + key);
-			}
+//			Matcher m = pattern.matcher(key);
+//			if (!m.matches()) {
+//				throw new JniInchiException("Invalid key format: " + key);
+//			}
 			
-			block1 = m.group(1);
-			block2 = m.group(2);
-			flagChar = m.group(3).charAt(0);
-			checkChar = m.group(4).charAt(0);
-			
-			if (flagChar < 'A' || flagChar > 'X') {
-				throw new JniInchiException("Invalid flag character: " + flagChar);
-			}
+//			block1 = m.group(1);
+//			block2 = m.group(2);
+//			flagChar = m.group(3).charAt(0);
+//			checkChar = m.group(4).charAt(0);
+//
+//			if (flagChar < 'A' || flagChar > 'X') {
+//				throw new JniInchiException("Invalid flag character: " + flagChar);
+//			}
 			
 			
 		}
