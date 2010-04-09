@@ -220,6 +220,28 @@ public class JniInchiWrapper {
     }
 
 
+    /**
+     * Generates the Standard InChI string for a chemical structure.
+     * @param input
+     * @return
+     * @throws JniInchiException
+     */
+    @SuppressWarnings("unchecked")
+    public static JniInchiOutput getStdInchi(JniInchiInput input) throws JniInchiException {
+        JniInchiWrapper wrapper = getWrapper();
+        try {
+            wrapper.getLock();
+        } catch (TimeoutException ex) {
+            throw new JniInchiException(ex);
+        }
+
+        try {
+            return wrapper.GetStdINCHI(input);
+        } finally {
+            wrapper.releaseLock();
+        }
+    }
+
     public static JniInchiOutput getInchiFromInchi(JniInchiInputInchi input) throws JniInchiException {
         JniInchiWrapper wrapper = getWrapper();
         try {
@@ -338,11 +360,15 @@ public class JniInchiWrapper {
 
     private native JniInchiOutput GetINCHI(JniInchiInput input);
 
+    private native JniInchiOutput GetStdINCHI(JniInchiInput input);
+
     private native JniInchiOutput GetINCHIfromINCHI(String inchi, String options);
 
     private native JniInchiOutputStructure GetStructFromINCHI(String inchi, String options);
 
     private native JniInchiOutputKey GetINCHIKeyFromINCHI(String inchi);
+
+    private native JniInchiOutputKey GetStdINCHIKeyFromStdINCHI(String inchi);
 
     private native int CheckINCHIKey(String key);
 

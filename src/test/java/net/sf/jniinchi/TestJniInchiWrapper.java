@@ -2037,4 +2037,30 @@ NSC-7414a
         }
 
     }
+
+
+
+    @Test
+    public void testGetStdInchi() throws JniInchiException {
+        JniInchiInput input = getLAlanine0D("");
+        JniInchiOutput output = JniInchiWrapper.getStdInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                output.getInchi());        
+    }
+
+    @Test
+    public void testGetStdInchiWithBadOption() throws JniInchiException {
+        // TODO
+        JniInchiInput input = getLAlanine0D("-FixedH");
+        JniInchiOutput output = JniInchiWrapper.getStdInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        System.err.println(output.getReturnStatus());
+        System.err.println(output.getMessage());
+        System.err.println(output.getInchi());
+        System.err.println(output.getLog());
+    }
+
+
 }

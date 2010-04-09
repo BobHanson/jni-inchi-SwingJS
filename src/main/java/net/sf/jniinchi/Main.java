@@ -99,6 +99,15 @@ public class Main {
             e.printStackTrace();
         }
 
+//        System.err.println("Running memtest");
+//        for (int i = 0; i < 1000000; i++) {
+//            if (i % 1000 == 0) {
+//                System.err.println(i+"\t"+((int)(Runtime.getRuntime().totalMemory()/1024)));
+//            }
+//            JniInchiStructure mol = getTestMolecule();
+//            JniInchiWrapper.getInchi(new JniInchiInput(mol));
+//        }
+
         System.err.println();
         System.err.println("Checks done.");
         System.err.println();
