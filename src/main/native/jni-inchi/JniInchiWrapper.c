@@ -267,6 +267,9 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
     fprintf(stderr, "nstereo: %d\n", nstereo);
     #endif
 
+//    fprintf(stderr, "natoms: %d\n", natoms);
+//    fprintf(stderr, "maxatoms: %d\n", MAX_ATOMS);
+
     if (natoms > MAX_ATOMS) {
         (*env)->ThrowNew(env, IllegalArgumentException, "Too many atoms");
         return 0;
@@ -429,164 +432,11 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
     fprintf(stderr, "** Get InChI\n");
     #endif
 
-//    inchi_Input *inchi_input = getInchiInput(env, input);
-
-
-    int i;
-
-    #ifdef DEBUG
-    fprintf(stderr, "** Get InChI\n");
-    #endif
-
-    jboolean iscopy = JNI_TRUE;
-
-    jint natoms = (*env)->CallIntMethod(env, input, getNumAtoms);
-    jint nstereo = (*env)->CallIntMethod(env, input, getNumStereo0D);
-    jint nbonds = (*env)->CallIntMethod(env, input, getNumBonds);
-
-    #ifdef DEBUG
-    fprintf(stderr, "natoms: %d\n", natoms);
-    fprintf(stderr, "nbonds: %d\n", nbonds);
-    fprintf(stderr, "nstereo: %d\n", nstereo);
-    #endif
-
-    if (natoms > MAX_ATOMS) {
-        (*env)->ThrowNew(env, IllegalArgumentException, "Too many atoms");
+    inchi_Input *inchi_input = getInchiInput(env, input);
+    if (!inchi_input) {
+        // Exception was thrown
         return 0;
     }
-
-
-    inchi_Atom *atoms = malloc(sizeof(inchi_Atom) * natoms);
-    memset(atoms,0,sizeof(inchi_Atom) * natoms);
-
-    for (i = 0; i < natoms; i++) {
-
-        #ifdef DEBUG
-        fprintf(stderr, "atom #%d:", i);
-        #endif
-
-        jobject atom = (*env)->CallObjectMethod(env, input, getAtom, i);
-
-        inchi_Atom *iatom = &atoms[i];
-
-        jstring jelname = (jstring) (*env)->CallObjectMethod(env, atom, getElementType);
-        const char *elname = (*env)->GetStringUTFChars(env, jelname, &iscopy);
-        if (strlen(elname) > ATOM_EL_LEN) {
-            (*env)->ThrowNew(env, IllegalArgumentException, "Element name too long; maximum: " + ATOM_EL_LEN);
-            (*env)->ReleaseStringUTFChars(env, jelname, elname);
-            return 0;
-        }
-        strcpy(iatom->elname, elname);
-        (*env)->ReleaseStringUTFChars(env, jelname, elname);
-
-        #ifdef DEBUG
-        fprintf(stderr, " %s", iatom->elname);
-        #endif
-
-        iatom->x = (*env)->CallDoubleMethod(env, atom, getX);
-        iatom->y = (*env)->CallDoubleMethod(env, atom, getY);
-        iatom->z = (*env)->CallDoubleMethod(env, atom, getZ);
-
-        #ifdef DEBUG
-        fprintf(stderr, " [%f,%f,%f]", iatom->x, iatom->y, iatom->z);
-        #endif
-
-        iatom->charge = (*env)->CallIntMethod(env, atom, getCharge);
-        iatom->radical = (*env)->CallIntMethod(env, atom, getRadical);
-
-        iatom->num_iso_H[0] = (*env)->CallIntMethod(env, atom, getImplicitH);
-        iatom->num_iso_H[1] = (*env)->CallIntMethod(env, atom, getImplicitProtium);
-        iatom->num_iso_H[2] = (*env)->CallIntMethod(env, atom, getImplicitDeuterium);
-        iatom->num_iso_H[3] = (*env)->CallIntMethod(env, atom, getImplicitTritium);
-
-        iatom->isotopic_mass = (*env)->CallIntMethod(env, atom, getIsotopicMass);
-
-        iatom->num_bonds = 0;
-
-        #ifdef DEBUG
-        fprintf(stderr, "\n");
-        #endif
-    }
-
-
-    for (i = 0; i < nbonds; i++) {
-
-        jobject bond = (*env)->CallObjectMethod(env, input, getBond, i);
-        jobject atomO = (*env)->CallObjectMethod(env, bond, getOriginAtom);
-        jobject atomT = (*env)->CallObjectMethod(env, bond, getTargetAtom);
-        jint bondType = (*env)->CallIntMethod(env, bond, getBondType);
-        jint bondStereo = (*env)->CallIntMethod(env, bond, getBondStereo);
-
-        jint iaO = (*env)->CallIntMethod(env, input, getAtomIndex, atomO);
-        jint iaT = (*env)->CallIntMethod(env, input, getAtomIndex, atomT);
-
-
-        #ifdef DEBUG
-        fprintf(stderr, "bond#%d: a#%d,a#%d (%d)\n", i, iaO, iaT, bondType);
-        #endif
-
-        inchi_Atom *iatom = &atoms[iaO];
-        int numbonds = iatom->num_bonds;
-        if (numbonds >= MAXVAL) {
-            free(atoms);
-            (*env)->ThrowNew(env, IllegalArgumentException, "Too many bonds from one atom; maximum: " + MAXVAL);
-            return 0;
-        }
-        iatom->neighbor[numbonds] = iaT;
-        iatom->bond_type[numbonds] = bondType;
-        iatom->bond_stereo[numbonds] = bondStereo;
-        iatom->num_bonds++;
-
-    }
-
-    inchi_Stereo0D *stereos = malloc(sizeof(inchi_Stereo0D) * nstereo);
-    memset(stereos,0,sizeof(inchi_Stereo0D) * nstereo);
-
-    for (i = 0; i < nstereo; i++) {
-
-        jobject stereo = (*env)->CallObjectMethod(env, input, getStereo0D, i);
-
-        inchi_Stereo0D *istereo = &stereos[i];
-
-        jobject cat = (*env)->CallObjectMethod(env, stereo, getCentralAtom);
-        jobject nat0 = (*env)->CallObjectMethod(env, stereo, getNeighbor, 0);
-        jobject nat1 = (*env)->CallObjectMethod(env, stereo, getNeighbor, 1);
-        jobject nat2 = (*env)->CallObjectMethod(env, stereo, getNeighbor, 2);
-        jobject nat3 = (*env)->CallObjectMethod(env, stereo, getNeighbor, 3);
-
-        istereo->central_atom = (*env)->CallIntMethod(env, input, getAtomIndex, cat);
-        istereo->neighbor[0] = (*env)->CallIntMethod(env, input, getAtomIndex, nat0);
-        istereo->neighbor[1] = (*env)->CallIntMethod(env, input, getAtomIndex, nat1);
-        istereo->neighbor[2] = (*env)->CallIntMethod(env, input, getAtomIndex, nat2);
-        istereo->neighbor[3] = (*env)->CallIntMethod(env, input, getAtomIndex, nat3);
-
-        istereo->type = (*env)->CallIntMethod(env, stereo, getStereoType);
-        istereo->parity = (*env)->CallIntMethod(env, stereo, getParity);
-
-    }
-
-    inchi_Input *inchi_input;                      // Allocate memory
-    inchi_input = malloc(sizeof(inchi_Input));
-    memset(inchi_input, 0, sizeof(inchi_Input));
-
-    jstring joptions = (jstring) (*env)->CallObjectMethod(env, input, getOptions);
-    const char *options = (*env)->GetStringUTFChars(env, joptions, &iscopy);
-    char *opts = malloc(sizeof(char) * (strlen(options)+1));
-    strcpy(opts, options);
-
-    #ifdef DEBUG
-//    cerr << "options: " << opts << "\n";
-    #endif
-
-    (*inchi_input).szOptions = opts;
-    (*env)->ReleaseStringUTFChars(env, joptions, options);
-
-
-    (*inchi_input).num_atoms = natoms;
-    (*inchi_input).atom = atoms;
-
-    (*inchi_input).num_stereo0D = nstereo;
-    (*inchi_input).stereo0D = stereos;
 
     inchi_Output *inchi_output;
     inchi_output = malloc(sizeof(inchi_Output));
@@ -618,9 +468,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHI
     #endif
 
     inchi_Input *inchi_input = getInchiInput(env, input);
-	if (!inchi_input) {
-		return 0;
-	}
+    if (!inchi_input) {
+        // Exception was thrown
+        return 0;
+    }
 
     inchi_Output *inchi_output;
     inchi_output = malloc(sizeof(inchi_Output));
@@ -686,7 +537,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromIN
     // xtra1 =1 calculate hash extension (up to 256 bits; 1st block)
     // xtra2 =1 calculate hash extension (up to 256 bits; 2nd block)
     const int xtra1 = 1;
-    const int xtra2 = 2;
+    const int xtra2 = 1;
 
     int ret = GetINCHIKeyFromINCHI(inchiString, xtra1, xtra2, szINCHIKey, szXtra1, szXtra2);
     (*env)->ReleaseStringUTFChars(env, inchi, inchiString);
@@ -780,6 +631,8 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIfromINCHI
 
     jobject output = getInchiOutput(env, ret, *inchi_output);
     FreeINCHI(inchi_output);
+    free(inchi_output);
+    free(inchi_input);
 
     return output;
 
@@ -913,6 +766,8 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
 
 
     FreeStructFromINCHI(inchi_output);
+    free(inchi_output);
+    free(inchi_input);
 
     #ifdef DEBUG
     fprintf(stderr, "----\n\n");

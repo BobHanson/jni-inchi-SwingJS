@@ -6,15 +6,15 @@
 #         University Of Cambrige, UK
 #
 
-# Native code version
+# Current native code version
 VERSION = 1.8
 
 ifndef JAVA_HOME
-f := $(error JAVA_HOME is not defined)
+f := $(error JAVA_HOME is not defined, Ensure that it is pointing to a JDK)
 endif
 
 JAVAH = "$(JAVA_HOME)/bin/javah"
-# f := $(error Cannot find javah. Ensure JAVA_HOME is correctly set.)
+# TODO $(error Cannot find javah. Ensure JAVA_HOME is correctly set and pointing to a JDK)
 
 
 # Include OS specific configuration
@@ -24,20 +24,19 @@ ifndef PLATFORM
 f := $(error PLATFORM is not defined)
 endif
 
-ifneq ($(findstring WINDOWS, $(PLATFORM)),)
+ifneq (,$(findstring WINDOWS, $(PLATFORM)))
 include Makefile.windows
-else
-ifneq ($(findstring LINUX, $(PLATFORM)),)
+else ifneq (,$(findstring LINUX, $(PLATFORM)))
 include Makefile.linux
-else
-ifneq ($(findstring MAC, $(PLATFORM)),)
+else ifneq (,$(findstring MAC, $(PLATFORM)))
 include Makefile.mac
+else ifeq ($(PLATFORM),SUNOS-X86)
+include Makefile.solaris.x86
+else ifeq ($(PLATFORM),SUNOS-AMD64)
+include Makefile.solaris.amd64
 else
-f := $(error Platform $(PLATFORM) not supported)
+f := $(error Platform '$(PLATFORM)' not supported)
 endif
-endif
-endif
-
 
 
 LIB_VERSION = $(VERSION)-$(PLATFORM)
@@ -48,7 +47,7 @@ TARGET = $(TARGET_PATH)/$(TARGET_FILE)
 JAR_WORKDIR = $(TARGET_PATH)/jar
 JAR = $(TARGET_PATH)/jniinchi-$(LIB_VERSION).jar
 
-OBJDIR = $(TARGET_PATH)/o/$(VERSION)
+OBJDIR = $(TARGET_PATH)/o
 
 INCHI_SRCDIR = inchi-1.03-pre
 INCHI_OBJDIR = $(OBJDIR)/inchi

@@ -1,0 +1,12 @@
+#
+# Makefile for JNI-InChI - Solaris X86 Settings
+#
+# Author: Timo Boehme <timo.boehme at ontochem.com>
+#         OntoChem GmbH, Halle, Germany
+#
+
+CFLAGS += -I$(JAVA_HOME)/include/solaris -fPIC
+LDFLAGS += -shared
+
+LIB_PREFIX = lib
+LIB_SUFFIX = .so
