@@ -42,7 +42,7 @@ public enum INCHI_KEY {
 
     EMPTY_INPUT(2),
 
-    NOT_INCHI_INPUT(3),
+    INVALID_INCHI_PREFIX(3),
 
     NOT_ENOUGH_MEMORY(4),
 
@@ -72,7 +72,7 @@ public enum INCHI_KEY {
             case 0:	return OK;
             case 1: return UNKNOWN_ERROR;
             case 2: return EMPTY_INPUT;
-            case 3: return NOT_INCHI_INPUT;
+            case 3: return INVALID_INCHI_PREFIX;
             case 4: return NOT_ENOUGH_MEMORY;
             case 20: return INVALID_INCHI;
             case 21: return INVALID_STD_INCHI;
