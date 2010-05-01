@@ -24,23 +24,25 @@ package net.sf.jniinchi;
  *
  * <p>InChI library return values:<br>
  * <tt>
- * VALID			(0)
+ * VALID_STANDARD			(0)
  * INVALID_LENGTH 	(1)
  * INVALID_LAYOUT 	(2)
- * INVALID_CHECKSUM	(3)
+ * INVALID_VERSION	(3)
  * </tt>
  * <p>See <tt>inchi_api.h</tt>.
  * @author Sam Adams
  */
 public enum INCHI_KEY_STATUS {
 
-    VALID("VALID", 0),
+    VALID_STANDARD("VALID_STANDARD", 0),
+
+    VALID_NON_STANDARD("VALID_NON_STANDARD", -1),
 
     INVALID_LENGTH("INVALID_LENGTH", 1),
 
-    INVALID_LAYOUT("INVALID_LAYOUT", 2),
+    INVALID_VERSION("INVALID_VERSION", 2),
 
-    INVALID_CHECKSUM("INVALID_CHECKSUM", 3);
+    INVALID_LAYOUT("INVALID_LAYOUT", 3);
 
 
     /**
@@ -72,10 +74,11 @@ public enum INCHI_KEY_STATUS {
     public static INCHI_KEY_STATUS getValue(int value) {
         INCHI_KEY_STATUS keyStatus;
         switch (value) {
-            case 0: keyStatus = INCHI_KEY_STATUS.VALID; break;
-            case 1: keyStatus = INCHI_KEY_STATUS.INVALID_LENGTH; break;
-            case 2: keyStatus = INCHI_KEY_STATUS.INVALID_LAYOUT; break;
-            case 3: keyStatus = INCHI_KEY_STATUS.INVALID_CHECKSUM; break;
+            case -1: keyStatus = VALID_NON_STANDARD; break;
+            case 0: keyStatus = VALID_STANDARD; break;
+            case 1: keyStatus = INVALID_LENGTH; break;
+            case 2: keyStatus = INVALID_LAYOUT; break;
+            case 3: keyStatus = INVALID_VERSION; break;
             default:
                 keyStatus = null;
         }

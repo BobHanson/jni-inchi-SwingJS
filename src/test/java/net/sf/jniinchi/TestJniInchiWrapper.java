@@ -1829,34 +1829,37 @@ NSC-7414a
 
     @Test
     public void testCheckInchiKeyValid() throws JniInchiException {
-        String key = "RYYVLZVUVIJVGH-UHFFFAOYAW";
+        String key = "RYYVLZVUVIJVGH-UHFFFAOYNA-N";
         INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
-        Assert.assertEquals(INCHI_KEY_STATUS.VALID, status);
+        Assert.assertEquals(INCHI_KEY_STATUS.VALID_NON_STANDARD, status);
     }
 
     @Test
-    public void testCheckInchiKeyInvalidLength() throws JniInchiException {
-        String key1 = "RYYVLZVUVIJVGH-UHFFFAOYA";
-        INCHI_KEY_STATUS status1 = JniInchiWrapper.checkInChIKey(key1);
+    public void testCheckInchiKeyInvalidLengthLong() throws JniInchiException {
+        String key = "RYYVLZVUVIJVGH-UHFFFAOYNA-NX";
+        INCHI_KEY_STATUS status1 = JniInchiWrapper.checkInChIKey(key);
         Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LENGTH, status1);
+    }
 
-        String key2 = "RYYVLZVUVIJVGH-UHFFFAOYAWX";
-        INCHI_KEY_STATUS status2 = JniInchiWrapper.checkInChIKey(key2);
+    @Test
+    public void testCheckInchiKeyInvalidLengthShort() throws JniInchiException {
+        String key = "RYYVLZVUVIJVGH-UHFFFAOYNA-";
+        INCHI_KEY_STATUS status2 = JniInchiWrapper.checkInChIKey(key);
         Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LENGTH, status2);
     }
 
     @Test
     public void testCheckInchiKeyInvalidLayout() throws JniInchiException {
-        String key = "RYYVLZVUVIJVGHXUHFFFAOYAW";
+        String key = "RYYVLZVUVIJVGHXUHFFFAOYNAXN";
         INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
         Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LAYOUT, status);
     }
 
     @Test
-    public void testCheckInchiKeyInvalidChecksum() throws JniInchiException {
-        String key = "RYYVLZVUVIJVGH-UHFFFAOYAA";
+    public void testCheckInchiKeyInvalidVersion() throws JniInchiException {
+        String key = "RYYVLZVUVIJVGH-UHFFFAOYNX-N";
         INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
-        Assert.assertEquals(INCHI_KEY_STATUS.INVALID_CHECKSUM, status);
+        Assert.assertEquals(INCHI_KEY_STATUS.INVALID_VERSION, status);
     }
 
     /* Option doesn't work yet

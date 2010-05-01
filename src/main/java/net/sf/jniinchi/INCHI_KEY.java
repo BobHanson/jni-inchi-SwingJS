@@ -46,7 +46,9 @@ public enum INCHI_KEY {
 
     NOT_ENOUGH_MEMORY(4),
 
-    ERROR_IN_FLAG_CHAR(5);
+    INVALID_INCHI(20),
+
+    INVALID_STD_INCHI(21);
 
 
     /**
@@ -72,7 +74,8 @@ public enum INCHI_KEY {
             case 2: return EMPTY_INPUT;
             case 3: return NOT_INCHI_INPUT;
             case 4: return NOT_ENOUGH_MEMORY;
-            case 5: return ERROR_IN_FLAG_CHAR;
+            case 20: return INVALID_INCHI;
+            case 21: return INVALID_STD_INCHI;
             default:
                 return null;
         }
