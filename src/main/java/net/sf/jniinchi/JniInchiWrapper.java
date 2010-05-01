@@ -205,6 +205,9 @@ public class JniInchiWrapper {
      */
     @SuppressWarnings("unchecked")
     public static JniInchiOutput getInchi(JniInchiInput input) throws JniInchiException {
+        if (input == null) {
+            throw new IllegalArgumentException("Null input");
+        }
         JniInchiWrapper wrapper = getWrapper();
         try {
             wrapper.getLock();
@@ -228,6 +231,9 @@ public class JniInchiWrapper {
      */
     @SuppressWarnings("unchecked")
     public static JniInchiOutput getStdInchi(JniInchiInput input) throws JniInchiException {
+        if (input == null) {
+            throw new IllegalArgumentException("Null input");
+        }
         JniInchiWrapper wrapper = getWrapper();
         try {
             wrapper.getLock();
@@ -243,6 +249,9 @@ public class JniInchiWrapper {
     }
 
     public static JniInchiOutput getInchiFromInchi(JniInchiInputInchi input) throws JniInchiException {
+        if (input == null) {
+            throw new IllegalArgumentException("Null input");
+        }
         JniInchiWrapper wrapper = getWrapper();
         try {
             wrapper.getLock();
@@ -265,7 +274,9 @@ public class JniInchiWrapper {
      * @throws JniInchiException
      */
     public static JniInchiOutputStructure getStructureFromInchi(JniInchiInputInchi input) throws JniInchiException {
-
+        if (input == null) {
+            throw new IllegalArgumentException("Null input");
+        }
         JniInchiWrapper wrapper = getWrapper();
         try {
             wrapper.getLock();
@@ -288,6 +299,9 @@ public class JniInchiWrapper {
      * @throws JniInchiException
      */
     public static JniInchiOutputKey getInChIKey(final String inchi) throws JniInchiException {
+        if (inchi == null) {
+            throw new IllegalArgumentException("Null InChI");
+        }
         JniInchiWrapper wrapper = getWrapper();
         try {
             wrapper.getLock();
@@ -313,6 +327,9 @@ public class JniInchiWrapper {
      * @throws JniInchiException
      */
     public static INCHI_KEY_STATUS checkInChIKey(final String key) throws JniInchiException {
+        if (key == null) {
+            throw new IllegalArgumentException("Null InChI key");
+        }
         JniInchiWrapper wrapper = getWrapper();
         try {
             wrapper.getLock();
