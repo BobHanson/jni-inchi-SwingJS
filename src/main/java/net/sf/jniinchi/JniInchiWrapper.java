@@ -150,6 +150,9 @@ public class JniInchiWrapper {
      * @param ops  List of INCHI_OPTION
      */
     protected static String checkOptions(List<INCHI_OPTION> ops) throws JniInchiException {
+        if (ops == null) {
+            throw new IllegalArgumentException("Null options");
+        }
         StringBuffer sbOptions = new StringBuffer();
 
         for (int i = 0; i < ops.size(); i++) {
@@ -172,6 +175,9 @@ public class JniInchiWrapper {
      *                     switch (/ or -).
      */
     protected static String checkOptions(final String ops) throws JniInchiException {
+        if (ops == null) {
+            throw new IllegalArgumentException("Null options");
+        }
         StringBuilder sbOptions = new StringBuilder();
 
         StringTokenizer tok = new StringTokenizer(ops);

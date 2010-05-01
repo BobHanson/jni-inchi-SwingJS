@@ -2107,4 +2107,46 @@ NSC-7414a
     }
 
 
+    // Test null inputs
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCheckInchiKeyNull() throws JniInchiException {
+        JniInchiWrapper.checkInChIKey(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCheckOptionsListNull() throws JniInchiException {
+        JniInchiWrapper.checkOptions((List)null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCheckOptionsStringNull() throws JniInchiException {
+        JniInchiWrapper.checkOptions((String)null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetInchiNull() throws JniInchiException {
+        JniInchiWrapper.getInchi(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetInchiFromInchiNull() throws JniInchiException {
+        JniInchiWrapper.getInchiFromInchi(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetInchiKeyNull() throws JniInchiException {
+        JniInchiWrapper.getInChIKey(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetStdInchiNull() throws JniInchiException {
+        JniInchiWrapper.getStdInchi(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetStructureFromInchiNull() throws JniInchiException {
+        JniInchiWrapper.getStructureFromInchi(null);
+    }
+
 }
