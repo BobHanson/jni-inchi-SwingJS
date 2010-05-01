@@ -29,1290 +29,6 @@ import org.junit.Test;
 
 public class TestJniInchiWrapper {
 
-    //
-    // *** Test atom handling ***
-    //
-
-    /**
-     * Tests element name is correctly passed to InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiFromChlorineAtom() throws Exception {
-        JniInchiInput input = getChlorineAtom("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1S/Cl", output.getInchi());
-    }
-
-
-    /**
-     * Tests charge is correctly passed to InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiFromChlorineIon() throws Exception {
-        JniInchiInput input = getChlorineIon("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1S/Cl/q-1", output.getInchi());
-    }
-
-
-    /**
-     * Tests isotopic mass is correctly passed to InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetInchiFromChlorine37Atom() throws Exception {
-        JniInchiInput input = getChlorine37Atom("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1S/Cl/i1+2", output.getInchi());
-    }
-
-
-    /**
-     * Tests isotopic mass shift is correctly passed to InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiFromChlorine37ByIstopicMassShiftAtom()
-            throws Exception {
-        JniInchiInput input = getChlorine37ByIsotopicMassShiftAtom("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1S/Cl/i1+2", output.getInchi());
-    }
-
-
-    /**
-     * Tests implicit hydrogen count is correctly passed to InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiFromHydrogenChlorideImplicitH() throws Exception {
-        JniInchiInput input = getHydrogenChlorideImplicitH("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1S/ClH/h1H", output.getInchi());
-    }
-
-
-    /**
-     * Tests implicit protium count is correctly passed to InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiFromHydrogenChlorideImplicitP() throws Exception {
-        JniInchiInput input = getHydrogenChlorideImplicitP("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1S/ClH/h1H/i/hH", output.getInchi());
-    }
-
-
-    /**
-     * Tests implicit deuterium count is correctly passed to InChi.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiFromHydrogenChlorideImplicitD() throws Exception {
-        JniInchiInput input = getHydrogenChlorideImplicitD("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1S/ClH/h1H/i/hD", output.getInchi());
-    }
-
-
-    /**
-     * Tests implicit tritium count is correctly passed to InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiFromHydrogenChlorideImplicitT() throws Exception {
-        JniInchiInput input = getHydrogenChlorideImplicitT("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1S/ClH/h1H/i/hT", output.getInchi());
-    }
-
-
-    /**
-     * Tests radical state is correctly passed to InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiFromMethylRadical() throws Exception {
-        JniInchiInput input = getMethylRadical("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1S/CH3/h1H3", output.getInchi());
-    }
-
-
-
-    //
-    // *** Test bond handling ***
-    //
-
-
-    /**
-     * Tests single bond is correctly passed to InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiFromEthane() throws Exception {
-        JniInchiInput input = getEthane("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1S/C2H6/c1-2/h1-2H3", output.getInchi());
-    }
-
-
-    /**
-     * Tests double bond is correctly passed to InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiFromEthene() throws Exception {
-        JniInchiInput input = getEthene("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1S/C2H4/c1-2/h1-2H2", output.getInchi());
-    }
-
-
-    /**
-     * Tests triple bond is correctly passed to InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiFromEthyne() throws Exception {
-        JniInchiInput input = getEthyne("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1S/C2H2/c1-2/h1-2H", output.getInchi());
-    }
-
-
-
-    //
-    // *** Test 2D coordinate handling ***
-    //
-
-
-    /**
-     * Tests 2D coordinates are correctly passed to InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiE12Dichloroethene2D() throws Exception {
-        JniInchiInput inputE = getE12dichloroethene2D("");
-        JniInchiOutput outputE = JniInchiWrapper.getInchi(inputE);
-        Assert.assertEquals(INCHI_RET.OKAY, outputE.getReturnStatus());
-        Assert.assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H/b2-1+", outputE
-                .getInchi());
-    }
-
-    @Test
-    public void testGetStdInchiZ12Dichloroethene2D() throws Exception {
-        JniInchiInput inputZ = getZ12dichloroethene2D("");
-        JniInchiOutput outputZ = JniInchiWrapper.getInchi(inputZ);
-        Assert.assertEquals(INCHI_RET.OKAY, outputZ.getReturnStatus());
-        Assert.assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H/b2-1-", outputZ
-                .getInchi());
-    }
-
-
-
-    //
-    // *** Test 3D coordinate handling ***
-    //
-
-
-    /**
-     * Tests InChI generation from L and D-Alanine molecules, with 3D
-     * coordinates.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiFromLAlanine3D() throws Exception {
-        JniInchiInput inputL = getLAlanine3D("");
-        JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
-        Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
-        Assert.assertEquals(
-                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
-                outputL.getInchi());
-    }
-
-    @Test
-    public void testGetStdInchiFromDAlanine3D() throws Exception {
-        JniInchiInput inputD = getDAlanine3D("");
-        JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
-        Assert.assertEquals(INCHI_RET.OKAY, outputD.getReturnStatus());
-        Assert.assertEquals(
-                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1",
-                outputD.getInchi());
-    };
-
-
-
-    //
-    // *** Test handling of 2D coordinates with bond stereo types ***
-    //
-
-
-    /**
-     * Tests InChI generation from L and D-Alanine molecules, with 3D
-     * coordinates, using FixSp3Bug option from InChI software v1.01
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiFromAlanine2D() throws Exception {
-        JniInchiInput input = getAlanine2D("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
-        Assert.assertEquals("Omitted undefined stereo", output.getMessage());
-        Assert.assertEquals("InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)",
-                output.getInchi());
-    }
-
-    @Test
-    public void testGetStdInchiFromLAlanine2D() throws Exception {
-        JniInchiInput inputL = getLAlanine2Da("");
-        JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
-        Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
-        Assert.assertEquals(
-                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
-                outputL.getInchi());
-    }
-
-    @Test
-    public void testGetStdInchiFromDAlanine2D() throws Exception {
-        JniInchiInput inputD = getDAlanine2D("");
-        JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
-        Assert.assertEquals(INCHI_RET.OKAY, outputD.getReturnStatus());
-        Assert.assertEquals(
-                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1",
-                outputD.getInchi());
-    }
-
-
-    /**
-     * Tests InChI generation from L-Alanine molecules, with 2D coordinates
-     * and wedge/hatch bonds, with bond drawn in opposite directions.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiStereoBondDirection1() throws Exception {
-        JniInchiInput input = getLAlanine2Da("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(
-                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
-                output.getInchi());
-    }
-
-    @Test
-    public void testGetStdInchiStereoBondDirection2() throws Exception {
-        JniInchiInput input = getLAlanine2Db("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(
-                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
-                output.getInchi());
-    }
-
-
-
-    //
-    // *** Test handling of no coordinates, with stereo parities ***
-    //
-
-
-    /**
-     * Tests InChI generation from L and D-Alanine molecules, with no
-     * coordinates but tetrahedral stereo parities.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchiFromAlanine0D() throws Exception {
-        JniInchiInput input = getAlanine0D("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
-        Assert.assertEquals("Omitted undefined stereo", output.getMessage());
-        Assert.assertEquals("InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)",
-                output.getInchi());
-    }
-
-    @Test
-    public void testGetStdInchiFromLAlanine0D() throws Exception {
-        JniInchiInput inputL = getLAlanine0D("");
-        JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
-        Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
-        Assert.assertEquals(
-                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
-                outputL.getInchi());
-    }
-
-    @Test
-    public void testGetInchiFromDAlanine0D() throws Exception {
-        JniInchiInput inputD = getDAlanine0D("");
-        JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
-        Assert.assertEquals(INCHI_RET.OKAY, outputD.getReturnStatus());
-        Assert.assertEquals(
-                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1",
-                outputD.getInchi());
-    }
-
-
-    /**
-     * Tests InChI generation from E and Z 1,2-dichloroethene molecules, with no
-     * coordinates but doublebond stereo parities.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetStdInchi12Dichloroethene0D() throws Exception {
-        JniInchiInput input = get12dichloroethene0D("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
-        Assert.assertEquals("Omitted undefined stereo", output.getMessage());
-        Assert.assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H", output
-                        .getInchi());
-    }
-
-    @Test
-    public void testGetStdInchiE12Dichloroethene0D() throws Exception {
-        JniInchiInput inputE = getE12dichloroethene0D("");
-        JniInchiOutput outputE = JniInchiWrapper.getInchi(inputE);
-        Assert.assertEquals(INCHI_RET.OKAY, outputE.getReturnStatus());
-        Assert.assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H/b2-1+", outputE
-                .getInchi());
-    }
-
-    @Test
-    public void testGetStdInchiZ12Dichloroethene0D() throws Exception {
-        JniInchiInput inputZ = getZ12dichloroethene0D("");
-        JniInchiOutput outputZ = JniInchiWrapper.getInchi(inputZ);
-        Assert.assertEquals(INCHI_RET.OKAY, outputZ.getReturnStatus());
-        Assert.assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H/b2-1-", outputZ
-                .getInchi());
-    }
-
-
-    @Test
-    public void testGetStdInchiFromNSC7414a() throws JniInchiException {
-          JniInchiInput input = getNSC7414a("");
-          JniInchiOutput output = JniInchiWrapper.getInchi(input);
-          Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-          Assert.assertEquals(
-                  "InChI=1S/C11H20/c1-3-10(2)11-8-6-4-5-7-9-11/h4-5,10-11H,3,6-9H2,1-2H3/t10-/m0/s1",
-                  output.getInchi());
-    }
-
-
-    // TODO
-    
-
-    // Test option checking
-
-    /**
-     * Tests option lists are canonicalised correctly.
-     */
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testCheckOptionsList() throws JniInchiException {
-        List opList = new ArrayList();
-        opList.add(INCHI_OPTION.Compress);
-        opList.add(INCHI_OPTION.SNon);
-        String options = JniInchiWrapper.checkOptions(opList);
-        String flag = JniInchiWrapper.flagChar;
-        Assert.assertEquals(flag + "Compress " + flag + "SNon ", options);
-    }
-
-    /**
-     * Tests option strings are handled checked canonicalised.
-     *
-     * @throws JniInchiException
-     */
-    @Test
-    public void testCheckOptionsString() throws JniInchiException {
-        String options = JniInchiWrapper.checkOptions("  -ComPreSS  /SNon");
-        String flag = JniInchiWrapper.flagChar;
-        Assert.assertEquals(flag + "Compress " + flag + "SNon", options);
-    }
-
-    // Test option handling
-
-    /**
-     * Tests passing options to inchi.
-     *
-     * @throws Exception
-     */
-    // @Test
-    public void testGetInchiWithOptions() throws Exception {
-        JniInchiInput input = getLAlanine3D("");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(
-                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
-                output.getInchi());
-
-        input = getLAlanine3D("-compress");
-        output = JniInchiWrapper.getInchi(input);
-        // debug(output);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF/tB1/m0/s1",
-                output.getInchi());
-
-        input = getLAlanine3D("/compress");
-        output = JniInchiWrapper.getInchi(input);
-        // debug(output);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF/tB1/m0/s1",
-                output.getInchi());
-
-        input = getLAlanine3D("-cOMprEsS");
-        output = JniInchiWrapper.getInchi(input);
-        // debug(output);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals("InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF/tB1/m0/s1",
-                output.getInchi());
-    }
-
-    // Test structure generation from InChI strings
-
-    /**
-     * Tests element name is correctly read from InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetChlorineAtomFromInchi() throws Exception {
-        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/Cl");
-        JniInchiOutputStructure output = JniInchiWrapper
-                .getStructureFromInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(1, output.getNumAtoms());
-        Assert.assertEquals(0, output.getNumBonds());
-        Assert.assertEquals(0, output.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(0).getDebugString());
-    }
-
-    /**
-     * Tests charge is correctly read from InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-//    @Ignore
-    // FIXME
-    public void testGetChlorineIonFromInchi() throws Exception {
-
-        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1S/Cl/q-1");
-        JniInchiOutputStructure output = JniInchiWrapper.getStructureFromInchi(input);
-        System.out.println(output.getLog());
-        Assert.assertEquals("InChI Atom: Cl [0.0,0.0,0.0] Charge:-1 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE", output.getAtom(0).getDebugString());
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(1, output.getNumAtoms());
-        Assert.assertEquals(0, output.getNumBonds());
-        Assert.assertEquals(0, output.getNumStereo0D());
-
-    }
-
-    /**
-     * Tests isotopic mass is correctly read from InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetChlorine37AtomFromInchi() throws Exception {
-        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/Cl/i1+2");
-        JniInchiOutputStructure output = JniInchiWrapper
-                .getStructureFromInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(1, output.getNumAtoms());
-        Assert.assertEquals(0, output.getNumBonds());
-        Assert.assertEquals(0, output.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:10002 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(0).getDebugString());
-    }
-
-    /**
-     * Tests implicit hydrogen count is correctly read from InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetHydrogenChlorideImplicitHFromInchi() throws Exception {
-        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/ClH/h1H");
-        JniInchiOutputStructure output = JniInchiWrapper
-                .getStructureFromInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(1, output.getNumAtoms());
-        Assert.assertEquals(0, output.getNumBonds());
-        Assert.assertEquals(0, output.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(0).getDebugString());
-    }
-
-    /**
-     * Tests implicit protium count is correctly read from InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetHydrogenChlorideImplicitPFromInchi() throws Exception {
-        JniInchiInputInchi input = new JniInchiInputInchi(
-                "InChI=1/ClH/h1H/i/hH");
-        JniInchiOutputStructure output = JniInchiWrapper
-                .getStructureFromInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(1, output.getNumAtoms());
-        Assert.assertEquals(0, output.getNumBonds());
-        Assert.assertEquals(0, output.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:1 D:0 T:0 // Radical: NONE",
-                        output.getAtom(0).getDebugString());
-    }
-
-    /**
-     * Tests implicit deuterium count is correctly read from InChi.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetHydrogenChlorideImplicitDFromInchi() throws Exception {
-        JniInchiInputInchi input = new JniInchiInputInchi(
-                "InChI=1/ClH/h1H/i/hD");
-        JniInchiOutputStructure output = JniInchiWrapper
-                .getStructureFromInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(1, output.getNumAtoms());
-        Assert.assertEquals(0, output.getNumBonds());
-        Assert.assertEquals(0, output.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:1 T:0 // Radical: NONE",
-                        output.getAtom(0).getDebugString());
-    }
-
-    /**
-     * Tests implicit tritium count is correctly read from InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetHydrogenChlorideImplicitTFromInchi() throws Exception {
-        JniInchiInputInchi input = new JniInchiInputInchi(
-                "InChI=1/ClH/h1H/i/hT");
-        JniInchiOutputStructure output = JniInchiWrapper
-                .getStructureFromInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(1, output.getNumAtoms());
-        Assert.assertEquals(0, output.getNumBonds());
-        Assert.assertEquals(0, output.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:1 // Radical: NONE",
-                        output.getAtom(0).getDebugString());
-    }
-
-    /**
-     * Tests radical state is correctly read from InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    @Ignore
-    // Test fails due to problem with InChI library
-    public void testGetMethylRadicalFromInchi() throws Exception {
-
-        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/CH3/h1H3");
-        JniInchiOutputStructure output = JniInchiWrapper.getStructureFromInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(1, output.getNumAtoms());
-        Assert.assertEquals(0, output.getNumBonds());
-        Assert.assertEquals(0, output.getNumStereo0D());
-        Assert.assertEquals("InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: DOUBLET", output.getAtom(0).getDebugString());
-    }
-
-
-
-    // Test bond handling
-
-    /**
-     * Tests single bond is correctly read from InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetEthaneFromInchi() throws Exception {
-        JniInchiInputInchi input = new JniInchiInputInchi(
-                "InChI=1/C2H6/c1-2/h1-2H3");
-        JniInchiOutputStructure output = JniInchiWrapper
-                .getStructureFromInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(2, output.getNumAtoms());
-        Assert.assertEquals(1, output.getNumBonds());
-        Assert.assertEquals(0, output.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(0).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(1).getDebugString());
-        Assert.assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE",
-                output.getBond(0).getDebugString());
-    }
-
-    /**
-     * Tests double bond is correctly read from InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetEtheneFromInchi() throws Exception {
-        JniInchiInputInchi input = new JniInchiInputInchi(
-                "InChI=1/C2H4/c1-2/h1-2H2");
-        JniInchiOutputStructure output = JniInchiWrapper
-                .getStructureFromInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(2, output.getNumAtoms());
-        Assert.assertEquals(1, output.getNumBonds());
-        Assert.assertEquals(0, output.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:2 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(0).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:2 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(1).getDebugString());
-        Assert.assertEquals("InChI Bond: C-C // Type: DOUBLE // Stereo: NONE",
-                output.getBond(0).getDebugString());
-    }
-
-    /**
-     * Tests triple bond is correctly read from InChI.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetEthyneFromInchi() throws Exception {
-        JniInchiInputInchi input = new JniInchiInputInchi(
-                "InChI=1/C2H2/c1-2/h1-2H");
-        JniInchiOutputStructure output = JniInchiWrapper
-                .getStructureFromInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(2, output.getNumAtoms());
-        Assert.assertEquals(1, output.getNumBonds());
-        Assert.assertEquals(0, output.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(0).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(1).getDebugString());
-        Assert.assertEquals("InChI Bond: C-C // Type: TRIPLE // Stereo: NONE",
-                output.getBond(0).getDebugString());
-    }
-
-    // Test handling of no coordinates, with stereo parities
-
-    /**
-     * Tests generation of L and D-Alanine molecules, from InChIs with
-     * tetrahedral stereo parities.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetLandDAlanine0DFromInchi() throws Exception {
-        JniInchiInputInchi input = new JniInchiInputInchi(
-                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)");
-        JniInchiOutputStructure output = JniInchiWrapper
-                .getStructureFromInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(6, output.getNumAtoms());
-        Assert.assertEquals(5, output.getNumBonds());
-        Assert.assertEquals(0, output.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(0).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(1).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(2).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: N [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:2 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(3).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: O [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(4).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: O [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(5).getDebugString());
-        Assert.assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE",
-                output.getBond(0).getDebugString());
-        Assert.assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE",
-                output.getBond(1).getDebugString());
-        Assert.assertEquals("InChI Bond: N-C // Type: SINGLE // Stereo: NONE",
-                output.getBond(2).getDebugString());
-        Assert.assertEquals("InChI Bond: O-C // Type: DOUBLE // Stereo: NONE",
-                output.getBond(3).getDebugString());
-        Assert.assertEquals("InChI Bond: O-C // Type: SINGLE // Stereo: NONE",
-                output.getBond(4).getDebugString());
-
-        JniInchiInputInchi inputL = new JniInchiInputInchi(
-                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1");
-        JniInchiOutputStructure outputL = JniInchiWrapper
-                .getStructureFromInchi(inputL);
-        Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
-        Assert.assertEquals(7, outputL.getNumAtoms());
-        Assert.assertEquals(6, outputL.getNumBonds());
-        Assert.assertEquals(1, outputL.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: NONE",
-                        outputL.getAtom(0).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputL.getAtom(1).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputL.getAtom(2).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: N [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:2 P:0 D:0 T:0 // Radical: NONE",
-                        outputL.getAtom(3).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: O [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputL.getAtom(4).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: O [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
-                        outputL.getAtom(5).getDebugString());
-        Assert.assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE",
-                outputL.getBond(0).getDebugString());
-        Assert.assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE",
-                outputL.getBond(1).getDebugString());
-        Assert.assertEquals("InChI Bond: N-C // Type: SINGLE // Stereo: NONE",
-                outputL.getBond(2).getDebugString());
-        Assert.assertEquals("InChI Bond: O-C // Type: DOUBLE // Stereo: NONE",
-                outputL.getBond(3).getDebugString());
-        Assert.assertEquals("InChI Bond: O-C // Type: SINGLE // Stereo: NONE",
-                outputL.getBond(4).getDebugString());
-        Assert.assertEquals(
-                "InChI Stereo0D: C [H,C,C,N] Type::TETRAHEDRAL // Parity:ODD",
-                outputL.getStereo0D(0).getDebugString());
-
-        JniInchiInputInchi inputD = new JniInchiInputInchi(
-                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1");
-        JniInchiOutputStructure outputD = JniInchiWrapper
-                .getStructureFromInchi(inputD);
-        Assert.assertEquals(INCHI_RET.OKAY, outputD.getReturnStatus());
-        Assert.assertEquals(7, outputD.getNumAtoms());
-        Assert.assertEquals(6, outputD.getNumBonds());
-        Assert.assertEquals(1, outputD.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: NONE",
-                        outputD.getAtom(0).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputD.getAtom(1).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputD.getAtom(2).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: N [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:2 P:0 D:0 T:0 // Radical: NONE",
-                        outputD.getAtom(3).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: O [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputD.getAtom(4).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: O [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
-                        outputD.getAtom(5).getDebugString());
-        Assert.assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE",
-                outputD.getBond(0).getDebugString());
-        Assert.assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE",
-                outputD.getBond(1).getDebugString());
-        Assert.assertEquals("InChI Bond: N-C // Type: SINGLE // Stereo: NONE",
-                outputD.getBond(2).getDebugString());
-        Assert.assertEquals("InChI Bond: O-C // Type: DOUBLE // Stereo: NONE",
-                outputD.getBond(3).getDebugString());
-        Assert.assertEquals("InChI Bond: O-C // Type: SINGLE // Stereo: NONE",
-                outputD.getBond(4).getDebugString());
-        Assert.assertEquals(
-                "InChI Stereo0D: C [H,C,C,N] Type::TETRAHEDRAL // Parity:EVEN",
-                outputD.getStereo0D(0).getDebugString());
-    };
-
-    /**
-     * Tests generation of E and Z 1,2-dichloroethene molecules, from InChIs
-     * with doublebond stereo parities.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetEandZ12Dichloroethene0DFromInchi() throws Exception {
-        JniInchiInputInchi input = new JniInchiInputInchi(
-                "InChI=1/C2H2Cl2/c3-1-2-4/h1-2H");
-        JniInchiOutputStructure output = JniInchiWrapper
-                .getStructureFromInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(4, output.getNumAtoms());
-        Assert.assertEquals(3, output.getNumBonds());
-        Assert.assertEquals(0, output.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(0).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(1).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(2).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        output.getAtom(3).getDebugString());
-        Assert.assertEquals("InChI Bond: C-C // Type: DOUBLE // Stereo: NONE",
-                output.getBond(0).getDebugString());
-        Assert.assertEquals("InChI Bond: Cl-C // Type: SINGLE // Stereo: NONE",
-                output.getBond(1).getDebugString());
-        Assert.assertEquals("InChI Bond: Cl-C // Type: SINGLE // Stereo: NONE",
-                output.getBond(2).getDebugString());
-
-        JniInchiInputInchi inputE = new JniInchiInputInchi(
-                "InChI=1/C2H2Cl2/c3-1-2-4/h1-2H/b2-1+");
-        JniInchiOutputStructure outputE = JniInchiWrapper
-                .getStructureFromInchi(inputE);
-        Assert.assertEquals(INCHI_RET.OKAY, outputE.getReturnStatus());
-        Assert.assertEquals(6, outputE.getNumAtoms());
-        Assert.assertEquals(5, outputE.getNumBonds());
-        Assert.assertEquals(1, outputE.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputE.getAtom(0).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputE.getAtom(1).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputE.getAtom(2).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputE.getAtom(3).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: H [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputE.getAtom(4).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: H [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputE.getAtom(5).getDebugString());
-        Assert.assertEquals("InChI Bond: C-C // Type: DOUBLE // Stereo: NONE",
-                outputE.getBond(0).getDebugString());
-        Assert.assertEquals("InChI Bond: Cl-C // Type: SINGLE // Stereo: NONE",
-                outputE.getBond(1).getDebugString());
-        Assert.assertEquals("InChI Bond: Cl-C // Type: SINGLE // Stereo: NONE",
-                outputE.getBond(2).getDebugString());
-        Assert.assertEquals(
-                "InChI Stereo0D: - [H,C,C,H] Type::DOUBLEBOND // Parity:EVEN",
-                outputE.getStereo0D(0).getDebugString());
-
-        JniInchiInputInchi inputZ = new JniInchiInputInchi(
-                "InChI=1/C2H2Cl2/c3-1-2-4/h1-2H/b2-1-");
-        JniInchiOutputStructure outputZ = JniInchiWrapper
-                .getStructureFromInchi(inputZ);
-        Assert.assertEquals(INCHI_RET.OKAY, outputZ.getReturnStatus());
-        Assert.assertEquals(6, outputZ.getNumAtoms());
-        Assert.assertEquals(5, outputZ.getNumBonds());
-        Assert.assertEquals(1, outputZ.getNumStereo0D());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputZ.getAtom(0).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputZ.getAtom(1).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputZ.getAtom(2).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputZ.getAtom(3).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: H [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputZ.getAtom(4).getDebugString());
-        Assert
-                .assertEquals(
-                        "InChI Atom: H [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
-                        outputZ.getAtom(5).getDebugString());
-        Assert.assertEquals("InChI Bond: C-C // Type: DOUBLE // Stereo: NONE",
-                outputZ.getBond(0).getDebugString());
-        Assert.assertEquals("InChI Bond: Cl-C // Type: SINGLE // Stereo: NONE",
-                outputZ.getBond(1).getDebugString());
-        Assert.assertEquals("InChI Bond: Cl-C // Type: SINGLE // Stereo: NONE",
-                outputZ.getBond(2).getDebugString());
-        Assert.assertEquals(
-                "InChI Stereo0D: - [H,C,C,H] Type::DOUBLEBOND // Parity:ODD",
-                outputZ.getStereo0D(0).getDebugString());
-    };
-
-
-    /**
-     * Tests InchiKey generation. (Example from InChI 1.02-beta release notes).
-     * @throws JniInchiException
-     */
-    @Test
-    public void testGetInchiKeyForCafeine() throws JniInchiException {
-        String inchi = "InChI=1S/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
-        JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
-        Assert.assertEquals(INCHI_KEY.OK, output.getReturnStatus());
-        Assert.assertEquals("RYYVLZVUVIJVGH-UHFFFAOYSA-N", output.getKey());
-    }
-
-    @Test
-    public void testCheckInchiKeyValid() throws JniInchiException {
-        String key = "RYYVLZVUVIJVGH-UHFFFAOYNA-N";
-        INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
-        Assert.assertEquals(INCHI_KEY_STATUS.VALID_NON_STANDARD, status);
-    }
-
-    @Test
-    public void testCheckInchiKeyInvalidLengthLong() throws JniInchiException {
-        String key = "RYYVLZVUVIJVGH-UHFFFAOYNA-NX";
-        INCHI_KEY_STATUS status1 = JniInchiWrapper.checkInChIKey(key);
-        Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LENGTH, status1);
-    }
-
-    @Test
-    public void testCheckInchiKeyInvalidLengthShort() throws JniInchiException {
-        String key = "RYYVLZVUVIJVGH-UHFFFAOYNA-";
-        INCHI_KEY_STATUS status2 = JniInchiWrapper.checkInChIKey(key);
-        Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LENGTH, status2);
-    }
-
-    @Test
-    public void testCheckInchiKeyInvalidLayout() throws JniInchiException {
-        String key = "RYYVLZVUVIJVGHXUHFFFAOYNAXN";
-        INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
-        Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LAYOUT, status);
-    }
-
-    @Test
-    public void testCheckInchiKeyInvalidVersion() throws JniInchiException {
-        String key = "RYYVLZVUVIJVGH-UHFFFAOYNX-N";
-        INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
-        Assert.assertEquals(INCHI_KEY_STATUS.INVALID_VERSION, status);
-    }
-
-    /* Option doesn't work yet
-    @Test
-    @Ignore
-    public void testGenerateInchiKeyViaOptions() throws JniInchiException {
-        JniInchiInput input = getLAlanine3D("-key");
-        JniInchiOutput output = JniInchiWrapper.getInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-//        Assert.assertEquals(null, output.getInchi());
-//        Assert.assertEquals(null, output.getAuxInfo());
-//        Assert.assertEquals(null, output.getMessage());
-//        Assert.assertEquals(null, output.getLog());
-    }
-    */
-
-
-    /**
-     * Tests thread safety - starts ten threads, and sets them generating InChIs
-     * for randomly picked elements. Checks generated InChIs are as expected.
-     *
-     */
-    @Test
-    public void testMultithreading() {
-
-        // Start threads
-        int nthreads = 5;
-        TestThread[] threads = new TestThread[nthreads];
-        for (int i = 0; i < nthreads; i++) {
-            threads[i] = new TestThread(i);
-            threads[i].start();
-            Thread.yield();
-        }
-
-        // Wait for threads to get going
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ie) {
-            Assert.fail("Interrupted");
-        }
-
-        boolean allRunning = true;
-
-        // Stop threads
-        for (int i = 0; i < nthreads; i++) {
-            if (threads[i].runCount < 1) {
-                allRunning = false;
-            }
-            threads[i].finish();
-            Thread.yield();
-        }
-
-        Assert.assertTrue("All threads running", allRunning);
-
-        // Wait for threads to stop
-        long tstop = System.currentTimeMillis() + 30000;
-        try {
-            for (int i = 0; i < nthreads; i++) {
-                long t0 = System.currentTimeMillis();
-                threads[i].join(Math.max(1,tstop-t0));
-            }
-        } catch (InterruptedException ie) {
-            Assert.fail("Interrupted");
-        }
-
-        // Check threads have finished
-        boolean allFinished = true;
-        for (int i = 0; i < nthreads; i++) {
-            if (!threads[i].isDone()) {
-                allFinished = false;
-                break;
-            }
-        }
-        Assert.assertTrue("All finished", allFinished);
-
-        int failureCount = 0;
-        for (int i = 0; i < nthreads; i++) {
-            failureCount += threads[i].failCount;
-        }
-
-        Assert.assertEquals("Fail count", 0, failureCount);
-    }
-
-
-    @Test
-    public void testTooManyAtoms() throws JniInchiException {
-        JniInchiInput input = new JniInchiInput();
-        for (int i = 0; i < 1025; i++) {
-            input.addAtom(new JniInchiAtom(0, 0, 0, "C"));
-        }
-        try {
-            JniInchiWrapper.getInchi(input);
-            Assert.fail("too many atoms");
-        } catch (IllegalArgumentException e) {
-            ; // pass
-        }
-    }
-
-
-
-
-
-
-    private class TestThread extends Thread {
-
-        private String[] ELS = { "H", "He", "Li", "Be", "B", "C", "N", "O",
-                "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar" };
-
-        private volatile boolean stop = false;
-        private volatile boolean done = false;
-
-        public volatile int failCount = 0;
-        public volatile int runCount = 0;
-
-        public Exception ex;
-
-        public final int threadIndex;
-
-        public TestThread(final int i) {
-            this.threadIndex = i;
-        }
-
-        public void run() {
-//            System.err.println("Thread "+threadIndex+" starting");
-            Random rand = new Random();
-            while (!stop) {
-                yield();
-                runCount++;
-                JniInchiInput input = new JniInchiInput();
-                String element = ELS[rand.nextInt(ELS.length)];
-                input.addAtom(new JniInchiAtom(0, 0, 0, element));
-                input.getAtom(0).setImplicitH(0);
-                try {
-                    JniInchiOutput output = JniInchiWrapper.getInchi(input);
-                    if (INCHI_RET.OKAY != output.getReturnStatus()) {
-                        failCount++;
-                    } else if (!("InChI=1S/" + element)
-                            .equals(output.getInchi())) {
-                        failCount++;
-                    }
-//                    System.err.print("("+threadIndex+")");
-//                    System.err.flush();
-                } catch (Exception e) {
-                    failCount++;
-                    ex = e;
-                    System.err.println("Thread "+threadIndex+ " error: " + e.getMessage());
-                    break;
-                }
-                yield();
-            }
-            done = true;
-//            System.err.println("Thread "+threadIndex+" stopping");
-        }
-
-        public void finish() {
-            this.stop = true;
-        }
-
-        public boolean isDone() {
-            return done;
-        }
-
-    }
-
-
-
-    @Test
-    public void testGetStdInchi() throws JniInchiException {
-        JniInchiInput input = getLAlanine0D("");
-        JniInchiOutput output = JniInchiWrapper.getStdInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        Assert.assertEquals(
-                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
-                output.getInchi());        
-    }
-
-    @Test
-    public void testGetStdInchiWithBadOption() throws JniInchiException {
-        // TODO
-        JniInchiInput input = getLAlanine0D("-FixedH");
-        JniInchiOutput output = JniInchiWrapper.getStdInchi(input);
-        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        System.err.println(output.getReturnStatus());
-        System.err.println(output.getMessage());
-        System.err.println(output.getInchi());
-        System.err.println(output.getLog());
-    }
-
-
-
-    //
-    // **** MEMORY LEAK TESTING ****
-    //
-
-    @Test
-    @Ignore
-    // *** Do not un-ignore for normal use
-    // Intended for manual inspection of memory growth in
-    // order to detect memory leaks
-    public void testMemoryUsageGetInchi() throws JniInchiException {
-        for (int i = 0; i < 1000000; i++) {
-            if (i % 1000 == 0) {
-                System.err.println(i);
-            }
-            JniInchiInput input = getLAlanine0D("");
-            JniInchiOutput output = JniInchiWrapper.getInchi(input);
-            Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        }
-    }
-
-    @Test
-    @Ignore
-    // *** Do not un-ignore for normal use
-    // Intended for manual inspection of memory growth in
-    // order to detect memory leaks
-    public void testMemoryUsageGetStdInchi() throws JniInchiException {
-        for (int i = 0; i < 1000000; i++) {
-            if (i % 1000 == 0) {
-                System.err.println(i);
-            }
-            JniInchiInput input = getLAlanine0D("");
-            JniInchiOutput output = JniInchiWrapper.getStdInchi(input);
-            Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
-        }
-    }
-
-    @Test
-    @Ignore
-    // *** Do not un-ignore for normal use
-    // Intended for manual inspection of memory growth in
-    // order to detect memory leaks
-    public void testMemoryUsageGetInchiKey() throws JniInchiException {
-        for (int i = 0; i < 10000000; i++) {
-            if (i % 1000 == 0) {
-                System.err.println(i);
-            }
-            JniInchiOutputKey output = JniInchiWrapper.getInChIKey("InChI=1/C24H33N3O5/c1-23(2,3)26-21(29)20(17-11-8-7-9-12-17)27(16-18-13-10-14-31-18)19(28)15-25-22(30)32-24(4,5)6/h7-14,20H,15-16H2,1-6H3,(H,25,30)(H,26,29)");
-            Assert.assertEquals(INCHI_KEY.OK, output.getReturnStatus());
-        }
-    }
-
-
-
-
-    //
-    //
-    //
-
     // Test molecules
 
     /**
@@ -2132,5 +848,1263 @@ public class TestJniInchiWrapper {
 
         return input;
     }
+
+    /*
+     *
+
+
+  -ClnMol-06180618052D
+
+ 11 11  0  0  0  0  0  0  0  0999 V2000
+   -1.1292   -0.5292    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	1
+   -1.1333   -1.5917    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	2
+   -1.1333    0.5333    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	3
+   -1.1375   -2.6542    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	4
+    0.8375    0.5625    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	5
+    0.9917   -2.4667    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	6
+    2.2417   -0.6542    0.0000 C   0  0  2  0  0  0  0  0  0  0  0  0	7
+    4.3000   -0.5000    0.0000 C   0  0  1  0  0  0  0  0  0  0  0  0	8
+    5.8583    0.9667    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	9
+    6.0167   -1.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	10
+    6.2042   -3.3417    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	11
+  6  4  1  0  0  0  0
+  1  2  2  0  0  0  0
+  7  5  1  1  0  0  0
+  7  6  1  1  0  0  0
+  2  4  1  0  0  0  0
+  8  7  1  0  0  0  0
+  9  8  1  1  0  0  0
+  5  3  1  0  0  0  0
+  8 10  1  1  0  0  0
+  1  3  1  0  0  0  0
+ 11 10  1  0  0  0  0
+M  END
+>  <ID>
+NSC-7414a
+
+     *
+     *
+     */
+
+    // Test atom handling
+
+    /**
+     * Tests element name is correctly passed to InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromChlorineAtom() throws Exception {
+        JniInchiInput input = getChlorineAtom("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1S/Cl", output.getInchi());
+    }
+
+    /**
+     * Tests charge is correctly passed to InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromChlorineIon() throws Exception {
+        JniInchiInput input = getChlorineIon("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1S/Cl/q-1", output.getInchi());
+    }
+
+    /**
+     * Tests isotopic mass is correctly passed to InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromChlorine37Atom() throws Exception {
+        JniInchiInput input = getChlorine37Atom("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1S/Cl/i1+2", output.getInchi());
+    }
+
+    /**
+     * Tests isotopic mass shift is correctly passed to InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromChlorine37ByIstopicMassShiftAtom()
+            throws Exception {
+        JniInchiInput input = getChlorine37ByIsotopicMassShiftAtom("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1S/Cl/i1+2", output.getInchi());
+    }
+
+    /**
+     * Tests implicit hydrogen count is correctly passed to InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromHydrogenChlorideImplicitH() throws Exception {
+        JniInchiInput input = getHydrogenChlorideImplicitH("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1S/ClH/h1H", output.getInchi());
+    }
+
+    /**
+     * Tests implicit protium count is correctly passed to InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromHydrogenChlorideImplicitP() throws Exception {
+        JniInchiInput input = getHydrogenChlorideImplicitP("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1S/ClH/h1H/i/hH", output.getInchi());
+    }
+
+    /**
+     * Tests implicit deuterium count is correctly passed to InChi.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromHydrogenChlorideImplicitD() throws Exception {
+        JniInchiInput input = getHydrogenChlorideImplicitD("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1S/ClH/h1H/i/hD", output.getInchi());
+    }
+
+    /**
+     * Tests implicit tritium count is correctly passed to InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromHydrogenChlorideImplicitT() throws Exception {
+        JniInchiInput input = getHydrogenChlorideImplicitT("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1S/ClH/h1H/i/hT", output.getInchi());
+    }
+
+    /**
+     * Tests radical state is correctly passed to InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromMethylRadical() throws Exception {
+        JniInchiInput input = getMethylRadical("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1S/CH3/h1H3", output.getInchi());
+    }
+
+    // Test bond handling
+
+    /**
+     * Tests single bond is correctly passed to InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromEthane() throws Exception {
+        JniInchiInput input = getEthane("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1S/C2H6/c1-2/h1-2H3", output.getInchi());
+    }
+
+    /**
+     * Tests double bond is correctly passed to InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromEthene() throws Exception {
+        JniInchiInput input = getEthene("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1S/C2H4/c1-2/h1-2H2", output.getInchi());
+    }
+
+    /**
+     * Tests triple bond is correctly passed to InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromEthyne() throws Exception {
+        JniInchiInput input = getEthyne("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1S/C2H2/c1-2/h1-2H", output.getInchi());
+    }
+
+    // Test 2D coordinate handling
+
+    /**
+     * Tests 2D coordinates are correctly passed to InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiEandZ12Dichloroethene2D() throws Exception {
+        JniInchiInput inputE = getE12dichloroethene2D("");
+        JniInchiOutput outputE = JniInchiWrapper.getInchi(inputE);
+        Assert.assertEquals(INCHI_RET.OKAY, outputE.getReturnStatus());
+        Assert.assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H/b2-1+", outputE
+                .getInchi());
+
+        JniInchiInput inputZ = getZ12dichloroethene2D("");
+        JniInchiOutput outputZ = JniInchiWrapper.getInchi(inputZ);
+        Assert.assertEquals(INCHI_RET.OKAY, outputZ.getReturnStatus());
+        Assert.assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H/b2-1-", outputZ
+                .getInchi());
+    }
+
+    // Test 3D coordinate handling
+
+    /**
+     * Tests InChI generation from L and D-Alanine molecules, with 3D
+     * coordinates.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromLandDAlanine3D() throws Exception {
+        JniInchiInput inputL = getLAlanine3D("");
+        JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
+        Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
+        Assert.assertEquals(
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                outputL.getInchi());
+
+        JniInchiInput inputD = getDAlanine3D("");
+        JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
+        Assert.assertEquals(INCHI_RET.OKAY, outputD.getReturnStatus());
+        Assert.assertEquals(
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1",
+                outputD.getInchi());
+    };
+
+    // Test handling of 2D coordinates with bond stereo types
+
+    /**
+     * Tests InChI generation from L and D-Alanine molecules, with 3D
+     * coordinates, using FixSp3Bug option from InChI software v1.01
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromLandDAlanine2DWithFixSp3Bug() throws Exception {
+        JniInchiInput input = getAlanine2D("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
+        Assert.assertEquals("Omitted undefined stereo", output.getMessage());
+        Assert.assertEquals("InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)",
+                output.getInchi());
+
+        JniInchiInput inputL = getLAlanine2Da("");
+        JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
+        Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
+        Assert.assertEquals(
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                outputL.getInchi());
+
+        JniInchiInput inputD = getDAlanine2D("");
+        JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
+        Assert.assertEquals(INCHI_RET.OKAY, outputD.getReturnStatus());
+        Assert.assertEquals(
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1",
+                outputD.getInchi());
+    };
+
+
+    /**
+     * Tests InChI generation from L-Alanine molecules, with 2D coordinates
+     * and wedge/hatch bonds, with bond drawn in opposite directions.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiStereoBondDirection() throws Exception {
+        JniInchiInput input = getLAlanine2Da("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                output.getInchi());
+
+        JniInchiInput inputL = getLAlanine2Db("");
+        JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
+        Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
+        Assert.assertEquals(
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                outputL.getInchi());
+    }
+
+    // Test handling of no coordinates, with stereo parities
+
+    /**
+     * Tests InChI generation from L and D-Alanine molecules, with no
+     * coordinates but tetrahedral stereo parities.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiFromLandDAlanine0D() throws Exception {
+        JniInchiInput input = getAlanine0D("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
+        Assert.assertEquals("Omitted undefined stereo", output.getMessage());
+        Assert.assertEquals("InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)",
+                output.getInchi());
+
+        JniInchiInput inputL = getLAlanine0D("");
+        JniInchiOutput outputL = JniInchiWrapper.getInchi(inputL);
+        Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
+        Assert.assertEquals(
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                outputL.getInchi());
+
+        JniInchiInput inputD = getDAlanine0D("");
+        JniInchiOutput outputD = JniInchiWrapper.getInchi(inputD);
+        Assert.assertEquals(INCHI_RET.OKAY, outputD.getReturnStatus());
+        Assert.assertEquals(
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1",
+                outputD.getInchi());
+    };
+
+    /**
+     * Tests InChI generation from E and Z 1,2-dichloroethene molecules, with no
+     * coordinates but doublebond stereo parities.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetInchiEandZ12Dichloroethene0D() throws Exception {
+        JniInchiInput input = get12dichloroethene0D("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
+        Assert.assertEquals("Omitted undefined stereo", output.getMessage());
+        Assert
+                .assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H", output
+                        .getInchi());
+
+        JniInchiInput inputE = getE12dichloroethene0D("");
+        JniInchiOutput outputE = JniInchiWrapper.getInchi(inputE);
+        Assert.assertEquals(INCHI_RET.OKAY, outputE.getReturnStatus());
+        Assert.assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H/b2-1+", outputE
+                .getInchi());
+
+        JniInchiInput inputZ = getZ12dichloroethene0D("");
+        JniInchiOutput outputZ = JniInchiWrapper.getInchi(inputZ);
+        Assert.assertEquals(INCHI_RET.OKAY, outputZ.getReturnStatus());
+        Assert.assertEquals("InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H/b2-1-", outputZ
+                .getInchi());
+    };
+
+
+
+    @Test
+    public void testGetInchiFromNSC7414a() throws JniInchiException {
+          JniInchiInput input = getNSC7414a("/fixedh /srel /fixsp3bug");
+          JniInchiOutput output = JniInchiWrapper.getInchi(input);
+          Assert.assertEquals(INCHI_RET.WARNING, output.getReturnStatus());
+          Assert.assertEquals("Omitted undefined stereo; Ambiguous stereo: center(s)", output.getMessage());
+          Assert.assertEquals(
+                  "InChI=1/C11H20/c1-3-10(2)11-8-6-4-5-7-9-11/h4-5,10-11H,3,6-9H2,1-2H3",
+                  output.getInchi());
+    }
+
+
+
+    // Test option checking
+
+    /**
+     * Tests option lists are canonicalised correctly.
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testCheckOptionsList() throws JniInchiException {
+        List opList = new ArrayList();
+        opList.add(INCHI_OPTION.Compress);
+        opList.add(INCHI_OPTION.SNon);
+        String options = JniInchiWrapper.checkOptions(opList);
+        String flag = JniInchiWrapper.flagChar;
+        Assert.assertEquals(flag + "Compress " + flag + "SNon ", options);
+    }
+
+    /**
+     * Tests option strings are handled checked canonicalised.
+     *
+     * @throws JniInchiException
+     */
+    @Test
+    public void testCheckOptionsString() throws JniInchiException {
+        String options = JniInchiWrapper.checkOptions("  -ComPreSS  /SNon");
+        String flag = JniInchiWrapper.flagChar;
+        Assert.assertEquals(flag + "Compress " + flag + "SNon", options);
+    }
+
+    // Test option handling
+
+    /**
+     * Tests passing options to inchi.
+     *
+     * @throws Exception
+     */
+    // @Test
+    public void testGetInchiWithOptions() throws Exception {
+        JniInchiInput input = getLAlanine3D("");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(
+                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                output.getInchi());
+
+        input = getLAlanine3D("-compress");
+        output = JniInchiWrapper.getInchi(input);
+        // debug(output);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF/tB1/m0/s1",
+                output.getInchi());
+
+        input = getLAlanine3D("/compress");
+        output = JniInchiWrapper.getInchi(input);
+        // debug(output);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF/tB1/m0/s1",
+                output.getInchi());
+
+        input = getLAlanine3D("-cOMprEsS");
+        output = JniInchiWrapper.getInchi(input);
+        // debug(output);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals("InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF/tB1/m0/s1",
+                output.getInchi());
+    }
+
+    // Test structure generation from InChI strings
+
+    /**
+     * Tests element name is correctly read from InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetChlorineAtomFromInchi() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/Cl");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(1, output.getNumAtoms());
+        Assert.assertEquals(0, output.getNumBonds());
+        Assert.assertEquals(0, output.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(0).getDebugString());
+    }
+
+    /**
+     * Tests charge is correctly read from InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    @Ignore
+    // FIXME
+    public void testGetChlorineIonFromInchi() throws Exception {
+
+        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/Cl/q-1", "-FixedH");
+        JniInchiOutputStructure output = JniInchiWrapper.getStructureFromInchi(input);
+        System.out.println(output.getLog());
+        Assert.assertEquals("InChI Atom: Cl [0.0,0.0,0.0] Charge:-1 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE", output.getAtom(0).getDebugString());
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(1, output.getNumAtoms());
+        Assert.assertEquals(0, output.getNumBonds());
+        Assert.assertEquals(0, output.getNumStereo0D());
+
+    }
+
+    /**
+     * Tests isotopic mass is correctly read from InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetChlorine37AtomFromInchi() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/Cl/i1+2");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(1, output.getNumAtoms());
+        Assert.assertEquals(0, output.getNumBonds());
+        Assert.assertEquals(0, output.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:10002 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(0).getDebugString());
+    }
+
+    /**
+     * Tests implicit hydrogen count is correctly read from InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetHydrogenChlorideImplicitHFromInchi() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/ClH/h1H");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(1, output.getNumAtoms());
+        Assert.assertEquals(0, output.getNumBonds());
+        Assert.assertEquals(0, output.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(0).getDebugString());
+    }
+
+    /**
+     * Tests implicit protium count is correctly read from InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetHydrogenChlorideImplicitPFromInchi() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi(
+                "InChI=1/ClH/h1H/i/hH");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(1, output.getNumAtoms());
+        Assert.assertEquals(0, output.getNumBonds());
+        Assert.assertEquals(0, output.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:1 D:0 T:0 // Radical: NONE",
+                        output.getAtom(0).getDebugString());
+    }
+
+    /**
+     * Tests implicit deuterium count is correctly read from InChi.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetHydrogenChlorideImplicitDFromInchi() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi(
+                "InChI=1/ClH/h1H/i/hD");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(1, output.getNumAtoms());
+        Assert.assertEquals(0, output.getNumBonds());
+        Assert.assertEquals(0, output.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:1 T:0 // Radical: NONE",
+                        output.getAtom(0).getDebugString());
+    }
+
+    /**
+     * Tests implicit tritium count is correctly read from InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetHydrogenChlorideImplicitTFromInchi() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi(
+                "InChI=1/ClH/h1H/i/hT");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(1, output.getNumAtoms());
+        Assert.assertEquals(0, output.getNumBonds());
+        Assert.assertEquals(0, output.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:1 // Radical: NONE",
+                        output.getAtom(0).getDebugString());
+    }
+
+    /**
+     * Tests radical state is correctly read from InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    @Ignore
+    // Test fails due to problem with InChI library
+    public void testGetMethylRadicalFromInchi() throws Exception {
+
+        JniInchiInputInchi input = new JniInchiInputInchi("InChI=1/CH3/h1H3");
+        JniInchiOutputStructure output = JniInchiWrapper.getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(1, output.getNumAtoms());
+        Assert.assertEquals(0, output.getNumBonds());
+        Assert.assertEquals(0, output.getNumStereo0D());
+        Assert.assertEquals("InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: DOUBLET", output.getAtom(0).getDebugString());
+    }
+
+
+
+    // Test bond handling
+
+    /**
+     * Tests single bond is correctly read from InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetEthaneFromInchi() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi(
+                "InChI=1/C2H6/c1-2/h1-2H3");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(2, output.getNumAtoms());
+        Assert.assertEquals(1, output.getNumBonds());
+        Assert.assertEquals(0, output.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(0).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(1).getDebugString());
+        Assert.assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE",
+                output.getBond(0).getDebugString());
+    }
+
+    /**
+     * Tests double bond is correctly read from InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetEtheneFromInchi() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi(
+                "InChI=1/C2H4/c1-2/h1-2H2");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(2, output.getNumAtoms());
+        Assert.assertEquals(1, output.getNumBonds());
+        Assert.assertEquals(0, output.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:2 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(0).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:2 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(1).getDebugString());
+        Assert.assertEquals("InChI Bond: C-C // Type: DOUBLE // Stereo: NONE",
+                output.getBond(0).getDebugString());
+    }
+
+    /**
+     * Tests triple bond is correctly read from InChI.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetEthyneFromInchi() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi(
+                "InChI=1/C2H2/c1-2/h1-2H");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(2, output.getNumAtoms());
+        Assert.assertEquals(1, output.getNumBonds());
+        Assert.assertEquals(0, output.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(0).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(1).getDebugString());
+        Assert.assertEquals("InChI Bond: C-C // Type: TRIPLE // Stereo: NONE",
+                output.getBond(0).getDebugString());
+    }
+
+    // Test handling of no coordinates, with stereo parities
+
+    /**
+     * Tests generation of L and D-Alanine molecules, from InChIs with
+     * tetrahedral stereo parities.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetLandDAlanine0DFromInchi() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi(
+                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(6, output.getNumAtoms());
+        Assert.assertEquals(5, output.getNumBonds());
+        Assert.assertEquals(0, output.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(0).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(1).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(2).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: N [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:2 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(3).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: O [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(4).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: O [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(5).getDebugString());
+        Assert.assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE",
+                output.getBond(0).getDebugString());
+        Assert.assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE",
+                output.getBond(1).getDebugString());
+        Assert.assertEquals("InChI Bond: N-C // Type: SINGLE // Stereo: NONE",
+                output.getBond(2).getDebugString());
+        Assert.assertEquals("InChI Bond: O-C // Type: DOUBLE // Stereo: NONE",
+                output.getBond(3).getDebugString());
+        Assert.assertEquals("InChI Bond: O-C // Type: SINGLE // Stereo: NONE",
+                output.getBond(4).getDebugString());
+
+        JniInchiInputInchi inputL = new JniInchiInputInchi(
+                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1");
+        JniInchiOutputStructure outputL = JniInchiWrapper
+                .getStructureFromInchi(inputL);
+        Assert.assertEquals(INCHI_RET.OKAY, outputL.getReturnStatus());
+        Assert.assertEquals(7, outputL.getNumAtoms());
+        Assert.assertEquals(6, outputL.getNumBonds());
+        Assert.assertEquals(1, outputL.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: NONE",
+                        outputL.getAtom(0).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputL.getAtom(1).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputL.getAtom(2).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: N [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:2 P:0 D:0 T:0 // Radical: NONE",
+                        outputL.getAtom(3).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: O [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputL.getAtom(4).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: O [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
+                        outputL.getAtom(5).getDebugString());
+        Assert.assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE",
+                outputL.getBond(0).getDebugString());
+        Assert.assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE",
+                outputL.getBond(1).getDebugString());
+        Assert.assertEquals("InChI Bond: N-C // Type: SINGLE // Stereo: NONE",
+                outputL.getBond(2).getDebugString());
+        Assert.assertEquals("InChI Bond: O-C // Type: DOUBLE // Stereo: NONE",
+                outputL.getBond(3).getDebugString());
+        Assert.assertEquals("InChI Bond: O-C // Type: SINGLE // Stereo: NONE",
+                outputL.getBond(4).getDebugString());
+        Assert.assertEquals(
+                "InChI Stereo0D: C [H,C,C,N] Type::TETRAHEDRAL // Parity:ODD",
+                outputL.getStereo0D(0).getDebugString());
+
+        JniInchiInputInchi inputD = new JniInchiInputInchi(
+                "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1");
+        JniInchiOutputStructure outputD = JniInchiWrapper
+                .getStructureFromInchi(inputD);
+        Assert.assertEquals(INCHI_RET.OKAY, outputD.getReturnStatus());
+        Assert.assertEquals(7, outputD.getNumAtoms());
+        Assert.assertEquals(6, outputD.getNumBonds());
+        Assert.assertEquals(1, outputD.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:3 P:0 D:0 T:0 // Radical: NONE",
+                        outputD.getAtom(0).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputD.getAtom(1).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputD.getAtom(2).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: N [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:2 P:0 D:0 T:0 // Radical: NONE",
+                        outputD.getAtom(3).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: O [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputD.getAtom(4).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: O [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
+                        outputD.getAtom(5).getDebugString());
+        Assert.assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE",
+                outputD.getBond(0).getDebugString());
+        Assert.assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE",
+                outputD.getBond(1).getDebugString());
+        Assert.assertEquals("InChI Bond: N-C // Type: SINGLE // Stereo: NONE",
+                outputD.getBond(2).getDebugString());
+        Assert.assertEquals("InChI Bond: O-C // Type: DOUBLE // Stereo: NONE",
+                outputD.getBond(3).getDebugString());
+        Assert.assertEquals("InChI Bond: O-C // Type: SINGLE // Stereo: NONE",
+                outputD.getBond(4).getDebugString());
+        Assert.assertEquals(
+                "InChI Stereo0D: C [H,C,C,N] Type::TETRAHEDRAL // Parity:EVEN",
+                outputD.getStereo0D(0).getDebugString());
+    };
+
+    /**
+     * Tests generation of E and Z 1,2-dichloroethene molecules, from InChIs
+     * with doublebond stereo parities.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetEandZ12Dichloroethene0DFromInchi() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi(
+                "InChI=1/C2H2Cl2/c3-1-2-4/h1-2H");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(4, output.getNumAtoms());
+        Assert.assertEquals(3, output.getNumBonds());
+        Assert.assertEquals(0, output.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(0).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:1 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(1).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(2).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        output.getAtom(3).getDebugString());
+        Assert.assertEquals("InChI Bond: C-C // Type: DOUBLE // Stereo: NONE",
+                output.getBond(0).getDebugString());
+        Assert.assertEquals("InChI Bond: Cl-C // Type: SINGLE // Stereo: NONE",
+                output.getBond(1).getDebugString());
+        Assert.assertEquals("InChI Bond: Cl-C // Type: SINGLE // Stereo: NONE",
+                output.getBond(2).getDebugString());
+
+        JniInchiInputInchi inputE = new JniInchiInputInchi(
+                "InChI=1/C2H2Cl2/c3-1-2-4/h1-2H/b2-1+");
+        JniInchiOutputStructure outputE = JniInchiWrapper
+                .getStructureFromInchi(inputE);
+        Assert.assertEquals(INCHI_RET.OKAY, outputE.getReturnStatus());
+        Assert.assertEquals(6, outputE.getNumAtoms());
+        Assert.assertEquals(5, outputE.getNumBonds());
+        Assert.assertEquals(1, outputE.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputE.getAtom(0).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputE.getAtom(1).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputE.getAtom(2).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputE.getAtom(3).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: H [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputE.getAtom(4).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: H [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputE.getAtom(5).getDebugString());
+        Assert.assertEquals("InChI Bond: C-C // Type: DOUBLE // Stereo: NONE",
+                outputE.getBond(0).getDebugString());
+        Assert.assertEquals("InChI Bond: Cl-C // Type: SINGLE // Stereo: NONE",
+                outputE.getBond(1).getDebugString());
+        Assert.assertEquals("InChI Bond: Cl-C // Type: SINGLE // Stereo: NONE",
+                outputE.getBond(2).getDebugString());
+        Assert.assertEquals(
+                "InChI Stereo0D: - [H,C,C,H] Type::DOUBLEBOND // Parity:EVEN",
+                outputE.getStereo0D(0).getDebugString());
+
+        JniInchiInputInchi inputZ = new JniInchiInputInchi(
+                "InChI=1/C2H2Cl2/c3-1-2-4/h1-2H/b2-1-");
+        JniInchiOutputStructure outputZ = JniInchiWrapper
+                .getStructureFromInchi(inputZ);
+        Assert.assertEquals(INCHI_RET.OKAY, outputZ.getReturnStatus());
+        Assert.assertEquals(6, outputZ.getNumAtoms());
+        Assert.assertEquals(5, outputZ.getNumBonds());
+        Assert.assertEquals(1, outputZ.getNumStereo0D());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputZ.getAtom(0).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: C [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputZ.getAtom(1).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputZ.getAtom(2).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: Cl [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputZ.getAtom(3).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: H [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputZ.getAtom(4).getDebugString());
+        Assert
+                .assertEquals(
+                        "InChI Atom: H [0.0,0.0,0.0] Charge:0 // Iso Mass:0 // Implicit H:0 P:0 D:0 T:0 // Radical: NONE",
+                        outputZ.getAtom(5).getDebugString());
+        Assert.assertEquals("InChI Bond: C-C // Type: DOUBLE // Stereo: NONE",
+                outputZ.getBond(0).getDebugString());
+        Assert.assertEquals("InChI Bond: Cl-C // Type: SINGLE // Stereo: NONE",
+                outputZ.getBond(1).getDebugString());
+        Assert.assertEquals("InChI Bond: Cl-C // Type: SINGLE // Stereo: NONE",
+                outputZ.getBond(2).getDebugString());
+        Assert.assertEquals(
+                "InChI Stereo0D: - [H,C,C,H] Type::DOUBLEBOND // Parity:ODD",
+                outputZ.getStereo0D(0).getDebugString());
+    };
+
+
+    /**
+     * Tests InchiKey generation.
+     * @throws JniInchiException
+     */
+    @Test
+    public void testGetInchiKeyForCafeine() throws JniInchiException {
+        String inchi = "InChI=1/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
+        JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
+        Assert.assertEquals(INCHI_KEY.OK, output.getReturnStatus());
+        Assert.assertEquals("RYYVLZVUVIJVGH-UHFFFAOYNA-N", output.getKey());
+    }
+
+    /**
+     * Tests InchiKey generation.
+     * @throws JniInchiException
+     */
+    @Test
+    public void testGetStdInchiKeyForCafeine() throws JniInchiException {
+        String inchi = "InChI=1S/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
+        JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
+        Assert.assertEquals(INCHI_KEY.OK, output.getReturnStatus());
+        Assert.assertEquals("RYYVLZVUVIJVGH-UHFFFAOYSA-N", output.getKey());
+    }
+
+    @Test
+    public void testGetInchiKeyEmptyInput() throws JniInchiException {
+        String inchi = "";
+        JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
+        Assert.assertEquals(INCHI_KEY.INVALID_INCHI_PREFIX, output.getReturnStatus());
+    }
+
+    @Test
+    public void testGetInchiKeyInputInvalidPrefix() throws JniInchiException {
+        String inchi = "foo=1/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
+        JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
+        Assert.assertEquals(INCHI_KEY.INVALID_INCHI_PREFIX, output.getReturnStatus());
+    }
+
+    @Test
+    public void testGetInchiKeyInputInvalidInchi() throws JniInchiException {
+        String inchi = "InChI=1/-";
+        JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
+        Assert.assertEquals(INCHI_KEY.INVALID_INCHI, output.getReturnStatus());
+    }
+
+    @Test
+    @Ignore
+    // InChI library does very little checking of input,
+    // many invalid InChIs will produce InChI keys...
+    public void testGetInchiKeyInputInvalidInchi1() throws JniInchiException {
+        String inchi = "InChI=1/C8H10N4O2/x1-9-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
+        JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
+        Assert.assertEquals(INCHI_KEY.INVALID_INCHI, output.getReturnStatus());
+    }
+
+    @Test
+    public void testCheckInchiKeyValid() throws JniInchiException {
+        String key = "RYYVLZVUVIJVGH-UHFFFAOYNA-N";
+        INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
+        Assert.assertEquals(INCHI_KEY_STATUS.VALID_NON_STANDARD, status);
+    }
+
+    @Test
+    public void testCheckInchiKeyInvalidLengthLong() throws JniInchiException {
+        String key = "RYYVLZVUVIJVGH-UHFFFAOYNA-NX";
+        INCHI_KEY_STATUS status1 = JniInchiWrapper.checkInChIKey(key);
+        Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LENGTH, status1);
+    }
+
+    @Test
+    public void testCheckInchiKeyInvalidLengthShort() throws JniInchiException {
+        String key = "RYYVLZVUVIJVGH-UHFFFAOYNA-";
+        INCHI_KEY_STATUS status2 = JniInchiWrapper.checkInChIKey(key);
+        Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LENGTH, status2);
+    }
+
+    @Test
+    public void testCheckInchiKeyInvalidLayout() throws JniInchiException {
+        String key = "RYYVLZVUVIJVGHXUHFFFAOYNAXN";
+        INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
+        Assert.assertEquals(INCHI_KEY_STATUS.INVALID_LAYOUT, status);
+    }
+
+    @Test
+    public void testCheckInchiKeyInvalidVersion() throws JniInchiException {
+        String key = "RYYVLZVUVIJVGH-UHFFFAOYNX-N";
+        INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
+        Assert.assertEquals(INCHI_KEY_STATUS.INVALID_VERSION, status);
+    }
+
+    /* Option doesn't work yet
+    @Test
+    @Ignore
+    public void testGenerateInchiKeyViaOptions() throws JniInchiException {
+        JniInchiInput input = getLAlanine3D("-key");
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+//        Assert.assertEquals(null, output.getInchi());
+//        Assert.assertEquals(null, output.getAuxInfo());
+//        Assert.assertEquals(null, output.getMessage());
+//        Assert.assertEquals(null, output.getLog());
+    }
+    */
+
+
+    /**
+     * Tests thread safety - starts ten threads, and sets them generating InChIs
+     * for randomly picked elements. Checks generated InChIs are as expected.
+     *
+     */
+    @Test
+    public void multithreading() {
+
+        // Start threads
+        int nthreads = 5;
+        TestThread[] threads = new TestThread[nthreads];
+        for (int i = 0; i < nthreads; i++) {
+            threads[i] = new TestThread(i);
+            threads[i].start();
+            Thread.yield();
+        }
+
+        // Wait for threads to get going
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ie) {
+            Assert.fail("Interrupted");
+        }
+
+        boolean allRunning = true;
+
+        // Stop threads
+        for (int i = 0; i < nthreads; i++) {
+            if (threads[i].runCount < 1) {
+                allRunning = false;
+            }
+            threads[i].finish();
+            Thread.yield();
+        }
+
+        Assert.assertTrue("All threads running", allRunning);
+
+        // Wait for threads to stop
+        long tstop = System.currentTimeMillis() + 30000;
+        try {
+            for (int i = 0; i < nthreads; i++) {
+                long t0 = System.currentTimeMillis();
+                threads[i].join(Math.max(1,tstop-t0));
+            }
+        } catch (InterruptedException ie) {
+            Assert.fail("Interrupted");
+        }
+
+        // Check threads have finished
+        boolean allFinished = true;
+        for (int i = 0; i < nthreads; i++) {
+            if (!threads[i].isDone()) {
+                allFinished = false;
+                break;
+            }
+        }
+        Assert.assertTrue("All finished", allFinished);
+
+        int failureCount = 0;
+        for (int i = 0; i < nthreads; i++) {
+            failureCount += threads[i].failCount;
+        }
+
+        Assert.assertEquals("Fail count", 0, failureCount);
+    }
+
+
+    @Test
+    public void testTooManyAtoms() throws JniInchiException {
+        JniInchiInput input = new JniInchiInput();
+        for (int i = 0; i < 2000; i++) {
+            input.addAtom(new JniInchiAtom(0, 0, 0, "C"));
+        }
+        try {
+            JniInchiWrapper.getInchi(input);
+            Assert.fail("too many atoms");
+        } catch (IllegalArgumentException e) {
+            ; // pass
+        }
+    }
+
+
+    @Test
+    public void testStructureToInchiBug2085031a() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi(
+                "InChI=1/C24H33N3O5/c1-23(2,3)26-21(29)20(17-11-8-7-9-12-17)27(16-18-13-10-14-31-18)19(28)15-25-22(30)32-24(4,5)6/h7-14,20H,15-16H2,1-6H3,(H,25,30)(H,26,29)");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+    }
+
+    @Test
+    public void testStructureToInchiBug2085031b() throws Exception {
+        JniInchiInputInchi input = new JniInchiInputInchi(
+                "InChI=1/C24H33N3O5/c1-23(2,3)26-21(29)20(17-11-8-7-9-12-17)27(16-18-13-10-14-31-18)19(28)15-25-22(30)32-24(4,5)6/h7-14,20H,15-16H2,1-6H3,(H,25,30)(H,26,29) ");
+        JniInchiOutputStructure output = JniInchiWrapper
+                .getStructureFromInchi(input);
+        Assert.assertEquals(INCHI_RET.EOF, output.getReturnStatus());
+    }
+
+
+
+
+    private class TestThread extends Thread {
+
+        private String[] ELS = { "H", "He", "Li", "Be", "B", "C", "N", "O",
+                "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar" };
+
+        private volatile boolean stop = false;
+        private volatile boolean done = false;
+
+        public volatile int failCount = 0;
+        public volatile int runCount = 0;
+
+        public Exception ex;
+
+        public final int threadIndex;
+
+        public TestThread(final int i) {
+            this.threadIndex = i;
+        }
+
+        public void run() {
+            System.err.println("Thread "+threadIndex+" starting");
+            Random rand = new Random();
+            while (!stop) {
+                yield();
+                runCount++;
+                JniInchiInput input = new JniInchiInput();
+                String element = ELS[rand.nextInt(ELS.length)];
+                input.addAtom(new JniInchiAtom(0, 0, 0, element));
+                input.getAtom(0).setImplicitH(0);
+                try {
+                    JniInchiOutput output = JniInchiWrapper.getInchi(input);
+                    if (INCHI_RET.OKAY != output.getReturnStatus()) {
+                        failCount++;
+                    } else if (!("InChI=1S/" + element)
+                            .equals(output.getInchi())) {
+                        failCount++;
+                    }
+//                    System.err.print("("+threadIndex+")");
+//                    System.err.flush();
+                } catch (Exception e) {
+                    failCount++;
+                    ex = e;
+                    System.err.println("Thread "+threadIndex+ " error: " + e.getMessage());
+                    break;
+                }
+                yield();
+            }
+            done = true;
+            System.err.println("Thread "+threadIndex+" stopping");
+        }
+
+        public void finish() {
+            this.stop = true;
+        }
+
+        public boolean isDone() {
+            return done;
+        }
+
+    }
+
+
+
+    @Test
+    public void testGetStdInchi() throws JniInchiException {
+        JniInchiInput input = getLAlanine0D("");
+        JniInchiOutput output = JniInchiWrapper.getStdInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        Assert.assertEquals(
+                "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1",
+                output.getInchi());
+    }
+
+    @Test
+    public void testGetStdInchiWithBadOption() throws JniInchiException {
+        // TODO
+        JniInchiInput input = getLAlanine0D("-FixedH");
+        JniInchiOutput output = JniInchiWrapper.getStdInchi(input);
+        Assert.assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        System.err.println(output.getReturnStatus());
+        System.err.println(output.getMessage());
+        System.err.println(output.getInchi());
+        System.err.println(output.getLog());
+    }
+
 
 }
