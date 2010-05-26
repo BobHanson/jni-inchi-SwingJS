@@ -30,6 +30,8 @@ else ifneq (,$(findstring LINUX, $(PLATFORM)))
 include Makefile.linux
 else ifneq (,$(findstring MAC, $(PLATFORM)))
 include Makefile.mac
+else ifneq (,$(findstring FREEBSD, $(PLATFORM)))
+include Makefile.freebsd
 else ifeq ($(PLATFORM),SUNOS-X86)
 include Makefile.solaris.x86
 else ifeq ($(PLATFORM),SUNOS-AMD64)
