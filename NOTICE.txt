@@ -1,4 +1,4 @@
-Copyright (C) 2006-2009 Sam Adams <sam.adams@cantab.net>
+Copyright (C) 2006-2010 Sam Adams <sea36 :at: users.sourceforge.net>
 
 This file is part of JNI-InChI.
 
