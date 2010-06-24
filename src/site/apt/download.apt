@@ -33,6 +33,9 @@ Download JNI-InChI
   Pre-compiled JNI-InChI JARs, packaged with their dependencies, are available on the {{{https://sourceforge.net/projects/jni-inchi/files/} JNI-InChI download}} pages hosted by SourceForge.
 SVN Access
 
+
+* Source Code Repository
+
   The {{{https://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi} JNI-InChI SVN Repository}} is accessible at:
 
 ----
