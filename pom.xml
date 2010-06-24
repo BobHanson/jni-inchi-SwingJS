@@ -195,13 +195,6 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <artifactId>maven-site-plugin</artifactId>
-                <configuration>
-                    <templateFile>${basedir}/maven-site.vm</templateFile>
-                </configuration>
-            </plugin>
-
         </plugins>
 
         <!-- Include license files in JARs -->
