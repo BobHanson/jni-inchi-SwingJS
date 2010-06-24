@@ -22,28 +22,28 @@ package net.sf.jniinchi;
  * Type-safe enumeration of InChI 0D parity types.  See <tt>inchi_api.h</tt>.
  * @author Sam Adams
  */
-public class INCHI_STEREOTYPE {
+public enum INCHI_STEREOTYPE {
 
 
     /**
      * None.
      */
-    public static final INCHI_STEREOTYPE NONE           = new INCHI_STEREOTYPE("NONE", 0);
+    NONE("NONE", 0),
 
     /**
      * Stereogenic bond >A=B< or cumulene >A=C=C=B<.
      */
-    public static final INCHI_STEREOTYPE DOUBLEBOND     = new INCHI_STEREOTYPE("DOUBLEBOND", 1);
+    DOUBLEBOND("DOUBLEBOND", 1),
 
     /**
      * Tetrahedral atom.
      */
-    public static final INCHI_STEREOTYPE TETRAHEDRAL    = new INCHI_STEREOTYPE("TETRAHEDRAL", 2);
+    TETRAHEDRAL("TETRAHEDRAL", 2),
 
     /**
      * Allene.
      */
-    public static final INCHI_STEREOTYPE ALLENE         = new INCHI_STEREOTYPE("ALLENE", 3);
+    ALLENE("ALLENE", 3);
 
 
 
