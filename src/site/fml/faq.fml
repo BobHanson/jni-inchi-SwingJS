@@ -56,7 +56,7 @@
         What is this .jnati directory that has appeared in my home directory?
       </question>
       <answer>
-         <p>When JNI-InChI is run the native code must also be loaded. JNI-InChI uses a library called jnati (http://jnati.sourceforge.net) to select the correct native library for your system. If the necessary files cannot be located, jnati checks to see whether they are bundled inside a JAR file, or downloads them from a remote repository. If so, these files are then cached in the .jnati directory, so they can be reused next time JNI-InChI is run.</p>
+         <p>When JNI-InChI is run the native code must also be loaded. JNI-InChI uses a library called <a href="http://jnati.sourceforge.net">jnati</a> to select the correct native library for your system. If the necessary files cannot be located, jnati checks to see whether they are bundled inside a JAR file, or downloads them from a remote repository. If so, these files are then cached in the .jnati directory, so they can be reused next time JNI-InChI is run.</p>
       </answer>
     </faq>    
     
@@ -65,7 +65,7 @@
         My question wasn't answered, what should I do?
       </question>
       <answer>
-        <p>e-mail me: sea36 at users.sourceforge.net.</p>
+        <p>Contact the <a href="http://sourceforge.net/mail/?group_id=173262">JNI-InChI mailing list</a>.</p>
       </answer>
     </faq>   
     
