@@ -7,7 +7,7 @@
 #
 
 # Current native code version
-VERSION = 1.8
+VERSION = 1.03_1
 
 ifndef JAVA_HOME
 f := $(error JAVA_HOME is not defined, Ensure that it is pointing to a JDK)
@@ -51,7 +51,6 @@ JAR = $(TARGET_PATH)/jniinchi-$(LIB_VERSION).jar
 
 OBJDIR = $(TARGET_PATH)/o
 
-INCHI_SRCDIR = inchi-1.03-pre
 INCHI_OBJDIR = $(OBJDIR)/inchi
 
 JAVA_SOURCE = ../java/net/sf/jniinchi/JniInchiWrapper.java
@@ -69,15 +68,16 @@ LDFLAGS += -s
 CFLAGS += -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR)
 CFLAGS += -Os
 
-_INCHI_OBJECTS =	ichi_bns.o  ichi_io.o   ichican2.o  ichicano.o  ichicans.o \
-                    ichiisot.o  ichilnct.o  ichimak2.o  ichimake.o  ichimap1.o \
-                    ichimap2.o  ichimap4.o  ichinorm.o  ichiparm.o  ichiprt1.o \
-                    ichiprt2.o  ichiprt3.o  ichiqueu.o  ichiread.o  ichiring.o \
-                    ichirvr1.o  ichirvr2.o  ichirvr3.o  ichirvr4.o  ichirvr5.o \
-                    ichirvr6.o  ichirvr7.o  ichisort.o  ichister.o  ichitaut.o \
-                    ikey_base26.o ikey_dll.o inchi_dll.o inchi_dll_a.o inchi_dll_a2.o \
-                    inchi_dll_main.o runichi.o sha2.o strutil.o util.o
+_INCHI_OBJECTS =	ichi_bns.o  ichimake.o  ichiprt3.o  ichirvr5.o     inchi_dll.o      \
+                    ichi_io.o   ichimap1.o  ichiqueu.o  ichirvr6.o     inchi_dll_a.o    \
+                    ichican2.o  ichimap2.o  ichiread.o  ichirvr7.o     inchi_dll_a2.o   \
+                    ichicano.o  ichimap4.o  ichiring.o  ichisort.o     inchi_dll_main.o \
+                    ichicans.o  ichinorm.o  ichirvr1.o  ichister.o     runichi.o        \
+                    ichiisot.o  ichiparm.o  ichirvr2.o  ichitaut.o     sha2.o           \
+                    ichilnct.o  ichiprt1.o  ichirvr3.o  ikey_base26.o  strutil.o        \
+                    ichimak2.o  ichiprt2.o  ichirvr4.o  ikey_dll.o     util.o           
 
+INCHI_SRCDIR = inchi-1.03
 INCHI_OBJECTS = $(addprefix $(INCHI_OBJDIR)/,$(_INCHI_OBJECTS))
 
 JNI_SRCDIR = jni-inchi
@@ -102,7 +102,7 @@ jar: buildresource
 .PHONY: buildresource
 buildresource: build
 	mkdir -p $(JAR_WORKDIR)/$(ARTIFACT_PATH)
-	-@ echo "<manifest id=\"jniinchi\" version=\"$(VERSION)\" platform=\"$(LIB_OS)\" architecture=\"$(LIB_ARCH)\">" > $(JAR_WORKDIR)/$(ARTIFACT_PATH)/MANIFEST.xml
+	-@ echo "<manifest id=\"jniinchi\" version=\"$(VERSION)\" platform=\"$(PLATFORM)\" >" > $(JAR_WORKDIR)/$(ARTIFACT_PATH)/MANIFEST.xml
 	-@ echo "  <file library=\"true\">$(TARGET_FILE)</file>" >> $(JAR_WORKDIR)/$(ARTIFACT_PATH)/MANIFEST.xml
 	-@ echo "</manifest>" >> $(JAR_WORKDIR)/$(ARTIFACT_PATH)/MANIFEST.xml
 	-@ cp $(TARGET) $(JAR_WORKDIR)/$(ARTIFACT_PATH)/$(TARGET_FILE)
@@ -154,9 +154,6 @@ debug:
 	-@ echo "OS: $(LIB_OS)"
 	-@ echo "ARCH: $(LIB_ARCH)"
 
-.PHONY: archives
-VERSIONS = $(shell ls ../resources/META-INF/jniinchi/$(VERSION) )
-archives: $(addprefix jniinchi-$(VERSION)-, $(addsuffix .jar, $(VERSIONS)))
 
 jniinchi-$(VERSION)-%.jar:
 	$(RM) -r $(TARGET_PATH)/jartemp
