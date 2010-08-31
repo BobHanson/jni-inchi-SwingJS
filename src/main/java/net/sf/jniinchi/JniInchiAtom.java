@@ -120,6 +120,16 @@ public class JniInchiAtom {
         this.elname = el;
     }
 
+
+    /**
+     * Convenience method to create a new atom with zero coordinates.
+     * @param el
+     */
+    public JniInchiAtom(final String el) {
+        this(0.0, 0.0, 0.0, el);
+    }
+
+
     /**
      * Sets charge on atom.
      *

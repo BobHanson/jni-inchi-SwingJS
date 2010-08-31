@@ -77,6 +77,17 @@ public class JniInchiStructure {
         return atom;
     }
 
+
+    /**
+     * Convenience method to add multiple atoms to molecule.
+     * @param atoms
+     */
+    public void addAtoms(JniInchiAtom... atoms) {
+        for (JniInchiAtom atom : atoms) {
+            addAtom(atom);
+        }        
+    }
+
     /**
      * Adds bond to inchi molecule.
      *
@@ -87,6 +98,16 @@ public class JniInchiStructure {
 	public JniInchiBond addBond(JniInchiBond bond) {
         bondList.add(bond);
         return bond;
+    }
+    
+    /**
+     * Convenience method to add multiple bonds to molecule.
+     * @param bonds
+     */
+    public void addBonds(JniInchiBond... bonds) {
+        for (JniInchiBond bond : bonds) {
+            addBond(bond);
+        }        
     }
 
     /**
