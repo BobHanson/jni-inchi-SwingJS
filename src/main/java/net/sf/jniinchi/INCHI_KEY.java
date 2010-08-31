@@ -69,13 +69,20 @@ public enum INCHI_KEY {
 
     public static INCHI_KEY getValue(int ret) {
         switch (ret) {
-            case 0:	return OK;
-            case 1: return UNKNOWN_ERROR;
-            case 2: return EMPTY_INPUT;
-            case 3: return INVALID_INCHI_PREFIX;
-            case 4: return NOT_ENOUGH_MEMORY;
-            case 20: return INVALID_INCHI;
-            case 21: return INVALID_STD_INCHI;
+            case 0:
+                return OK;
+            case 1:
+                return UNKNOWN_ERROR;
+            case 2:
+                return EMPTY_INPUT;
+            case 3:
+                return INVALID_INCHI_PREFIX;
+            case 4:
+                return NOT_ENOUGH_MEMORY;
+            case 20:
+                return INVALID_INCHI;
+            case 21:
+                return INVALID_STD_INCHI;
             default:
                 return null;
         }

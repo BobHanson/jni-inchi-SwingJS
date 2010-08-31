@@ -19,7 +19,8 @@
 package net.sf.jniinchi;
 
 /**
- * Type-safe enumeration of InChI 0D parities.  See <tt>inchi_api.h</tt>.
+ * Enumeration of InChI 0D parities.
+ * Corresponds to <tt>inchi_StereoParity0D</tt> in <tt>inchi_api.h</tt>.
  * @author Sam Adams
  */
 public enum INCHI_PARITY {
@@ -27,33 +28,28 @@ public enum INCHI_PARITY {
     /**
      * None.
      */
-    NONE("NONE", 0),
+    NONE(0),
 
     /**
      * Odd.
      */
-    ODD("ODD", 1),
+    ODD(1),
 
     /**
      * Even.
      */
-    EVEN("EVEN", 2),
+    EVEN(2),
 
     /**
      * Unknown.
      */
-    UNKNOWN("UNKNOWN", 3),
+    UNKNOWN(3),
 
     /**
      * Undefined.
      */
-    UNDEFINED("UNDEFINED", 4);
+    UNDEFINED(4);
 
-
-    /**
-     * Name.
-     */
-    private final String name;
 
     /**
      * Internal InChI index (from inchi_api.h).
@@ -63,23 +59,27 @@ public enum INCHI_PARITY {
     /**
      * Constructor.
      */
-    private INCHI_PARITY(final String name, final int indx) { this.name = name; this.indx = indx; };
+    private INCHI_PARITY(final int indx) {
+        this.indx = indx;
+    }
 
     public int getIndx() {
         return indx;
     }
 
-    public String toString() {
-        return name;
-    }
 
     public static INCHI_PARITY getValue(int parity) {
         switch (parity) {
-            case 0:	return NONE;
-            case 1:	return ODD;
-            case 2:	return EVEN;
-            case 3:	return UNKNOWN;
-            case 4:	return UNDEFINED;
+            case 0:
+                return NONE;
+            case 1:
+                return ODD;
+            case 2:
+                return EVEN;
+            case 3:
+                return UNKNOWN;
+            case 4:
+                return UNDEFINED;
             default:
                 return null;
         }

@@ -34,21 +34,17 @@ package net.sf.jniinchi;
  */
 public enum INCHI_KEY_STATUS {
 
-    VALID_STANDARD("VALID_STANDARD", 0),
+    VALID_STANDARD(0),
 
-    VALID_NON_STANDARD("VALID_NON_STANDARD", -1),
+    VALID_NON_STANDARD(-1),
 
-    INVALID_LENGTH("INVALID_LENGTH", 1),
+    INVALID_LENGTH(1),
 
-    INVALID_VERSION("INVALID_VERSION", 2),
+    INVALID_LAYOUT(2),
 
-    INVALID_LAYOUT("INVALID_LAYOUT", 3);
+    INVALID_VERSION(3);
 
 
-    /**
-     * Name.
-     */
-    private final String name;
 
     /**
      * Internal InChI index (from inchi_api.h).
@@ -58,8 +54,7 @@ public enum INCHI_KEY_STATUS {
     /**
      * Constructor.
      */
-    private INCHI_KEY_STATUS(final String name, final int indx) {
-        this.name = name;
+    private INCHI_KEY_STATUS(final int indx) {
         this.indx = indx;
     }
 
@@ -67,22 +62,21 @@ public enum INCHI_KEY_STATUS {
         return indx;
     }
 
-    public String toString() {
-        return name;
-    }
-
     public static INCHI_KEY_STATUS getValue(int value) {
-        INCHI_KEY_STATUS keyStatus;
         switch (value) {
-            case -1: keyStatus = VALID_NON_STANDARD; break;
-            case 0: keyStatus = VALID_STANDARD; break;
-            case 1: keyStatus = INVALID_LENGTH; break;
-            case 2: keyStatus = INVALID_LAYOUT; break;
-            case 3: keyStatus = INVALID_VERSION; break;
+            case -1:
+                return VALID_NON_STANDARD;
+            case 0:
+                return VALID_STANDARD;
+            case 1:
+                return INVALID_LENGTH;
+            case 2:
+                return INVALID_LAYOUT;
+            case 3:
+                return INVALID_VERSION;
             default:
-                keyStatus = null;
+                return null;
         }
-        return keyStatus;
     }
 
 }

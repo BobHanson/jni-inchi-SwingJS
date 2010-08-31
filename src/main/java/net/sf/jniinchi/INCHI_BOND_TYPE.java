@@ -19,40 +19,36 @@
 package net.sf.jniinchi;
 
 /**
- * Type-safe enumeration of InChI bond type definitions.  See <tt>inchi_api.h</tt>.
+ * Enumeration of InChI bond type definitions.
+ * Corresponds to <tt>inchi_BondType</tt> in <tt>inchi_api.h</tt>.
  * @author Sam Adams
  */
 public enum INCHI_BOND_TYPE {
 
 
-    NONE("NONE", 0),
+    NONE(0),
 
     /**
      * Single bond.
      */
-    SINGLE("SINGLE", 1),
+    SINGLE(1),
 
     /**
      * Double bond.
      */
-    DOUBLE("DOUBLE", 2),
+    DOUBLE(2),
 
     /**
      * Triple bond.
      */
-    TRIPLE("TRIPLE", 3),
+    TRIPLE(3),
 
     /**
-     * Alternating (single-double) bond.
+     * Alternating (single-double) bond. Avoid where possible.
      */
-    ALTERN("ALTERN", 4);
+    ALTERN(4);
 
 
-
-    /**
-     * Name.
-     */
-    private final String name;
 
     /**
      * Internal InChI index (from inchi_api.h).
@@ -62,26 +58,29 @@ public enum INCHI_BOND_TYPE {
     /**
      * Constructor.
      */
-    private INCHI_BOND_TYPE(final String name, final int indx) { this.name = name; this.indx = indx; };
+    private INCHI_BOND_TYPE(final int indx) {
+        this.indx = indx;
+    }
 
     public int getIndx() {
         return indx;
     }
 
-    public String toString() {
-        return name;
-    }
-
     public static INCHI_BOND_TYPE getValue(int btype) {
-        INCHI_BOND_TYPE type;
         switch (btype) {
-            case 1: type = INCHI_BOND_TYPE.SINGLE; break;
-            case 2: type = INCHI_BOND_TYPE.DOUBLE; break;
-            case 3: type = INCHI_BOND_TYPE.TRIPLE; break;
-            case 4: type = INCHI_BOND_TYPE.ALTERN; break;
+            case 0:
+                return NONE;
+            case 1:
+                return SINGLE;
+            case 2:
+                return DOUBLE;
+            case 3:
+                return TRIPLE;
+            case 4:
+                return ALTERN;
             default:
-                type = null;
+                return null;
         }
-        return type;
     }
+    
 }

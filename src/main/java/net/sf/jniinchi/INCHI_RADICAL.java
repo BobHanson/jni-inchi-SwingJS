@@ -19,7 +19,8 @@
 package net.sf.jniinchi;
 
 /**
- * Type-safe enumeration of InChI radical definitions.  See <tt>inchi_api.h</tt>.
+ * Enumeration of InChI radical definitions.
+ * Corresponds to <tt>inchi_Radical</tt> in <tt>inchi_api.h</tt>.
  * @author Sam Adams
  */
 public enum INCHI_RADICAL {
@@ -27,28 +28,23 @@ public enum INCHI_RADICAL {
     /**
      * No radical status recorded.
      */
-    NONE("NONE", 0),
+    NONE(0),
 
     /**
      * Singlet.
      */
-    SINGLET("SINGLET", 1),
+    SINGLET(1),
 
     /**
      * Doublet.
      */
-    DOUBLET("DOUBLET", 2),
+    DOUBLET(2),
 
     /**
      * Triplet.
      */
-    TRIPLET("TRIPLET", 3);
+    TRIPLET(3);
 
-
-    /**
-     * Name.
-     */
-    private final String name;
 
     /**
      * Internal InChI index (from inchi_api.h).
@@ -57,13 +53,11 @@ public enum INCHI_RADICAL {
 
     /**
      * Constructor.
-     * @param name  name of radical.
      * @param indx  index of radical.
      */
-    private INCHI_RADICAL(final String name, final int indx) {
-        this.name = name;
+    private INCHI_RADICAL(final int indx) {
         this.indx = indx;
-    };
+    }
 
    /**
     * Returns index.
@@ -73,23 +67,19 @@ public enum INCHI_RADICAL {
         return indx;
     }
 
-    /**
-     * Returns name.
-     */
-    public String toString() {
-        return name;
-    }
-
     public static INCHI_RADICAL getValue(int rad) {
-        INCHI_RADICAL radical;
         switch (rad) {
-            case 0: radical = NONE; break;
-            case 1: radical = SINGLET; break;
-            case 2: radical = DOUBLET; break;
-            case 3: radical = TRIPLET; break;
+            case 0:
+                return NONE;
+            case 1:
+                return SINGLET;
+            case 2:
+                return DOUBLET;
+            case 3:
+                return TRIPLET;
             default:
-                radical = null;
+                return null;
         }
-        return radical;
     }
+    
 }

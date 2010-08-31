@@ -42,50 +42,44 @@ public enum INCHI_RET {
     /**
      * Not used in InChI library.
      */
-    SKIP("SKIP", -2),
+    SKIP(-2),
 
     /**
      * No structural data has been provided.
      */
-    EOF("EOF", -1),
+    EOF(-1),
 
     /**
      * Success; no errors or warnings.
      */
-    OKAY("OKAY", 0),
+    OKAY(0),
 
     /**
      * Success; warning(s) issued.
      */
-    WARNING("WARNING", 1),
+    WARNING(1),
 
     /**
      * Error: no InChI has been created.
      */
-    ERROR("ERROR", 2),
+    ERROR(2),
 
     /**
      * Severe error: no InChI has been created (typically, memory allocation failure).
      */
-    FATAL("FATAL", 3),
+    FATAL(3),
 
     /**
      * Unknown program error.
      */
-    UNKNOWN("UNKNOWN", 4),
+    UNKNOWN(4),
 
     /**
      * Previuos call to InChI has not returned yet.
      */
-    BUSY("BUSY", 5);
+    BUSY(5);
 
 
-
-
-    /**
-     * Name.
-     */
-    private final String name;
 
     /**
      * Internal InChI index (from inchi_api.h).
@@ -95,8 +89,7 @@ public enum INCHI_RET {
     /**
      * Constructor.
      */
-    private INCHI_RET(final String name, final int indx) {
-        this.name = name;
+    private INCHI_RET(final int indx) {
         this.indx = indx;
     };
 
@@ -104,24 +97,27 @@ public enum INCHI_RET {
         return indx;
     }
 
-    public String toString() {
-        return name;
-    }
-
     public static INCHI_RET getValue(int ret) {
-        INCHI_RET retStatus;
         switch(ret) {
-            case -2: retStatus = INCHI_RET.SKIP; break;
-            case -1: retStatus = INCHI_RET.EOF; break;
-            case 0:  retStatus = INCHI_RET.OKAY; break;
-            case 1:  retStatus = INCHI_RET.WARNING; break;
-            case 2:  retStatus = INCHI_RET.ERROR; break;
-            case 3:  retStatus = INCHI_RET.FATAL; break;
-            case 4:  retStatus = INCHI_RET.UNKNOWN; break;
-            case 5:  retStatus = INCHI_RET.BUSY; break;
+            case -2:
+                return SKIP;
+            case -1:
+                return EOF;
+            case 0:
+                return OKAY;
+            case 1:
+                return WARNING;
+            case 2:
+                return ERROR;
+            case 3:
+                return FATAL;
+            case 4:
+                return UNKNOWN;
+            case 5:
+                return BUSY;
             default:
-                retStatus = null;
+                return null;
         }
-        return retStatus;
     }
+    
 }

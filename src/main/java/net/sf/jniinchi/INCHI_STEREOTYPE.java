@@ -19,7 +19,8 @@
 package net.sf.jniinchi;
 
 /**
- * Type-safe enumeration of InChI 0D parity types.  See <tt>inchi_api.h</tt>.
+ * Enumeration of InChI 0D parity types.
+ * Corresponds to <tt>inchi_StereoType0D</tt> in <tt>inchi_api.h</tt>.
  * @author Sam Adams
  */
 public enum INCHI_STEREOTYPE {
@@ -28,30 +29,24 @@ public enum INCHI_STEREOTYPE {
     /**
      * None.
      */
-    NONE("NONE", 0),
+    NONE(0),
 
     /**
      * Stereogenic bond >A=B< or cumulene >A=C=C=B<.
      */
-    DOUBLEBOND("DOUBLEBOND", 1),
+    DOUBLEBOND(1),
 
     /**
      * Tetrahedral atom.
      */
-    TETRAHEDRAL("TETRAHEDRAL", 2),
+    TETRAHEDRAL(2),
 
     /**
      * Allene.
      */
-    ALLENE("ALLENE", 3);
+    ALLENE(3);
 
 
-
-
-    /**
-     * Name.
-     */
-    private final String name;
 
     /**
      * Internal InChI index (from inchi_api.h).
@@ -61,26 +56,27 @@ public enum INCHI_STEREOTYPE {
     /**
      * Constructor.
      */
-    private INCHI_STEREOTYPE(final String name, final int indx) { this.name = name; this.indx = indx; };
+    private INCHI_STEREOTYPE(final int indx) {
+        this.indx = indx;
+    }
 
     public int getIndx() {
         return indx;
     }
 
-    public String toString() {
-        return name;
-    }
-
-	public static INCHI_STEREOTYPE getValue(int type) {
-		INCHI_STEREOTYPE stereoType;
+    public static INCHI_STEREOTYPE getValue(int type) {
 		switch (type) {
-			case 0: stereoType = INCHI_STEREOTYPE.NONE; break;
-			case 1: stereoType = INCHI_STEREOTYPE.DOUBLEBOND; break;
-			case 2: stereoType = INCHI_STEREOTYPE.TETRAHEDRAL; break;
-			case 3: stereoType = INCHI_STEREOTYPE.ALLENE; break;
+			case 0:
+                return NONE;
+			case 1:
+                return DOUBLEBOND;
+            case 2:
+                return TETRAHEDRAL;
+			case 3:
+                return ALLENE;
 			default:
-				stereoType = null;
+				return null;
 		}
-		return stereoType;
 	}
+    
 }
