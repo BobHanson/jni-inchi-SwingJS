@@ -46,6 +46,9 @@ import org.apache.log4j.Logger;
  */
 public class JniInchiWrapper {
 
+    // TODO CheckINCHI
+    // TODO AuxInfo to InChI
+
     private static final Logger LOG = Logger.getLogger(JniInchiWrapper.class);
 
     private static final String ID = "jniinchi";
@@ -204,7 +207,10 @@ public class JniInchiWrapper {
 
 
     /**
-     * Generates InChI string for a chemical structure.
+     * <p>Calculates the InChI for a chemical structure.</p>
+     * <p>If no InChI creation/stereo modification options are specified then a standard InChI is produced.
+     * If any of SUU/SLUUD/RecMet/FixedH/Ket/15T/SRel/SRac/SUCF options are specified, then the generated InChI
+     * will be non-standard one.</p>
      * @param input
      * @return
      * @throws JniInchiException
@@ -230,7 +236,9 @@ public class JniInchiWrapper {
 
 
     /**
-     * Generates the Standard InChI string for a chemical structure.
+     * <p>Calculates the Standard InChI string for a chemical structure.</p>
+     * <p>The only valid structure perception options are NEWPSOFF/DoNotAddH/SNon. In any other structural
+     * perception options are specified then the calculation will fail.</p>
      * @param input
      * @return
      * @throws JniInchiException
@@ -254,6 +262,16 @@ public class JniInchiWrapper {
         }
     }
 
+
+    /**
+     * <p>Converts an InChI into an InChI for validation purposes (the same as the -InChI2InChI option).</p>
+     * <p>This method may also be used to filter out specific layers. For instance, /Snon would remove the
+     * stereochemical layer; Omitting /FixedH and/or /RecMet would remove Fixed-H or Reconnected layers.
+     * In order to keep all InChI layers use options string "/FixedH /RecMet"; option /InChI2InChI is not needed.</p>         
+     * @param input
+     * @return
+     * @throws JniInchiException
+     */
     public static JniInchiOutput getInchiFromInchi(JniInchiInputInchi input) throws JniInchiException {
         if (input == null) {
             throw new IllegalArgumentException("Null input");
@@ -299,10 +317,10 @@ public class JniInchiWrapper {
 
 
     /**
-     * Generate InChIKey from InChI string.
-     * @param inchi
-     * @return
-     * @throws JniInchiException
+     * Calculates the InChIKey for an InChI string.
+     * @param inchi     source InChI string
+     * @return  InChIKey output
+     * @throws  JniInchiException
      */
     public static JniInchiOutputKey getInChIKey(final String inchi) throws JniInchiException {
         if (inchi == null) {
@@ -327,7 +345,7 @@ public class JniInchiWrapper {
 
 
     /**
-     * Check InChIKey.
+     * Checks whether a string represents valid InChIKey.
      * @param key
      * @return
      * @throws JniInchiException
