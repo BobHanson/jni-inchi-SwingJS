@@ -66,7 +66,7 @@ ARTIFACT_PATH = META-INF/jniinchi/$(VERSION)/$(PLATFORM)
 
 LDFLAGS += -s
 CFLAGS += -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR)
-CFLAGS += -Os
+CFLAGS += -Os -ansi
 
 _INCHI_OBJECTS =	ichi_bns.o  ichimake.o  ichiprt3.o  ichirvr5.o     inchi_dll.o      \
                     ichi_io.o   ichimap1.o  ichiqueu.o  ichirvr6.o     inchi_dll_a.o    \

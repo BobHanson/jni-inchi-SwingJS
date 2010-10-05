@@ -27,42 +27,44 @@
 
 #define NATIVE_LIB_VERSION "1.03_1"
 
-// Uncomment to enable debug mode
-// #define DEBUG 1
+/*
+Uncomment to enable debug mode
+#define DEBUG 1
+*/
 
 
-// === CLASS REFs === //
+/* === CLASS REFs === */
 
 jclass IllegalArgumentException;
 
 jclass jniInchiInput, jniInchiOutput, jniInchiOutputKey, jniInchiOutputStructure;
 jclass jniInchiStructure, jniInchiAtom, jniInchiBond, jniInchiStereo0D;
 
-// === METHOD REFs === //
+/* === METHOD REFs === */
 
-// constructors
+/* constructors */
 jmethodID initJniInchiOutput, initJniInchiOutputKey;
 jmethodID initJniInchiAtom, initJniInchiBond, initJniInchiStereo0D;
 jmethodID initJniInchiOutputStructure;
 
-// structure methods
+/* structure methods */
 jmethodID getNumAtoms, getNumBonds, getNumStereo0D, getOptions, getAtom, getAtomIndex, getBond, getStereo0D;
 jmethodID addAtom, addBond, addStereo0D;
 
-// atom methods
+/* atom methods */
 jmethodID getElementType, getX, getY, getZ, getCharge, getRadical, getImplicitH, getImplicitProtium, getImplicitDeuterium, getImplicitTritium, getIsotopicMass;
 jmethodID setCharge, setRadical, setImplicitH, setImplicitProtium, setImplicitDeuterium, setImplicitTritium, setIsotopicMass;
 
-// bond methods
+/* bond methods */
 jmethodID getOriginAtom, getTargetAtom, getBondType, getBondStereo;
 
-// stereo0D methods
+/* stereo0D methods */
 jmethodID getCentralAtom, getNeighbor, getStereoType, getParity;
 
 
 
 
-// === CHECK NATIVE CODE VERSION === //
+/* === CHECK NATIVE CODE VERSION === */
 
 JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersion
     (JNIEnv *env, jclass class) {
@@ -72,12 +74,12 @@ JNIEXPORT jstring JNICALL Java_net_sf_jniinchi_JniInchiWrapper_LibInchiGetVersio
 }
 
 
-// === JNI INITIALIZERS === //
+/* === JNI INITIALIZERS === */
 
 
-//
-// Initialises the jclass pointer clazz to point to the named class
-//
+/*
+ Initialises the jclass pointer clazz to point to the named class
+*/
 int initClass(JNIEnv *env, jclass *clazz, char *name) {
 
     if (NULL != (*clazz)) {
@@ -197,13 +199,13 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_init
 
 inchi_InputINCHI* getInchiInputINCHI(JNIEnv *env, jstring inchi, jstring options) {
 
-    // Convert java.lang.String inchi to char*
+    /* Convert java.lang.String inchi to char* */
     const char *inchiString = (*env)->GetStringUTFChars(env, inchi, 0);
     char *szInchi = malloc(sizeof(char) * (strlen(inchiString)+1));
     strcpy(szInchi, inchiString);
     (*env)->ReleaseStringUTFChars(env, inchi, inchiString);
 
-    // Convert java.lang.String options to char*
+    /* Convert java.lang.String options to char* */
     const char *optionsString = (*env)->GetStringUTFChars(env, options, 0);
     char *szOptions = malloc(sizeof(char) * (strlen(optionsString)+1));
     strcpy(szOptions, optionsString);
@@ -214,9 +216,9 @@ inchi_InputINCHI* getInchiInputINCHI(JNIEnv *env, jstring inchi, jstring options
     fprintf(stderr, "options: %s\n", szOptions);
     #endif
 
-    inchi_InputINCHI *input;                      // Allocate memory
+    inchi_InputINCHI *input;                      /* Allocate memory */
     input = malloc(sizeof(inchi_InputINCHI));
-    memset(input, 0, sizeof(inchi_InputINCHI));  // Set initial values to 0
+    memset(input, 0, sizeof(inchi_InputINCHI));  /* Set initial values to 0 */
 
     (*input).szInChI = szInchi;
     (*input).szOptions = szOptions;
@@ -267,8 +269,8 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
     fprintf(stderr, "nstereo: %d\n", nstereo);
     #endif
 
-//    fprintf(stderr, "natoms: %d\n", natoms);
-//    fprintf(stderr, "maxatoms: %d\n", MAX_ATOMS);
+/*    fprintf(stderr, "natoms: %d\n", natoms); */
+/*    fprintf(stderr, "maxatoms: %d\n", MAX_ATOMS); */
 
     if (natoms > MAX_ATOMS) {
         (*env)->ThrowNew(env, IllegalArgumentException, "Too many atoms");
@@ -387,7 +389,7 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
 
     }
 
-    inchi_Input *inchi_input;                      // Allocate memory
+    inchi_Input *inchi_input;                      /* Allocate memory */
     inchi_input = malloc(sizeof(inchi_Input));
     memset(inchi_input, 0, sizeof(inchi_Input));
 
@@ -397,7 +399,7 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
     strcpy(opts, options);
 
     #ifdef DEBUG
-//    cerr << "options: " << opts << "\n";
+/*    cerr << "options: " << opts << "\n"; */
     #endif
 
     (*inchi_input).szOptions = opts;
@@ -418,11 +420,11 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
 
 
 
-// ****************************************************************************
-//
-//     STRUCTURE to INCHI
-//
-// ****************************************************************************
+/****************************************************************************
+ *                                                                          *
+ *   STRUCTURE to INCHI                                                     *
+ *                                                                          *
+ ****************************************************************************/
 
 
 JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
@@ -434,7 +436,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
 
     inchi_Input *inchi_input = getInchiInput(env, input);
     if (!inchi_input) {
-        // Exception was thrown
+        /* Exception was thrown */
         return 0;
     }
 
@@ -469,7 +471,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHI
 
     inchi_Input *inchi_input = getInchiInput(env, input);
     if (!inchi_input) {
-        // Exception was thrown
+        /* Exception was thrown */
         return 0;
     }
 
@@ -496,12 +498,11 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHI
 
 
 
-
-// ****************************************************************************
-//
-//     STRUCTURE to INCHI KEY
-//
-// ****************************************************************************
+/****************************************************************************
+ *                                                                          *
+ *   STRUCTURE to INCHI KEY                                                 *
+ *                                                                          *
+ ****************************************************************************/
 
 /**
  * Generates InChI KEY from InChI.
@@ -516,17 +517,17 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromIN
     fprintf(stderr, "inchi: %s\n", inchi);
     #endif
 
-    // The user-supplied buffer szINCHIKey should be at least 28 bytes long.
+    /* The user-supplied buffer szINCHIKey should be at least 28 bytes long. */
     char *szINCHIKey = malloc(sizeof(char) * 28);
     memset(szINCHIKey, 0, sizeof(char) * 28);
 
-    // hash extension (up to 256 bits; 1st block) string
-    // Caller should allocate space for 64 characters + trailing NULL
+    /* hash extension (up to 256 bits; 1st block) string */
+    /* Caller should allocate space for 64 characters + trailing NULL */
     char *szXtra1 = malloc(sizeof(char) * 65);
     memset(szXtra1, 0, sizeof(char) * 65);
 
-    // hash extension (up to 256 bits; 2nd block) string
-    // Caller should allocate space for 64 characters + trailing NULL
+    /* hash extension (up to 256 bits; 2nd block) string */
+    /* Caller should allocate space for 64 characters + trailing NULL */
     char *szXtra2 = malloc(sizeof(char) * 65);
     memset(szXtra2, 0, sizeof(char) * 65);
 
@@ -534,8 +535,8 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromIN
     fprintf(stderr, "getting InChIKey...\n");
     #endif
 
-    // xtra1 =1 calculate hash extension (up to 256 bits; 1st block)
-    // xtra2 =1 calculate hash extension (up to 256 bits; 2nd block)
+    /* xtra1 =1 calculate hash extension (up to 256 bits; 1st block) */
+    /* xtra2 =1 calculate hash extension (up to 256 bits; 2nd block) */
     const int xtra1 = 1;
     const int xtra2 = 1;
 
@@ -577,7 +578,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHIKeyFro
     fprintf(stderr, "inchi: %s\n", inchi);
     #endif
 
-    // The user-supplied buffer szINCHIKey should be at least 28 bytes long.
+    /* The user-supplied buffer szINCHIKey should be at least 28 bytes long. */
     char *szINCHIKey = malloc(sizeof(char) * 28);
     memset(szINCHIKey, 0, sizeof(char) * 28);
 
@@ -611,7 +612,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHIKeyFro
 
 
 
-// === INCHI to INCHI === //
+/* === INCHI to INCHI === */
 
 /**
  * Generates InChI from InChI string.
@@ -640,7 +641,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIfromINCHI
 
 
 
-// === INCHI to STRUCTURE === //
+/* === INCHI to STRUCTURE === */
 
 JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCHI
     (JNIEnv *env, jobject obj, jstring inchi, jstring options) {
@@ -708,7 +709,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
     }
 
 
-    // Bonds
+    /* Bonds */
 
     for (i = 0; i < numatoms; i++) {
 
@@ -721,7 +722,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
 
             for (j = 0; j < numbonds; j++) {
 
-                // Bonds get recorded twice, so only pick one direction...
+                /* Bonds get recorded twice, so only pick one direction... */
                 if (iatom.neighbor[j] < i) {
 
                     #ifdef DEBUG
@@ -789,7 +790,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_CheckINCHIKey
     (JNIEnv *env, jobject obj, jstring key) {
 
-    // Get inchi string
+    /* Get inchi string */
     const char *keyString = (*env)->GetStringUTFChars(env, key, 0);
 
     #ifdef DEBUG
