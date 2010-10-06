@@ -2172,4 +2172,9 @@ NSC-7414a
         JniInchiWrapper.getStructureFromInchi(null);
     }
 
+    @Test
+    public void testGetInputFromAuxInfo() throws JniInchiException {
+        JniInchiWrapper.getInputFromAuxInfo("AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/it:im/rA:6CCNCOO/rB:s1;s1;N1;s2;d2;/rC:264,968,0;295,985,0;233,986,0;264,932,0;326,967,0;295,1021,0;");
+    }
+
 }

@@ -377,6 +377,32 @@ public class JniInchiWrapper {
     }
 
 
+    public static void getInputFromAuxInfo(String auxInfo) throws JniInchiException {
+        if (auxInfo == null) {
+            throw new IllegalArgumentException("Null AuxInfo");
+        }
+        JniInchiWrapper wrapper = getWrapper();
+        try {
+            wrapper.getLock();
+        } catch (TimeoutException ex) {
+            throw new JniInchiException(ex);
+        }
+
+        try {
+            wrapper.GetINCHIInputFromAuxInfo(auxInfo, false, false);
+//            INCHI_KEY_STATUS retStatus = INCHI_KEY_STATUS.getValue(ret);
+//            if (retStatus == null) {
+//                throw new JniInchiException("Unknown return status: " + ret);
+//            }
+
+            return;
+
+        } finally {
+            wrapper.releaseLock();
+        }
+    }
+
+
     private volatile boolean locked = false;
 
     private synchronized void getLock() throws TimeoutException {
@@ -412,5 +438,7 @@ public class JniInchiWrapper {
     private native JniInchiOutputKey GetStdINCHIKeyFromStdINCHI(String inchi);
 
     private native int CheckINCHIKey(String key);
+
+    private native JniInchiInput GetINCHIInputFromAuxInfo(String auxInfo, boolean bDoNotAddH, boolean bDiffUnkUndfStereo);
 
 }

@@ -472,7 +472,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
     Free_inchi_Input(inchi_input);
     free(inchi_output);
     free(inchi_input);
-    
+
     return output;
 }
 
@@ -673,6 +673,102 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIfromINCHI
 
 
 
+void createAtoms(JNIEnv *env, int numatoms, inchi_Atom atoms[], jobject output) {
+
+  int i;
+  for (i = 0; i < numatoms; i++) {
+
+    inchi_Atom iatom = atoms[i];
+
+    #ifdef DEBUG
+    fprintf(stderr, "atom #%d: %s\n", i, iatom.elname);
+    #endif
+
+    jobject atom = (*env)->NewObject(env, jniInchiAtom, initJniInchiAtom,
+                    iatom.x,
+                    iatom.y,
+                    iatom.z,
+                    (*env)->NewStringUTF(env, iatom.elname));
+
+    (*env)->CallVoidMethod(env, atom, setCharge, iatom.charge);
+    (*env)->CallVoidMethod(env, atom, setRadical, iatom.radical);
+    (*env)->CallVoidMethod(env, atom, setImplicitH, iatom.num_iso_H[0]);
+    (*env)->CallVoidMethod(env, atom, setImplicitProtium, iatom.num_iso_H[1]);
+    (*env)->CallVoidMethod(env, atom, setImplicitDeuterium, iatom.num_iso_H[2]);
+    (*env)->CallVoidMethod(env, atom, setImplicitTritium, iatom.num_iso_H[3]);
+    (*env)->CallVoidMethod(env, atom, setIsotopicMass, iatom.isotopic_mass);
+
+    (*env)->CallVoidMethod(env, output, addAtom, atom);
+
+  }
+
+}
+
+void createBonds(JNIEnv *env, int numatoms, inchi_Atom atoms[], jobject output) {
+
+  int i, j;
+
+  for (i = 0; i < numatoms; i++) {
+
+    inchi_Atom iatom = atoms[i];
+    int numbonds = iatom.num_bonds;
+
+    if (numbonds > 0) {
+      jobject atO = (*env)->CallObjectMethod(env, output, getAtom, i);
+      for (j = 0; j < numbonds; j++) {
+
+        /* Bonds get recorded twice, so only pick one direction... */
+        if (iatom.neighbor[j] < i) {
+
+          #ifdef DEBUG
+          fprintf(stderr, "bond: a#%d,a#%d (%d)\n", i, iatom.neighbor[j], iatom.bond_type[j]);
+          #endif
+
+          jobject atT = (*env)->CallObjectMethod(env, output, getAtom, iatom.neighbor[j]);
+          jobject bond = (*env)->NewObject(env, jniInchiBond, initJniInchiBond, atO, atT, iatom.bond_type[j], iatom.bond_stereo[j]);
+          (*env)->CallVoidMethod(env, output, addBond, bond);
+
+        }
+      }
+    }
+
+  }
+
+}
+
+
+void createStereos(JNIEnv *env, int numstereo, inchi_Stereo0D stereos[], jobject output) {
+
+  int i;
+  for (i = 0; i < numstereo; i++) {
+
+    jobject atC, an0, an1, an2, an3, stereo;
+    inchi_Stereo0D istereo = stereos[i];
+
+    atC = NULL;
+    if (istereo.central_atom != NO_ATOM) {
+        atC = (*env)->CallObjectMethod(env, output, getAtom, istereo.central_atom);
+    }
+    an0 = (*env)->CallObjectMethod(env, output, getAtom, istereo.neighbor[0]);
+    an1 = (*env)->CallObjectMethod(env, output, getAtom, istereo.neighbor[1]);
+    an2 = (*env)->CallObjectMethod(env, output, getAtom, istereo.neighbor[2]);
+    an3 = (*env)->CallObjectMethod(env, output, getAtom, istereo.neighbor[3]);
+
+    stereo = (*env)->NewObject(env, jniInchiStereo0D, initJniInchiStereo0D,
+                atC,
+                an0,
+                an1,
+                an2,
+                an3,
+                istereo.type,
+                istereo.parity);
+
+    (*env)->CallVoidMethod(env, output, addStereo0D, stereo);
+
+  }
+
+}
+
 /* === INCHI to STRUCTURE === */
 
 JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCHI
@@ -717,92 +813,9 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
     numatoms = (*inchi_output).num_atoms;
     numstereo = (*inchi_output).num_stereo0D;
 
-
-    for (i = 0; i < numatoms; i++) {
-
-        inchi_Atom iatom = (*inchi_output).atom[i];
-
-        #ifdef DEBUG
-        fprintf(stderr, "atom #%d: %s\n", i, iatom.elname);
-        #endif
-
-        jobject atom = (*env)->NewObject(env, jniInchiAtom, initJniInchiAtom,
-                iatom.x,
-                iatom.y,
-                iatom.z,
-                (*env)->NewStringUTF(env, iatom.elname));
-
-        (*env)->CallVoidMethod(env, atom, setCharge, iatom.charge);
-        (*env)->CallVoidMethod(env, atom, setRadical, iatom.radical);
-        (*env)->CallVoidMethod(env, atom, setImplicitH, iatom.num_iso_H[0]);
-        (*env)->CallVoidMethod(env, atom, setImplicitProtium, iatom.num_iso_H[1]);
-        (*env)->CallVoidMethod(env, atom, setImplicitDeuterium, iatom.num_iso_H[2]);
-        (*env)->CallVoidMethod(env, atom, setImplicitTritium, iatom.num_iso_H[3]);
-        (*env)->CallVoidMethod(env, atom, setIsotopicMass, iatom.isotopic_mass);
-
-        (*env)->CallVoidMethod(env, output, addAtom, atom);
-
-    }
-
-
-    /* Bonds */
-
-    for (i = 0; i < numatoms; i++) {
-
-        inchi_Atom iatom = (*inchi_output).atom[i];
-        int numbonds = iatom.num_bonds;
-
-        if (numbonds > 0) {
-
-            jobject atO = (*env)->CallObjectMethod(env, output, getAtom, i);
-
-            for (j = 0; j < numbonds; j++) {
-
-                /* Bonds get recorded twice, so only pick one direction... */
-                if (iatom.neighbor[j] < i) {
-
-                    #ifdef DEBUG
-                    fprintf(stderr, "bond: a#%d,a#%d (%d)\n", i, iatom.neighbor[j], iatom.bond_type[j]);
-                    #endif
-
-                    jobject atT = (*env)->CallObjectMethod(env, output, getAtom, iatom.neighbor[j]);
-                    jobject bond = (*env)->NewObject(env, jniInchiBond, initJniInchiBond, atO, atT, iatom.bond_type[j], iatom.bond_stereo[j]);
-                    (*env)->CallVoidMethod(env, output, addBond, bond);
-
-                }
-            }
-
-        }
-    }
-
-
-    for (i = 0; i < numstereo; i++) {
-
-        jobject atC, an0, an1, an2, an3, stereo;
-
-        inchi_Stereo0D istereo = (*inchi_output).stereo0D[i];
-
-        atC = NULL;
-        if (istereo.central_atom != NO_ATOM) {
-            atC = (*env)->CallObjectMethod(env, output, getAtom, istereo.central_atom);
-        }
-        an0 = (*env)->CallObjectMethod(env, output, getAtom, istereo.neighbor[0]);
-        an1 = (*env)->CallObjectMethod(env, output, getAtom, istereo.neighbor[1]);
-        an2 = (*env)->CallObjectMethod(env, output, getAtom, istereo.neighbor[2]);
-        an3 = (*env)->CallObjectMethod(env, output, getAtom, istereo.neighbor[3]);
-
-        stereo = (*env)->NewObject(env, jniInchiStereo0D, initJniInchiStereo0D,
-                    atC,
-                    an0,
-                    an1,
-                    an2,
-                    an3,
-                    istereo.type,
-                    istereo.parity);
-
-        (*env)->CallVoidMethod(env, output, addStereo0D, stereo);
-    }
-
+    createAtoms(env, numatoms, (*inchi_output).atom, output);
+    createBonds(env, numatoms, (*inchi_output).atom, output);
+    createStereos(env, numstereo, (*inchi_output).stereo0D, output);
 
     FreeStructFromINCHI(inchi_output);
     free(inchi_output);
@@ -852,3 +865,41 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_CheckINCHIKey
     return ret;
 
 }
+
+
+JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIInputFromAuxInfo
+  (JNIEnv *env, jobject obj, jstring auxInfo, jboolean bDoNotAddH, jboolean bDiffUnkUndfStereo) {
+
+    const char *szAuxInfo;
+    InchiInpData *inputData;
+    inchi_Input *input;
+    jobject object;
+
+    szAuxInfo = (*env)->GetStringUTFChars(env, auxInfo, 0);
+
+    inputData = malloc(sizeof(InchiInpData));
+    memset(inputData,0,sizeof(InchiInpData));
+
+    input = malloc(sizeof(inchi_InputINCHI));   /* Allocate memory */
+    memset(input, 0, sizeof(inchi_InputINCHI));  /* Set initial values to 0 */
+
+    (*inputData).pInp = input;
+
+    int ret = Get_inchi_Input_FromAuxInfo(szAuxInfo, bDoNotAddH, bDiffUnkUndfStereo, inputData);
+    /*
+    fprintf(stderr, "--------------------\nGet_inchi_Input_FromAuxInfo\n\n");
+    fprintf(stderr, "numatoms: %d\n", (*input).num_atoms);
+    fprintf(stderr, "numstereo: %d\n", (*input).num_stereo0D);
+    fprintf(stderr, "messages: %s\n", (*inputData).szErrMsg);
+    */
+    
+    (*env)->ReleaseStringUTFChars(env, auxInfo, szAuxInfo);
+
+    Free_inchi_Input(input);
+    free(input);
+    free(inputData);
+
+    return 0;
+
+  }
+
