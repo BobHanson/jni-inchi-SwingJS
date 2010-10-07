@@ -1856,7 +1856,7 @@ NSC-7414a
     @Test
     public void testGetInchiKeyForCafeine() throws JniInchiException {
         String inchi = "InChI=1/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
-        JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
+        JniInchiOutputKey output = JniInchiWrapper.getInchiKey(inchi);
         assertEquals(INCHI_KEY.OK, output.getReturnStatus());
         assertEquals("RYYVLZVUVIJVGH-UHFFFAOYNA-N", output.getKey());
     }
@@ -1868,7 +1868,7 @@ NSC-7414a
     @Test
     public void testGetStdInchiKeyForCafeine() throws JniInchiException {
         String inchi = "InChI=1S/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
-        JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
+        JniInchiOutputKey output = JniInchiWrapper.getInchiKey(inchi);
         assertEquals(INCHI_KEY.OK, output.getReturnStatus());
         assertEquals("RYYVLZVUVIJVGH-UHFFFAOYSA-N", output.getKey());
     }
@@ -1876,21 +1876,21 @@ NSC-7414a
     @Test
     public void testGetInchiKeyEmptyInput() throws JniInchiException {
         String inchi = "";
-        JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
+        JniInchiOutputKey output = JniInchiWrapper.getInchiKey(inchi);
         assertEquals(INCHI_KEY.INVALID_INCHI_PREFIX, output.getReturnStatus());
     }
 
     @Test
     public void testGetInchiKeyInputInvalidPrefix() throws JniInchiException {
         String inchi = "foo=1/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
-        JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
+        JniInchiOutputKey output = JniInchiWrapper.getInchiKey(inchi);
         assertEquals(INCHI_KEY.INVALID_INCHI_PREFIX, output.getReturnStatus());
     }
 
     @Test
     public void testGetInchiKeyInputInvalidInchi() throws JniInchiException {
         String inchi = "InChI=1/-";
-        JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
+        JniInchiOutputKey output = JniInchiWrapper.getInchiKey(inchi);
         assertEquals(INCHI_KEY.INVALID_INCHI, output.getReturnStatus());
     }
 
@@ -1900,42 +1900,42 @@ NSC-7414a
     // many invalid InChIs will produce InChI keys...
     public void testGetInchiKeyInputInvalidInchi1() throws JniInchiException {
         String inchi = "InChI=1/C8H10N4O2/x1-9-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
-        JniInchiOutputKey output = JniInchiWrapper.getInChIKey(inchi);
+        JniInchiOutputKey output = JniInchiWrapper.getInchiKey(inchi);
         assertEquals(INCHI_KEY.INVALID_INCHI, output.getReturnStatus());
     }
 
     @Test
     public void testCheckInchiKeyValid() throws JniInchiException {
         String key = "RYYVLZVUVIJVGH-UHFFFAOYNA-N";
-        INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
+        INCHI_KEY_STATUS status = JniInchiWrapper.checkInchiKey(key);
         assertEquals(INCHI_KEY_STATUS.VALID_NON_STANDARD, status);
     }
 
     @Test
     public void testCheckInchiKeyInvalidLengthLong() throws JniInchiException {
         String key = "RYYVLZVUVIJVGH-UHFFFAOYNA-NX";
-        INCHI_KEY_STATUS status1 = JniInchiWrapper.checkInChIKey(key);
+        INCHI_KEY_STATUS status1 = JniInchiWrapper.checkInchiKey(key);
         assertEquals(INCHI_KEY_STATUS.INVALID_LENGTH, status1);
     }
 
     @Test
     public void testCheckInchiKeyInvalidLengthShort() throws JniInchiException {
         String key = "RYYVLZVUVIJVGH-UHFFFAOYNA-";
-        INCHI_KEY_STATUS status2 = JniInchiWrapper.checkInChIKey(key);
+        INCHI_KEY_STATUS status2 = JniInchiWrapper.checkInchiKey(key);
         assertEquals(INCHI_KEY_STATUS.INVALID_LENGTH, status2);
     }
 
     @Test
     public void testCheckInchiKeyInvalidLayout() throws JniInchiException {
         String key = "RYYVLZVUVIJVGHXUHFFFAOYNAXN";
-        INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
+        INCHI_KEY_STATUS status = JniInchiWrapper.checkInchiKey(key);
         assertEquals(INCHI_KEY_STATUS.INVALID_LAYOUT, status);
     }
 
     @Test
     public void testCheckInchiKeyInvalidVersion() throws JniInchiException {
         String key = "RYYVLZVUVIJVGH-UHFFFAOYNX-N";
-        INCHI_KEY_STATUS status = JniInchiWrapper.checkInChIKey(key);
+        INCHI_KEY_STATUS status = JniInchiWrapper.checkInchiKey(key);
         assertEquals(INCHI_KEY_STATUS.INVALID_VERSION, status);
     }
 
@@ -2135,7 +2135,7 @@ NSC-7414a
 
     @Test(expected = IllegalArgumentException.class)
     public void testCheckInchiKeyNull() throws JniInchiException {
-        JniInchiWrapper.checkInChIKey(null);
+        JniInchiWrapper.checkInchiKey(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -2160,7 +2160,7 @@ NSC-7414a
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetInchiKeyNull() throws JniInchiException {
-        JniInchiWrapper.getInChIKey(null);
+        JniInchiWrapper.getInchiKey(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -2238,7 +2238,7 @@ NSC-7414a
     @Test
     public void testCheckInchiValidStd() throws JniInchiException {
         String inchi = "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1";
-        INCHI_STATUS ret = JniInchiWrapper.checkInChI(inchi, false);
+        INCHI_STATUS ret = JniInchiWrapper.checkInchi(inchi, false);
         assertEquals(INCHI_STATUS.VALID_STANDARD, ret);
     }
 
@@ -2246,28 +2246,28 @@ NSC-7414a
     @Ignore     // TODO -- this seems to be an InChI bug
     public void testCheckInchiValidStdStrict() throws JniInchiException {
         String inchi = "InChI=1S/C4H6/c1-3-4-2/h3-4H,1-2H2";
-        INCHI_STATUS ret = JniInchiWrapper.checkInChI(inchi, true);
+        INCHI_STATUS ret = JniInchiWrapper.checkInchi(inchi, true);
         assertEquals(INCHI_STATUS.VALID_STANDARD, ret);
     }
 
     @Test
     public void testCheckInchiValidNonStd() throws JniInchiException {
         String inchi = "InChI=1/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
-        INCHI_STATUS ret = JniInchiWrapper.checkInChI(inchi, false);
+        INCHI_STATUS ret = JniInchiWrapper.checkInchi(inchi, false);
         assertEquals(INCHI_STATUS.VALID_NON_STANDARD, ret);
     }
 
     @Test
     public void testCheckInchiInvalidVersion() throws JniInchiException {
         String inchi = "InChI=2/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
-        INCHI_STATUS ret = JniInchiWrapper.checkInChI(inchi, false);
+        INCHI_STATUS ret = JniInchiWrapper.checkInchi(inchi, false);
         assertEquals(INCHI_STATUS.INVALID_VERSION, ret);
     }
 
     @Test
     public void testCheckInchiInvalidPrefix() throws JniInchiException {
         String inchi = "foo=1/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
-        INCHI_STATUS ret = JniInchiWrapper.checkInChI(inchi, false);
+        INCHI_STATUS ret = JniInchiWrapper.checkInchi(inchi, false);
         assertEquals(INCHI_STATUS.INVALID_PREFIX, ret);
     }
 

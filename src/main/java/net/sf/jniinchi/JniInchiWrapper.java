@@ -324,7 +324,7 @@ public class JniInchiWrapper {
      * @return  InChIKey output
      * @throws  JniInchiException
      */
-    public static JniInchiOutputKey getInChIKey(final String inchi) throws JniInchiException {
+    public static JniInchiOutputKey getInchiKey(final String inchi) throws JniInchiException {
         if (inchi == null) {
             throw new IllegalArgumentException("Null InChI");
         }
@@ -344,7 +344,7 @@ public class JniInchiWrapper {
      * @return
      * @throws JniInchiException
      */
-    public static INCHI_KEY_STATUS checkInChIKey(final String key) throws JniInchiException {
+    public static INCHI_KEY_STATUS checkInchiKey(final String key) throws JniInchiException {
         if (key == null) {
             throw new IllegalArgumentException("Null InChI key");
         }
@@ -372,7 +372,7 @@ public class JniInchiWrapper {
  *               If <code>true</code>, try to perform InChI2InChI conversion and returns success if a resulting
  *               InChI string exactly match source. The result may be 'false alarm' due to imperfectness of
      */
-    public static INCHI_STATUS checkInChI(final String inchi, final boolean strict) throws JniInchiException {
+    public static INCHI_STATUS checkInchi(final String inchi, final boolean strict) throws JniInchiException {
         if (inchi == null) {
             throw new IllegalArgumentException("Null InChI");
         }
