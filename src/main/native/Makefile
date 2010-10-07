@@ -25,19 +25,29 @@ f := $(error PLATFORM is not defined)
 endif
 
 ifneq (,$(findstring WINDOWS, $(PLATFORM)))
-include Makefile.windows
-else ifneq (,$(findstring LINUX, $(PLATFORM)))
-include Makefile.linux
-else ifneq (,$(findstring MAC, $(PLATFORM)))
-include Makefile.mac
-else ifneq (,$(findstring FREEBSD, $(PLATFORM)))
-include Makefile.freebsd
-else ifeq ($(PLATFORM),SUNOS-X86)
-include Makefile.solaris.x86
-else ifeq ($(PLATFORM),SUNOS-AMD64)
-include Makefile.solaris.amd64
+ include Makefile.windows
 else
-f := $(error Platform '$(PLATFORM)' not supported)
+ ifneq (,$(findstring LINUX, $(PLATFORM)))
+  include Makefile.linux
+ else
+  ifneq (,$(findstring MAC, $(PLATFORM)))
+   include Makefile.mac
+  else
+   ifneq (,$(findstring FREEBSD, $(PLATFORM)))
+    include Makefile.freebsd
+   else
+    ifeq ($(PLATFORM),SUNOS-X86)
+     include Makefile.solaris.x86
+    else
+     ifeq ($(PLATFORM),SUNOS-AMD64)
+      include Makefile.solaris.amd64
+     else
+      f := $(error Platform '$(PLATFORM)' not supported)
+     endif
+    endif
+   endif
+  endif
+ endif
 endif
 
 
