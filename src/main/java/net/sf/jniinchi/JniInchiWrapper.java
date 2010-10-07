@@ -211,10 +211,32 @@ public class JniInchiWrapper {
 
 
     /**
-     * <p>Calculates the InChI for a chemical structure.</p>
-     * <p>If no InChI creation/stereo modification options are specified then a standard InChI is produced.
-     * If any of SUU/SLUUD/RecMet/FixedH/Ket/15T/SRel/SRac/SUCF options are specified, then the generated InChI
-     * will be non-standard one.</p>
+     * <p>Generates the InChI for a chemical structure.</p>
+     *
+     * <p>If no InChI creation/stereo modification options are specified then a standard
+     * InChI is produced, otherwise the generated InChI will be a non-standard one.</p>
+     *
+     * <p><b>Valid options:</b></p>
+     * <pre>
+     *  Structure perception (compatible with stdInChI):
+     *    /NEWPSOFF   /DoNotAddH   /SNon
+     *  Stereo interpretation (lead to generation of non-standard InChI)
+     *    /SRel /SRac /SUCF /ChiralFlagON /ChiralFlagOFF
+     *  InChI creation options (lead to generation of non-standard InChI)
+     *    /SUU /SLUUD   /FixedH  /RecMet  /KET /15T
+     * </pre>
+     *
+     * <p><b>Other options:</b></p>
+     * <pre>
+     *  /AuxNone    Omit auxiliary information (default: Include)
+     *  /Wnumber    Set time-out per structure in seconds; W0 means unlimited
+     *              In InChI library the default value is unlimited
+     *  /OutputSDF  Output SDfile instead of InChI
+     *  /WarnOnEmptyStructure
+     *              Warn and produce empty InChI for empty structure
+     *  /SaveOpt    Save custom InChI creation options (non-standard InChI)
+     * </pre>
+     *
      * @param input
      * @return
      * @throws JniInchiException
