@@ -705,7 +705,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_CheckINCHIKey
     (JNIEnv *env, jobject obj, jstring key) {
 
-    /* Get inchi string */
+    /* Get inchi key string */
     const char *keyString = (*env)->GetStringUTFChars(env, key, 0);
 
     int ret = CheckINCHIKey(keyString);
@@ -713,6 +713,24 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_CheckINCHIKey
     return ret;
 
 }
+
+
+JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_CheckINCHI
+  (JNIEnv *env, jobject obj, jstring inchi, jboolean bStrict) {
+
+  int ret;
+
+  /* Get inchi string */
+  const char *szInchi = (*env)->GetStringUTFChars(env, inchi, 0);
+  const int strict = (bStrict ? 1 : 0);
+  ret = CheckINCHI(szInchi, strict);
+
+  (*env)->ReleaseStringUTFChars(env, inchi, szInchi);
+
+  return ret;
+
+}
+
 
 
 JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIInputFromAuxInfo

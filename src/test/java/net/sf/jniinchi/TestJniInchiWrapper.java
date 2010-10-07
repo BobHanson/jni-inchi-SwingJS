@@ -2173,8 +2173,6 @@ NSC-7414a
         JniInchiWrapper.getStructureFromInchi(null);
     }
 
-    /*
-    
     @Test
     public void testGetInputFromAuxInfoLAlanine3D() throws JniInchiException {
         JniInchiInputData data = JniInchiWrapper.getInputFromAuxInfo("AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/it:im/rA:6CCNCOO/rB:s1;s1;s1;s2;d2;/rC:-.358,.819,20.655;-1.598,-.032,20.905;-.275,2.014,21.574;.952,.043,20.838;-2.678,.479,21.093;-1.596,-1.239,20.958;");
@@ -2236,7 +2234,50 @@ NSC-7414a
         assertEquals(0, input.getNumStereo0D());
     }
 
-    // */
+
+    @Test
+    public void testCheckInchiValidStd() throws JniInchiException {
+        String inchi = "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1";
+        INCHI_STATUS ret = JniInchiWrapper.checkInChI(inchi, false);
+        assertEquals(INCHI_STATUS.VALID_STANDARD, ret);
+    }
+
+    @Test
+    @Ignore     // TODO -- this seems to be an InChI bug
+    public void testCheckInchiValidStdStrict() throws JniInchiException {
+        String inchi = "InChI=1S/C4H6/c1-3-4-2/h3-4H,1-2H2";
+        INCHI_STATUS ret = JniInchiWrapper.checkInChI(inchi, true);
+        assertEquals(INCHI_STATUS.VALID_STANDARD, ret);
+    }
+
+    @Test
+    public void testCheckInchiValidNonStd() throws JniInchiException {
+        String inchi = "InChI=1/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
+        INCHI_STATUS ret = JniInchiWrapper.checkInChI(inchi, false);
+        assertEquals(INCHI_STATUS.VALID_NON_STANDARD, ret);
+    }
+
+    @Test
+    public void testCheckInchiInvalidVersion() throws JniInchiException {
+        String inchi = "InChI=2/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
+        INCHI_STATUS ret = JniInchiWrapper.checkInChI(inchi, false);
+        assertEquals(INCHI_STATUS.INVALID_VERSION, ret);
+    }
+
+    @Test
+    public void testCheckInchiInvalidPrefix() throws JniInchiException {
+        String inchi = "foo=1/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3";
+        INCHI_STATUS ret = JniInchiWrapper.checkInChI(inchi, false);
+        assertEquals(INCHI_STATUS.INVALID_PREFIX, ret);
+    }
 
 
+    @Test
+    public void testGetInchiFromInchi() throws JniInchiException {
+        String inchi = "InChI=1S/C4H6/c1-3-4-2/h3-4H,1-2H2";
+        JniInchiInputInchi input = new JniInchiInputInchi(inchi);
+        JniInchiOutput output = JniInchiWrapper.getInchiFromInchi(input);
+        assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        assertEquals(inchi, output.getInchi());
+    }
 }

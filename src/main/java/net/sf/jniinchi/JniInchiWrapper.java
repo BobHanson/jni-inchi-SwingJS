@@ -48,9 +48,6 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class JniInchiWrapper {
 
-    // TODO CheckINCHI
-    // TODO AuxInfo to InChI
-
     private static final Logger LOG = Logger.getLogger(JniInchiWrapper.class);
 
     private static final String ID = "jniinchi";
@@ -366,6 +363,33 @@ public class JniInchiWrapper {
     }
 
 
+    /**
+     * <p>Checks if the string represents valid InChI/standard InChI.</p>
+     *
+     * @param inchi  source InChI
+     * @param strict if <code>false</code>, just briefly check for proper layout (prefix, version, etc.) The result
+ *               may not be strict.
+ *               If <code>true</code>, try to perform InChI2InChI conversion and returns success if a resulting
+ *               InChI string exactly match source. The result may be 'false alarm' due to imperfectness of
+     */
+    public static INCHI_STATUS checkInChI(final String inchi, final boolean strict) throws JniInchiException {
+        if (inchi == null) {
+            throw new IllegalArgumentException("Null InChI");
+        }
+        JniInchiWrapper wrapper = getWrapper();
+        wrapper.getLock();
+        try {
+            int ret = wrapper.CheckINCHI(inchi, strict);
+            INCHI_STATUS retStatus = INCHI_STATUS.getValue(ret);
+            if (retStatus == null) {
+                throw new JniInchiException("Unknown return status: " + ret);
+            }
+            return retStatus;
+        } finally {
+            lock.unlock();
+        }
+    }
+
     public static JniInchiInputData getInputFromAuxInfo(String auxInfo) throws JniInchiException {
         if (auxInfo == null) {
             throw new IllegalArgumentException("Null AuxInfo");
@@ -412,6 +436,8 @@ public class JniInchiWrapper {
     private native JniInchiOutputKey GetStdINCHIKeyFromStdINCHI(String inchi);
 
     private native int CheckINCHIKey(String key);
+
+    private native int CheckINCHI(String inchi, boolean strict);
 
     private native JniInchiInputData GetINCHIInputFromAuxInfo(String auxInfo, boolean bDoNotAddH, boolean bDiffUnkUndfStereo);
 
