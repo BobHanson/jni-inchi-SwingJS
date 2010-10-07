@@ -18,14 +18,16 @@
  */
 package net.sf.jniinchi;
 
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.concurrent.TimeoutException;
-
 import net.sf.jnati.NativeCodeException;
 import net.sf.jnati.deploy.NativeLibraryLoader;
-
 import org.apache.log4j.Logger;
+
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * <p>JNI Wrapper for International Chemical Identifier (InChI) C++ library.
@@ -76,6 +78,7 @@ public class JniInchiWrapper {
 
     private static JniInchiWrapper inchiWrapper;
 
+    private static final Lock lock = new ReentrantLock(true); 
 
     /**
      * Loads native library.
@@ -222,16 +225,11 @@ public class JniInchiWrapper {
             throw new IllegalArgumentException("Null input");
         }
         JniInchiWrapper wrapper = getWrapper();
-        try {
-            wrapper.getLock();
-        } catch (TimeoutException ex) {
-            throw new JniInchiException(ex);
-        }
-
+        wrapper.getLock();
         try {
             return wrapper.GetINCHI(input);
         } finally {
-            wrapper.releaseLock();
+            lock.unlock();
         }
     }
 
@@ -250,16 +248,11 @@ public class JniInchiWrapper {
             throw new IllegalArgumentException("Null input");
         }
         JniInchiWrapper wrapper = getWrapper();
-        try {
-            wrapper.getLock();
-        } catch (TimeoutException ex) {
-            throw new JniInchiException(ex);
-        }
-
+        wrapper.getLock();
         try {
             return wrapper.GetStdINCHI(input);
         } finally {
-            wrapper.releaseLock();
+            lock.unlock();
         }
     }
 
@@ -278,18 +271,12 @@ public class JniInchiWrapper {
             throw new IllegalArgumentException("Null input");
         }
         JniInchiWrapper wrapper = getWrapper();
-        try {
-            wrapper.getLock();
-        } catch (TimeoutException ex) {
-            throw new JniInchiException(ex);
-        }
-
+        wrapper.getLock();
         try {
             return wrapper.GetINCHIfromINCHI(input.getInchi(), input.getOptions());
         } finally {
-            wrapper.releaseLock();
+            lock.unlock();
         }
-
     }
 
     /**
@@ -303,16 +290,11 @@ public class JniInchiWrapper {
             throw new IllegalArgumentException("Null input");
         }
         JniInchiWrapper wrapper = getWrapper();
-        try {
-            wrapper.getLock();
-        } catch (TimeoutException ex) {
-            throw new JniInchiException(ex);
-        }
-
+        wrapper.getLock();
         try {
             return wrapper.GetStructFromINCHI(input.getInchi(), input.getOptions());
         } finally {
-            wrapper.releaseLock();
+            lock.unlock();
         }
     }
 
@@ -328,20 +310,12 @@ public class JniInchiWrapper {
             throw new IllegalArgumentException("Null InChI");
         }
         JniInchiWrapper wrapper = getWrapper();
+        wrapper.getLock();
         try {
-            wrapper.getLock();
-        } catch (TimeoutException ex) {
-            throw new JniInchiException(ex);
-        }
-
-        try {
-
             return wrapper.GetINCHIKeyFromINCHI(inchi);
-
         } finally {
-            wrapper.releaseLock();
+            lock.unlock();
         }
-
     }
 
 
@@ -356,25 +330,17 @@ public class JniInchiWrapper {
             throw new IllegalArgumentException("Null InChI key");
         }
         JniInchiWrapper wrapper = getWrapper();
-        try {
-            wrapper.getLock();
-        } catch (TimeoutException ex) {
-            throw new JniInchiException(ex);
-        }
-
+        wrapper.getLock();
         try {
             int ret = wrapper.CheckINCHIKey(key);
             INCHI_KEY_STATUS retStatus = INCHI_KEY_STATUS.getValue(ret);
             if (retStatus == null) {
                 throw new JniInchiException("Unknown return status: " + ret);
             }
-
             return retStatus;
-
         } finally {
-            wrapper.releaseLock();
+            lock.unlock();
         }
-
     }
 
 
@@ -383,42 +349,27 @@ public class JniInchiWrapper {
             throw new IllegalArgumentException("Null AuxInfo");
         }
         JniInchiWrapper wrapper = getWrapper();
+        wrapper.getLock();
         try {
-            wrapper.getLock();
-        } catch (TimeoutException ex) {
-            throw new JniInchiException(ex);
-        }
-
-        try {
-            JniInchiInputData input = wrapper.GetINCHIInputFromAuxInfo(auxInfo, false, false);
-//            INCHI_KEY_STATUS retStatus = INCHI_KEY_STATUS.getValue(ret);
-//            if (retStatus == null) {
-//                throw new JniInchiException("Unknown return status: " + ret);
-//            }
-
-            return input;
-
+            return wrapper.GetINCHIInputFromAuxInfo(auxInfo, false, false);
         } finally {
-            wrapper.releaseLock();
+            lock.unlock();
         }
     }
 
 
-    private volatile boolean locked = false;
-
-    private synchronized void getLock() throws TimeoutException {
-        long timeout = System.currentTimeMillis() + 1000 * MAX_LOCK_TIMEOUT;
-        while (locked) {
-            if (timeout < System.currentTimeMillis()) {
+    private static synchronized void getLock() throws JniInchiException {
+        try {
+            if (!lock.tryLock(MAX_LOCK_TIMEOUT, TimeUnit.SECONDS)) {
                 throw new TimeoutException("Unable to get lock");
             }
+        } catch (TimeoutException ex) {
+            throw new JniInchiException(ex);
+        } catch (InterruptedException ex) {
+            throw new JniInchiException(ex);
         }
-        locked = true;
     }
 
-    private void releaseLock() {
-        locked = false;
-    }
 
 
     protected native static String LibInchiGetVersion();
