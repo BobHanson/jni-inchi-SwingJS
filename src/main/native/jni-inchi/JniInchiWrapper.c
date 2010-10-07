@@ -17,9 +17,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA
  */
-#include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 
 #include "net_sf_jniinchi_JniInchiWrapper.h"
 #include <inchi_api.h>
@@ -37,13 +36,13 @@ Uncomment to enable debug mode
 
 jclass IllegalArgumentException;
 
-jclass jniInchiInput, jniInchiOutput, jniInchiOutputKey, jniInchiOutputStructure;
+jclass jniInchiInput, jniInchiOutput, jniInchiOutputKey, jniInchiOutputStructure, jniInchiInputData;
 jclass jniInchiStructure, jniInchiAtom, jniInchiBond, jniInchiStereo0D;
 
 /* === METHOD REFs === */
 
 /* constructors */
-jmethodID initJniInchiOutput, initJniInchiOutputKey;
+jmethodID initJniInchiOutput, initJniInchiOutputKey, initJniInchiInput, initJniInchiInputData;
 jmethodID initJniInchiAtom, initJniInchiBond, initJniInchiStereo0D;
 jmethodID initJniInchiOutputStructure;
 
@@ -111,6 +110,7 @@ int initClassRefs(JNIEnv *env) {
     if (!initClass(env, &jniInchiOutput, "net/sf/jniinchi/JniInchiOutput")) return 0;
     if (!initClass(env, &jniInchiOutputStructure, "net/sf/jniinchi/JniInchiOutputStructure")) return 0;
     if (!initClass(env, &jniInchiOutputKey, "net/sf/jniinchi/JniInchiOutputKey")) return 0;
+    if (!initClass(env, &jniInchiInputData, "net/sf/jniinchi/JniInchiInputData")) return 0;
 
     if (!initClass(env, &jniInchiStructure, "net/sf/jniinchi/JniInchiStructure")) return 0;
     if (!initClass(env, &jniInchiAtom, "net/sf/jniinchi/JniInchiAtom")) return 0;
@@ -172,11 +172,11 @@ int initMethodRefs(JNIEnv *env) {
     if (0== (getParity = (*env)->GetMethodID(env, jniInchiStereo0D, "getInchiParity", "()I"))) return 0;
 
     if (0== (initJniInchiOutput = (*env)->GetMethodID(env, jniInchiOutput, "<init>", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V"))) return 0;
-
-
     if (0== (initJniInchiOutputStructure = (*env)->GetMethodID(env, jniInchiOutputStructure, "<init>", "(ILjava/lang/String;Ljava/lang/String;JJJJ)V"))) return 0;
-
     if (0== (initJniInchiOutputKey = (*env)->GetMethodID(env, jniInchiOutputKey, "<init>", "(ILjava/lang/String;)V"))) return 0;
+
+    if (0== (initJniInchiInput = (*env)->GetMethodID(env, jniInchiInput, "<init>", "()V"))) return 0;
+    if (0== (initJniInchiInputData = (*env)->GetMethodID(env, jniInchiInputData, "<init>", "(ILnet/sf/jniinchi/JniInchiInput;ILjava/lang/String;)V"))) return 0;
 
     return 1;
 }
@@ -184,9 +184,7 @@ int initMethodRefs(JNIEnv *env) {
 
 
 JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_init
-    (JNIEnv *env, jobject obj) {
-
-    fprintf(stderr, "Init JniInchi\n");
+    (JNIEnv *env, jclass class) {
 
     if (0 == initClassRefs(env)) {
         return;
@@ -213,14 +211,9 @@ inchi_InputINCHI* getInchiInputINCHI(JNIEnv *env, jstring inchi, jstring options
 
     /* Convert java.lang.String options to char* */
     optionsString = (*env)->GetStringUTFChars(env, options, 0);
-    *szOptions = (int) malloc(sizeof(char) * (strlen(optionsString)+1));
+    szOptions = malloc(sizeof(char) * (strlen(optionsString)+1));
     strcpy(szOptions, optionsString);
     (*env)->ReleaseStringUTFChars(env, options, optionsString);
-
-    #ifdef DEBUG
-    fprintf(stderr, "inchi: %s\n", szInchi);
-    fprintf(stderr, "options: %s\n", szOptions);
-    #endif
 
     input = malloc(sizeof(inchi_InputINCHI));   /* Allocate memory */
     memset(input, 0, sizeof(inchi_InputINCHI));  /* Set initial values to 0 */
@@ -235,12 +228,6 @@ inchi_InputINCHI* getInchiInputINCHI(JNIEnv *env, jstring inchi, jstring options
 
 
 jobject getInchiOutput(JNIEnv *env, int ret, inchi_Output inchi_output) {
-
-    #ifdef DEBUG
-    fprintf(stderr, "ret: %d\n", ret);
-    fprintf(stderr, "message: %s\n", inchi_output.szMessage);
-    fprintf(stderr, "inchi: %s\n", inchi_output.szInChI);
-    #endif
 
     jobject output = (*env)->NewObject(env, jniInchiOutput, initJniInchiOutput,
             ret,
@@ -264,39 +251,21 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
     const char *options;
     char *opts;
 
-    #ifdef DEBUG
-    fprintf(stderr, "** Get InChI\n");
-    #endif
-
     jboolean iscopy = JNI_TRUE;
 
     jint natoms = (*env)->CallIntMethod(env, input, getNumAtoms);
     jint nstereo = (*env)->CallIntMethod(env, input, getNumStereo0D);
     jint nbonds = (*env)->CallIntMethod(env, input, getNumBonds);
 
-    #ifdef DEBUG
-    fprintf(stderr, "natoms: %d\n", natoms);
-    fprintf(stderr, "nbonds: %d\n", nbonds);
-    fprintf(stderr, "nstereo: %d\n", nstereo);
-    #endif
-
-/*    fprintf(stderr, "natoms: %d\n", natoms); */
-/*    fprintf(stderr, "maxatoms: %d\n", MAX_ATOMS); */
-
     if (natoms > MAX_ATOMS) {
         (*env)->ThrowNew(env, IllegalArgumentException, "Too many atoms");
         return 0;
     }
 
-
     atoms = malloc(sizeof(inchi_Atom) * natoms);
     memset(atoms,0,sizeof(inchi_Atom) * natoms);
 
     for (i = 0; i < natoms; i++) {
-
-        #ifdef DEBUG
-        fprintf(stderr, "atom #%d:", i);
-        #endif
 
         jobject atom = (*env)->CallObjectMethod(env, input, getAtom, i);
 
@@ -312,17 +281,9 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
         strcpy(iatom->elname, elname);
         (*env)->ReleaseStringUTFChars(env, jelname, elname);
 
-        #ifdef DEBUG
-        fprintf(stderr, " %s", iatom->elname);
-        #endif
-
         iatom->x = (*env)->CallDoubleMethod(env, atom, getX);
         iatom->y = (*env)->CallDoubleMethod(env, atom, getY);
         iatom->z = (*env)->CallDoubleMethod(env, atom, getZ);
-
-        #ifdef DEBUG
-        fprintf(stderr, " [%f,%f,%f]", iatom->x, iatom->y, iatom->z);
-        #endif
 
         iatom->charge = (*env)->CallIntMethod(env, atom, getCharge);
         iatom->radical = (*env)->CallIntMethod(env, atom, getRadical);
@@ -335,10 +296,6 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
         iatom->isotopic_mass = (*env)->CallIntMethod(env, atom, getIsotopicMass);
 
         iatom->num_bonds = 0;
-
-        #ifdef DEBUG
-        fprintf(stderr, "\n");
-        #endif
     }
 
 
@@ -354,10 +311,6 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
         jint iaT = (*env)->CallIntMethod(env, input, getAtomIndex, atomT);
 
 
-        #ifdef DEBUG
-        fprintf(stderr, "bond#%d: a#%d,a#%d (%d)\n", i, iaO, iaT, bondType);
-        #endif
-
         inchi_Atom *iatom = &atoms[iaO];
         int numbonds = iatom->num_bonds;
         if (numbonds >= MAXVAL) {
@@ -371,8 +324,6 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
         iatom->num_bonds++;
 
     }
-
-
 
     stereos = malloc(sizeof(inchi_Stereo0D) * nstereo);
     memset(stereos,0,sizeof(inchi_Stereo0D) * nstereo);
@@ -409,20 +360,14 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
     opts = malloc(sizeof(char) * (strlen(options)+1));
     strcpy(opts, options);
 
-    #ifdef DEBUG
-/*    cerr << "options: " << opts << "\n"; */
-    #endif
-
     (*inchi_input).szOptions = opts;
     (*env)->ReleaseStringUTFChars(env, joptions, options);
-
 
     (*inchi_input).num_atoms = natoms;
     (*inchi_input).num_stereo0D = nstereo;
 
     (*inchi_input).atom = atoms;
     (*inchi_input).stereo0D = stereos;
-
 
   return inchi_input;
 
@@ -441,10 +386,6 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
 JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
     (JNIEnv *env, jobject obj, jobject input) {
 
-    #ifdef DEBUG
-    fprintf(stderr, "** Get InChI\n");
-    #endif
-
     inchi_Input *inchi_input;
     inchi_Output *inchi_output;
     int ret;
@@ -458,10 +399,6 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
 
     inchi_output = malloc(sizeof(inchi_Output));
     memset(inchi_output, 0, sizeof(inchi_Output));
-
-    #ifdef DEBUG
-    fprintf(stderr, "generating InChI\n");
-    #endif
 
     ret = GetINCHI(inchi_input, inchi_output);
 
@@ -480,10 +417,6 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
 JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHI
     (JNIEnv *env, jobject obj, jobject input) {
 
-    #ifdef DEBUG
-    fprintf(stderr, "** Get StdInChI\n");
-    #endif
-
     inchi_Input *inchi_input;
     inchi_Output *inchi_output;
     int ret;
@@ -497,10 +430,6 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHI
 
     inchi_output = malloc(sizeof(inchi_Output));
     memset(inchi_output, 0, sizeof(inchi_Output));
-
-    #ifdef DEBUG
-    fprintf(stderr, "generating StdInChI\n");
-    #endif
 
     ret = GetStdINCHI(inchi_input, inchi_output);
 
@@ -536,11 +465,6 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromIN
     jstring key;
     jobject robj;
 
-    #ifdef DEBUG
-    fprintf(stderr, "** Get InChIKey from InChI\n");
-    fprintf(stderr, "inchi: %s\n", inchi);
-    #endif
-
     /* The user-supplied buffer szINCHIKey should be at least 28 bytes long. */
     szINCHIKey = malloc(sizeof(char) * 28);
     memset(szINCHIKey, 0, sizeof(char) * 28);
@@ -555,20 +479,11 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromIN
     szXtra2 = malloc(sizeof(char) * 65);
     memset(szXtra2, 0, sizeof(char) * 65);
 
-    #ifdef DEBUG
-    fprintf(stderr, "getting InChIKey...\n");
-    #endif
-
     /* xtra1 =1 calculate hash extension (up to 256 bits; 1st block) */
     /* xtra2 =1 calculate hash extension (up to 256 bits; 2nd block) */
 
     ret = GetINCHIKeyFromINCHI(inchiString, xtra1, xtra2, szINCHIKey, szXtra1, szXtra2);
     (*env)->ReleaseStringUTFChars(env, inchi, inchiString);
-
-    #ifdef DEBUG
-    fprintf(stderr, "ret: %d\n", ret);
-    fprintf(stderr, "key: %s\n", szINCHIKey);
-    #endif
 
     key = (*env)->NewStringUTF(env, szINCHIKey);
 
@@ -577,10 +492,6 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromIN
     free(szXtra2);
 
     robj = (*env)->NewObject(env, jniInchiOutputKey, initJniInchiOutputKey, ret, key);
-
-    #ifdef DEBUG
-    fprintf(stderr, "----\n\n");
-    #endif
 
     return robj;
 
@@ -601,26 +512,12 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHIKeyFro
 
     inchiString = (*env)->GetStringUTFChars(env, inchi, 0);
 
-    #ifdef DEBUG
-    fprintf(stderr, "** Get StdInChIKey from StdInChI\n");
-    fprintf(stderr, "inchi: %s\n", inchi);
-    #endif
-
     /* The user-supplied buffer szINCHIKey should be at least 28 bytes long. */
     szINCHIKey = malloc(sizeof(char) * 28);
     memset(szINCHIKey, 0, sizeof(char) * 28);
 
-    #ifdef DEBUG
-    fprintf(stderr, "generating StdInChIKey...\n");
-    #endif
-
     ret = GetStdINCHIKeyFromStdINCHI(inchiString, szINCHIKey);
     (*env)->ReleaseStringUTFChars(env, inchi, inchiString);
-
-    #ifdef DEBUG
-    fprintf(stderr, "ret: %d\n", ret);
-    fprintf(stderr, "key: %s\n", szINCHIKey);
-    #endif
 
     key = (*env)->NewStringUTF(env, szINCHIKey);
 
@@ -628,15 +525,9 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHIKeyFro
 
     robj = (*env)->NewObject(env, jniInchiOutputKey, initJniInchiOutputKey, ret, key);
 
-    #ifdef DEBUG
-    fprintf(stderr, "----\n\n");
-    #endif
-
     return robj;
 
 }
-
-
 
 
 
@@ -680,10 +571,6 @@ void createAtoms(JNIEnv *env, int numatoms, inchi_Atom atoms[], jobject output) 
 
     inchi_Atom iatom = atoms[i];
 
-    #ifdef DEBUG
-    fprintf(stderr, "atom #%d: %s\n", i, iatom.elname);
-    #endif
-
     jobject atom = (*env)->NewObject(env, jniInchiAtom, initJniInchiAtom,
                     iatom.x,
                     iatom.y,
@@ -707,7 +594,6 @@ void createAtoms(JNIEnv *env, int numatoms, inchi_Atom atoms[], jobject output) 
 void createBonds(JNIEnv *env, int numatoms, inchi_Atom atoms[], jobject output) {
 
   int i, j;
-
   for (i = 0; i < numatoms; i++) {
 
     inchi_Atom iatom = atoms[i];
@@ -719,15 +605,9 @@ void createBonds(JNIEnv *env, int numatoms, inchi_Atom atoms[], jobject output) 
 
         /* Bonds get recorded twice, so only pick one direction... */
         if (iatom.neighbor[j] < i) {
-
-          #ifdef DEBUG
-          fprintf(stderr, "bond: a#%d,a#%d (%d)\n", i, iatom.neighbor[j], iatom.bond_type[j]);
-          #endif
-
           jobject atT = (*env)->CallObjectMethod(env, output, getAtom, iatom.neighbor[j]);
           jobject bond = (*env)->NewObject(env, jniInchiBond, initJniInchiBond, atO, atT, iatom.bond_type[j], iatom.bond_stereo[j]);
           (*env)->CallVoidMethod(env, output, addBond, bond);
-
         }
       }
     }
@@ -780,25 +660,12 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
     jobject output;
     int numatoms, numstereo;
 
-    #ifdef DEBUG
-    fprintf(stderr, "** Get Struct From InChI\n");
-    #endif
-
     inchi_input = getInchiInputINCHI(env, inchi, options);
 
     inchi_output = malloc(sizeof(inchi_OutputStruct));
     memset(inchi_output,0,sizeof(inchi_OutputStruct));
 
-
-    #ifdef DEBUG
-    fprintf(stderr, "getting structure...\n");
-    #endif
-
     ret = GetStructFromINCHI(inchi_input, inchi_output);
-
-    #ifdef DEBUG
-    fprintf(stderr, "ret: %d\n", ret);
-    #endif
 
     output = (*env)->NewObject(env, jniInchiOutputStructure, initJniInchiOutputStructure,
             ret,
@@ -821,10 +688,6 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
     free(inchi_output);
     free(inchi_input);
 
-    #ifdef DEBUG
-    fprintf(stderr, "----\n\n");
-    #endif
-
     return output;
 }
 
@@ -844,24 +707,8 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_CheckINCHIKey
     /* Get inchi string */
     const char *keyString = (*env)->GetStringUTFChars(env, key, 0);
 
-    #ifdef DEBUG
-    fprintf(stderr, "** Check InChIKey\n");
-    fprintf(stderr, "key: %s\n", keyString);
-    fprintf(stderr, "checking InChIKey...\n");
-    #endif
-
     int ret = CheckINCHIKey(keyString);
-
-    #ifdef DEBUG
-    fprintf(stderr, "ret: %d\n", ret);
-    #endif
-
     (*env)->ReleaseStringUTFChars(env, key, keyString);
-
-    #ifdef DEBUG
-    fprintf(stderr, "----\n\n");
-    #endif
-
     return ret;
 
 }
@@ -873,7 +720,8 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIInputFrom
     const char *szAuxInfo;
     InchiInpData *inputData;
     inchi_Input *input;
-    jobject object;
+    jobject inchiInput, inchiInputData;
+    int ret, numatoms, numstereo;
 
     szAuxInfo = (*env)->GetStringUTFChars(env, auxInfo, 0);
 
@@ -885,21 +733,29 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIInputFrom
 
     (*inputData).pInp = input;
 
-    int ret = Get_inchi_Input_FromAuxInfo(szAuxInfo, bDoNotAddH, bDiffUnkUndfStereo, inputData);
-    /*
-    fprintf(stderr, "--------------------\nGet_inchi_Input_FromAuxInfo\n\n");
-    fprintf(stderr, "numatoms: %d\n", (*input).num_atoms);
-    fprintf(stderr, "numstereo: %d\n", (*input).num_stereo0D);
-    fprintf(stderr, "messages: %s\n", (*inputData).szErrMsg);
-    */
+    ret = Get_inchi_Input_FromAuxInfo(szAuxInfo, bDoNotAddH, bDiffUnkUndfStereo, inputData);
     
+    numatoms = (*input).num_atoms;
+
+    inchiInput = (*env)->NewObject(env, jniInchiInput, initJniInchiInput);
+    createAtoms(env, numatoms, (*input).atom, inchiInput);
+    createBonds(env, numatoms, (*input).atom, inchiInput);
+
+    numstereo = (*input).num_stereo0D;
+    createStereos(env, numstereo, (*input).stereo0D, inchiInput);
+
+    inchiInputData = (*env)->NewObject(env, jniInchiInputData, initJniInchiInputData,
+                  ret,
+                  inchiInput,
+                  (*inputData).bChiral,
+                  (*env)->NewStringUTF(env, (*inputData).szErrMsg));
+
     (*env)->ReleaseStringUTFChars(env, auxInfo, szAuxInfo);
 
     Free_inchi_Input(input);
     free(input);
     free(inputData);
 
-    return 0;
+    return inchiInputData;
 
-  }
-
+}

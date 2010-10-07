@@ -133,6 +133,8 @@ public class JniInchiWrapper {
 
     private static synchronized JniInchiWrapper getWrapper() throws LoadNativeLibraryException {
         if (inchiWrapper == null) {
+            loadLibrary();
+            init();
             inchiWrapper = new JniInchiWrapper();
         }
         return inchiWrapper;
@@ -142,8 +144,7 @@ public class JniInchiWrapper {
      * Constructor
      */
     private JniInchiWrapper() throws LoadNativeLibraryException {
-        loadLibrary();
-        init();
+
     }
 
 
@@ -377,7 +378,7 @@ public class JniInchiWrapper {
     }
 
 
-    public static void getInputFromAuxInfo(String auxInfo) throws JniInchiException {
+    public static JniInchiInputData getInputFromAuxInfo(String auxInfo) throws JniInchiException {
         if (auxInfo == null) {
             throw new IllegalArgumentException("Null AuxInfo");
         }
@@ -389,13 +390,13 @@ public class JniInchiWrapper {
         }
 
         try {
-            wrapper.GetINCHIInputFromAuxInfo(auxInfo, false, false);
+            JniInchiInputData input = wrapper.GetINCHIInputFromAuxInfo(auxInfo, false, false);
 //            INCHI_KEY_STATUS retStatus = INCHI_KEY_STATUS.getValue(ret);
 //            if (retStatus == null) {
 //                throw new JniInchiException("Unknown return status: " + ret);
 //            }
 
-            return;
+            return input;
 
         } finally {
             wrapper.releaseLock();
@@ -422,8 +423,8 @@ public class JniInchiWrapper {
 
     protected native static String LibInchiGetVersion();
 
+    private native static void init();
 
-    private native void init();
 
     private native JniInchiOutput GetINCHI(JniInchiInput input);
 
@@ -439,6 +440,6 @@ public class JniInchiWrapper {
 
     private native int CheckINCHIKey(String key);
 
-    private native JniInchiInput GetINCHIInputFromAuxInfo(String auxInfo, boolean bDoNotAddH, boolean bDiffUnkUndfStereo);
+    private native JniInchiInputData GetINCHIInputFromAuxInfo(String auxInfo, boolean bDoNotAddH, boolean bDiffUnkUndfStereo);
 
 }

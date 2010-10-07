@@ -98,6 +98,12 @@ public enum INCHI_BOND_STEREO {
                 return SINGLE_1DOWN;
             case 3:
                 return DOUBLE_EITHER;
+            case -1:
+                return SINGLE_2UP;
+            case -4:
+                return SINGLE_2EITHER;
+            case -6:
+                return SINGLE_2DOWN;
             default:
                 return null;
         }
