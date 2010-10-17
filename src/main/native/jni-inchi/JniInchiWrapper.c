@@ -813,10 +813,14 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIInputFrom
   (JNIEnv *env, jobject obj, jstring auxInfo, jboolean bDoNotAddH, jboolean bDiffUnkUndfStereo) {
 
     const char *szAuxInfo;
-    InchiInpData *inputData;
-    inchi_Input *input;
     jobject inchiInput, inchiInputData;
     int ret, numatoms, numstereo;
+
+    inchi_Input  inchi_inp2, *pInp2 = &inchi_inp2;
+    InchiInpData idat;
+    /* setup input for Get_inchi_Input_FromAuxInfo */
+    idat.pInp = pInp2;
+    pInp2->szOptions = NULL; /* not needed */
 
     #ifdef DEBUG
     fprintf(stderr, "__GetINCHIInputFromAuxInfo()\n");
@@ -824,36 +828,36 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIInputFrom
 
     szAuxInfo = (*env)->GetStringUTFChars(env, auxInfo, 0);
 
+/*
     inputData = malloc(sizeof(InchiInpData));
     memset(inputData,0,sizeof(InchiInpData));
 
-    input = malloc(sizeof(inchi_InputINCHI));   /* Allocate memory */
-    memset(input, 0, sizeof(inchi_InputINCHI));  /* Set initial values to 0 */
+    input = malloc(sizeof(inchi_InputINCHI));   /* Allocate memory * /
+    memset(input, 0, sizeof(inchi_InputINCHI));  /* Set initial values to 0 * /
 
     (*inputData).pInp = input;
+*/
 
-    ret = Get_inchi_Input_FromAuxInfo(szAuxInfo, bDoNotAddH, bDiffUnkUndfStereo, inputData);
+    ret = Get_inchi_Input_FromAuxInfo(szAuxInfo, bDoNotAddH, bDiffUnkUndfStereo, &idat);
     
-    numatoms = (*input).num_atoms;
+    numatoms = inchi_inp2.num_atoms;
 
     inchiInput = (*env)->NewObject(env, jniInchiInput, initJniInchiInput);
-    createAtoms(env, numatoms, (*input).atom, inchiInput);
-    createBonds(env, numatoms, (*input).atom, inchiInput);
+    createAtoms(env, numatoms, inchi_inp2.atom, inchiInput);
+    createBonds(env, numatoms, inchi_inp2.atom, inchiInput);
 
-    numstereo = (*input).num_stereo0D;
-    createStereos(env, numstereo, (*input).stereo0D, inchiInput);
+    numstereo = inchi_inp2.num_stereo0D;
+    createStereos(env, numstereo, inchi_inp2.stereo0D, inchiInput);
 
     inchiInputData = (*env)->NewObject(env, jniInchiInputData, initJniInchiInputData,
                   ret,
                   inchiInput,
-                  (*inputData).bChiral,
-                  (*env)->NewStringUTF(env, (*inputData).szErrMsg));
+                  idat.bChiral,
+                  (*env)->NewStringUTF(env, idat.szErrMsg));
 
     (*env)->ReleaseStringUTFChars(env, auxInfo, szAuxInfo);
 
-    Free_inchi_Input(input);
-    free(input);
-    free(inputData);
+    Free_inchi_Input( pInp2 );
 
     #ifdef DEBUG
     fprintf(stderr, "__GetINCHIInputFromAuxInfo__\n");
