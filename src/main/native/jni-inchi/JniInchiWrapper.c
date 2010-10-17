@@ -187,10 +187,18 @@ int initMethodRefs(JNIEnv *env) {
 JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_init
     (JNIEnv *env, jclass class) {
 
+    #ifdef DEBUG
+    fprintf(stderr, "__init()\n");
+    #endif
+
     if (0 == initClassRefs(env)) {
         return;
     }
     initMethodRefs(env);
+
+    #ifdef DEBUG
+    fprintf(stderr, "__init__\n");
+    #endif
 
 }
 
@@ -392,6 +400,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
     int ret;
     jobject output;
 
+    #ifdef DEBUG
+    fprintf(stderr, "__GetINCHI()\n");
+    #endif
+
     inchi_input = getInchiInput(env, input);
     if (!inchi_input) {
         /* Exception was thrown */
@@ -411,6 +423,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
     free(inchi_output);
     free(inchi_input);
 
+    #ifdef DEBUG
+    fprintf(stderr, "__GetINCHI__\n");
+    #endif
+
     return output;
 }
 
@@ -422,6 +438,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHI
     inchi_Output *inchi_output;
     int ret;
     jobject output;
+
+    #ifdef DEBUG
+    fprintf(stderr, "__GetStdINCHI()\n");
+    #endif
 
     inchi_input = getInchiInput(env, input);
     if (!inchi_input) {
@@ -441,6 +461,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHI
     Free_std_inchi_Input(inchi_input);
     free(inchi_output);
     free(inchi_input);
+
+    #ifdef DEBUG
+    fprintf(stderr, "__GetStdINCHI__\n");
+    #endif
 
     return output;
 }
@@ -465,6 +489,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromIN
     int ret;
     jstring key;
     jobject robj;
+
+    #ifdef DEBUG
+    fprintf(stderr, "__GetINCHIKeyFromINCHI()\n");
+    #endif
 
     /* The user-supplied buffer szINCHIKey should be at least 28 bytes long. */
     szINCHIKey = malloc(sizeof(char) * 28);
@@ -494,6 +522,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIKeyFromIN
 
     robj = (*env)->NewObject(env, jniInchiOutputKey, initJniInchiOutputKey, ret, key);
 
+    #ifdef DEBUG
+    fprintf(stderr, "__GetINCHIKeyFromINCHI__\n");
+    #endif
+
     return robj;
 
 }
@@ -511,6 +543,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHIKeyFro
     jstring key;
     jobject robj;
 
+    #ifdef DEBUG
+    fprintf(stderr, "__GetStdINCHIKeyFromStdINCHI()\n");
+    #endif
+
     inchiString = (*env)->GetStringUTFChars(env, inchi, 0);
 
     /* The user-supplied buffer szINCHIKey should be at least 28 bytes long. */
@@ -525,6 +561,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHIKeyFro
     free(szINCHIKey);
 
     robj = (*env)->NewObject(env, jniInchiOutputKey, initJniInchiOutputKey, ret, key);
+
+    #ifdef DEBUG
+    fprintf(stderr, "__GetStdINCHIKeyFromStdINCHI__\n");
+    #endif
 
     return robj;
 
@@ -548,6 +588,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIfromINCHI
     int ret;
     jobject output;
 
+    #ifdef DEBUG
+    fprintf(stderr, "__GetINCHIFromINCHI()\n");
+    #endif
+
     inchi_input = getInchiInputINCHI(env, inchi, options);
 
     memset(inchi_output, 0, sizeof(inchi_Output));
@@ -558,6 +602,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIfromINCHI
     FreeINCHI(inchi_output);
     free(inchi_output);
     free(inchi_input);
+
+    #ifdef DEBUG
+    fprintf(stderr, "__GetINCHIFromINCHI__\n");
+    #endif
 
     return output;
 
@@ -661,6 +709,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
     jobject output;
     int numatoms, numstereo;
 
+    #ifdef DEBUG
+    fprintf(stderr, "__GetStructFromINCHI()\n");
+    #endif
+
     inchi_input = getInchiInputINCHI(env, inchi, options);
 
     inchi_output = malloc(sizeof(inchi_OutputStruct));
@@ -689,6 +741,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
     free(inchi_output);
     free(inchi_input);
 
+    #ifdef DEBUG
+    fprintf(stderr, "__GetStructFromINCHI__\n");
+    #endif
+
     return output;
 }
 
@@ -706,10 +762,22 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_CheckINCHIKey
     (JNIEnv *env, jobject obj, jstring key) {
 
     /* Get inchi key string */
-    const char *keyString = (*env)->GetStringUTFChars(env, key, 0);
+    const char *keyString;
+    int ret;
 
-    int ret = CheckINCHIKey(keyString);
+    #ifdef DEBUG
+    fprintf(stderr, "__CheckINCHIKey()\n");
+    #endif
+
+    keyString = (*env)->GetStringUTFChars(env, key, 0);
+
+    ret = CheckINCHIKey(keyString);
     (*env)->ReleaseStringUTFChars(env, key, keyString);
+
+    #ifdef DEBUG
+    fprintf(stderr, "__CheckINCHIKey__\n");
+    #endif
+
     return ret;
 
 }
@@ -718,16 +786,24 @@ JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_CheckINCHIKey
 JNIEXPORT jint JNICALL Java_net_sf_jniinchi_JniInchiWrapper_CheckINCHI
   (JNIEnv *env, jobject obj, jstring inchi, jboolean bStrict) {
 
-  int ret;
+    int ret;
+    const char *szInchi;
+    const int strict = (bStrict ? 1 : 0);
 
-  /* Get inchi string */
-  const char *szInchi = (*env)->GetStringUTFChars(env, inchi, 0);
-  const int strict = (bStrict ? 1 : 0);
-  ret = CheckINCHI(szInchi, strict);
+    #ifdef DEBUG
+    fprintf(stderr, "__CheckINCHIKey()\n");
+    #endif
 
-  (*env)->ReleaseStringUTFChars(env, inchi, szInchi);
+    szInchi = (*env)->GetStringUTFChars(env, inchi, 0);
+    ret = CheckINCHI(szInchi, strict);
 
-  return ret;
+    (*env)->ReleaseStringUTFChars(env, inchi, szInchi);
+
+    #ifdef DEBUG
+    fprintf(stderr, "__CheckINCHIKey__\n");
+    #endif
+
+    return ret;
 
 }
 
@@ -741,6 +817,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIInputFrom
     inchi_Input *input;
     jobject inchiInput, inchiInputData;
     int ret, numatoms, numstereo;
+
+    #ifdef DEBUG
+    fprintf(stderr, "__GetINCHIInputFromAuxInfo()\n");
+    #endif
 
     szAuxInfo = (*env)->GetStringUTFChars(env, auxInfo, 0);
 
@@ -774,6 +854,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIInputFrom
     Free_inchi_Input(input);
     free(input);
     free(inputData);
+
+    #ifdef DEBUG
+    fprintf(stderr, "__GetINCHIInputFromAuxInfo__\n");
+    #endif
 
     return inchiInputData;
 
