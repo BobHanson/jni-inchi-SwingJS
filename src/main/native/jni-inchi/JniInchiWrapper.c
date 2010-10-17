@@ -595,6 +595,10 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIfromINCHI
 
     output = getInchiOutput(env, ret, &inchi_out);
 
+    FreeINCHI(&inchi_out);
+    free(inchi_inp.szInChI);
+    free(inchi_inp.szOption);
+
     #ifdef DEBUG
     fprintf(stderr, "__GetINCHIFromINCHI__\n");
     #endif
