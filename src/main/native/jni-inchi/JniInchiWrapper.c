@@ -223,12 +223,11 @@ jobject getInchiOutput(JNIEnv *env, int ret, inchi_Output *inchi_output) {
 }
 
 
-inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
+int initInchiInput(JNIEnv *env, inchi_Input *inchi_input, jobject input) {
 
     int i;
     inchi_Atom *atoms;
     inchi_Stereo0D *stereos;
-    inchi_Input *inchi_input;
     jstring joptions;
     const char *options;
     char *opts;
@@ -333,10 +332,6 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
 
     }
 
-    /* Allocate memory */
-    inchi_input = malloc(sizeof(inchi_Input));
-    memset(inchi_input, 0, sizeof(inchi_Input));
-
     joptions = (jstring) (*env)->CallObjectMethod(env, input, getOptions);
     options = (*env)->GetStringUTFChars(env, joptions, &iscopy);
     opts = malloc(sizeof(char) * (strlen(options)+1));
@@ -351,7 +346,7 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
     (*inchi_input).atom = atoms;
     (*inchi_input).stereo0D = stereos;
 
-  return inchi_input;
+    return 1;
 
 }
 
@@ -368,33 +363,26 @@ inchi_Input* getInchiInput(JNIEnv *env, jobject input) {
 JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
     (JNIEnv *env, jobject obj, jobject input) {
 
-    inchi_Input *inchi_input;
-    inchi_Output *inchi_output;
-    int ret;
+    inchi_Input inchi_input;
+    inchi_Output inchi_output;
+    int ret, r;
     jobject output;
 
     #ifdef DEBUG
     fprintf(stderr, "__GetINCHI()\n");
     #endif
 
-    inchi_input = getInchiInput(env, input);
-    if (!inchi_input) {
-        /* Exception was thrown */
+    if (0 == initInchiInput(env, &inchi_input, input)) {
         return 0;
     }
 
-    inchi_output = malloc(sizeof(inchi_Output));
-    memset(inchi_output, 0, sizeof(inchi_Output));
+    ret = GetINCHI(&inchi_input, &inchi_output);
 
-    ret = GetINCHI(inchi_input, inchi_output);
+    output = getInchiOutput(env, ret, &inchi_output);
 
-    output = getInchiOutput(env, ret, inchi_output);
-
-    FreeINCHI(inchi_output);
-    free((*inchi_input).szOptions);
-    Free_inchi_Input(inchi_input);
-    free(inchi_output);
-    free(inchi_input);
+    FreeINCHI(&inchi_output);
+    free(inchi_input.szOptions);
+    Free_inchi_Input(&inchi_input);
 
     #ifdef DEBUG
     fprintf(stderr, "__GetINCHI__\n");
@@ -407,8 +395,8 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
 JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHI
     (JNIEnv *env, jobject obj, jobject input) {
 
-    inchi_Input *inchi_input;
-    inchi_Output *inchi_output;
+    inchi_Input inchi_input;
+    inchi_Output inchi_output;
     int ret;
     jobject output;
 
@@ -416,25 +404,19 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHI
     fprintf(stderr, "__GetStdINCHI()\n");
     #endif
 
-    inchi_input = getInchiInput(env, input);
-    if (!inchi_input) {
+    if (0 == initInchiInput(env, &inchi_input, input)) {
         /* Exception was thrown */
         return 0;
     }
 
-    inchi_output = malloc(sizeof(inchi_Output));
-    memset(inchi_output, 0, sizeof(inchi_Output));
+    ret = GetStdINCHI(&inchi_input, &inchi_output);
 
-    ret = GetStdINCHI(inchi_input, inchi_output);
+    output = getInchiOutput(env, ret, &inchi_output);
 
-    output = getInchiOutput(env, ret, inchi_output);
-
-    FreeStdINCHI(inchi_output);
-    free((*inchi_input).szOptions);
-    Free_std_inchi_Input(inchi_input);
-    free(inchi_output);
-    free(inchi_input);
-
+    FreeStdINCHI(&inchi_output);
+    free(inchi_input.szOptions);
+    Free_std_inchi_Input(&inchi_input);
+    
     #ifdef DEBUG
     fprintf(stderr, "__GetStdINCHI__\n");
     #endif
@@ -730,12 +712,6 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
     createStereos(env, numstereo, inchi_out.stereo0D, output);
 
     FreeStructFromINCHI(&inchi_out);
-    /*
-    free(&inchi_out);
-    free(&inchi_inp);
-
-    */
-
     free(inchi_inp.szInChI);
     free(inchi_inp.szOptions);
 
@@ -825,16 +801,6 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIInputFrom
     #endif
 
     szAuxInfo = (*env)->GetStringUTFChars(env, auxInfo, 0);
-
-/*
-    inputData = malloc(sizeof(InchiInpData));
-    memset(inputData,0,sizeof(InchiInpData));
-
-    input = malloc(sizeof(inchi_InputINCHI));   /* Allocate memory * /
-    memset(input, 0, sizeof(inchi_InputINCHI));  /* Set initial values to 0 * /
-
-    (*inputData).pInp = input;
-*/
 
     ret = Get_inchi_Input_FromAuxInfo(szAuxInfo, bDoNotAddH, bDiffUnkUndfStereo, &idat);
     
