@@ -206,33 +206,6 @@ JNIEXPORT void JNICALL Java_net_sf_jniinchi_JniInchiWrapper_init
 
 
 
-inchi_InputINCHI* getInchiInputINCHI(JNIEnv *env, jstring inchi, jstring options) {
-
-    const char *inchiString, *optionsString;
-    char *szInchi, *szOptions;
-    inchi_InputINCHI *input;
-
-    /* Convert java.lang.String inchi to char* */
-    inchiString = (*env)->GetStringUTFChars(env, inchi, 0);
-    szInchi = malloc(sizeof(char) * (strlen(inchiString)+1));
-    strcpy(szInchi, inchiString);
-    (*env)->ReleaseStringUTFChars(env, inchi, inchiString);
-
-    /* Convert java.lang.String options to char* */
-    optionsString = (*env)->GetStringUTFChars(env, options, 0);
-    szOptions = malloc(sizeof(char) * (strlen(optionsString)+1));
-    strcpy(szOptions, optionsString);
-    (*env)->ReleaseStringUTFChars(env, options, optionsString);
-
-    input = malloc(sizeof(inchi_InputINCHI));   /* Allocate memory */
-    memset(input, 0, sizeof(inchi_InputINCHI));  /* Set initial values to 0 */
-
-    (*input).szInChI = szInchi;
-    (*input).szOptions = szOptions;
-
-    return input;
-
-}
 
 
 
@@ -723,8 +696,8 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
     (JNIEnv *env, jobject obj, jstring inchi, jstring options) {
 
     int i, j, ret;
-    inchi_InputINCHI *inchi_input;
-    inchi_OutputStruct *inchi_output;
+    inchi_InputINCHI inchi_inp;
+    inchi_OutputStruct inchi_out;
     jobject output;
     int numatoms, numstereo;
 
@@ -732,33 +705,35 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStructFromINCH
     fprintf(stderr, "__GetStructFromINCHI()\n");
     #endif
 
-    inchi_input = getInchiInputINCHI(env, inchi, options);
+    initInchiInputINCHI(env, &inchi_inp, inchi, options);
 
-    inchi_output = malloc(sizeof(inchi_OutputStruct));
-    memset(inchi_output,0,sizeof(inchi_OutputStruct));
-
-    ret = GetStructFromINCHI(inchi_input, inchi_output);
+    ret = GetStructFromINCHI(&inchi_inp, &inchi_out);
 
     output = (*env)->NewObject(env, jniInchiOutputStructure, initJniInchiOutputStructure,
             ret,
-            (*env)->NewStringUTF(env, (*inchi_output).szMessage),
-            (*env)->NewStringUTF(env, (*inchi_output).szLog),
-            (*inchi_output).WarningFlags[0][0],
-            (*inchi_output).WarningFlags[0][1],
-            (*inchi_output).WarningFlags[1][0],
-            (*inchi_output).WarningFlags[1][1]);
+            (*env)->NewStringUTF(env, inchi_out.szMessage),
+            (*env)->NewStringUTF(env, inchi_out.szLog),
+            inchi_out.WarningFlags[0][0],
+            inchi_out.WarningFlags[0][1],
+            inchi_out.WarningFlags[1][0],
+            inchi_out.WarningFlags[1][1]);
 
+    numatoms = inchi_out.num_atoms;
+    numstereo = inchi_out.num_stereo0D;
 
-    numatoms = (*inchi_output).num_atoms;
-    numstereo = (*inchi_output).num_stereo0D;
+    createAtoms(env, numatoms, inchi_out.atom, output);
+    createBonds(env, numatoms, inchi_out.atom, output);
+    createStereos(env, numstereo, inchi_out.stereo0D, output);
 
-    createAtoms(env, numatoms, (*inchi_output).atom, output);
-    createBonds(env, numatoms, (*inchi_output).atom, output);
-    createStereos(env, numstereo, (*inchi_output).stereo0D, output);
+    FreeStructFromINCHI(&inchi_out);
+    /*
+    free(&inchi_out);
+    free(&inchi_inp);
 
-    FreeStructFromINCHI(inchi_output);
-    free(inchi_output);
-    free(inchi_input);
+    */
+
+    free(inchi_inp.szInChI);
+    free(inchi_inp.szOptions);
 
     #ifdef DEBUG
     fprintf(stderr, "__GetStructFromINCHI__\n");

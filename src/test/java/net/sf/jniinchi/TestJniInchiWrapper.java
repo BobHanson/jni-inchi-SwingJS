@@ -19,16 +19,15 @@
 package net.sf.jniinchi;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 public class TestJniInchiWrapper {
 
@@ -875,7 +874,7 @@ public class TestJniInchiWrapper {
 
   -ClnMol-06180618052D
 
- 11 11  0  0  0  0  0  0  0  0999 V2000
+11 11  0  0  0  0  0  0  0  0999 V2000
    -1.1292   -0.5292    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	1
    -1.1333   -1.5917    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	2
    -1.1333    0.5333    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0	3
@@ -897,7 +896,7 @@ public class TestJniInchiWrapper {
   5  3  1  0  0  0  0
   8 10  1  1  0  0  0
   1  3  1  0  0  0  0
- 11 10  1  0  0  0  0
+11 10  1  0  0  0  0
 M  END
 >  <ID>
 NSC-7414a
@@ -2191,7 +2190,7 @@ NSC-7414a
         assertEquals("InChI Bond: C-C // Type: SINGLE // Stereo: NONE", input.getBond(2).getDebugString());
         assertEquals("InChI Bond: O-C // Type: SINGLE // Stereo: NONE", input.getBond(3).getDebugString());
         assertEquals("InChI Bond: O-C // Type: DOUBLE // Stereo: NONE", input.getBond(4).getDebugString());
-        assertEquals(0, input.getNumStereo0D());        
+        assertEquals(0, input.getNumStereo0D());
     }
 
 
