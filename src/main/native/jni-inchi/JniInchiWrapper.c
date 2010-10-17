@@ -236,14 +236,14 @@ inchi_InputINCHI* getInchiInputINCHI(JNIEnv *env, jstring inchi, jstring options
 
 
 
-jobject getInchiOutput(JNIEnv *env, int ret, inchi_Output inchi_output) {
+jobject getInchiOutput(JNIEnv *env, int ret, inchi_Output *inchi_output) {
 
     jobject output = (*env)->NewObject(env, jniInchiOutput, initJniInchiOutput,
             ret,
-            (*env)->NewStringUTF(env, inchi_output.szInChI),
-            (*env)->NewStringUTF(env, inchi_output.szAuxInfo),
-            (*env)->NewStringUTF(env, inchi_output.szMessage),
-            (*env)->NewStringUTF(env, inchi_output.szLog));
+            (*env)->NewStringUTF(env, inchi_output->szInChI),
+            (*env)->NewStringUTF(env, inchi_output->szAuxInfo),
+            (*env)->NewStringUTF(env, inchi_output->szMessage),
+            (*env)->NewStringUTF(env, inchi_output->szLog));
 
     return output;
 
@@ -415,7 +415,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHI
 
     ret = GetINCHI(inchi_input, inchi_output);
 
-    output = getInchiOutput(env, ret, *inchi_output);
+    output = getInchiOutput(env, ret, inchi_output);
 
     FreeINCHI(inchi_output);
     free((*inchi_input).szOptions);
@@ -454,7 +454,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHI
 
     ret = GetStdINCHI(inchi_input, inchi_output);
 
-    output = getInchiOutput(env, ret, *inchi_output);
+    output = getInchiOutput(env, ret, inchi_output);
 
     FreeStdINCHI(inchi_output);
     free((*inchi_input).szOptions);
@@ -574,6 +574,30 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHIKeyFro
 
 /* === INCHI to INCHI === */
 
+void initInchiInputINCHI(JNIEnv *env, inchi_InputINCHI *inchi_inp, jstring inchi, jstring options) {
+
+    const char *inchiString, *optionsString;
+    char *szInchi, *szOptions;
+
+    /* Convert java.lang.String inchi to char* */
+    inchiString = (*env)->GetStringUTFChars(env, inchi, 0);
+    szInchi = malloc(sizeof(char) * (strlen(inchiString)+1));
+    strcpy(szInchi, inchiString);
+    (*env)->ReleaseStringUTFChars(env, inchi, inchiString);
+
+    inchi_inp->szInChI = szInchi;
+
+    /* Convert java.lang.String options to char* */
+    optionsString = (*env)->GetStringUTFChars(env, options, 0);
+    szOptions = malloc(sizeof(char) * (strlen(optionsString)+1));
+    strcpy(szOptions, optionsString);
+    (*env)->ReleaseStringUTFChars(env, options, optionsString);
+
+    inchi_inp->szOptions = szOptions;
+
+}
+
+
 /**
  * Generates InChI from InChI string.
  * @param inchi		InChI string
@@ -583,8 +607,8 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetStdINCHIKeyFro
 JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIfromINCHI
     (JNIEnv *env, jobject obj, jstring inchi, jstring options) {
 
-    inchi_InputINCHI *inchi_input;
-    inchi_Output *inchi_output;
+    inchi_InputINCHI    inchi_inp;
+    inchi_Output        inchi_out;
     int ret;
     jobject output;
 
@@ -592,16 +616,11 @@ JNIEXPORT jobject JNICALL Java_net_sf_jniinchi_JniInchiWrapper_GetINCHIfromINCHI
     fprintf(stderr, "__GetINCHIFromINCHI()\n");
     #endif
 
-    inchi_input = getInchiInputINCHI(env, inchi, options);
+    initInchiInputINCHI(env, &inchi_inp, inchi, options);
 
-    memset(inchi_output, 0, sizeof(inchi_Output));
+    ret = GetINCHIfromINCHI(&inchi_inp, &inchi_out);
 
-    ret = GetINCHIfromINCHI(inchi_input, inchi_output);
-
-    output = getInchiOutput(env, ret, *inchi_output);
-    FreeINCHI(inchi_output);
-    free(inchi_output);
-    free(inchi_input);
+    output = getInchiOutput(env, ret, &inchi_out);
 
     #ifdef DEBUG
     fprintf(stderr, "__GetINCHIFromINCHI__\n");
