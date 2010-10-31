@@ -34,7 +34,7 @@
     <p>The Maven build system takes care of JNI-InChI's dependencies, and runs Make to build the native code required. From JNI-InChI's root directory (containing the file pom.xml) simply run Maven with the desired goal:</p>
 
     <p>To install JNI-InChI in you local Maven repository:</p>
-	<pre>mvn install</pre>
+	  <pre>mvn install</pre>
 
     <p>To compile JNI-InChI, and create a JAR file:</p>
     <pre>mvn package</pre>

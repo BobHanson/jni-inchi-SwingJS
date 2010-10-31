@@ -6,7 +6,7 @@
 
 Who uses JNI InChI Wrapper ?
 
-  JNI InChI Wrapper is a library indended for use by developers of other
+  JNI InChI Wrapper is a library intended for use by developers of other
   projects. The following organisations and projects are known to make use of it:
 
   * {{{http://cdk.sourceforge.net}The Chemistry Development Kit (CDK)}}
