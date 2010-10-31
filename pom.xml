@@ -80,8 +80,8 @@
         </repository>
     </repositories>
 
-  <pluginRepositories>
-      <pluginRepository>
+    <pluginRepositories>
+        <pluginRepository>
             <id>jnati</id>
             <url>http://jnati.sourceforge.net/m2repo</url>
             <releases>
@@ -101,8 +101,8 @@
                 <enabled>true</enabled>
             </snapshots>
         </pluginRepository>
-  </pluginRepositories>
-    
+    </pluginRepositories>
+
     <developers>
         <developer>
             <id>sea36</id>
@@ -283,7 +283,7 @@
                 </plugins>
             </build>
         </profile>
-        
+
         <profile>
             <id>freebsd</id>
             <activation>
@@ -315,22 +315,20 @@
             <plugin>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.1.2</version>
-                <!--
-                                <reportSets>
-                                  <reportSet>
-                                    <reports>
-                                      <report>summary</report>
-                                      <report>dependencies</report>
-                                      <report>scm</report>
-                                      <report>license</report>
-                                      <report>project-team</report>
-                                      <report>plugins</report>
-                                      <report>cim</report>
-                                      <report>mailing-list</report>
-                                    </reports>
-                                  </reportSet>
-                                </reportSets>
-                -->
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>summary</report>
+                            <report>dependencies</report>
+                            <report>scm</report>
+                            <report>license</report>
+                            <report>project-team</report>
+                            <report>plugins</report>
+                            <report>cim</report>
+                            <report>mailing-list</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -354,5 +352,20 @@
         </plugins>
     </reporting>
 
+    <distributionManagement>
+        <repository>
+            <id>jniinchi-releases</id>
+            <url>file:///home/sea36/sites/jni-inchi/htdocs/m2repo</url>
+        </repository>
+        <snapshotRepository>
+            <id>jniinchi-snapshots</id>
+            <url>file:///home/sea36/sites/jni-inchi/htdocs/m2-snapshot-repo</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+        <site>
+            <id>jniinchi-site</id>
+            <url>file:///home/sea36/sites/jni-inchi/htdocs</url>
+        </site>
+    </distributionManagement>
 
 </project>
