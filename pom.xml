@@ -22,7 +22,7 @@
 
     <groupId>net.sf.jni-inchi</groupId>
     <artifactId>jni-inchi</artifactId>
-    <version>0.7</version>
+    <version>0.8-SNAPSHOT</version>
 
     <name>JNI-InChI</name>
     <url>http://jniinchi.sourceforge.net/</url>
@@ -52,9 +52,9 @@
     </properties>
 
     <scm>
-        <connection>scm:svn:http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi/tags/jni-inchi-0.7</connection>
-        <developerConnection>scm:svn:https://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi/tags/jni-inchi-0.7</developerConnection>
-        <url>http://jni-inchi.svn.sourceforge.net/viewvc/jni-inchi/tags/jni-inchi-0.7</url>
+        <connection>scm:svn:http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi/trunk</connection>
+        <developerConnection>scm:svn:https://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi/trunk</developerConnection>
+        <url>http://jni-inchi.svn.sourceforge.net/viewvc/jni-inchi/trunk</url>
     </scm>
 
     <repositories>
