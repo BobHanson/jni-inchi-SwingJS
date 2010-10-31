@@ -1,7 +1,7 @@
 Java Native Interface for InChI
 ===============================
 
-(C) 2006, 2007, 2008 Sam Adams, sea36 at users.sourceforge.net
+(C) 2006-2010 Sam Adams, sea36 at users.sourceforge.net
 Unilever Centre for Molecular Science Informatics, University of Cambridge, UK
 
 Precompiled InChI library files and the API header file have been included in
@@ -20,24 +20,24 @@ InChI distribution, including source code, is available from the IUPAC website
     4. Installation
     5. Usage
     6. Customisation
-    7. Compatibility
-    8. License
+    7. License
 
 
 2. Introduction
 
 This package provides Java Native Interface (JNI) wrappers for software version
-1.02b of the InChI chemical identifier C++ library distributed by IUPAC. The
+1.03 of the InChI chemical identifier C++ library distributed by IUPAC. The
 following features are supported:
 
-    * Structure to InChI
+    * Structure to (Standard/Non-Stanadard) InChI
     * InChI to Structure (0D - no coordinates)
     * InChI to InChI
     * InChI to InChIKey
+    * Check InChI
     * Check InChIKey
     * Full range of InChI flags/options
 
-While the Java code is cross-platfrom, the C++ InChI library requires compiling
+While the Java code is cross-platfrom, the C InChI library requires compiling
 for a specific operating system/architecture. JNI InChI includes precompiled
 binaries for several common platfroms, and automatically deploys and loads the
 appropriate library using the JNati library. Compilation of the native code
@@ -55,7 +55,7 @@ use on other platforms.
     /                       readme and license files
     /pom.xml                Maven Project Object Model file
     /src/main/java          Java source code
-    /src/main/native        C++ source code
+    /src/main/native        C source code
     /src/test/java          Java unit tests
 
 
@@ -69,7 +69,7 @@ automatically be extracted from the JAR and loaded, otherwise you will need to
 recompile JNI InChI for your machine.
 
 In order to build JNI InChI the following software is required:
-    * Java (JDK) 1.4 or higher
+    * Java (JDK) 1.5 or higher
     * Maven 2.0
     * GNU Make
     * GCC/G++
@@ -80,7 +80,7 @@ the JDK.
 The Maven build system takes care of JNI InChI's dependencies, and runs Make to
 build the native code required. From JNI InChI's root directory (containing the
 file pom.xml) simply run 'mvn package' to compile a JAR file for your system.
-Maven will compile the Java code, call Make to build the C++ code, run a suite
+Maven will compile the Java code, call Make to build the C code, run a suite
 of unit tests to ensure the code has compiled successfully and package
 everything into a JAR file in the target directory: jniinchi-(version).jar
 
@@ -113,23 +113,17 @@ are a number of customisations that can be made, if required.  For more details
 see the jnati project documentation.
 
 
-7. Compatibility
+7. License
 
-The JNI wrapper is written in Java 1.4, to allow compatibility with as many
-applications as possible.
-
-
-8. License
-
-This program is free software: you can redistribute it and/or modify
+JNI-InChI is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published
 by the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+JNI-InChI is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with JNI-InChI.  If not, see <http://www.gnu.org/licenses/>.
