@@ -23,7 +23,7 @@ Download JNI-InChI
     <dependency>
         <groupId>net.sf.jni-inchi</groupId>
         <artifactId>jni-inchi</artifactId>
-        <version>0.6</version>
+        <version>0.7</version>
     </dependency>
 </dependencies>    
 ----
