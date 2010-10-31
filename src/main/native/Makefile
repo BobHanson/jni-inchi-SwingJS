@@ -24,36 +24,9 @@ ifndef PLATFORM
 f := $(error PLATFORM is not defined)
 endif
 
-ifneq (,$(findstring WINDOWS, $(PLATFORM)))
- include Makefile.windows
-else
- ifneq (,$(findstring LINUX, $(PLATFORM)))
-  include Makefile.linux
- else
-  ifneq (,$(findstring MAC, $(PLATFORM)))
-   include Makefile.mac
-  else
-   ifneq (,$(findstring FREEBSD, $(PLATFORM)))
-    include Makefile.freebsd
-   else
-    ifeq ($(PLATFORM),SUNOS-X86)
-     include Makefile.solaris.x86
-    else
-     ifeq ($(PLATFORM),SUNOS-AMD64)
-      include Makefile.solaris.amd64
-     else
-      f := $(error Platform '$(PLATFORM)' not supported)
-     endif
-    endif
-   endif
-  endif
- endif
-endif
-
-
 LIB_VERSION = $(VERSION)-$(PLATFORM)
 
-TARGET_PATH = ../../../target/native
+TARGET_PATH = ../../../target/native/$(LIB_VERSION)
 TARGET_FILE = $(LIB_PREFIX)JniInchi-$(LIB_VERSION)$(LIB_SUFFIX)
 TARGET = $(TARGET_PATH)/$(TARGET_FILE)
 JAR_WORKDIR = $(TARGET_PATH)/jar
@@ -74,10 +47,6 @@ JAVAH_CMD = $(JAVAH) $(JAVAH_FLAGS) $(OUTPUT_OPTION)
 RESOURCE_PATH = ../resources
 ARTIFACT_PATH = META-INF/jniinchi/$(VERSION)/$(PLATFORM)
 
-LDFLAGS += -s
-CFLAGS += -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR)
-CFLAGS += -Os -ansi -pedantic
-
 _INCHI_OBJECTS =	ichi_bns.o  ichimake.o  ichiprt3.o  ichirvr5.o     inchi_dll.o      \
                     ichi_io.o   ichimap1.o  ichiqueu.o  ichirvr6.o     inchi_dll_a.o    \
                     ichican2.o  ichimap2.o  ichiread.o  ichirvr7.o     inchi_dll_a2.o   \
@@ -96,6 +65,38 @@ JNI_OBJECTS = $(JNI_OBJDIR)/JniInchiWrapper.o
 JNI_HEADER_DIR = ../../../target/generated-sources
 JNI_HEADERS = $(JNI_HEADER_DIR)/net_sf_jniinchi_JniInchiWrapper.h
 
+
+ifneq (,$(findstring WINDOWS, $(PLATFORM)))
+include Makefile.windows
+else
+ifneq (,$(findstring LINUX, $(PLATFORM)))
+ include Makefile.linux
+else
+ ifneq (,$(findstring MAC, $(PLATFORM)))
+  include Makefile.mac
+ else
+  ifneq (,$(findstring FREEBSD, $(PLATFORM)))
+   include Makefile.freebsd
+  else
+   ifeq ($(PLATFORM),SUNOS-X86)
+    include Makefile.solaris.x86
+   else
+    ifeq ($(PLATFORM),SUNOS-AMD64)
+     include Makefile.solaris.amd64
+    else
+     f := $(error Platform '$(PLATFORM)' not supported)
+    endif
+   endif
+  endif
+ endif
+endif
+endif
+
+ifneq (,$(findstring WINDOWS-AMD64, $(PLATFORM)))
+ include Makefile.vs
+else
+ include Makefile.gcc
+endif
 
 all: copies
 .PHONY: all
@@ -139,16 +140,6 @@ nativedirs:
 	mkdir -p $(INCHI_OBJDIR)
 	mkdir -p $(JNI_OBJDIR)
 
-$(TARGET): $(INCHI_OBJECTS) $(JNI_OBJECTS)
-	$(LINK.c) $^ -o $@
-
-$(INCHI_OBJDIR)/%.o: $(INCHI_SRCDIR)/%.c
-	$(COMPILE.c) $< -o $@
-
-# $(JNI_OBJDIR)/%.o: $(JNI_SRCDIR)/%.cc $(JNI_HEADERS)
-#	$(COMPILE.cc) $< -o $@
-$(JNI_OBJDIR)/%.o: $(JNI_SRCDIR)/%.c $(JNI_HEADERS)
-	$(COMPILE.c) $< -o $@ -I$(JNI_HEADER_DIR)
 
 $(JNI_HEADERS): $(JAVA_SOURCE) $(JAVA_CLASSPATH)/$(JAVA_CLASS_FILE) $(JNI_HEADER_DIR)
 	$(JAVAH_CMD) -o $@ $(JAVA_CLASS)
