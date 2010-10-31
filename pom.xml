@@ -15,14 +15,14 @@
   ~ GNU Lesser General Public License for more details.
   ~
   ~ You should have received a copy of the GNU Lesser General Public License
-  ~ along with JNI-InChI.  If not, see <http://www.gnu.org/licenses/>.
+  ~ along with JNI-InChI.  If not, see <http://www.gnu.org/licenses />.
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.sf.jni-inchi</groupId>
     <artifactId>jni-inchi</artifactId>
-    <version>0.7-SNAPSHOT</version>
+    <version>0.7</version>
 
     <name>JNI-InChI</name>
     <url>http://jniinchi.sourceforge.net/</url>
@@ -52,9 +52,9 @@
     </properties>
 
     <scm>
-        <connection>scm:svn:http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi/trunk</connection>
-        <developerConnection>scm:svn:https://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi/trunk</developerConnection>
-        <url>http://jni-inchi.svn.sourceforge.net/viewvc/jni-inchi/trunk</url>
+        <connection>scm:svn:http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi/tags/jni-inchi-0.7</connection>
+        <developerConnection>scm:svn:https://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi/tags/jni-inchi-0.7</developerConnection>
+        <url>http://jni-inchi.svn.sourceforge.net/viewvc/jni-inchi/tags/jni-inchi-0.7</url>
     </scm>
 
     <repositories>
