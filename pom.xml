@@ -29,6 +29,10 @@
         </license>
     </licenses>
 
+    <properties>
+        <jnati.version>0.3</jnati.version>
+    </properties>
+
     <scm>
         <connection>scm:svn:http://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi/trunk</connection>
         <developerConnection>scm:svn:https://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi/trunk</developerConnection>
@@ -131,7 +135,7 @@
             <plugin>
                 <groupId>net.sf.jnati</groupId>
                 <artifactId>jnati-maven-plugin</artifactId>
-                <version>0.3-SNAPSHOT</version>
+                <version>${jnati.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -235,7 +239,7 @@
         <dependency>
             <groupId>net.sf.jnati</groupId>
             <artifactId>jnati-deploy</artifactId>
-            <version>0.3-SNAPSHOT</version>
+            <version>${jnati.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
