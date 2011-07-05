@@ -48,7 +48,7 @@
     </licenses>
 
     <properties>
-        <jnati.version>0.3</jnati.version>
+        <jnati.version>0.4-SNAPSHOT</jnati.version>
     </properties>
 
     <scm>
