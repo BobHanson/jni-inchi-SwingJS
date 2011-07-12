@@ -20,6 +20,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
     <groupId>net.sf.jni-inchi</groupId>
     <artifactId>jni-inchi</artifactId>
     <version>0.8-SNAPSHOT</version>
@@ -57,43 +63,11 @@
         <url>http://jni-inchi.svn.sourceforge.net/viewvc/jni-inchi/trunk</url>
     </scm>
 
-    <repositories>
-        <repository>
-            <id>jnati</id>
-            <url>http://jnati.sourceforge.net/m2repo</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>jnati-snapshots</id>
-            <url>http://jnati.sourceforge.net/m2-snapshot-repo</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <pluginRepositories>
         <pluginRepository>
-            <id>jnati</id>
-            <url>http://jnati.sourceforge.net/m2repo</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>jnati-snapshots</id>
-            <url>http://jnati.sourceforge.net/m2-snapshot-repo</url>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
