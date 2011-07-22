@@ -1,7 +1,7 @@
 Java Native Interface for InChI
 ===============================
 
-(C) 2006-2010 Sam Adams, sea36 at users.sourceforge.net
+(C) 2006-2011 Sam Adams, sea36 at users.sourceforge.net
 Unilever Centre for Molecular Science Informatics, University of Cambridge, UK
 
 Precompiled InChI library files and the API header file have been included in
