@@ -54,7 +54,8 @@
     </licenses>
 
     <properties>
-        <jnati.version>0.4-SNAPSHOT</jnati.version>
+        <jnati.version>0.4</jnati.version>
+        <junit.version>4.8.2</junit.version>
     </properties>
 
     <scm>
@@ -62,20 +63,6 @@
         <developerConnection>scm:svn:https://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi/trunk</developerConnection>
         <url>http://jni-inchi.svn.sourceforge.net/viewvc/jni-inchi/trunk</url>
     </scm>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Nexus Snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
     <developers>
         <developer>
@@ -236,7 +223,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.5</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -327,15 +314,6 @@
     </reporting>
 
     <distributionManagement>
-        <repository>
-            <id>jniinchi-releases</id>
-            <url>file:///home/sea36/sites/jni-inchi/htdocs/m2repo</url>
-        </repository>
-        <snapshotRepository>
-            <id>jniinchi-snapshots</id>
-            <url>file:///home/sea36/sites/jni-inchi/htdocs/m2-snapshot-repo</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
         <site>
             <id>jniinchi-site</id>
             <url>file:///home/sea36/sites/jni-inchi/htdocs</url>
