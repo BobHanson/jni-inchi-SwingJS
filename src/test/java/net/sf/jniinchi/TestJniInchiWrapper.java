@@ -2278,4 +2278,45 @@ NSC-7414a
         assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
         assertEquals(inchi, output.getInchi());
     }
+
+    @Test
+    public void testGetInchiFromBenzeneKekule() throws JniInchiException {
+        JniInchiInput input = new JniInchiInput();
+        input.addAtoms(
+                new JniInchiAtom("C"), new JniInchiAtom("C"), new JniInchiAtom("C"),
+                new JniInchiAtom("C"), new JniInchiAtom("C"), new JniInchiAtom("C")
+        );
+        input.addBonds(
+                new JniInchiBond(input.getAtom(0), input.getAtom(1), INCHI_BOND_TYPE.SINGLE),
+                new JniInchiBond(input.getAtom(1), input.getAtom(2), INCHI_BOND_TYPE.DOUBLE),
+                new JniInchiBond(input.getAtom(2), input.getAtom(3), INCHI_BOND_TYPE.SINGLE),
+                new JniInchiBond(input.getAtom(3), input.getAtom(4), INCHI_BOND_TYPE.DOUBLE),
+                new JniInchiBond(input.getAtom(4), input.getAtom(5), INCHI_BOND_TYPE.SINGLE),
+                new JniInchiBond(input.getAtom(5), input.getAtom(0), INCHI_BOND_TYPE.DOUBLE)
+        );
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        assertEquals("InChI=1S/C6H6/c1-2-4-6-5-3-1/h1-6H", output.getInchi());
+    }
+
+    @Test
+    public void testGetInchiFromBenzeneNonKekule() throws JniInchiException {
+        JniInchiInput input = new JniInchiInput();
+        input.addAtoms(
+                new JniInchiAtom("C"), new JniInchiAtom("C"), new JniInchiAtom("C"),
+                new JniInchiAtom("C"), new JniInchiAtom("C"), new JniInchiAtom("C")
+        );
+        input.addBonds(
+                new JniInchiBond(input.getAtom(0), input.getAtom(1), INCHI_BOND_TYPE.ALTERN),
+                new JniInchiBond(input.getAtom(1), input.getAtom(2), INCHI_BOND_TYPE.ALTERN),
+                new JniInchiBond(input.getAtom(2), input.getAtom(3), INCHI_BOND_TYPE.ALTERN),
+                new JniInchiBond(input.getAtom(3), input.getAtom(4), INCHI_BOND_TYPE.ALTERN),
+                new JniInchiBond(input.getAtom(4), input.getAtom(5), INCHI_BOND_TYPE.ALTERN),
+                new JniInchiBond(input.getAtom(5), input.getAtom(0), INCHI_BOND_TYPE.ALTERN)
+        );
+        JniInchiOutput output = JniInchiWrapper.getInchi(input);
+        assertEquals(INCHI_RET.OKAY, output.getReturnStatus());
+        assertEquals("InChI=1S/C6H6/c1-2-4-6-5-3-1/h1-6H", output.getInchi());
+    }
+
 }
