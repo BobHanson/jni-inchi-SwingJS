@@ -1,0 +1,3 @@
+jimdowning = Jim Downing <jimdowning@users.sf.net> 
+sea36 = Sam Adams <sea36@users.sf.net>
+wohlgemuth_gert = Gert Wohlgemuth <wohlgemuth_gert@users.sf.net>
