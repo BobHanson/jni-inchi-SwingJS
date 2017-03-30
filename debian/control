@@ -1,0 +1,18 @@
+Source: jni-inchi
+Section: java
+Priority: optional
+Maintainer: Yury Zavarin <yzavarin@ebi.ac.uk>
+Build-Depends:
+ debhelper (>= 9),
+ default-jdk (>= 1.5),
+ junit4 (>= 4.5),
+ libsurefire-java (>= 2.5),
+ maven-debian-helper (>= 1.5),
+Standards-Version: 3.9.7
+
+Package: libjni-inchi-java
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${maven:Depends},
+Description: JNI wrapper for C++ InChI library 
