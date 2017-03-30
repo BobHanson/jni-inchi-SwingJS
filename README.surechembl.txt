@@ -11,7 +11,7 @@ the original SVN repository, add the following lines in .git/config:
 [svn-remote "svn"]
         url = https://svn.code.sf.net/p/jni-inchi/code
         fetch = trunk:refs/remotes/svn/trunk
-        branches = branches/*:refs/svn/upstream/*
+        branches = branches/*:refs/svn/svn/*
         tags = tags/*:refs/remotes/svn/tags/*
 [svn]
         authorsfile = ./authors.txt
