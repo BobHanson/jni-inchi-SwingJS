@@ -6,26 +6,26 @@
 
 Documentation
 
-  * {{{faq.html}Frequently Asked Questions}}
+  * {{{./faq.html}Frequently Asked Questions}}
 
-  * {{{guide.html}User Guide}}
+  * {{{./guide.html}User Guide}}
 
 
-  * {{{apidocs/}API Javadocs}}
+  * {{{./apidocs/}API Javadocs}}
 
-  * {{{xref/}Source XRef}}
+  * {{{./xref/}Source XRef}}
 
-  * {{{xref-test/}Test Source XRef}}
+  * {{{./xref-test/}Test Source XRef}}
 
 
 Maven-generated Reports
 
-  * {{{project-summary.html}Project Summary}}
+  * {{{./project-summary.html}Project Summary}}
 
-  * {{{team-list.html}The Team}}
+  * {{{./team-list.html}The Team}}
 
-  * {{{dependencies.html}Dependencies Report}}
+  * {{{./dependencies.html}Dependencies Report}}
 
-  * {{{surefire-report.html}Surefire Test Report}}
+  * {{{./surefire-report.html}Surefire Test Report}}
 
-  * {{{license.html}License}}
+  * {{{./license.html}License}}

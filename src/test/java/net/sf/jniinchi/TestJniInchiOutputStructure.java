@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2010 Sam Adams <sea36 at users.sourceforge.net>
+ * Copyright 2006-2011 Sam Adams <sea36 at users.sourceforge.net>
  *
  * This file is part of JNI-InChI.
  *

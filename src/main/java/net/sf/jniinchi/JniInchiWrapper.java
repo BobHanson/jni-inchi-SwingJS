@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2010 Sam Adams <sea36 at users.sourceforge.net>
+ * Copyright 2006-2011 Sam Adams <sea36 at users.sourceforge.net>
  *
  * This file is part of JNI-InChI.
  *
@@ -20,7 +20,6 @@ package net.sf.jniinchi;
 
 import net.sf.jnati.NativeCodeException;
 import net.sf.jnati.deploy.NativeLibraryLoader;
-import org.apache.log4j.Logger;
 
 import java.util.List;
 import java.util.StringTokenizer;
@@ -47,8 +46,6 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Sam Adams
  */
 public class JniInchiWrapper {
-
-    private static final Logger LOG = Logger.getLogger(JniInchiWrapper.class);
 
     private static final String ID = "jniinchi";
     private static final String VERSION = "1.03_1";
@@ -109,25 +106,20 @@ public class JniInchiWrapper {
      */
     private static void checkNativeCodeVersion() throws NativeCodeException {
 
-        LOG.trace("Checking native code version");
-
         // Get native code version string
         String nativeVersion;
         try {
             nativeVersion = JniInchiWrapper.LibInchiGetVersion();
         } catch (UnsatisfiedLinkError e) {
-            LOG.error("Unable to get native code version", e);
             throw new NativeCodeException("Unable get native code version", e);
         }
 
         // Compare to expected version
         if (!VERSION.equals(nativeVersion)) {
-            LOG.error("Native code version mismatch; expected " + VERSION + ", found " + nativeVersion);
             throw new NativeCodeException("JNI InChI native code version mismatch: expected "
                     + VERSION + ", found " + nativeVersion);
         }
 
-        LOG.trace("Expected native code version found: " + nativeVersion);
     }
 
 
