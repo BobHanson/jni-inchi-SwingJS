@@ -5,9 +5,20 @@ Maintainer: Yury Zavarin <yzavarin@ebi.ac.uk>
 Build-Depends:
  debhelper (>= 9),
  default-jdk (>= 1.5),
+ gcc,
  junit4 (>= 4.5),
  libsurefire-java (>= 2.5),
+ libmaven-assembly-plugin-java,
+ libmaven-compiler-plugin-java,
+ libmaven-exec-plugin-java,
+ libmaven-jar-plugin-java,
+ libmaven-javadoc-plugin-java (>= 2.6.1),
+ libmaven-project-info-reports-plugin-java (>= 2.1.2),
+ libmaven-site-plugin-java,
+ libsurefire-java (>= 2.17),
  maven-debian-helper (>= 1.5),
+Build-Depends-Indep:
+ libjnati-java (>= 0.3),
 Standards-Version: 3.9.7
 
 Package: libjni-inchi-java
@@ -15,4 +26,5 @@ Architecture: all
 Depends:
  ${misc:Depends},
  ${maven:Depends},
-Description: JNI wrapper for C++ InChI library 
+ libjnati-java (>= 0.3),
+Description: JNI wrapper for C++ InChI library
