@@ -1,3 +1,9 @@
+jni-inchi (0.8-1) unstable; urgency=medium
+
+  * New version.
+
+ -- Yury Zavarin <yzavarin@ebi.ac.uk>  Tue, 27 Jun 2017 14:12:48 +0100
+
 jni-inchi (0.7-1) unstable; urgency=medium
 
   * Initial release.
