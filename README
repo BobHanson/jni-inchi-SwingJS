@@ -1,3 +1,9 @@
+This project is forked from [SureChEMBL/jni-inchi](https://github.com/SureChEMBL/jni-inchi) with the hope of being 
+able to expand it a bit and also bring its make file up to code for compiling for Mac OS X aarch64 architecture.
+
+Original README follows:
+
+
 Java Native Interface for InChI
 ===============================
 
