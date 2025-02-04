@@ -1,0 +1,53 @@
+  ----------
+  JNI-InChI - Download
+  ----------
+  Sam Adams
+  ----------
+
+Download JNI-InChI
+
+* Maven Repository
+
+  If your project is using {{{http://maven.apache.org/} Apache Maven}} as its build system, then you can make use of JNI-InChI by including the {{{http://jni-inchi.sourceforge.net/m2repo} JNI-InChI Maven repository}} in your POM, and adding JNI-InChI as a dependency.
+
+----
+<repositories>
+    <repository>
+        <id>jni-inchi</id>
+        <name>JNI-InChI Maven Repository</name>
+        <url>http://jni-inchi.sourceforge.net/m2repo</url>
+    <repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>net.sf.jni-inchi</groupId>
+        <artifactId>jni-inchi</artifactId>
+        <version>0.7</version>
+    </dependency>
+</dependencies>    
+----
+
+* Releases on SourceForge
+
+  Pre-compiled JNI-InChI JARs, packaged with their dependencies, are available on the {{{https://sourceforge.net/projects/jni-inchi/files/} JNI-InChI download}} pages hosted by SourceForge.
+SVN Access
+
+
+* Source Code Repository
+
+  The {{{https://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi} JNI-InChI SVN Repository}} is accessible at:
+
+----
+https://jni-inchi.svn.sourceforge.net/svnroot/jni-inchi
+----
+
+* Licence
+
+  Copyright © 2006-2010, Sam Adams.
+
+  JNI-InChI is released under Version 3 of the {{{http://www.gnu.org/licenses/lgpl-3.0.html} GNU Lesser General Public License}}:
+
+  <<JNI-InChI is free software: you can redistribute it and/or modify it under the terms of the {{{http://www.gnu.org/licenses/lgpl-3.0.html} GNU Lesser General Public License}} as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.>>
+
+  <<JNI-InChI is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the {{{http://www.gnu.org/licenses/lgpl-3.0.html} GNU Lesser General Public License}} for more details.>>

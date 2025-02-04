@@ -1,0 +1,25 @@
+  ----------
+  JNI InChI - About
+  ----------
+  Sam Adams
+  ----------
+
+About
+
+  JNI-InChI is developed and maintained by, Sam Adams at the Unilever Centre
+  for Molecular Science Informatics, University of Cambridge.
+
+  See the {{{./team-list.html}Team List}} for details of other people who have contributed
+  to the project.
+
+
+License
+
+  Copyright © 2006-2010, Sam Adams.
+
+  JNI-InChI is released under Version 3 of the {{{http://www.gnu.org/licenses/lgpl-3.0.html} GNU Lesser General Public License}}:
+
+  <<JNI-InChI is free software: you can redistribute it and/or modify it under the terms of the {{{http://www.gnu.org/licenses/lgpl-3.0.html} GNU Lesser General Public License}} as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.>>
+
+  <<JNI-InChI is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the {{{http://www.gnu.org/licenses/lgpl-3.0.html} GNU Lesser General Public License}} for more details.>>
+
