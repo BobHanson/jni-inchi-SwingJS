@@ -19,7 +19,8 @@
 # along with JNI-InChI.  If not, see <http://www.gnu.org/licenses/>.
 
 LDFLAGS = -dynamiclib 
-# -single_module
+##-single_module
 
-                                                                                                                                     
-CFLAGS += -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR) -march i386 -march x86_64          
+CC = /bin/aarch64-linux-gnu-gcc                                                                                                                                      
+CFLAGS += -I"${JAVA_HOME}/include" -I$(JNI_SRCDIR) -I$(INCHI_SRCDIR)
+          

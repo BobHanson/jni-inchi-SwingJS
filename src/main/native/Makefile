@@ -23,12 +23,15 @@
 VERSION = 1.03_1
 
 ifndef JAVA_HOME
-f := $(error JAVA_HOME is not defined, Ensure that it is pointing to a JDK)
+JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+# f := $(error JAVA_HOME is not defined, Ensure that it is pointing to a JDK)
 endif
 
-JAVAH = "$(JAVA_HOME)/bin/javah"
+# JAVAH = $(JAVA_HOME)/bin/java -h
 # TODO $(error Cannot find javah. Ensure JAVA_HOME is correctly set and pointing to a JDK)
+# for windows:
 
+JAVAH = /mnt/c/PROGRA~2/Java/jdk1.8.0_331/bin/javah.exe
 
 # Include OS specific configuration
 
@@ -85,6 +88,9 @@ else
 ifneq (,$(findstring LINUX, $(PLATFORM)))
  include Makefile.linux
 else
+ ifneq (,$(findstring MAC-aarch64, $(PLATFORM)))
+  include Makefile.mac-aarch64
+ else
  ifneq (,$(findstring MAC, $(PLATFORM)))
   include Makefile.mac
  else
@@ -102,6 +108,7 @@ else
    endif
   endif
  endif
+endif
 endif
 endif
 
